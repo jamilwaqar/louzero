@@ -41,7 +41,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             width: 496,
             padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 32),
             decoration: BoxDecorationEx.shadowEffect(
-                borderRadius: 16,
+                borderRadius: BorderRadius.circular(16),
                 blurRadius: 3,
                 shadowOffset: const Offset(0, 1),
                 shadowRadius: 2,

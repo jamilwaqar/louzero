@@ -38,5 +38,13 @@ class AuthAPI {
       return e.message;
     }
   }
+  Future logout() async {
+    try {
+      await Backendless.userService.logout();
+      return;
+    } on PlatformException catch (e) {
+      return e.message;
+    }
+  }
 
 }

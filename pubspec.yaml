@@ -14,9 +14,11 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   backendless_sdk:
+
   page_transition:
 
   another_flushbar:
+  image_picker:
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +30,13 @@ flutter:
   uses-material-design: true
   assets:
      - assets/
+     - assets/icons/
+     - assets/icons/general/
+     - assets/icons/general/2.0x/
+     - assets/icons/general/3.0x/
+     - assets/icons/menu/
+     - assets/icons/menu/2.0x/
+     - assets/icons/menu/3.0x/
   fonts:
     - family: Roboto
       fonts:

@@ -4,25 +4,10 @@ import 'package:louzero/controller/constant/colors.dart';
 extension BoxDecorationEx on BoxDecoration {
   static BoxDecoration gradientEffect({
     List<Color>? gradientColors,
-    BorderRadius? border,
-    double borderRadius = 0,
+    BorderRadius borderRadius = BorderRadius.zero,
   }) {
     return BoxDecoration(
-      borderRadius: border ?? BorderRadius.all(Radius.circular(borderRadius)),
-      gradient: LinearGradient(
-          colors: gradientColors ?? [AppColors.light_1, AppColors.light_1]),
-    );
-  }
-
-  static BoxDecoration gradientOnlyBottomEffect({
-    List<Color>? gradientColors,
-    double borderRadius = 12,
-  }) {
-    return BoxDecoration(
-      borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(borderRadius),
-        bottomRight: Radius.circular(borderRadius),
-      ),
+      borderRadius: borderRadius,
       gradient: LinearGradient(
           colors: gradientColors ?? [AppColors.light_1, AppColors.light_1]),
     );
@@ -32,24 +17,12 @@ extension BoxDecorationEx on BoxDecoration {
     Color? backgroundColor,
     Color? shadowColor,
     Offset? shadowOffset,
-    double borderRadius = 14,
+    BorderRadiusGeometry? borderRadius,
     double shadowRadius = 10,
     double blurRadius = 8,
-    bool onlyTop = false,
-    bool onlyBottom = false,
   }) {
     return BoxDecoration(
-        borderRadius: onlyTop
-            ? BorderRadius.only(
-          topRight: Radius.circular(borderRadius),
-          topLeft: Radius.circular(borderRadius),
-        )
-            : (onlyBottom
-            ? BorderRadius.only(
-          bottomLeft: Radius.circular(borderRadius),
-          bottomRight: Radius.circular(borderRadius),
-        )
-            : BorderRadius.all(Radius.circular(borderRadius))),
+        borderRadius: borderRadius,
         color: backgroundColor ?? AppColors.lightest,
         boxShadow: [
           BoxShadow(

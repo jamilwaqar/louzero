@@ -6,10 +6,12 @@ import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/buttons/text_button.dart';
+import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -26,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     if (kDebugMode) {
       _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "louzerouser_123";
+      _passwordController.text = "9bjFFZXB";
     }
     super.initState();
   }
@@ -47,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
             width: 496,
             padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 32),
             decoration: BoxDecorationEx.shadowEffect(
-                borderRadius: 16,
+                borderRadius: BorderRadius.circular(16),
                 blurRadius: 3,
                 shadowOffset: const Offset(0, 1),
                 shadowRadius: 2,
@@ -273,7 +275,11 @@ class _LoginPageState extends State<LoginPage> {
     NavigationController().notifierInitLoading.value = true;
     var res = await AuthAPI().login(_emailController.text, _passwordController.text);
     NavigationController().notifierInitLoading.value = false;
-    print(res);
+    if (res is String) {
+      WarningMessageDialog.showDialog(context, res);
+    } else {
+      AuthStateManager().loggedIn.value = true;
+    }
   }
   void _onRememberDevice() {
 

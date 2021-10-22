@@ -5,7 +5,9 @@ import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/widget/buttons/text_button.dart';
+import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 
 import '../base_scaffold.dart';
 
@@ -44,7 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
             width: 496,
             padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 32),
             decoration: BoxDecorationEx.shadowEffect(
-                borderRadius: 16,
+                borderRadius: BorderRadius.circular(16),
                 blurRadius: 3,
                 shadowOffset: const Offset(0, 1),
                 shadowRadius: 2,
@@ -264,7 +266,12 @@ class _SignUpPageState extends State<SignUpPage> {
     NavigationController().notifierInitLoading.value = true;
     var res = await AuthAPI().signup(_emailController.text, _passwordController.text);
     NavigationController().notifierInitLoading.value = false;
-    print(res);
+
+    if (res is String) {
+      WarningMessageDialog.showDialog(context, res);
+    } else {
+      AuthStateManager().loggedIn.value = true;
+    }
   }
   void _onGoogleSignUp() {
 
