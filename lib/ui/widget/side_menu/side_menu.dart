@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/widget/cell/list/side_menu.dart';
 import 'package:louzero/ui/widget/dialolg/popup/camera_option.dart';
 
@@ -119,7 +121,7 @@ class _SideMenuViewState extends State<SideMenuView> {
               CupertinoButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   "My Account",
                   style: TextStyle(
                     color: AppColors.dark_1,
@@ -144,7 +146,9 @@ class _SideMenuViewState extends State<SideMenuView> {
                         Icons.dashboard,
                         color: AppColors.icon,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _pop();
+                      },
                     ),
                     SideMenuCell(
                       title: "Customers",
@@ -153,23 +157,32 @@ class _SideMenuViewState extends State<SideMenuView> {
                         color: AppColors.icon,
                       ),
                       count: 0,
-                      onPressed: () {},
+                      onPressed: () {
+                        _pop();
+                        NavigationController().pushTo(context, child: const AddCustomerPage());
+                      },
                     ),
                     SideMenuCell(
                       title: "Jobs",
                       icon: Image.asset("assets/icons/menu/jobs.png"),
                       count: 0,
-                      onPressed: () {},
+                      onPressed: () {
+                        _pop();
+                      },
                     ),
                     SideMenuCell(
                       title: "Schedule",
                       icon: Image.asset("assets/icons/menu/schedule.png"),
-                      onPressed: () {},
+                      onPressed: () {
+                        _pop();
+                      },
                     ),
                     SideMenuCell(
                       title: "Inventory",
                       icon: Image.asset("assets/icons/menu/inventory.png"),
-                      onPressed: () {},
+                      onPressed: () {
+                        _pop();
+                      },
                     ),
                     SideMenuCell(
                       title: "Reports",
@@ -177,7 +190,9 @@ class _SideMenuViewState extends State<SideMenuView> {
                         Icons.bar_chart,
                         color: AppColors.icon,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _pop();
+                      },
                     ),
                     const SizedBox(height: 20,),
                     Column(
@@ -196,7 +211,9 @@ class _SideMenuViewState extends State<SideMenuView> {
                         Icons.settings,
                         color: AppColors.icon,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _pop();
+                      },
                     ),
 
                   ],
@@ -219,6 +236,8 @@ class _SideMenuViewState extends State<SideMenuView> {
       // selectedImage.
     }
   }
+
+  void _pop()=> NavigationController().pop(context);
 }
 
 

@@ -33,11 +33,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   backendless_sdk: 23f02a2afbc999842b93d27ee7c10a5b49f2edb6
   BackendlessSwift: 1ec74d3ea9de1ed9e5291e23e322b51b0bf9ee41
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
   Socket.IO-Client-Swift: c116d6dc9fd6be9c259bacfe143f8725bce7d79e
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2
