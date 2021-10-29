@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/models.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
-import 'package:louzero/ui/widget/buttons/text_button.dart';
-import 'package:louzero/ui/widget/side_menu/sub_app_bar.dart';
-import 'package:louzero/ui/widget/switch_button.dart';
-import 'package:louzero/ui/widget/textfield/text_field.dart';
+import 'package:louzero/ui/widget/widget.dart';
+
 
 class AddCustomerPage extends StatefulWidget {
   const AddCustomerPage({Key? key}) : super(key: key);
@@ -21,7 +20,15 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController = TextEditingController();
   bool _subAccount = false;
+  bool _billAddressEnabled = true;
   CTContactType? _contactType;
+  final List<Widget> _customerContactList = [];
+
+  @override
+  void initState() {
+    _customerContactList.add(_customerContact());
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -46,18 +53,23 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   Widget _body() {
+    List<Widget> list = [
+      _customerDetails(),
+      const SizedBox(height: 24),
+      _serviceAddress(),
+      const SizedBox(height: 24),
+      _billingAddress(),
+      ... _customerContactList,
+      const SizedBox(height: 24),
+      _addContact(),
+      const SizedBox(height: 32),
+      const Divider(),
+      const SizedBox(height: 32),
+      _saveOrCancel(),
+    ];
     return ListView(
       padding: const EdgeInsets.fromLTRB(32, 0, 32, 30),
-      children: [
-        _customerDetails(),
-        const SizedBox(height: 24),
-        _serviceAddress(),
-        const SizedBox(height: 24),
-        _billingAddress(),
-        const SizedBox(height: 24),
-        _customerContact(),
-        const SizedBox(height: 24),
-      ],
+      children: list,
     );
   }
 
@@ -78,7 +90,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             children: [
               Flexible(child: NZTextField(controller: _companyNameController, label: "Company or Account Name")),
               const SizedBox(width: 32),
-              Flexible(child: NZTextField(controller: _companyNameController, label: "Customer Type")),
+              Flexible(child: NZTextField(controller: _companyNameController, label: "Customer Type*")),
             ],
           ),
           const SizedBox(height: 24),
@@ -177,9 +189,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         children: [
           const Text("Billing Address", style: TextStyles.nav20),
           const SizedBox(height: 16),
-          NZSwitch(isOn: _subAccount, label: "Sub-Account of another customer", onChanged: (val) {
+          NZSwitch(isOn: _billAddressEnabled, label: "Sub-Account of another customer", onChanged: (val) {
             setState(() {
-              _subAccount = val;
+              _billAddressEnabled = val;
             });
           }),
         ],
@@ -189,6 +201,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   Widget _customerContact() {
     return Container(
+      margin: const EdgeInsets.only(top: 24),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.light_2, width: 1),
@@ -198,7 +211,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _itemTitle("Service Address", Icons.contacts),
+          _itemTitle("Custom Contact", Icons.contacts),
           const SizedBox(height: 24),
           Row(
             children: [
@@ -226,34 +239,80 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           const SizedBox(height: 16),
           const Divider(indent: 25, endIndent: 25),
           const SizedBox(height: 24),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.start,
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: [
-          //     _optionItem(CTContactType.primary),
-          //     _optionItem(CTContactType.billing),
-          //     _optionItem(CTContactType.schedule),
-          //   ],
-          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _contactTypeItem(CTContactType.primary),
+              _contactTypeItem(CTContactType.billing),
+              _contactTypeItem(CTContactType.schedule),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _optionItem(CTContactType type) => Container(
-    height: 35,
-    child: CheckboxListTile(
-        title: Text(type.name,
-            style: TextStyles.text16),
-        controlAffinity: ListTileControlAffinity.leading,
-        checkColor: Colors.white,
-        value: type == _contactType,
-        onChanged: (val) {
+  Widget _contactTypeItem(CTContactType type) => Container(
+        height: 35,
+        alignment: Alignment.centerLeft,
+        child: CupertinoButton(
+          onPressed: () {
+            setState(() {
+              _contactType = type;
+            });
+          },
+          padding: EdgeInsets.zero,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Checkbox(
+                  checkColor: Colors.white,
+                  value: type == _contactType,
+                  activeColor: AppColors.dark_1,
+                  onChanged: (val) {
+                    setState(() {
+                      _contactType = type;
+                    });
+                  }),
+              const SizedBox(width: 8),
+              Text(type.name, style: TextStyles.text16),
+              if (type != CTContactType.schedule) const SizedBox(width: 32),
+            ],
+          ),
+        ),
+      );
+
+  Widget _addContact() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: CupertinoButton(
+        onPressed: () {
           setState(() {
-            _contactType = type;
+            _customerContactList.add(_customerContact());
           });
-        }),
-  );
+        },
+        padding: EdgeInsets.zero,
+        child: Container(
+          height: 36,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.light_4,
+            borderRadius: BorderRadius.circular(18)
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              appIcon(Icons.add_circle, color: AppColors.medium_2),
+              const SizedBox(width: 8),
+              const Text("Add Another Contact", style: TextStyles.text16),
+              const SizedBox(width: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _itemTitle(String label, IconData iconData) {
     return Row(
@@ -264,5 +323,44 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         Text(label, style: TextStyles.nav20),
       ],
     );
+  }
+
+  Widget _saveOrCancel() {
+    return Container(
+      padding: const EdgeInsets.only(left: 24),
+      alignment: Alignment.centerLeft,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CupertinoButton(
+              child: Container(
+                width: 192,
+                height: 56,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: AppColors.dark_1,
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                child: Text("SAVE CUSTOMER", style: TextStyles.text16.copyWith(color: Colors.white),),
+              ),
+              onPressed: _save),
+          const SizedBox(width: 8),
+          CupertinoButton(
+              child: Container(
+                width: 125,
+                height: 56,
+                alignment: Alignment.center,
+                child: const Text("CANCEL", style: TextStyles.text16),
+              ),
+              onPressed: () {
+                NavigationController().pop(context);
+              }),
+        ],
+      ),
+    );
+  }
+
+  void _save() {
+
   }
 }

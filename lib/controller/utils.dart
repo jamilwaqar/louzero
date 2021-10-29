@@ -24,6 +24,6 @@ class Utils {
   }
 }
 
-Icon appIcon(IconData iconData) {
-  return Icon(iconData, size: 24, color: AppColors.icon);
+Icon appIcon(IconData iconData, {Color? color}) {
+  return Icon(iconData, size: 24, color: color ?? AppColors.icon);
 }

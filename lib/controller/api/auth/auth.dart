@@ -38,6 +38,15 @@ class AuthAPI {
       return e.message;
     }
   }
+
+  Future sendForgot(String email) async {
+    try {
+      await Backendless.userService.restorePassword(email);
+    } on PlatformException catch (e) {
+      return e.message;
+    }
+  }
+
   Future logout() async {
     try {
       await Backendless.userService.logout();

@@ -11,6 +11,7 @@ abstract class AppColors {
   static Color light_1 = const Color(0xFFF1F2F4);
   static Color light_2 = const Color(0xFFD6D8DC);
   static Color light_3 = const Color(0xFFBABDC5);
+  static const Color light_4 = Color(0xFFE2E2E3);
   static Color lightest = const Color(0xFFFFFFFF);
   static Color darkest = const Color(0xFF0B0C0E);
   static Color icon = const Color(0xFF323232);
