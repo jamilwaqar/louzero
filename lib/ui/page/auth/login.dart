@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     if (kDebugMode) {
       _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "9bjFFZXB";
+      _passwordController.text = "DhDGIDqy";
     }
     super.initState();
   }
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             child: Column(
               children: [
-                Text(
+                const Text(
                   "Sign in to LOUzero",
                   style: TextStyle(
                     color: AppColors.dark_1,
@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'New to LOUzero? ',
                       style: TextStyle(
                         fontSize: 16,
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Email Address",
                       style: TextStyle(
                         color: AppColors.dark_1,
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Password",
                       style: TextStyle(
                         color: AppColors.dark_1,
@@ -213,8 +213,8 @@ class _LoginPageState extends State<LoginPage> {
                         color: AppColors.light_3,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
                       child: Text(
                           "or",
                           style: TextStyle(
@@ -244,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(28),
                       border: Border.all(color: AppColors.medium_1, width: 1)
                     ),
-                    child: Text(
+                    child: const Text(
                         "Sign In with Google",
                         style: TextStyle(
                           color: AppColors.dark_1,

@@ -57,7 +57,7 @@ class DashboardCell extends StatelessWidget {
                         children: [
                           Text(
                               title,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: AppColors.dark_1,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20,

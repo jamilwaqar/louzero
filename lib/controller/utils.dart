@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/state/auth_state.dart';
 
 class Utils {
@@ -21,4 +22,8 @@ class Utils {
   Future initialize() async {
     AuthStateManager().initializeManager();
   }
+}
+
+Icon appIcon(IconData iconData, {Color? color}) {
+  return Icon(iconData, size: 24, color: color ?? AppColors.icon);
 }

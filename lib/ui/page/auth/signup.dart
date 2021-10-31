@@ -54,7 +54,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             child: Column(
               children: [
-                Text(
+                const Text(
                   "Create Account",
                   style: TextStyle(
                     color: AppColors.dark_1,
@@ -66,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Already using LOUzero? ',
                       style: TextStyle(
                         fontSize: 16,
@@ -94,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         borderRadius: BorderRadius.circular(28),
                         border: Border.all(color: AppColors.medium_1, width: 1)
                     ),
-                    child: Text(
+                    child: const Text(
                         "Sign up with Google",
                         style: TextStyle(
                           color: AppColors.dark_1,
@@ -113,8 +113,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         color: AppColors.light_3,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
                       child: Text(
                           "or",
                           style: TextStyle(
@@ -136,7 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Enter your email to create a new account",
                       style: TextStyle(
                         color: AppColors.dark_1,
@@ -145,7 +145,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     const SizedBox(height: 16,),
-                    Text(
+                    const Text(
                       "Your Email",
                       style: TextStyle(
                         color: AppColors.dark_1,
@@ -181,7 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Password",
                       style: TextStyle(
                         color: AppColors.dark_1,

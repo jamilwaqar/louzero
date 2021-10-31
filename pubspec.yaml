@@ -19,6 +19,9 @@ dependencies:
 
   another_flushbar:
   image_picker:
+  flutter_bloc:
+  bloc:
+  flutter_switch:
 
 dev_dependencies:
   flutter_test:

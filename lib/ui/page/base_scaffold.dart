@@ -65,7 +65,6 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                   PopupMenuButton(
                                       offset: const Offset(0, 40),
                                       onSelected: (value) {
-                                        print(value);
                                         if (value == 3) {
                                           _onSignOut();
                                         }

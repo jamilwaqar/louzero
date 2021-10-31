@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+
+class SubAppBar extends StatelessWidget with PreferredSizeWidget {
+  final String title;
+  final List<Widget>? actions;
+  final Widget? leading;
+  final String leadingTxt;
+  final bool hasActions;
+  final BuildContext context;
+  final Function()? onPressed;
+
+  const SubAppBar(
+      {required this.title,
+        required this.context,
+        this.actions,
+        this.leading,
+        this.leadingTxt = '',
+        this.hasActions = true,
+        this.onPressed, Key? key})
+      : super(key: key);
+
+  @override
+  Size get preferredSize => const Size.fromHeight(55);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      shadowColor: Colors.transparent,
+      backgroundColor: Colors.transparent,
+      title: Text(title, style: TextStyles.title24),
+      centerTitle: true,
+      leading: leading ?? _leading,
+      leadingWidth: 200,
+      actions: actions ?? (hasActions ? [_cancel] : null),
+    );
+  }
+
+  Widget get _leading {
+    return TextButton(
+      onPressed: ()=> NavigationController().pop(context),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // const SizedBox(width: 32),
+          Icon(Icons.arrow_back, color: AppColors.icon),
+          const SizedBox(width: 8),
+          Text(leadingTxt, style: TextStyles.nav20),
+        ],
+      ),
+    );
+  }
+
+  Widget get _cancel {
+    return Padding(
+      padding: const EdgeInsets.only(right: 40.0),
+      child: TextButton(
+        onPressed: () => NavigationController().pop(context),
+        child: const Text('Cancel', style: TextStyles.nav20),
+      ),
+    );
+  }
+}
