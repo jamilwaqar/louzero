@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Email Address",
                       style: TextStyle(
                         color: AppColors.dark_1,

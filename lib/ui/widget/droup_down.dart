@@ -12,30 +12,30 @@ class NZDropDownMenu extends StatelessWidget {
       child: DropdownButtonFormField<int>(
           isExpanded: true,
           hint: Text(label),
-          decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(0.0),
+          decoration: const InputDecoration(
+              contentPadding: EdgeInsets.all(0.0),
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),
               isDense: true),
           value: null,
-          items: [
+          items: const [
             DropdownMenuItem<int>(
               value: 0,
-              child: Container(
+              child: SizedBox(
                 width: 100,
                 height: 50,
-                child: const Text(
+                child: Text(
                   "less character", style: TextStyles.text16
                 ),
               ),
             ),
             DropdownMenuItem<int>(
                 value: 1,
-                child: Container(
+                child: SizedBox(
                   width: 100,
                   height: 50,
-                  child: const Text(
+                  child: Text(
                     "mooooorrrrreeee character", style: TextStyles.text16,
                   ),
                 )),

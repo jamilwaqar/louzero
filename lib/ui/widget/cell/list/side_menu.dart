@@ -28,7 +28,7 @@ class SideMenuCell extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.dark_1,
                   fontWeight: FontWeight.w400,
                   fontSize: 16,

@@ -231,7 +231,6 @@ class _SideMenuViewState extends State<SideMenuView> {
       var selectedImage = await ImagePicker().pickImage(source: option);
       setState(() {
         _profileImagePath = selectedImage?.path;
-        print(_profileImagePath);
       });
       // selectedImage.
     }

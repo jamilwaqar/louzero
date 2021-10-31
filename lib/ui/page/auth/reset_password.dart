@@ -49,7 +49,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             ),
             child: Column(
               children: [
-                Text(
+                const Text(
                   "Can't Log in?",
                   style: TextStyle(
                     color: AppColors.dark_1,
@@ -58,8 +58,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   ),
                 ),
                 const SizedBox(height: 16,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
                     "Not to worry. Enter the email address you use to sign in to LOUzero below and we'll send you instructions on how to set a new password. ",
                     style: TextStyle(
@@ -73,7 +73,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Your Email",
                       style: TextStyle(
                         color: AppColors.dark_1,
@@ -130,7 +130,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Never mind, go back to the ',
                       style: TextStyle(
                         fontSize: 16,
@@ -144,7 +144,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       textDecoration: TextDecoration.underline,
                       onPressed: _onSignIn,
                     ),
-                    Text(
+                    const Text(
                       ' screen',
                       style: TextStyle(
                         fontSize: 16,
