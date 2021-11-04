@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/widget/appbar_action.dart';
 
 class SubAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
@@ -53,12 +54,7 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   Widget get _cancel {
-    return Padding(
-      padding: const EdgeInsets.only(right: 40.0),
-      child: TextButton(
-        onPressed: () => NavigationController().pop(context),
-        child: const Text('Cancel', style: TextStyles.nav20),
-      ),
-    );
+    return AppBarAction(
+        label: 'Cancel', onPressed: () => NavigationController().pop(context));
   }
 }

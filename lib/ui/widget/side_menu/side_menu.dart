@@ -7,6 +7,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
+import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/widget/cell/list/side_menu.dart';
 import 'package:louzero/ui/widget/dialolg/popup/camera_option.dart';
 
@@ -159,7 +160,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                       count: 0,
                       onPressed: () {
                         _pop();
-                        NavigationController().pushTo(context, child: const AddCustomerPage());
+                        NavigationController().pushTo(context, child: const CustomerListPage());
                       },
                     ),
                     SideMenuCell(
