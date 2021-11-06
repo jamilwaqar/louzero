@@ -30,7 +30,7 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       shadowColor: Colors.transparent,
       backgroundColor: Colors.transparent,
-      title: Text(title, style: TextStyles.title24),
+      title: Text(title, style: TextStyles.headLineM.copyWith(color: AppColors.dark_3)),
       centerTitle: true,
       leading: leading ?? _leading,
       leadingWidth: 200,
@@ -45,9 +45,9 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // const SizedBox(width: 32),
-          Icon(Icons.arrow_back, color: AppColors.icon),
+          const Icon(Icons.arrow_back, color: AppColors.icon),
           const SizedBox(width: 8),
-          Text(leadingTxt, style: TextStyles.nav20),
+          Text(leadingTxt, style: TextStyles.titleM),
         ],
       ),
     );

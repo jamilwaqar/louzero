@@ -11,3 +11,12 @@ enum CTContactType {
   billing,
   schedule,
 }
+
+enum CustomerCategory {
+  jobs,
+  siteProfiles,
+  contacts,
+  pictures,
+  notes,
+  subAccounts
+}

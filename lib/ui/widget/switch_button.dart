@@ -34,7 +34,7 @@ class NZSwitch extends StatelessWidget {
           onToggle: onChanged,
         ),
         const SizedBox(width: 8),
-        Text(label, style: TextStyles.text16,)
+        Text(label, style: TextStyles.bodyL,)
       ],
     );
   }

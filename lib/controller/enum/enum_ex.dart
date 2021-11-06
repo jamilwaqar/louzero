@@ -12,3 +12,39 @@ extension CTContactTypeEx on CTContactType {
     }
   }
 }
+
+extension CustomerCategoryEx on CustomerCategory {
+  String get title {
+    switch(this) {
+      case CustomerCategory.jobs:
+        return 'Jobs';
+      case CustomerCategory.siteProfiles:
+        return 'Site Profiles';
+      case CustomerCategory.contacts:
+        return 'Contacts';
+      case CustomerCategory.pictures:
+        return 'Pictures';
+      case CustomerCategory.notes:
+        return 'Customer Notes';
+      case CustomerCategory.subAccounts:
+        return 'Sub-Accounts';
+    }
+  }
+
+  String get description {
+    switch(this) {
+      case CustomerCategory.jobs:
+        return 'Track and view existing Jobs as well as create new ones';
+      case CustomerCategory.siteProfiles:
+        return 'Keep track of important information about this customer’s location';
+      case CustomerCategory.contacts:
+        return 'Manage primary, billing, and other contacts for this customer';
+      case CustomerCategory.pictures:
+        return 'Keep track of location photos, job photos, and more';
+      case CustomerCategory.notes:
+        return 'A place to keep notes for this customer that don’t fit anywhere else';
+      case CustomerCategory.subAccounts:
+        return 'Manage and create new sub-account for this customer';
+    }
+  }
+}

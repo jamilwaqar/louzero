@@ -4,19 +4,19 @@ import 'package:louzero/controller/constant/colors.dart';
 
 class CameraOption {
   static Future showCameraOptions(BuildContext context) {
-    var styleTitle = TextStyle(
+    var styleTitle = const TextStyle(
       fontFamily: "Mulish",
       fontWeight: FontWeight.w700,
       fontSize: 16,
       color: AppColors.black,
     );
-    var style = TextStyle(
+    var style = const TextStyle(
       fontFamily: "Mulish",
       fontWeight: FontWeight.w500,
       fontSize: 14,
       color: AppColors.black,
     );
-    var styleCancel = TextStyle(
+    var styleCancel = const TextStyle(
       fontFamily: "Mulish",
       fontWeight: FontWeight.w500,
       fontSize: 14,

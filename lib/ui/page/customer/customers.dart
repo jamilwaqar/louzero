@@ -62,11 +62,11 @@ class _CustomerListPageState extends State<CustomerListPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               DashboardCell(
-                title: "Customer",
+                title: "Customer ${index + 1}",
                 description: "Description...",
                 count: 0,
-                buttonTitleLeft: "ADD CUSTOMER",
-                buttonTitleRight: "VIEW ALL",
+                buttonTitleLeft: "3486 Archwood Ave., Vancouver, Washington 98665",
+                buttonTitleRight: "",
                 onPressed: () => NavigationController()
                     .pushTo(context, child: const CustomerProfilePage()),
                 onPressedLeft: () {},

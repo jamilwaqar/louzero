@@ -11,7 +11,7 @@ class ConfirmationDialog {
           return CupertinoAlertDialog(
             content: Text(
               content,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: "Mulish",
                   fontWeight: FontWeight.w400,
                   fontSize: 16,

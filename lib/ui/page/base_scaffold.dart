@@ -52,7 +52,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                   CupertinoButton(
                                     padding: EdgeInsets.zero,
                                     onPressed: _onMenu,
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.menu,
                                       color: AppColors.lightest,
                                     ),
@@ -72,7 +72,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                       elevation: 2,
                                       shape: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(8),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                               color: AppColors.medium_2,
                                               width: 0
                                           )
@@ -88,7 +88,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                                 borderRadius: BorderRadius.circular(16),
                                                 border: Border.all(color: AppColors.medium_1, width: 1)
                                             ),
-                                            child: Text(
+                                            child: const Text(
                                                 "MA",
                                                 style: TextStyle(
                                                   color: AppColors.lightest,
@@ -98,7 +98,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                             ),
                                           ),
                                           const SizedBox(width: 4,),
-                                          Icon(
+                                          const Icon(
                                             Icons.arrow_drop_down,
                                             color: AppColors.light_3,
                                           )
@@ -110,12 +110,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                             width: 280,
                                             height: 60,
                                             child: Row(
-                                              children: [
+                                              children: const [
                                                 Icon(
                                                   Icons.account_circle_rounded,
                                                   color: AppColors.icon,
                                                 ),
-                                                const SizedBox(width: 10,),
+                                                SizedBox(width: 10,),
                                                 Text(
                                                     "My Account",
                                                     style: TextStyle(
@@ -134,12 +134,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                             width: 280,
                                             height: 60,
                                             child: Row(
-                                              children: [
+                                              children: const [
                                                 Icon(
                                                   Icons.settings,
                                                   color: AppColors.icon,
                                                 ),
-                                                const SizedBox(width: 10,),
+                                                SizedBox(width: 10,),
                                                 Text(
                                                     "Settings",
                                                     style: TextStyle(
@@ -158,12 +158,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                             width: 280,
                                             height: 60,
                                             child: Row(
-                                              children: [
+                                              children: const [
                                                 Icon(
                                                   Icons.exit_to_app,
                                                   color: AppColors.icon,
                                                 ),
-                                                const SizedBox(width: 10,),
+                                                SizedBox(width: 10,),
                                                 Text(
                                                     "Sign Out",
                                                     style: TextStyle(

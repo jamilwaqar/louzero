@@ -97,7 +97,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                             color: AppColors.dark_3),
@@ -116,7 +116,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         color: AppColors.dark_1,
                         borderRadius: BorderRadius.circular(28)
                     ),
-                    child: Text(
+                    child: const Text(
                         "Email Reset Instructions",
                         style: TextStyle(
                           color: AppColors.lightest,

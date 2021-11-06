@@ -12,7 +12,7 @@ class AppBarAction extends StatelessWidget {
       padding: const EdgeInsets.only(right: 40.0),
       child: TextButton(
         onPressed: onPressed,
-        child: Text(label, style: TextStyles.nav20),
+        child: Text(label, style: TextStyles.titleM),
       ),
     );
   }
