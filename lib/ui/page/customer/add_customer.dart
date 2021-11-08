@@ -187,7 +187,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Billing Address", style: TextStyles.nav20),
+          const Text("Billing Address", style: TextStyles.titleM),
           const SizedBox(height: 16),
           NZSwitch(isOn: _billAddressEnabled, label: "Sub-Account of another customer", onChanged: (val) {
             setState(() {
@@ -276,7 +276,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                     });
                   }),
               const SizedBox(width: 8),
-              Text(type.name, style: TextStyles.text16),
+              Text(type.name, style: TextStyles.bodyL),
               if (type != CTContactType.schedule) const SizedBox(width: 32),
             ],
           ),
@@ -305,7 +305,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             children: [
               appIcon(Icons.add_circle, color: AppColors.medium_2),
               const SizedBox(width: 8),
-              const Text("Add Another Contact", style: TextStyles.text16),
+              const Text("Add Another Contact", style: TextStyles.bodyL),
               const SizedBox(width: 16),
             ],
           ),
@@ -320,7 +320,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       children: [
         appIcon(iconData),
         const SizedBox(width: 8),
-        Text(label, style: TextStyles.nav20),
+        Text(label, style: TextStyles.titleM),
       ],
     );
   }
@@ -341,7 +341,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   color: AppColors.dark_1,
                   borderRadius: BorderRadius.circular(28),
                 ),
-                child: Text("SAVE CUSTOMER", style: TextStyles.text16.copyWith(color: Colors.white),),
+                child: Text("SAVE CUSTOMER", style: TextStyles.bodyL.copyWith(color: Colors.white),),
               ),
               onPressed: _save),
           const SizedBox(width: 8),
@@ -350,7 +350,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 width: 125,
                 height: 56,
                 alignment: Alignment.center,
-                child: const Text("CANCEL", style: TextStyles.text16),
+                child: const Text("CANCEL", style: TextStyles.bodyL),
               ),
               onPressed: () {
                 NavigationController().pop(context);

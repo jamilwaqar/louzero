@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/ui/page/customer/add_customer.dart';
+import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/widget/cell/list/side_menu.dart';
 import 'package:louzero/ui/widget/dialolg/popup/camera_option.dart';
 
@@ -53,7 +53,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.close,
                         color: AppColors.medium_3,
                       ),
@@ -78,7 +78,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                             fit: BoxFit.cover
                           )
                       ),
-                      child: _profileImagePath != null ? null : Text(
+                      child: _profileImagePath != null ? null : const Text(
                         "MA",
                         style: TextStyle(
                           color: AppColors.lightest,
@@ -99,7 +99,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                           border: Border.all(color: AppColors.light_1, width: 1),
                           color: AppColors.medium_3,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit,
                           color: AppColors.lightest,
                           size: 12,
@@ -110,7 +110,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 ),
               ),
               const SizedBox(height: 16,),
-              Text(
+              const Text(
                 "Mark Austen",
                 style: TextStyle(
                   color: AppColors.black,
@@ -142,7 +142,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                   children: [
                     SideMenuCell(
                       title: "Dashboard",
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.dashboard,
                         color: AppColors.icon,
                       ),
@@ -152,14 +152,14 @@ class _SideMenuViewState extends State<SideMenuView> {
                     ),
                     SideMenuCell(
                       title: "Customers",
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.person,
                         color: AppColors.icon,
                       ),
                       count: 0,
                       onPressed: () {
                         _pop();
-                        NavigationController().pushTo(context, child: const AddCustomerPage());
+                        NavigationController().pushTo(context, child: const CustomerListPage());
                       },
                     ),
                     SideMenuCell(
@@ -186,7 +186,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                     ),
                     SideMenuCell(
                       title: "Reports",
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.bar_chart,
                         color: AppColors.icon,
                       ),
@@ -207,7 +207,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                     const SizedBox(height: 16,),
                     SideMenuCell(
                       title: "Settings",
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.settings,
                         color: AppColors.icon,
                       ),

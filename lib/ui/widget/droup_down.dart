@@ -26,7 +26,7 @@ class NZDropDownMenu extends StatelessWidget {
                 width: 100,
                 height: 50,
                 child: Text(
-                  "less character", style: TextStyles.text16
+                  "less character", style: TextStyles.bodyL
                 ),
               ),
             ),
@@ -36,7 +36,7 @@ class NZDropDownMenu extends StatelessWidget {
                   width: 100,
                   height: 50,
                   child: Text(
-                    "mooooorrrrreeee character", style: TextStyles.text16,
+                    "mooooorrrrreeee character", style: TextStyles.bodyL,
                   ),
                 )),
           ],

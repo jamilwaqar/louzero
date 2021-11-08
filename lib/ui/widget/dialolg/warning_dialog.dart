@@ -19,7 +19,7 @@ class WarningMessageDialog {
         child: Center(
           child: Text(message,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                   color: AppColors.lightest,
                   fontWeight: FontWeight.w700,
                   fontSize: 15)),

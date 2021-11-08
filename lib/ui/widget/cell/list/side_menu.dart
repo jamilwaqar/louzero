@@ -46,7 +46,7 @@ class SideMenuCell extends StatelessWidget {
                 ),
                 child: Text(
                   "${count ?? 0}",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.lightest,
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
