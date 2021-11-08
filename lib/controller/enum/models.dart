@@ -20,3 +20,9 @@ enum CustomerCategory {
   notes,
   subAccounts
 }
+
+enum CTSiteTemplate {
+  residential,
+  commercial,
+  custom,
+}

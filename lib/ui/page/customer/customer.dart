@@ -8,9 +8,8 @@ import 'package:louzero/controller/enum/models.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
-import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer_location.dart';
-import 'package:louzero/ui/widget/appbar_action.dart';
+import 'package:louzero/ui/page/customer/customer_site.dart';
 import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
@@ -25,10 +24,9 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController =
       TextEditingController();
-  late HeroController _heroController;
+
   @override
   void initState() {
-    _heroController = HeroController(createRectTween: _createRectTween);
     super.initState();
   }
 
@@ -262,57 +260,81 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   }
 
   Widget _categoryItem(CustomerCategory category) {
-    return Container(
-      alignment: Alignment.topLeft,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.light_2, width: 1),
-        color: AppColors.lightest,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              width: 64,
-              height: 64,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.light_1,
+    return InkWell(
+      onTap: () {
+        Widget? categoryPage;
+        switch(category) {
+          case CustomerCategory.jobs:
+            break;
+          case CustomerCategory.siteProfiles:
+            categoryPage = const CustomerSiteProfilePage();
+            break;
+          case CustomerCategory.contacts:
+            break;
+          case CustomerCategory.pictures:
+            break;
+          case CustomerCategory.notes:
+            break;
+          case CustomerCategory.subAccounts:
+            break;
+        }
+
+        if (categoryPage != null) {
+          NavigationController().pushTo(context, child: categoryPage);
+        }
+      },
+      child: Container(
+        alignment: Alignment.topLeft,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.light_2, width: 1),
+          color: AppColors.lightest,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                width: 64,
+                height: 64,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.light_1,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: Text(category.title, style: TextStyles.titleL.copyWith(color: AppColors.dark_3))),
-                    Container(
-                      width: 32,
-                      height: 32,
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.light_2,
-                      ),
-                      child: const Text('7', style: TextStyle(fontSize: 14, color: AppColors.dark_3, fontWeight: FontWeight.bold)),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  category.description,
-                  style: TextStyles.bodyM.copyWith(color: AppColors.dark_3),
-                  maxLines: 2,
-                ),
-              ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(child: Text(category.title, style: TextStyles.titleL.copyWith(color: AppColors.dark_3))),
+                      Container(
+                        width: 32,
+                        height: 32,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.light_2,
+                        ),
+                        child: const Text('7', style: TextStyle(fontSize: 14, color: AppColors.dark_3, fontWeight: FontWeight.bold)),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    category.description,
+                    style: TextStyles.bodyM.copyWith(color: AppColors.dark_3),
+                    maxLines: 2,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

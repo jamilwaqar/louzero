@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     if (kDebugMode) {
       _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "DhDGIDqy";
+      _passwordController.text = "73SWhjN3";
     }
     super.initState();
   }
