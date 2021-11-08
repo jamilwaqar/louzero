@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
+import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/widget/cell/grid/dashboard.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -25,7 +27,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   count: 0,
                   buttonTitleLeft: "ADD CUSTOMER",
                   buttonTitleRight: "VIEW ALL",
-                  onPressed: () {},
+                  onPressed: () {
+                    NavigationController().pushTo(context, child: const CustomerListPage());
+                  },
                   onPressedLeft: () {},
                   onPressedRight: () {},
                 ),

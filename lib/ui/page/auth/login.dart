@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                             border: InputBorder.none,
                         ),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                             color: AppColors.dark_3),
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                             color: AppColors.dark_3),
@@ -186,12 +186,12 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Icon(
                           Icons.lock,
                           color: AppColors.light_2,
                         ),
-                        const SizedBox(width: 8,),
+                        SizedBox(width: 8,),
                         Text(
                             "Sign In",
                             style: TextStyle(

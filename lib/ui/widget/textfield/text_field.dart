@@ -14,7 +14,7 @@ class NZTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyles.text16,
+          style: TextStyles.bodyL,
         ),
         const SizedBox(height: 4,),
         Container(
@@ -32,7 +32,7 @@ class NZTextField extends StatelessWidget {
             decoration: const InputDecoration(
               border: InputBorder.none,
             ),
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
                 color: AppColors.dark_3),

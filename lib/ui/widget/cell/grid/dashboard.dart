@@ -45,7 +45,7 @@ class DashboardCell extends StatelessWidget {
                           color: AppColors.light_3.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(8)
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.image,
                           color: AppColors.light_3,
                         ),
@@ -66,7 +66,7 @@ class DashboardCell extends StatelessWidget {
                           const SizedBox(width: 16,),
                           Text(
                               description,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: AppColors.medium_3,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,
@@ -88,7 +88,7 @@ class DashboardCell extends StatelessWidget {
                     ),
                     child: Text(
                         "${count ?? 0}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.darkest,
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -106,7 +106,7 @@ class DashboardCell extends StatelessWidget {
                     onPressed: onPressedLeft,
                     child: Text(
                         buttonTitleLeft ?? "",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.black,
                           fontWeight: FontWeight.w400,
                           fontSize: 16,
@@ -119,7 +119,7 @@ class DashboardCell extends StatelessWidget {
                     onPressed: onPressedRight,
                     child: Text(
                         buttonTitleRight ?? "",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.black,
                           fontWeight: FontWeight.w400,
                           fontSize: 16,

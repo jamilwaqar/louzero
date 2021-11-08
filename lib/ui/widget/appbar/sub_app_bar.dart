@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/widget/appbar_action.dart';
 
 class SubAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
@@ -29,7 +30,7 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       shadowColor: Colors.transparent,
       backgroundColor: Colors.transparent,
-      title: Text(title, style: TextStyles.title24),
+      title: Text(title, style: TextStyles.headLineM.copyWith(color: AppColors.dark_3)),
       centerTitle: true,
       leading: leading ?? _leading,
       leadingWidth: 200,
@@ -44,21 +45,16 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // const SizedBox(width: 32),
-          Icon(Icons.arrow_back, color: AppColors.icon),
+          const Icon(Icons.arrow_back, color: AppColors.icon),
           const SizedBox(width: 8),
-          Text(leadingTxt, style: TextStyles.nav20),
+          Text(leadingTxt, style: TextStyles.titleM),
         ],
       ),
     );
   }
 
   Widget get _cancel {
-    return Padding(
-      padding: const EdgeInsets.only(right: 40.0),
-      child: TextButton(
-        onPressed: () => NavigationController().pop(context),
-        child: const Text('Cancel', style: TextStyles.nav20),
-      ),
-    );
+    return AppBarAction(
+        label: 'Cancel', onPressed: () => NavigationController().pop(context));
   }
 }
