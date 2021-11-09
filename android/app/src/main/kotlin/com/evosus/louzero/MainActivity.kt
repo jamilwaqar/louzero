@@ -1,4 +1,4 @@
-package com.singlemind.louzero.louzero
+package com.evosus.louzero
 
 import io.flutter.embedding.android.FlutterActivity
 
