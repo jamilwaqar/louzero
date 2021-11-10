@@ -13,6 +13,6 @@ class AuthStateManager {
   final loggedIn = ValueNotifier(false);
 
   Future initializeManager() async {
-    loggedIn.value = true/*(await Backendless.userService.isValidLogin()) ?? false*/;
+    loggedIn.value = (await Backendless.userService.isValidLogin()) ?? false;
   }
 }
