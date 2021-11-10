@@ -88,9 +88,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           const SizedBox(height: 32),
           Row(
             children: [
-              Flexible(child: NZTextField(controller: _companyNameController, label: "Company or Account Name")),
+              Flexible(child: LZTextField(controller: _companyNameController, label: "Company or Account Name")),
               const SizedBox(width: 32),
-              Flexible(child: NZTextField(controller: _companyNameController, label: "Customer Type*")),
+              Flexible(child: LZTextField(controller: _companyNameController, label: "Customer Type*")),
             ],
           ),
           const SizedBox(height: 24),
@@ -115,7 +115,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         const SizedBox(height: 24),
         Row(
           children: [
-            Flexible(child: NZTextField(controller: _parentAccountNameController, label: "Parent Account Name")),
+            Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Parent Account Name")),
             const SizedBox(width: 32),
             const Flexible(child: SizedBox()),
           ],
@@ -139,27 +139,27 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           const SizedBox(height: 32),
           Row(
             children: [
-              Flexible(child: NZTextField(controller: _parentAccountNameController, label: "Country")),
+              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Country")),
               const SizedBox(width: 32),
               const Flexible(child: SizedBox()),
             ],
           ),
           const SizedBox(height: 24),
-          NZTextField(controller: _parentAccountNameController, label: "Street Address"),
+          LZTextField(controller: _parentAccountNameController, label: "Street Address"),
           const SizedBox(height: 16),
-          NZTextField(controller: _parentAccountNameController, label: "Apartment, unit, suite, or floor #"),
+          LZTextField(controller: _parentAccountNameController, label: "Apartment, unit, suite, or floor #"),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Flexible(child: NZTextField(controller: _parentAccountNameController, label: "City")),
+              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "City")),
               const SizedBox(width: 16),
               Flexible(
                 child: Row(
                   children: [
-                    Flexible(child: NZTextField(controller: _parentAccountNameController, label: "State")),
+                    Flexible(child: LZTextField(controller: _parentAccountNameController, label: "State")),
                     const SizedBox(width: 16),
-                    Flexible(child: NZTextField(controller: _parentAccountNameController, label: "Zip")),
+                    Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Zip")),
                   ],
                 ),
               ),
@@ -215,23 +215,23 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           const SizedBox(height: 24),
           Row(
             children: [
-              Flexible(child: NZTextField(controller: _parentAccountNameController, label: "First Name")),
+              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "First Name")),
               const SizedBox(width: 32),
-              Flexible(child: NZTextField(controller: _parentAccountNameController, label: "Last Name")),
+              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Last Name")),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              Flexible(child: NZTextField(controller: _parentAccountNameController, label: "Email Address")),
+              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Email Address")),
               const SizedBox(width: 32),
-              Flexible(child: NZTextField(controller: _parentAccountNameController, label: "Phone Number")),
+              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Phone Number")),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              Flexible(child: NZTextField(controller: _parentAccountNameController, label: "Role")),
+              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Role")),
               const SizedBox(width: 32),
               const Flexible(child: SizedBox()),
             ],

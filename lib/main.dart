@@ -9,7 +9,7 @@ import 'controller/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Backendless.setUrl(APIManager.API_HOST);
+  // await Backendless.setUrl(APIManager.API_HOST);
   await Backendless.initApp(
       applicationId: APIManager.APPLICATION_ID,
       androidApiKey: APIManager.ANDROID_API_KEY,

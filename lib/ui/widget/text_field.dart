@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
-class NZTextField extends StatelessWidget {
+class LZTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
 
-  const NZTextField({Key? key, required this.controller, required this.label}) : super(key: key);
+  const LZTextField({Key? key, required this.controller, required this.label}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

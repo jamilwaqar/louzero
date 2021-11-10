@@ -44,7 +44,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 20, 30, 0),
                             child: Row(
                               mainAxisAlignment: isLoggedIn ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                               children: [
