@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/enum/models.dart';
+import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
@@ -16,16 +17,22 @@ class CustomerSiteProfilePage extends StatefulWidget {
 
 class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   final TextEditingController _profileNameController = TextEditingController();
-  final TextEditingController _addNewLabelController = TextEditingController();
-  final TextEditingController _addNewValueController = TextEditingController();
+  TextEditingController _addNewLabelController = TextEditingController();
+  TextEditingController _addNewValueController = TextEditingController();
+
+  List<TextEditingController> _profileItemLabelControllers = [];
+  List<TextEditingController> _profileItemValueControllers = [];
+
   final String _getStartDes =
       "Create Site Profiles to keep track of information common across many customer locations. Examples might include, gate codes, chemical preferences, pool shapes, number of gallons in pool or spa, animals you may encounter, and other site-specific pieces of information not captured elsewhere.";
-
+  List<CTSiteProfile>profiles = [];
   bool _showMsg = false;
   bool _isEditing = false;
 
   @override
   void initState() {
+    _profileItemLabelControllers = List.generate(4, (index) => TextEditingController());
+    _profileItemValueControllers = List.generate(4, (index) => TextEditingController());
     super.initState();
   }
 
@@ -295,6 +302,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            const SizedBox(width: 56),
             Flexible(child: LZTextField(controller: _addNewLabelController, label: "Add New Label")),
             const SizedBox(width: 16),
             Flexible(child: LZTextField(controller: _addNewValueController, label: "Add New Value")),
@@ -317,7 +325,13 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                           TextStyles.titleM.copyWith(color: AppColors.dark_3),
                       textAlign: TextAlign.center),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _profileItemLabelControllers.add(_addNewLabelController);
+                  _profileItemValueControllers.add(_addNewValueController);
+                  _addNewLabelController = TextEditingController();
+                  _addNewValueController = TextEditingController();
+                  setState(() {});
+                },
               ),
             ),
           ],
@@ -326,33 +340,86 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     );
   }
 
-  final Color oddItemColor = AppColors.light_3;
-  final Color evenItemColor = AppColors.light_1;
-  final List<int> _items = List<int>.generate(4, (int index) => index);
-
+  final Color _oddItemColor = AppColors.light_1.withOpacity(0.7);
+  final Color _evenItemColor = AppColors.light_2.withOpacity(0.4);
   Widget _reorderList() {
-    return ReorderableListView(
-      shrinkWrap: true,
-      children: <Widget>[
-        for (int index = 0; index < _items.length; index++)
-          ListTile(
-            key: Key('$index'),
-            contentPadding: EdgeInsets.zero,
-            leading: appIcon(Icons.menu, color: AppColors.medium_2),
-            trailing: appIcon(Icons.delete, color: AppColors.medium_2),
-            tileColor: _items[index].isOdd ? oddItemColor : evenItemColor,
-            title: Text('Item ${_items[index]}'),
-          ),
-      ],
-      onReorder: (int oldIndex, int newIndex) {
-        setState(() {
-          if (oldIndex < newIndex) {
-            newIndex -= 1;
-          }
-          final int item = _items.removeAt(oldIndex);
-          _items.insert(newIndex, item);
-        });
-      },
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+      child: ReorderableListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          for (int index = 0; index < _profileItemLabelControllers.length; index++)
+            Container(
+              key: Key('$index'),
+              width: double.infinity,
+              height: 64,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(index == 0 ? 8 : 0),
+                    topRight: Radius.circular(index == 0 ? 8 : 0),
+                    bottomLeft: Radius.circular(index == _profileItemLabelControllers.length - 1 ? 8 : 0),
+                    bottomRight: Radius.circular(index == _profileItemLabelControllers.length - 1 ? 8 : 0)),
+                color: index.isOdd ? _oddItemColor : _evenItemColor,
+              ),
+              child: Row(
+                children: [
+                  const SizedBox(width: 16),
+                  appIcon(Icons.menu, color: AppColors.medium_2),
+                  const SizedBox(width: 16),
+                  Expanded(child: _textField(_profileItemLabelControllers[index])),
+                  const SizedBox(width: 16),
+                  Expanded(child: _textField(_profileItemValueControllers[index])),
+                  const SizedBox(width: 32),
+                  InkWell(
+                      onTap: () {
+                        _profileItemLabelControllers.removeAt(index);
+                        _profileItemValueControllers.removeAt(index);
+                        setState(() {});
+                      },
+                      child: appIcon(Icons.delete, color: AppColors.medium_2),
+                  ),
+                  const SizedBox(width: 32),
+                ],
+              ),
+            ),
+        ],
+        onReorder: (int oldIndex, int newIndex) {
+          setState(() {
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
+            final TextEditingController itemLabel = _profileItemLabelControllers.removeAt(oldIndex);
+            _profileItemLabelControllers.insert(newIndex, itemLabel);
+            final TextEditingController itemValue = _profileItemValueControllers.removeAt(oldIndex);
+            _profileItemValueControllers.insert(newIndex, itemValue);
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _textField(TextEditingController controller) {
+    return Container(
+      height: 48,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.light_3, width: 1),
+        color: Colors.white
+      ),
+      child: TextFormField(
+        controller: controller,
+        keyboardAppearance: Brightness.light,
+        keyboardType: TextInputType.emailAddress,
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+        ),
+        style: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            color: AppColors.dark_3),
+      ),
     );
   }
 
@@ -391,6 +458,16 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   void _save() {
+    CTSiteProfile profile = CTSiteProfile();
+    profile.name = _profileNameController.text;
+    for (int i = 0; i < _profileItemLabelControllers.length; i++) {
+      String label = _profileItemLabelControllers[i].text;
+      if (label.isEmpty) continue;
+      profile.profiles[label] = _profileItemValueControllers[i].text;
+    }
 
+    setState(() {
+      profiles.add(profile);
+    });
   }
 }

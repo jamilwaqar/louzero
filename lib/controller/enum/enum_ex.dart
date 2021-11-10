@@ -1,4 +1,4 @@
-import 'package:louzero/controller/enum/models.dart';
+import 'package:louzero/controller/enum/enums.dart';
 
 extension CTContactTypeEx on CTContactType {
   String get name {
