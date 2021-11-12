@@ -12,7 +12,8 @@ import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerSiteProfilePage extends StatefulWidget {
-  const CustomerSiteProfilePage({Key? key}) : super(key: key);
+  final bool isTemplate;
+  const CustomerSiteProfilePage({this.isTemplate = false, Key? key}) : super(key: key);
 
   @override
   _CustomerSiteProfilePageState createState() => _CustomerSiteProfilePageState();
@@ -35,6 +36,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   bool _isEditing = false;
   bool _showGetStarted = true;
   bool _isAdding = false;
+  late bool _isTemplate;
   final List<ExpandState> _expandedList = [];
 
   @override
@@ -44,6 +46,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     profiles.add(_setMock(1));
     _expandedList.add(ExpandState.expanded);
     _expandedList.add(ExpandState.collapsed);
+    _isTemplate = widget.isTemplate;
     super.initState();
   }
 
@@ -83,9 +86,9 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     return BaseScaffold(
       child: Scaffold(
         appBar: SubAppBar(
-          title: "Site Profile",
+          title: _isTemplate ? "Site Profile Templates" : "Site Profile",
           context: context,
-          leadingTxt: "Customer Profile",
+          leadingTxt: _isTemplate ? "Settings" : "Customer Profile",
           hasActions: _isAdding,
           actions: [
             if (!_isAdding)
@@ -124,6 +127,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   Widget _addSiteProfile() {
+    String label = _isTemplate ? "Add Template" : "Add Site Profile";
     return Container(
       alignment: Alignment.centerLeft,
       margin: const EdgeInsets.only(right: 32.0),
@@ -149,7 +153,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
             children: [
               appIcon(Icons.add_circle),
               const SizedBox(width: 8),
-              const Text("Add Site Profile", style: TextStyles.labelL),
+              Text(label, style: TextStyles.labelL),
               const SizedBox(width: 16),
             ],
           ),
@@ -285,7 +289,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                   children: [
                     appIcon(Icons.home_work),
                     const SizedBox(width: 8),
-                    Expanded(child: Text("Site Profile", style: TextStyles.titleL.copyWith(color: AppColors.dark_2))),
+                    Expanded(child: Text(_isTemplate ? "Add Template" : "Site Profile", style: TextStyles.titleL.copyWith(color: AppColors.dark_2))),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
@@ -415,6 +419,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     return Align(
       alignment: Alignment.centerRight,
       child: CupertinoButton(
+        padding: EdgeInsets.zero,
           child: Container(
             width: 83,
             height: 40,
@@ -466,7 +471,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
               Flexible(
                 child: LZTextField(
                   controller: _profileNameController,
-                  label: 'Site Profile Name*',
+                  label: _isTemplate ? "Template Name*" :"Site Profile Name*",
                 ),
               ),
               const Flexible(child: SizedBox()),
@@ -489,6 +494,28 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          width: double.infinity,
+          height: 48,
+          child: Row(
+            children: [
+              const SizedBox(width: 56),
+              Expanded(
+                child: Text(
+                  "Label",
+                  style:
+                  TextStyles.bodyL.copyWith(color: AppColors.dark_3),
+                ),
+              ),
+              Expanded(child: Text(
+                "Default Value",
+                style:
+                TextStyles.bodyL.copyWith(color: AppColors.dark_3),
+              )),
+              const SizedBox(width: 56),
+            ],
+          ),
+        ),
         _reorderList(),
         const SizedBox(height: 24),
         Row(
@@ -622,6 +649,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CupertinoButton(
+            padding: EdgeInsets.zero,
               child: Container(
                 width: 192,
                 height: 56,
@@ -630,11 +658,12 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                   color: AppColors.dark_1,
                   borderRadius: BorderRadius.circular(28),
                 ),
-                child: Text("Save Site Profile", style: TextStyles.bodyL.copyWith(color: Colors.white),),
+                child: Text( _isTemplate ? "Save Template" : "Save Site Profile", style: TextStyles.bodyL.copyWith(color: Colors.white),),
               ),
               onPressed: _save),
           const SizedBox(width: 8),
           CupertinoButton(
+              padding: EdgeInsets.zero,
               child: Container(
                 width: 125,
                 height: 56,
