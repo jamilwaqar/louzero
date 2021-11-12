@@ -44,7 +44,7 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // const SizedBox(width: 32),
+          const SizedBox(width: 16),
           const Icon(Icons.arrow_back, color: AppColors.icon),
           const SizedBox(width: 8),
           Text(leadingTxt, style: TextStyles.titleM),
