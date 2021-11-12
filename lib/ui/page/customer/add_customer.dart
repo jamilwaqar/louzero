@@ -295,7 +295,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         padding: EdgeInsets.zero,
         child: Container(
           height: 36,
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             color: AppColors.light_4,
             borderRadius: BorderRadius.circular(18)

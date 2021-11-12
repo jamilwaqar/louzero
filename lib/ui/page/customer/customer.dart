@@ -129,7 +129,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                         color: AppColors.light_4.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(30)
                     ),
-                    child: SvgPicture.asset("${Constant.imgPrefixPath}/icon-up-down.svg"),
+                    child: SvgPicture.asset("${Constant.imgPrefixPath}/icon-collapse.svg"),
                   ))
             ],
           ),
@@ -142,7 +142,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                     Container(
                       width: 246,
                       height: 240,
-                      color: Colors.black12,
+                      decoration: const BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8))),
                       child: GoogleMap(
                         mapType: MapType.normal,
                         myLocationEnabled: false,
@@ -245,6 +245,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
       ),
     );
   }
+
   Widget _category() {
     List<Widget> itemList = List.generate(CustomerCategory.values.length,
         (index) => _categoryItem(CustomerCategory.values[index])).toList();
