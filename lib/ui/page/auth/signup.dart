@@ -1,14 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_button.dart';
+import 'package:louzero/common/app_card_center.dart';
+import 'package:louzero/common/app_input_text.dart';
+import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/app_text_divider.dart';
+import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/app_text_help_link.dart';
+import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
-import 'package:louzero/ui/widget/buttons/text_button.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
-
 import '../base_scaffold.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -30,231 +36,64 @@ class _SignUpPageState extends State<SignUpPage> {
     }
     super.initState();
   }
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      child: Column(
-        children: [
-          const SizedBox(height: 128,),
-          Container(
-            width: 496,
-            padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 32),
-            decoration: BoxDecorationEx.shadowEffect(
-                borderRadius: BorderRadius.circular(16),
-                blurRadius: 3,
-                shadowOffset: const Offset(0, 1),
-                shadowRadius: 2,
-                backgroundColor: AppColors.lightest
-            ),
-            child: Column(
+      child: AppCardCenter(
+        child: Column(
+          children: [
+            Column(
               children: [
-                const Text(
-                  "Create Account",
-                  style: TextStyle(
-                    color: AppColors.dark_1,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 32,
-                  ),
+                const AppTextHeader('Create Account'),
+                AppTextHelpLink(
+                    label: 'Already using LOUzero? ',
+                    linkText: 'Sign In here',
+                    onPressed: _onSignIn),
+                const SizedBox(
+                  height: 22,
                 ),
-                const SizedBox(height: 6,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Already using LOUzero? ',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.dark_1,
-                      ),
-                    ),
-                    LZTextButton(
-                      "Sign In here",
-                      fontWeight: FontWeight.w700,
-                      textDecoration: TextDecoration.underline,
-                      onPressed: _onSignIn,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 22,),
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
+                AppButton(
+                  label: 'Sign Up with Google',
                   onPressed: _onGoogleSignUp,
-                  child: Container(
-                    height: 56,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: AppColors.light_1,
-                        borderRadius: BorderRadius.circular(28),
-                        border: Border.all(color: AppColors.medium_1, width: 1)
-                    ),
-                    child: const Text(
-                        "Sign up with Google",
-                        style: TextStyle(
-                          color: AppColors.dark_1,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        )
-                    ),
-                  ),
+                  primary: false,
                 ),
-                const SizedBox(height: 24,),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 1,
-                        color: AppColors.light_3,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
-                      child: Text(
-                          "or",
-                          style: TextStyle(
-                            color: AppColors.dark_1,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                          )
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 1,
-                        color: AppColors.light_3,
-                      ),
-                    ),
-                  ],
+                const AppTextDivider(),
+                const AppTextBody('Enter your email to create a new account '),
+                AppInputText(
+                  mt: 16,
+                  controller: _emailController,
+                  label: 'Your Email',
+                  keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 24,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Enter your email to create a new account",
-                      style: TextStyle(
-                        color: AppColors.dark_1,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 16,),
-                    const Text(
-                      "Your Email",
-                      style: TextStyle(
-                        color: AppColors.dark_1,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4,),
-                    Container(
-                      height: 48,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.light_3, width: 1)
-                      ),
-                      child: TextFormField(
-                        controller: _emailController,
-                        keyboardAppearance: Brightness.light,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: AppColors.dark_3),
-                      ),
-                    ),
-                  ],
+                AppInputText(
+                  mb: 32,
+                  controller: _passwordController,
+                  label: 'Your Password',
+                  password: true,
                 ),
-                const SizedBox(height: 24,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Password",
-                      style: TextStyle(
-                        color: AppColors.dark_1,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4,),
-                    Container(
-                      height: 48,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.light_3, width: 1)
-                      ),
-                      child: TextFormField(
-                        controller: _passwordController,
-                        keyboardAppearance: Brightness.light,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: AppColors.dark_3),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32,),
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
+                AppButton(
+                  label: 'Create Account',
+                  icon: Icons.lock,
                   onPressed: _onCreateAccount,
-                  child: Container(
-                    height: 56,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: AppColors.dark_1,
-                        borderRadius: BorderRadius.circular(28)
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.lock,
-                          color: AppColors.light_2,
-                        ),
-                        SizedBox(width: 8,),
-                        Text(
-                            "Create Account",
-                            style: TextStyle(
-                              color: AppColors.lightest,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                            )
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 12,),
-          LZTextButton(
-            "HAVE AN INVITATION CODE?",
-            fontWeight: FontWeight.w700,
-            textDecoration: TextDecoration.underline,
-            onPressed: () {},
-          ),
-        ],
+            AppTextLink(
+              "HAVE AN INVITATION CODE?",
+              fontWeight: FontWeight.w700,
+              textDecoration: TextDecoration.underline,
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -262,9 +101,11 @@ class _SignUpPageState extends State<SignUpPage> {
   void _onSignIn() {
     NavigationController().pop(context);
   }
+
   void _onCreateAccount() async {
     NavigationController().notifierInitLoading.value = true;
-    var res = await AuthAPI().signup(_emailController.text, _passwordController.text);
+    var res =
+        await AuthAPI().signup(_emailController.text, _passwordController.text);
     NavigationController().notifierInitLoading.value = false;
 
     if (res is String) {
@@ -273,7 +114,6 @@ class _SignUpPageState extends State<SignUpPage> {
       AuthStateManager().loggedIn.value = true;
     }
   }
-  void _onGoogleSignUp() {
 
-  }
+  void _onGoogleSignUp() {}
 }
