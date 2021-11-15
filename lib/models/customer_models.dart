@@ -1,14 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:louzero/controller/enum/enums.dart';
 part 'customer_models.g.dart';
 
 @JsonSerializable()
 class CTSiteProfile {
-  CTSiteProfile();
+  CTSiteProfile({required this.name, this.profiles = const {}});
 
-  CTSiteTemplate? template;
-  @JsonKey(defaultValue: "")
-  String name = "";
-  @JsonKey(defaultValue: {})
-  Map<String, dynamic> profiles = {};
+  String name;
+  Map<String, dynamic> profiles;
+
+  factory CTSiteProfile.fromJson(Map<String, dynamic> json) => _$CTSiteProfileFromJson(json);
+  Map<String, dynamic> toJson() => _$CTSiteProfileToJson(this);
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/customer_models.dart';
@@ -31,7 +30,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
   final String _getStartDes =
       "Create Site Profiles to keep track of information common across many customer locations. Examples might include, gate codes, chemical preferences, pool shapes, number of gallons in pool or spa, animals you may encounter, and other site-specific pieces of information not captured elsewhere.";
-  List<CTSiteProfile>profiles = [];
+  List<CTSiteProfile>_profiles = [];
   bool _showMsg = false;
   bool _isEditing = false;
   bool _showGetStarted = true;
@@ -42,11 +41,17 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   @override
   void initState() {
     _initTextControllers();
-    profiles.add(_setMock(0));
-    profiles.add(_setMock(1));
-    _expandedList.add(ExpandState.expanded);
-    _expandedList.add(ExpandState.collapsed);
     _isTemplate = widget.isTemplate;
+    if (_isTemplate) {
+      _profiles = Constant.siteTemplates;
+
+    } else {
+      _profiles.add(_setMock(0));
+      _profiles.add(_setMock(1));
+    }
+    _profiles.forEach((_) {
+      _expandedList.add(ExpandState.collapsed);
+    });
     super.initState();
   }
 
@@ -74,10 +79,9 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       "Gate Code" : "1145",
       "Filter" : "Type A",
     };
-    CTSiteProfile _mockProfile = CTSiteProfile();
-    _mockProfile.name = index == 0 ? "Archood Spa" : "Archood Pool";
-    _mockProfile.profiles = profileItems;
-    _mockProfile.template = CTSiteTemplate.residential;
+    CTSiteProfile _mockProfile = CTSiteProfile(
+        name: index == 0 ? "Archood Spa" : "Archood Pool",
+        profiles: profileItems);
     return _mockProfile;
   }
 
@@ -121,7 +125,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         itemBuilder: (context, index) {
           return _profileItem(index);
         },
-        itemCount: profiles.length,
+        itemCount: _profiles.length,
       );
     }
   }
@@ -163,7 +167,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   Widget _profileItem(int index) {
-    CTSiteProfile profile = profiles[index];
+    CTSiteProfile profile = _profiles[index];
     bool isExpanded = _expandedList[index] == ExpandState.expanded;
     String expandCollapse = !isExpanded
         ? "${Constant.imgPrefixPath}/icon-expand.svg"
@@ -231,7 +235,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
             itemCount: profile.profiles.length,
             itemBuilder: (context, index) {
               String label = profile.profiles.keys.toList()[index];
-              String value = profile.profiles[label];
+              String? value = profile.profiles[label];
               return Container(
                 key: Key('$index'),
                 width: double.infinity,
@@ -249,7 +253,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                     ),
                     const SizedBox(width: 16),
                     Expanded(child: Text(
-                      value,
+                      value ?? '-- --',
                       style:
                       TextStyles.bodyL.copyWith(color: AppColors.dark_3),
                     )),
@@ -295,6 +299,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                       onPressed: () {
                         setState(() {
                           _isAdding = false;
+                          _isEditing = false;
                         });
                       },
                       child: Container(
@@ -327,6 +332,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         children: [
           if (_showGetStarted)
           _getStarted(),
+          if (!_isTemplate)
           Padding(
             padding: const EdgeInsets.all(32),
             child: Column(
@@ -434,28 +440,55 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     );
   }
 
+  final CTSiteProfile _customTemplate = CTSiteProfile(name: 'Custom');
   Widget _templates() {
-    List<Widget> itemList = List.generate(CTSiteTemplate.values.length,
-        (index) => _templateItem(CTSiteTemplate.values[index])).toList();
-    itemList.insert(1, const SizedBox(width: 17));
-    itemList.insert(3, const SizedBox(width: 17));
-    return Row(children: itemList);
+    List<CTSiteProfile>profiles = [... Constant.siteTemplates];
+    profiles.add(_customTemplate);
+    List<Widget> itemList = List.generate(profiles.length,
+        (index) => _templateItem(profiles[index])).toList();
+    return GridView.count(
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 3,
+      crossAxisSpacing: 17,
+      mainAxisSpacing: 17,
+      shrinkWrap: true,
+      children: itemList,
+      childAspectRatio: 4/3,
+    );
   }
 
-  Widget _templateItem(CTSiteTemplate template) {
-    return Expanded(
-      child: CupertinoButton(
-        onPressed: ()=> setState(() {_isEditing = true;}),
-        child: Container(
-          alignment: Alignment.center,
-          height: 150,
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.light_2, width: 1),
-            color: AppColors.lightest,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Text(template.title, style: TextStyles.titleM.copyWith(color: AppColors.dark_1), textAlign: TextAlign.center),
+  Widget _templateItem(CTSiteProfile template) {
+    return CupertinoButton(
+      onPressed: () {
+        if (template.name != 'Custom') {
+          _profileNameController.text = template.name;
+
+          _profileItemLabelControllers = [];
+          _profileItemValueControllers = [];
+          for (int i = 0; i < template.profiles.keys.length; i++) {
+            String key = template.profiles.keys.toList()[i];
+            String? value = template.profiles[key];
+            _profileItemLabelControllers.add(TextEditingController(text: key));
+            _profileItemValueControllers.add(TextEditingController(text: value));
+          }
+          /// Add empty one
+          _profileItemLabelControllers.add(TextEditingController());
+          _profileItemValueControllers.add(TextEditingController());
+        }
+
+        setState(() {
+          _isEditing = true;
+        });
+      },
+      padding: EdgeInsets.zero,
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.light_2, width: 1),
+          color: AppColors.lightest,
+          borderRadius: BorderRadius.circular(16),
         ),
+        child: Text(template.name, style: TextStyles.titleM.copyWith(color: AppColors.dark_1), textAlign: TextAlign.center),
       ),
     );
   }
@@ -679,25 +712,33 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   void _save() {
-    CTSiteProfile profile = CTSiteProfile();
-    profile.name = _profileNameController.text;
+    CTSiteProfile profile = CTSiteProfile(name: _profileNameController.text);
+    Map<String, dynamic> profiles = {};
     for (int i = 0; i < _profileItemLabelControllers.length; i++) {
       String label = _profileItemLabelControllers[i].text;
       if (label.isEmpty) continue;
-      profile.profiles[label] = _profileItemValueControllers[i].text;
+      profiles[label] = _profileItemValueControllers[i].text.isEmpty ? null : _profileItemValueControllers[i].text;
     }
-
+    profile.profiles = profiles;
     setState(() {
-      profiles.add(profile);
+      if (_isTemplate) {
+        Constant.siteTemplates.add(profile);
+      } else {
+        _profiles.add(profile);
+      }
       _expandedList.add(ExpandState.collapsed);
       _isAdding = false;
+      _isEditing = false;
     });
   }
 
   void _gotIt() {
     setState(() {
-      _isEditing = true;
+      _isAdding = true;
       _showGetStarted = false;
+      if (_isTemplate) {
+        _isEditing = true;
+      }
     });
   }
 }
