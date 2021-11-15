@@ -8,8 +8,6 @@ import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
-import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 
 import '../base_scaffold.dart';
