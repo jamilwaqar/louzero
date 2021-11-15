@@ -1,7 +1,7 @@
 name: louzero
 description: A new Flutter project.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+3
 
@@ -25,6 +25,7 @@ dependencies:
   google_maps_flutter:
   json_annotation: ^4.3.0
   flutter_svg:
+  flutter_verification_code: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -37,14 +38,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-     - assets/
-     - assets/icons/
-     - assets/icons/general/
-     - assets/icons/general/2.0x/
-     - assets/icons/general/3.0x/
-     - assets/icons/menu/
-     - assets/icons/menu/2.0x/
-     - assets/icons/menu/3.0x/
+    - assets/
+    - assets/icons/
+    - assets/icons/general/
+    - assets/icons/general/2.0x/
+    - assets/icons/general/3.0x/
+    - assets/icons/menu/
+    - assets/icons/menu/2.0x/
+    - assets/icons/menu/3.0x/
   fonts:
     - family: Roboto
       fonts:
