@@ -11,6 +11,7 @@ import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/ui/page/auth/complete.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
@@ -136,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _verificationCode() {
-    NavigationController().pushTo(context, child: const VerifyPage());
+    NavigationController().pushTo(context, child: const CompletePage());
   }
 
   void _onGoogleSignIn() {}
