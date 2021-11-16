@@ -10,6 +10,7 @@ class AppInputText extends StatefulWidget {
       required this.label,
       this.keyboardType = TextInputType.text,
       this.password = false,
+      this.autofocus = false,
       this.mt = 0,
       this.mb = 24})
       : super(key: key);
@@ -20,6 +21,7 @@ class AppInputText extends StatefulWidget {
   final bool password;
   final double mt;
   final double mb;
+  final bool autofocus;
 
   @override
   _AppInputTextState createState() => _AppInputTextState();
@@ -63,6 +65,7 @@ class _AppInputTextState extends State<AppInputText> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: inputContainer,
           child: TextFormField(
+            autofocus: widget.autofocus,
             controller: widget.controller,
             keyboardAppearance: Brightness.light,
             keyboardType: widget.keyboardType,
