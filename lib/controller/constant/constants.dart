@@ -21,3 +21,11 @@ abstract class Constant {
     }),
   ];
 }
+
+abstract class BPath {
+  static const String customer = "Customer";
+}
+
+abstract class AppKey {
+  static const String googleMapKey = 'AIzaSyDT3fQjqpPHJqEFu-40Qk0NP4OffWA0624';
+}

@@ -3,7 +3,7 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/page/auth/login.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
-
+import 'package:country_picker/country_picker.dart';
 import 'controller/api/api_manager.dart';
 import 'controller/utils.dart';
 
@@ -24,6 +24,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        CountryLocalizations.delegate,
+      ],
       theme: ThemeData(
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: Colors.white,

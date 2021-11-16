@@ -10,6 +10,7 @@ enum CTContactType {
   primary,
   billing,
   schedule,
+  other
 }
 
 enum CustomerCategory {

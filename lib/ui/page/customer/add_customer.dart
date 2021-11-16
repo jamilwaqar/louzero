@@ -1,11 +1,16 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
+import 'package:uuid/uuid.dart';
 
 
 class AddCustomerPage extends StatefulWidget {
@@ -19,6 +24,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController = TextEditingController();
+  final TextEditingController _serviceCountryController = TextEditingController();
   bool _subAccount = false;
   bool _billAddressEnabled = true;
   CTContactType? _contactType;
@@ -34,6 +40,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   void dispose() {
     _companyNameController.dispose();
     _parentAccountNameController.dispose();
+    _serviceCountryController.dispose();
     super.dispose();
   }
 
@@ -139,7 +146,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           const SizedBox(height: 32),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Country")),
+              Flexible(child: InkWell(
+                onTap: _showCountryPicker,
+                  child: LZTextField(controller: _serviceCountryController, label: "Country", enabled: false,))),
               const SizedBox(width: 32),
               const Flexible(child: SizedBox()),
             ],
@@ -325,6 +334,19 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     );
   }
 
+  void _showCountryPicker() {
+    showCountryPicker(
+      context: context,
+      showPhoneCode: true, // optional. Shows phone code before the country name.
+      onSelect: (Country country) {
+        setState(() {
+          _serviceCountryController.text = country.name;
+        });
+        print('Select country: ${country.displayName}');
+      },
+    );
+  }
+
   Widget _saveOrCancel() {
     return Container(
       padding: const EdgeInsets.only(left: 24),
@@ -333,6 +355,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CupertinoButton(
+            padding: EdgeInsets.zero,
               child: Container(
                 width: 192,
                 height: 56,
@@ -361,6 +384,17 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   void _save() {
+    // AddressModel serviceAddress = AddressModel(country: country, street: street, city: city, state: state, zip: zip);
+    // CustomerModel model = CustomerModel(id: const Uuid().v4(),
+    //     userId: const Uuid().v4(),
+    //     companyId: const Uuid().v4(),
+    //     name: _companyNameController.text,
+    //     serviceAddress: serviceAddress,
+    //     billingAddress: billingAddress);
 
+    Map testObject = {};
+    testObject["foo"] = "bar";
+    Backendless.data.of(BPath.customer).save(testObject).then(
+            (response) => print("Object is saved in Backendless. Please check in the console."));
   }
 }
