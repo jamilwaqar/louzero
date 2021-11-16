@@ -19,6 +19,7 @@ class CompletePage extends StatefulWidget {
 class _CompletePageState extends State<CompletePage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -57,6 +58,11 @@ class _CompletePageState extends State<CompletePage> {
                   controller: _lastNameController,
                   label: 'Last Name',
                   keyboardType: TextInputType.name,
+                ),
+                AppInputText(
+                  controller: _passwordController,
+                  label: 'Password (8 or more characters)',
+                  password: true,
                 ),
                 AppCheckboxWithLabel(mb: 15, label: termsLabel),
                 AppCheckboxWithLabel(

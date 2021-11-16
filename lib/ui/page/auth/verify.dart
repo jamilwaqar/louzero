@@ -5,6 +5,7 @@ import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/auth/complete.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
@@ -108,7 +109,10 @@ class _VerifyPageState extends State<VerifyPage> {
                   },
                 ),
                 const SizedBox(height: 40),
-                AppButton(label: 'Continue'),
+                AppButton(
+                  label: 'Continue',
+                  onPressed: _completeSignup,
+                ),
               ],
             ),
           ),
@@ -129,6 +133,10 @@ class _VerifyPageState extends State<VerifyPage> {
 
   void _goback() async {
     NavigationController().pop(context);
+  }
+
+  void _completeSignup() {
+    NavigationController().pushTo(context, child: const CompletePage());
   }
 
   void _methodTBD() {}
