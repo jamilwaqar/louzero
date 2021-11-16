@@ -11,6 +11,7 @@ import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/ui/page/auth/accept_invite.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
@@ -30,10 +31,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    if (kDebugMode) {
-      _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "73SWhjN3";
-    }
+    // if (kDebugMode) {
+    //   _emailController.text = "mark.austen@singlemindconsulting.com";
+    //   _passwordController.text = "73SWhjN3";
+    // }
     super.initState();
   }
 
@@ -100,14 +101,28 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 12,
-          ),
           AppTextLink(
             "HAVE AN INVITATION CODE?",
             fontWeight: FontWeight.w700,
             onPressed: _verificationCode,
           ),
+          Expanded(
+              child: Flex(
+            mainAxisAlignment: MainAxisAlignment.end,
+            direction: Axis.vertical,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  AppTextLink(
+                    'Accept Invite',
+                    onPressed: _onAcceptInvite,
+                  ),
+                  Text('Blah')
+                ],
+              )
+            ],
+          ))
         ],
       ),
     );
@@ -115,6 +130,10 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onCreateAccount() {
     NavigationController().pushTo(context, child: const SignUpPage());
+  }
+
+  void _onAcceptInvite() {
+    NavigationController().pushTo(context, child: const AcceptInvitePage());
   }
 
   void _onSignIn() async {
