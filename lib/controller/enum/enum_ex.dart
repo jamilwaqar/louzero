@@ -48,16 +48,3 @@ extension CustomerCategoryEx on CustomerCategory {
     }
   }
 }
-
-extension CTSiteTemplateEx on CTSiteTemplate {
-  String get title {
-    switch(this) {
-      case CTSiteTemplate.residential:
-        return "Residential\nPool";
-      case CTSiteTemplate.commercial:
-        return "Commercial\nPool";
-      case CTSiteTemplate.custom:
-        return 'Custom';
-    }
-  }
-}
