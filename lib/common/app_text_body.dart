@@ -9,6 +9,7 @@ class AppTextBody extends StatelessWidget {
   final String text;
   final double size;
   final Color color;
+  final bool bold;
   final double mt; // margin top (defalt:0)
   final double mb; // margin bottom (default:20)
   final double pl; // padding Left (default:0)
@@ -23,6 +24,7 @@ class AppTextBody extends StatelessWidget {
       this.mb = 0.0,
       this.pl = 0.0,
       this.pr = 0.0,
+      this.bold = false,
       this.px})
       : super(key: key);
 
@@ -34,7 +36,7 @@ class AppTextBody extends StatelessWidget {
       child: Text(text,
           style: TextStyle(
             fontSize: size,
-            fontWeight: FontWeight.normal,
+            fontWeight: bold ? FontWeight.bold : FontWeight.w400,
             color: color,
             fontFamily: 'Roboto',
           )),
