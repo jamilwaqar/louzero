@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_card.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 
@@ -20,24 +21,19 @@ class AppCardCenter extends StatelessWidget {
     var _default = _swidth * 0.18;
     var _width =
         width > 0 && width < _swidth ? (_swidth - width) / 2 : _default;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(
-            vertical: 0,
-            horizontal: _width,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 32),
-          decoration: BoxDecorationEx.shadowEffect(
-              borderRadius: BorderRadius.circular(16),
-              blurRadius: 3,
-              shadowOffset: const Offset(0, 1),
-              shadowRadius: 2,
-              backgroundColor: AppColors.lightest),
-          child: child,
-        )
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AppCard(
+            child: child,
+            ml: _width,
+            mr: _width,
+            px: 24,
+            py: 32,
+          )
+        ],
+      ),
     );
   }
 }
