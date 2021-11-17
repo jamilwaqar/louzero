@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:louzero/bloc/bloc.dart';
+import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
@@ -13,7 +14,6 @@ import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
-
 
 class AddCustomerPage extends StatefulWidget {
   const AddCustomerPage(this._customerBloc, {Key? key}) : super(key: key);
@@ -28,15 +28,38 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController = TextEditingController();
+
   final TextEditingController _serviceCountryController = TextEditingController();
+  final TextEditingController _serviceStreetController = TextEditingController();
+  final TextEditingController _serviceCityController = TextEditingController();
+  final TextEditingController _serviceAtController = TextEditingController();
+  final TextEditingController _serviceStateController = TextEditingController();
+  final TextEditingController _serviceZipController = TextEditingController();
+
+  final TextEditingController _billCountryController = TextEditingController();
+  final TextEditingController _billStreetController = TextEditingController();
+  final TextEditingController _billCityController = TextEditingController();
+  final TextEditingController _billAtController = TextEditingController();
+  final TextEditingController _billStateController = TextEditingController();
+  final TextEditingController _billZipController = TextEditingController();
+
+  final List<TextEditingController> _contactFNameControllers = [TextEditingController()];
+  final List<TextEditingController> _contactLNameControllers = [TextEditingController()];
+  final List<TextEditingController> _contactEmailControllers = [TextEditingController()];
+  final List<TextEditingController> _contactPhoneControllers = [TextEditingController()];
+  final List<TextEditingController> _contactRoleControllers = [TextEditingController()];
+
   bool _subAccount = false;
-  bool _billAddressEnabled = true;
-  CTContactType? _contactType;
+  bool _sameAsService = true;
   final List<Widget> _customerContactList = [];
+  final List<String> _mockCustomerType = ["Residential", "Commercial"];
+  String? _customerType;
+  List<List<CTContactType>> _contactTypes = [[]];
 
   @override
   void initState() {
-    _customerContactList.add(_customerContact());
+    _customerContactList.add(_customerContact(0));
+    _customerType = _mockCustomerType[0];
     super.initState();
   }
 
@@ -84,7 +107,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       _billingAddress(),
       ... _customerContactList,
       const SizedBox(height: 24),
-      _addContact(),
+      _addContactWidget(),
       const SizedBox(height: 32),
       const Divider(),
       const SizedBox(height: 32),
@@ -113,7 +136,11 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             children: [
               Flexible(child: LZTextField(controller: _companyNameController, label: "Company or Account Name")),
               const SizedBox(width: 32),
-              Flexible(child: LZTextField(controller: _companyNameController, label: "Customer Type*")),
+              Flexible(child: AppDropDown(label: "Customer Type*",itemList: _mockCustomerType, initValue: _customerType, onChanged: (value){
+                setState(() {
+                  _customerType = value;
+                });
+              },)),
             ],
           ),
           const SizedBox(height: 24),
@@ -160,44 +187,54 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         children: [
           _itemTitle("Service Address", Icons.location_pin),
           const SizedBox(height: 32),
-          Row(
-            children: [
-              Flexible(child: InkWell(
-                onTap: _showCountryPicker,
-                  child: LZTextField(controller: _serviceCountryController, label: "Country", enabled: false,))),
-              const SizedBox(width: 32),
-              const Flexible(child: SizedBox()),
-            ],
-          ),
-          const SizedBox(height: 24),
-          LZTextField(controller: _parentAccountNameController, label: "Street Address"),
-          const SizedBox(height: 16),
-          LZTextField(controller: _parentAccountNameController, label: "Apartment, unit, suite, or floor #"),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "City")),
-              const SizedBox(width: 16),
-              Flexible(
-                child: Row(
-                  children: [
-                    Flexible(child: LZTextField(controller: _parentAccountNameController, label: "State")),
-                    const SizedBox(width: 16),
-                    Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Zip")),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          LZTextButton(
-            "Enter Address Fields Manually",
-            textDecoration: TextDecoration.underline,
-            onPressed: () {},
-          ),
+          _addressWidget(true),
         ],
       ),
+    );
+  }
+
+  Widget _addressWidget(bool isService) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          children: [
+            Flexible(child: InkWell(
+                onTap: _showCountryPicker,
+                child: LZTextField(controller: isService ? _serviceCountryController : _billCountryController, label: "Country", enabled: false,))),
+            const SizedBox(width: 32),
+            const Flexible(child: SizedBox()),
+          ],
+        ),
+        const SizedBox(height: 24),
+        LZTextField(controller: isService ? _serviceStreetController : _billStreetController, label: "Street Address"),
+        const SizedBox(height: 16),
+        LZTextField(controller: isService ? _serviceAtController : _billAtController, label: "Apt / Suite / Other"),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(child: LZTextField(controller: isService ? _serviceCityController : _billCityController, label: "City")),
+            const SizedBox(width: 16),
+            Flexible(
+              child: Row(
+                children: [
+                  Flexible(child: LZTextField(controller: isService ? _serviceStateController : _billStateController, label: "State")),
+                  const SizedBox(width: 16),
+                  Flexible(child: LZTextField(controller: isService ? _serviceZipController : _billZipController, label: "Zip")),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        LZTextButton(
+          "Enter Address Fields Manually",
+          textDecoration: TextDecoration.underline,
+          onPressed: () {},
+        ),
+      ],
     );
   }
 
@@ -214,17 +251,19 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         children: [
           const Text("Billing Address", style: TextStyles.titleM),
           const SizedBox(height: 16),
-          NZSwitch(isOn: _billAddressEnabled, label: "Sub-Account of another customer", onChanged: (val) {
+          NZSwitch(isOn: _sameAsService, label: "Same as Service Address", onChanged: (val) {
             setState(() {
-              _billAddressEnabled = val;
+              _sameAsService = val;
             });
           }),
+          if (!_sameAsService)
+          _addressWidget(false),
         ],
       ),
     );
   }
 
-  Widget _customerContact() {
+  Widget _customerContact(int index) {
     return Container(
       margin: const EdgeInsets.only(top: 24),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -240,23 +279,23 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           const SizedBox(height: 24),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "First Name")),
+              Flexible(child: LZTextField(controller: _contactFNameControllers[index], label: "First Name")),
               const SizedBox(width: 32),
-              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Last Name")),
+              Flexible(child: LZTextField(controller: _contactLNameControllers[index], label: "Last Name")),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Email Address")),
+              Flexible(child: LZTextField(controller: _contactEmailControllers[index], label: "Email Address")),
               const SizedBox(width: 32),
-              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Phone Number")),
+              Flexible(child: LZTextField(controller: _contactPhoneControllers[index], label: "Phone Number")),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Role")),
+              Flexible(child: LZTextField(controller: _contactRoleControllers[index], label: "Role")),
               const SizedBox(width: 32),
               const Flexible(child: SizedBox()),
             ],
@@ -268,9 +307,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _contactTypeItem(CTContactType.primary),
-              _contactTypeItem(CTContactType.billing),
-              _contactTypeItem(CTContactType.schedule),
+              _contactTypeItem(index, CTContactType.primary),
+              _contactTypeItem(index, CTContactType.billing),
+              _contactTypeItem(index, CTContactType.schedule),
+              _contactTypeItem(index, CTContactType.other),
             ],
           ),
         ],
@@ -278,45 +318,45 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     );
   }
 
-  Widget _contactTypeItem(CTContactType type) => Container(
-        height: 35,
-        alignment: Alignment.centerLeft,
-        child: CupertinoButton(
-          onPressed: () {
-            setState(() {
-              _contactType = type;
-            });
-          },
-          padding: EdgeInsets.zero,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Checkbox(
-                  checkColor: Colors.white,
-                  value: type == _contactType,
-                  activeColor: AppColors.dark_1,
-                  onChanged: (val) {
-                    setState(() {
-                      _contactType = type;
-                    });
-                  }),
-              const SizedBox(width: 8),
-              Text(type.name, style: TextStyles.bodyL),
-              if (type != CTContactType.schedule) const SizedBox(width: 32),
-            ],
-          ),
+  Widget _contactTypeItem(int index, CTContactType type) {
+    List<CTContactType> types = _contactTypes[index];
+    return Container(
+      height: 35,
+      alignment: Alignment.centerLeft,
+      child: CupertinoButton(
+        onPressed: ()=> _onChangedContactType(index, type),
+        padding: EdgeInsets.zero,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Checkbox(
+                checkColor: Colors.white,
+                value: types.contains(type),
+                activeColor: AppColors.dark_1,
+                onChanged: (val)=> _onChangedContactType(index, type)),
+            Text(type.name, style: TextStyles.bodyL),
+            if (type != CTContactType.schedule) const SizedBox(width: 16),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
-  Widget _addContact() {
+  void _onChangedContactType(int index, type) {
+    setState(() {
+      if (_contactTypes[index].contains(type)) {
+        _contactTypes[index].remove(type);
+      } else {
+        _contactTypes[index].add(type);
+      }
+    });
+  }
+
+  Widget _addContactWidget() {
     return Container(
       alignment: Alignment.centerLeft,
       child: CupertinoButton(
-        onPressed: () {
-          setState(() {
-            _customerContactList.add(_customerContact());
-          });
-        },
+        onPressed: _addContact,
         padding: EdgeInsets.zero,
         child: Container(
           height: 36,
@@ -337,6 +377,18 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         ),
       ),
     );
+  }
+
+  void _addContact() {
+    setState(() {
+      _contactFNameControllers.add(TextEditingController());
+      _contactLNameControllers.add(TextEditingController());
+      _contactEmailControllers.add(TextEditingController());
+      _contactPhoneControllers.add(TextEditingController());
+      _contactRoleControllers.add(TextEditingController());
+      _contactTypes.add([]);
+      _customerContactList.add(_customerContact(_customerContactList.length));
+    });
   }
 
   Widget _itemTitle(String label, IconData iconData) {
@@ -400,17 +452,38 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   void _save() {
-    // AddressModel serviceAddress = AddressModel(country: country, street: street, city: city, state: state, zip: zip);
-    // CustomerModel model = CustomerModel(id: const Uuid().v4(),
-    //     userId: const Uuid().v4(),
-    //     companyId: const Uuid().v4(),
-    //     name: _companyNameController.text,
-    //     serviceAddress: serviceAddress,
-    //     billingAddress: billingAddress);
+    AddressModel billingAddress;
+    AddressModel serviceAddress = AddressModel(
+        country: _serviceCountryController.text,
+        street: _serviceStreetController.text,
+        city: _serviceCityController.text,
+        state: _serviceStateController.text,
+        zip: _serviceZipController.text);
+    if (_sameAsService) {
+      billingAddress = serviceAddress;
+    } else {
+      billingAddress = AddressModel(
+          country: _billCountryController.text,
+          street: _billStreetController.text,
+          city: _billCityController.text,
+          state: _billStateController.text,
+          zip: _billZipController.text);
+    }
 
-    Map testObject = {};
-    testObject["foo"] = "bar";
-    Backendless.data.of(BPath.customer).save(testObject).then(
+    List<CustomerContact> contacts = [];
+
+
+    CustomerModel model = CustomerModel(id: const Uuid().v4(),
+        userId: const Uuid().v4(),
+        companyId: const Uuid().v4(),
+        name: _companyNameController.text,
+        type: _customerType!,
+        serviceAddress: serviceAddress,
+        billingAddress: billingAddress);
+    model.customerContacts = contacts;
+
+    Map<String, dynamic> data = model.toJson();
+    Backendless.data.of(BPath.customer).save(data).then(
             (response) => print("Object is saved in Backendless. Please check in the console."));
   }
 }

@@ -24,16 +24,13 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       userId: json['userId'] as String,
       companyId: json['companyId'] as String,
       name: json['name'] as String,
+      type: json['type'] as String,
       serviceAddress:
           AddressModel.fromJson(json['serviceAddress'] as Map<String, dynamic>),
       billingAddress:
           AddressModel.fromJson(json['billingAddress'] as Map<String, dynamic>),
     )
       ..parentId = json['parentId'] as String?
-      ..contactTypes = (json['contactTypes'] as List<dynamic>?)
-              ?.map((e) => $enumDecode(_$CTContactTypeEnumMap, e))
-              .toList() ??
-          []
       ..customerContacts = (json['customerContacts'] as List<dynamic>?)
               ?.map((e) => CustomerContact.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -48,25 +45,17 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'id': instance.id,
       'userId': instance.userId,
       'name': instance.name,
+      'type': instance.type,
       'parentId': instance.parentId,
       'companyId': instance.companyId,
       'serviceAddress': instance.serviceAddress,
       'billingAddress': instance.billingAddress,
-      'contactTypes':
-          instance.contactTypes.map((e) => _$CTContactTypeEnumMap[e]).toList(),
       'customerContacts': instance.customerContacts,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
     };
-
-const _$CTContactTypeEnumMap = {
-  CTContactType.primary: 'primary',
-  CTContactType.billing: 'billing',
-  CTContactType.schedule: 'schedule',
-  CTContactType.other: 'other',
-};
 
 AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
       country: json['country'] as String,
@@ -92,6 +81,10 @@ CustomerContact _$CustomerContactFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String,
       phone: json['phone'] as String,
       role: json['role'] as String,
+      types: (json['types'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$CTContactTypeEnumMap, e))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$CustomerContactToJson(CustomerContact instance) =>
@@ -101,4 +94,12 @@ Map<String, dynamic> _$CustomerContactToJson(CustomerContact instance) =>
       'email': instance.email,
       'phone': instance.phone,
       'role': instance.role,
+      'types': instance.types.map((e) => _$CTContactTypeEnumMap[e]).toList(),
     };
+
+const _$CTContactTypeEnumMap = {
+  CTContactType.primary: 'primary',
+  CTContactType.billing: 'billing',
+  CTContactType.schedule: 'schedule',
+  CTContactType.other: 'other',
+};

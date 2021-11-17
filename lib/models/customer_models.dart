@@ -24,19 +24,19 @@ class CustomerModel {
       required this.userId,
       required this.companyId,
       required this.name,
+      required this.type,
       required this.serviceAddress,
       required this.billingAddress});
 
   String id;
   String userId;
   String name;
+  String type;
   String? parentId;
   String companyId;
   AddressModel serviceAddress;
   AddressModel billingAddress;
 
-  @JsonKey(defaultValue: [])
-  List<CTContactType> contactTypes = [];
   @JsonKey(defaultValue: [])
   List<CustomerContact> customerContacts = [];
 
@@ -92,13 +92,16 @@ class CustomerContact {
       required this.lastName,
       required this.email,
       required this.phone,
-      required this.role});
+      required this.role,
+      this.types = const [],
+      });
 
   String firstName;
   String lastName;
   String email;
   String phone;
   String role;
+  @JsonKey(defaultValue: []) List<CTContactType> types;
 
   factory CustomerContact.fromJson(Map<String, dynamic> json) =>
       _$CustomerContactFromJson(json);
