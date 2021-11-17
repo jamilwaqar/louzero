@@ -4,18 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class AppButton extends StatelessWidget {
-  AppButton(
-      {Key? key,
-      this.label = 'button',
-      this.onPressed,
-      this.icon,
-      this.primary = true})
-      : super(key: key);
+  AppButton({
+    Key? key,
+    this.label = 'button',
+    this.onPressed,
+    this.icon,
+    this.primary = true,
+    this.mb = 0,
+    this.mt = 0,
+  }) : super(key: key);
 
   final VoidCallback? onPressed;
   final String label;
   final IconData? icon;
   final bool primary;
+  final double mt;
+  final double mb;
 
   final BoxDecoration secondaryBox = BoxDecoration(
       color: AppColors.light_1,
@@ -45,6 +49,7 @@ class AppButton extends StatelessWidget {
       child: Container(
         height: 56,
         alignment: Alignment.center,
+        margin: EdgeInsets.only(top: mt, bottom: mb),
         decoration: primary ? primaryBox : secondaryBox,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

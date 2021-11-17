@@ -46,6 +46,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/mocks/
     - assets/icons/
     - assets/icons/general/
     - assets/icons/general/2.0x/

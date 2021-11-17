@@ -11,6 +11,7 @@ import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/ui/page/auth/accept_invite.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
@@ -90,8 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 22,
                 ),
-                AppButton(
-                    onPressed: _onSignIn, label: 'Sign In', icon: Icons.lock),
+                AppButton(onPressed: _onSignIn, label: 'Sign In'),
                 const AppTextDivider(),
                 AppButton(
                   onPressed: _onGoogleSignIn,
@@ -101,14 +101,27 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 12,
-          ),
           AppTextLink(
             "HAVE AN INVITATION CODE?",
             fontWeight: FontWeight.w700,
             onPressed: _verificationCode,
           ),
+          Expanded(
+              child: Flex(
+            mainAxisAlignment: MainAxisAlignment.end,
+            direction: Axis.vertical,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  AppTextLink(
+                    'Accept Invite',
+                    onPressed: _onAcceptInvite,
+                  ),
+                ],
+              )
+            ],
+          ))
         ],
       ),
     );
@@ -116,6 +129,10 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onCreateAccount() {
     NavigationController().pushTo(context, child: const SignUpPage());
+  }
+
+  void _onAcceptInvite() {
+    NavigationController().pushTo(context, child: const AcceptInvitePage());
   }
 
   void _onSignIn() async {
