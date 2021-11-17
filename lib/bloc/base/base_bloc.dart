@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc.dart';
 
 class BaseBloc extends Bloc<BaseEvent, BaseState> {
-  final String TAG = 'SettingScreenBloc';
+  final String tag = 'BaseBloc';
 
 
   BaseBloc() : super(BaseState());

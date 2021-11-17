@@ -2,6 +2,8 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
@@ -14,7 +16,9 @@ import 'package:uuid/uuid.dart';
 
 
 class AddCustomerPage extends StatefulWidget {
-  const AddCustomerPage({Key? key}) : super(key: key);
+  const AddCustomerPage(this._customerBloc, {Key? key}) : super(key: key);
+
+  final CustomerBloc _customerBloc;
 
   @override
   _AddCustomerPageState createState() => _AddCustomerPageState();
@@ -41,25 +45,37 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     _companyNameController.dispose();
     _parentAccountNameController.dispose();
     _serviceCountryController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: "Add New Customer",
-          context: context,
-          leadingTxt: "Customer",
-        ),
-        backgroundColor: AppColors.light_1,
-        body: _body(),
+    return BlocListener<CustomerBloc, CustomerState>(
+      bloc: widget._customerBloc,
+      listener: (context, state) {
+
+      },
+      child: BlocBuilder<CustomerBloc, CustomerState>(
+        bloc: widget._customerBloc,
+        builder: (context, state) {
+          return BaseScaffold(
+            child: Scaffold(
+              appBar: SubAppBar(
+                title: "Add New Customer",
+                context: context,
+                leadingTxt: "Customer",
+              ),
+              backgroundColor: AppColors.light_1,
+              body: _body(state),
+            ),
+          );
+        }
       ),
     );
   }
 
-  Widget _body() {
+  Widget _body(CustomerState state) {
     List<Widget> list = [
       _customerDetails(),
       const SizedBox(height: 24),

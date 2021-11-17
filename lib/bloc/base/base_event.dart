@@ -2,8 +2,10 @@ import 'package:equatable/equatable.dart';
 
 
 abstract class BaseEvent extends Equatable {
-  BaseEvent();
+  const BaseEvent();
 
   @override
   List<Object> get props => [];
 }
+
+class BaseInitEvent extends BaseEvent {}

@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:louzero/models/customer_models.dart';
 
-class BaseState extends Equatable {
+class CustomerState extends Equatable {
   final bool isUpdating;
   final List<CustomerModel> customers;
 
-  const BaseState({
+  const CustomerState({
     this.isUpdating = false,
     this.customers = const [],
   });
@@ -16,11 +16,11 @@ class BaseState extends Equatable {
     customers,
   ];
 
-  BaseState copyWith({
+  CustomerState copyWith({
     bool? isUpdating,
     List<CustomerModel>? customers
   }) {
-    return BaseState(
+    return CustomerState(
       isUpdating: isUpdating ?? this.isUpdating,
       customers: customers ?? this.customers,
     );
