@@ -12,6 +12,7 @@ import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 import '../base_scaffold.dart';
 
@@ -45,10 +46,11 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      child: AppCardCenter(
-        child: Column(
-          children: [
-            Column(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AppCardCenter(
+            child: Column(
               children: [
                 const AppTextHeader('Create Account'),
                 AppTextHelpLink(
@@ -79,19 +81,21 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 AppButton(
                   label: 'Create Account',
-                  icon: Icons.lock,
+                  // icon: Icons.lock,
                   onPressed: _onCreateAccount,
                 ),
               ],
             ),
-            AppTextLink(
-              "HAVE AN INVITATION CODE?",
-              fontWeight: FontWeight.w700,
-              textDecoration: TextDecoration.underline,
-              onPressed: () {},
-            ),
-          ],
-        ),
+          ),
+          AppTextLink(
+            "HAVE AN INVITATION CODE?",
+            fontWeight: FontWeight.w700,
+            textDecoration: TextDecoration.underline,
+            onPressed: () {
+              NavigationController().pushTo(context, child: const VerifyPage());
+            },
+          ),
+        ],
       ),
     );
   }
