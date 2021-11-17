@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_card_center.dart';
+import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
@@ -12,47 +13,25 @@ import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 
-class VerifyPage extends StatefulWidget {
-  const VerifyPage({Key? key}) : super(key: key);
+class AcceptInvitePage extends StatefulWidget {
+  const AcceptInvitePage({Key? key}) : super(key: key);
 
   @override
-  _VerifyPageState createState() => _VerifyPageState();
+  _AcceptInvitePageState createState() => _AcceptInvitePageState();
 }
 
-class _VerifyPageState extends State<VerifyPage> {
+class _AcceptInvitePageState extends State<AcceptInvitePage> {
   bool _onEditing = true;
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  final styleText = const TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    color: AppColors.dark_1,
-  );
-  final styleTextBold = const TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    color: AppColors.darkest,
-  );
-  final styleTextHeading = const TextStyle(
-    fontSize: 32,
-    fontWeight: FontWeight.w600,
-    color: AppColors.darkest,
-  );
 
   @override
   void initState() {
-    if (kDebugMode) {
-      _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "73SWhjN3";
-    }
     super.initState();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -65,15 +44,19 @@ class _VerifyPageState extends State<VerifyPage> {
           AppCardCenter(
             child: Column(
               children: [
-                const AppTextHeader('Verification Code'),
-                const AppTextBody('We sent a verification code to'),
-                const AppTextBody(
-                  'josh.coolman@singlemindconsulting.com',
-                  color: AppColors.dark_3,
-                  bold: true,
+                const AppTextHeader(
+                  'Accept Invitation',
                 ),
-                const AppTextBody('Enter that code to continue',
-                    mt: 24, mb: 16),
+                const AppTextBody(
+                  'Enter your email address and invitation code below.',
+                  mb: 40,
+                ),
+                AppInputText(
+                  controller: _emailController,
+                  label: 'Email',
+                  keyboardType: TextInputType.emailAddress,
+                  autofocus: true,
+                ),
                 VerificationCode(
                   textStyle: const TextStyle(
                     fontSize: 30.0,
@@ -83,7 +66,6 @@ class _VerifyPageState extends State<VerifyPage> {
                   keyboardType: TextInputType.number,
                   underlineColor: AppColors.darkest,
                   fillColor: AppColors.darkest,
-                  // itemSize: 60,
                   length: 6,
                   onCompleted: (String value) {
                     setState(() {
@@ -106,11 +88,6 @@ class _VerifyPageState extends State<VerifyPage> {
             ),
           ),
           AppTextHelpLink(
-            label: 'Haven\'t received your code yet? ',
-            linkText: 'Resend Code',
-            onPressed: _methodTBD,
-          ),
-          AppTextHelpLink(
             label: 'Go back to ',
             linkText: 'Login',
             onPressed: _goback,
@@ -122,11 +99,10 @@ class _VerifyPageState extends State<VerifyPage> {
 
   void _goback() async {
     NavigationController().pop(context);
+    // NavigationController().pushTo(context, child: const LoginPage());
   }
 
   void _completeSignup() {
     NavigationController().pushTo(context, child: const CompletePage());
   }
-
-  void _methodTBD() {}
 }

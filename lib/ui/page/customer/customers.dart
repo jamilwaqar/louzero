@@ -58,22 +58,16 @@ class _CustomerListPageState extends State<CustomerListPage> {
         padding: const EdgeInsets.symmetric(horizontal: 32),
         itemCount: 10,
         itemBuilder: (context, index) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DashboardCell(
-                title: "Customer ${index + 1}",
-                description: "Description...",
-                count: 0,
-                buttonTitleLeft: "3486 Archwood Ave., Vancouver, Washington 98665",
-                buttonTitleRight: "",
-                onPressed: () => NavigationController()
-                    .pushTo(context, child: const CustomerProfilePage()),
-                onPressedLeft: () {},
-                onPressedRight: () {},
-              ),
-              const SizedBox(height: 24),
-            ],
+          return DashboardCell(
+            title: "Customer ${index + 1}",
+            description: "Many More Items",
+            count: 0,
+            buttonTitleLeft: "3486 Archwood Ave., Vancouver, Washington 98665",
+            buttonTitleRight: "",
+            onPressed: () => NavigationController()
+                .pushTo(context, child: const CustomerProfilePage()),
+            onPressedLeft: () {},
+            onPressedRight: () {},
           );
         });
   }
