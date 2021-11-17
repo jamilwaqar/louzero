@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_card_center.dart';
+import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -63,28 +65,15 @@ class _VerifyPageState extends State<VerifyPage> {
           AppCardCenter(
             child: Column(
               children: [
-                Text(
-                  "Verification Code",
-                  style: styleTextHeading,
+                const AppTextHeader('Verification Code'),
+                const AppTextBody('We sent a verification code to'),
+                const AppTextBody(
+                  'josh.coolman@singlemindconsulting.com',
+                  color: AppColors.dark_3,
+                  bold: true,
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'We sent a verification code to',
-                  style: styleText,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'allan.whitaker@thumbtakpoolcleaners.com',
-                  style: styleTextBold,
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Text('Enter that code to continue', style: styleText),
+                const AppTextBody('Enter that code to continue',
+                    mt: 24, mb: 16),
                 VerificationCode(
                   textStyle: const TextStyle(
                     fontSize: 30.0,
