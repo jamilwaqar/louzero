@@ -6,7 +6,10 @@ import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/auth/accept_invite.dart';
 import '../base_scaffold.dart';
 
 class CompletePage extends StatefulWidget {
@@ -39,10 +42,11 @@ class _CompletePageState extends State<CompletePage> {
         'Yes, I would like to receive email updates about products & services, upcoming webinars, news and events from LOUzero.';
     var termsLabel = 'I have read and agreed to the Terms of Service';
     return BaseScaffold(
-      child: AppCardCenter(
-        child: Column(
-          children: [
-            Column(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AppCardCenter(
+            child: Column(
               children: [
                 const AppTextHeader('Complete Signup'),
                 const AppTextBody(
@@ -76,10 +80,19 @@ class _CompletePageState extends State<CompletePage> {
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          AppTextLink(
+            'Back',
+            onPressed: _goBack,
+          )
+        ],
       ),
     );
+  }
+
+  void _goBack() async {
+    NavigationController().pop(context);
+    // NavigationController().pushTo(context, child: const AcceptInvitePage());
   }
 
   void _onCompleteSignup() async {
