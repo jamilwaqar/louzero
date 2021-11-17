@@ -118,7 +118,6 @@ class _LoginPageState extends State<LoginPage> {
                     'Accept Invite',
                     onPressed: _onAcceptInvite,
                   ),
-                  Text('Blah')
                 ],
               )
             ],
