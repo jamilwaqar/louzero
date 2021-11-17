@@ -30,10 +30,6 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
     super.initState();
   }
 
-  RectTween _createRectTween(Rect? begin, Rect? end) {
-    return MaterialRectArcTween(begin: begin, end: end);
-  }
-
   @override
   void dispose() {
     _companyNameController.dispose();
@@ -64,11 +60,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
         itemBuilder: (context, index) {
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              _info(),
-              const SizedBox(height: 24),
-              _category()
-            ],
+            children: [_info(), const SizedBox(height: 24), _category()],
           );
         });
   }
@@ -97,20 +89,29 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('Archwood House', style: TextStyles.headLineS.copyWith(color: AppColors.dark_2)),
+                              Text('Archwood House',
+                                  style: TextStyles.headLineS
+                                      .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),
-                              TopLeftButton(onPressed: () {}, iconData: Icons.edit),
+                              TopLeftButton(
+                                  onPressed: () {}, iconData: Icons.edit),
                             ],
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('3486 Archwood Ave., Vancouver, Washington 98665', style: TextStyles.bodyL),
+                              const Text(
+                                  '3486 Archwood Ave., Vancouver, Washington 98665',
+                                  style: TextStyles.bodyL),
                               const SizedBox(width: 50),
                               appIcon(Icons.attach_money),
                               const SizedBox(width: 3),
-                              Text('Acct. Balance:', style:TextStyles.bodyL.copyWith(color: AppColors.dark_2)),
-                              Text("\$0.00:", style: TextStyles.bodyL.copyWith(color: AppColors.darkest)),
+                              Text('Acct. Balance:',
+                                  style: TextStyles.bodyL
+                                      .copyWith(color: AppColors.dark_2)),
+                              Text("\$0.00:",
+                                  style: TextStyles.bodyL
+                                      .copyWith(color: AppColors.darkest)),
                             ],
                           )
                         ],
@@ -120,16 +121,16 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                 ),
               ),
               CupertinoButton(
-                  onPressed: () {  },
+                  onPressed: () {},
                   child: Container(
                     width: 40,
                     height: 40,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         color: AppColors.light_4.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(30)
-                    ),
-                    child: SvgPicture.asset("${Constant.imgPrefixPath}/icon-collapse.svg"),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: SvgPicture.asset(
+                        "${Constant.imgPrefixPath}/icon-collapse.svg"),
                   ))
             ],
           ),
@@ -142,18 +143,21 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                     Container(
                       width: 246,
                       height: 240,
-                      decoration: const BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8))),
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(8))),
                       child: GoogleMap(
                         mapType: MapType.normal,
                         myLocationEnabled: false,
                         myLocationButtonEnabled: false,
                         zoomControlsEnabled: false,
                         initialCameraPosition: const CameraPosition(
-                          target: LatLng(45.6731541,-122.6928643),
+                          target: LatLng(45.6731541, -122.6928643),
                           zoom: 18,
                         ),
                         onMapCreated: (GoogleMapController controller) {
-                          Future.delayed(const Duration(milliseconds: 500)).then((value) {
+                          Future.delayed(const Duration(milliseconds: 500))
+                              .then((value) {
                             setState(() {
                               // mapController.complete(controller);
                             });
@@ -166,13 +170,15 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                         right: 8,
                         child: InkWell(
                           onTap: () {
-                            NavigationController().pushTo(context, child: const CustomerLocationPage());
+                            NavigationController().pushTo(context,
+                                child: const CustomerLocationPage());
                           },
                           child: Container(
                             width: 40,
                             height: 40,
                             alignment: Alignment.center,
-                            child: Image.asset("assets/icons/icon-full-screen.png"),
+                            child: Image.asset(
+                                "assets/icons/icon-full-screen.png"),
                           ),
                         )),
                   ],
@@ -183,7 +189,8 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Divider(thickness: 2,color: AppColors.light_1, height: 0),
+                      const Divider(
+                          thickness: 2, color: AppColors.light_1, height: 0),
                       Align(
                         alignment: Alignment.topRight,
                         child: Container(
@@ -191,17 +198,20 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           height: 24,
                           alignment: Alignment.center,
                           decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
-                            color: AppColors.light_1
-                          ),
-                          child: Text('RESIDENTIAL', style: TextStyles.bodyL.copyWith(fontSize: 12)),
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8)),
+                              color: AppColors.light_1),
+                          child: Text('RESIDENTIAL',
+                              style: TextStyles.bodyL.copyWith(fontSize: 12)),
                         ),
                       ),
                       Row(
                         children: [
-                          appIcon(Icons.person,  color: AppColors.dark_1),
+                          appIcon(Icons.person, color: AppColors.dark_1),
                           const SizedBox(width: 8),
-                          const Text('Primary Contact', style: TextStyles.labelL),
+                          const Text('Primary Contact',
+                              style: TextStyles.labelL),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -213,9 +223,15 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('Nicole Swanson - Home Owner', style: TextStyles.bodyL.copyWith(color: AppColors.dark_3)),
-                            Text('nswanson@emailaddress.net', style: TextStyles.bodyL.copyWith(color: AppColors.dark_3)),
-                            Text('1 (360) 936-7594', style: TextStyles.bodyL.copyWith(color: AppColors.dark_3)),
+                            Text('Nicole Swanson - Home Owner',
+                                style: TextStyles.bodyL
+                                    .copyWith(color: AppColors.dark_3)),
+                            Text('nswanson@emailaddress.net',
+                                style: TextStyles.bodyL
+                                    .copyWith(color: AppColors.dark_3)),
+                            Text('1 (360) 936-7594',
+                                style: TextStyles.bodyL
+                                    .copyWith(color: AppColors.dark_3)),
                           ],
                         ),
                       ),
@@ -224,14 +240,17 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                         children: [
                           appIcon(Icons.location_pin, color: AppColors.dark_1),
                           const SizedBox(width: 8),
-                          const Text('Billing Address', style: TextStyles.labelL),
+                          const Text('Billing Address',
+                              style: TextStyles.labelL),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 32.0),
-                          child: Text('Same as Service Address', style: TextStyles.bodyL.copyWith(color: AppColors.dark_3)),
+                          child: Text('Same as Service Address',
+                              style: TextStyles.bodyL
+                                  .copyWith(color: AppColors.dark_3)),
                         ),
                       ),
                     ],
@@ -256,7 +275,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
       mainAxisSpacing: 24,
       shrinkWrap: true,
       children: itemList,
-      childAspectRatio: 2.4/1,
+      childAspectRatio: 2.4 / 1,
     );
   }
 
@@ -264,7 +283,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
     return InkWell(
       onTap: () {
         Widget? categoryPage;
-        switch(category) {
+        switch (category) {
           case CustomerCategory.jobs:
             break;
           case CustomerCategory.siteProfiles:
@@ -312,7 +331,10 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                 children: [
                   Row(
                     children: [
-                      Expanded(child: Text(category.title, style: TextStyles.titleL.copyWith(color: AppColors.dark_3))),
+                      Expanded(
+                          child: Text(category.title,
+                              style: TextStyles.titleL
+                                  .copyWith(color: AppColors.dark_3))),
                       Container(
                         width: 32,
                         height: 32,
@@ -321,7 +343,11 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           shape: BoxShape.circle,
                           color: AppColors.light_2,
                         ),
-                        child: const Text('7', style: TextStyle(fontSize: 14, color: AppColors.dark_3, fontWeight: FontWeight.bold)),
+                        child: const Text('7',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: AppColors.dark_3,
+                                fontWeight: FontWeight.bold)),
                       )
                     ],
                   ),

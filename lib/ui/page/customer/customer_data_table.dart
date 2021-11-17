@@ -30,7 +30,7 @@ class CustomerDataTable extends StatelessWidget {
 }
 
 List<Customer> generateItems(int numberOfItems) {
-  final _random = new Random();
+  final _random = Random();
   return List<Customer>.generate(numberOfItems, (int index) {
     return Customer(
         name:

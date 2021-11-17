@@ -9,7 +9,6 @@ import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/ui/page/auth/accept_invite.dart';
 import '../base_scaffold.dart';
 
 class CompletePage extends StatefulWidget {
@@ -151,6 +150,5 @@ class AppCheckboxWithLabel extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

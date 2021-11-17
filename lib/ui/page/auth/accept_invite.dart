@@ -9,7 +9,6 @@ import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/auth/complete.dart';
-import 'package:louzero/ui/page/auth/login.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
