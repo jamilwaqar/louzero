@@ -20,8 +20,6 @@ Map<String, dynamic> _$CTSiteProfileToJson(CTSiteProfile instance) =>
 
 CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
     CustomerModel(
-      id: json['id'] as String,
-      userId: json['userId'] as String,
       companyId: json['companyId'] as String,
       name: json['name'] as String,
       type: json['type'] as String,
@@ -36,14 +34,10 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
               .toList() ??
           []
       ..latitude = (json['latitude'] as num?)?.toDouble() ?? 0.0
-      ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0
-      ..createdAt = json['createdAt'] as int?
-      ..updatedAt = json['updatedAt'] as int?;
+      ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0;
 
 Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'userId': instance.userId,
       'name': instance.name,
       'type': instance.type,
       'parentId': instance.parentId,
@@ -53,8 +47,6 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'customerContacts': instance.customerContacts,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
-      'createdAt': instance.createdAt,
-      'updatedAt': instance.updatedAt,
     };
 
 AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
@@ -103,3 +95,22 @@ const _$CTContactTypeEnumMap = {
   CTContactType.schedule: 'schedule',
   CTContactType.other: 'other',
 };
+
+SearchAddressModel _$SearchAddressModelFromJson(Map<String, dynamic> json) =>
+    SearchAddressModel()
+      ..placeId = json['placeId'] as String? ?? ''
+      ..name = json['main_text'] as String? ?? ''
+      ..description = json['secondary_text'] as String? ?? ''
+      ..state = json['state'] as String? ?? ''
+      ..latitude = (json['latitude'] as num?)?.toDouble() ?? 0.0
+      ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0;
+
+Map<String, dynamic> _$SearchAddressModelToJson(SearchAddressModel instance) =>
+    <String, dynamic>{
+      'placeId': instance.placeId,
+      'main_text': instance.name,
+      'secondary_text': instance.description,
+      'state': instance.state,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+    };

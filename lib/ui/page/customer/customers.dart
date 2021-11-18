@@ -1,8 +1,11 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer.dart';
@@ -28,6 +31,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
   @override
   void initState() {
     _customerBloc =  CustomerBloc(context.read<BaseBloc>());
+    _fetchCustomers();
     super.initState();
   }
 
@@ -36,6 +40,13 @@ class _CustomerListPageState extends State<CustomerListPage> {
     _companyNameController.dispose();
     _parentAccountNameController.dispose();
     super.dispose();
+  }
+
+  void _fetchCustomers() {
+    Backendless.data.of(BLPath.customer).find().then((res) {
+      _customerBloc.add(UpdateCustomerModelListEvent(
+          List<Map>.from(res!).map((e) => CustomerModel.fromMap(e)).toList()));
+    });
   }
 
   @override
@@ -76,11 +87,12 @@ class _CustomerListPageState extends State<CustomerListPage> {
         padding: const EdgeInsets.symmetric(horizontal: 32),
         itemCount: state.customers.length,
         itemBuilder: (context, index) {
+          CustomerModel model = state.customers[index];
           return DashboardCell(
-            title: "Customer ${index + 1}",
-            description: "Many More Items",
+            title: model.name,
+            description: "",
             count: 0,
-            buttonTitleLeft: "3486 Archwood Ave., Vancouver, Washington 98665",
+            buttonTitleLeft: "${model.serviceAddress.street}, ${model.serviceAddress.city}, ${model.serviceAddress.state}",
             buttonTitleRight: "",
             onPressed: () => NavigationController()
                 .pushTo(context, child: const CustomerProfilePage()),

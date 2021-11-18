@@ -20,16 +20,14 @@ class CTSiteProfile {
 @JsonSerializable()
 class CustomerModel {
   CustomerModel(
-      {required this.id,
-      required this.userId,
-      required this.companyId,
+      {required this.companyId,
       required this.name,
       required this.type,
       required this.serviceAddress,
       required this.billingAddress});
 
-  String id;
-  String userId;
+  @JsonKey(ignore: true) String? objectId;
+  @JsonKey(ignore: true) String? ownerId;
   String name;
   String type;
   String? parentId;
@@ -45,9 +43,6 @@ class CustomerModel {
   @JsonKey(defaultValue: 0.0)
   double longitude = 0.0;
 
-  int? createdAt;
-  int? updatedAt;
-
   bool get isValidLocation => latitude != 0 && longitude != 0;
 
   LatLng? get latLng {
@@ -56,6 +51,18 @@ class CustomerModel {
     } else {
       return null;
     }
+  }
+
+  factory CustomerModel.fromMap(Map map) {
+    Map serviceAddress = map.remove('serviceAddress');
+    Map billingAddress = map.remove('billingAddress');
+    List customerContacts = map.remove('customerContacts');
+    map['serviceAddress'] = Map<String, dynamic>.from(serviceAddress);
+    map['billingAddress'] = Map<String, dynamic>.from(billingAddress);
+    map['customerContacts'] =
+        customerContacts.map((e) => Map<String, dynamic>.from(e)).toList();
+    Map<String, dynamic> json = Map<String, dynamic>.from(map);
+    return CustomerModel.fromJson(json);
   }
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) =>
@@ -107,4 +114,20 @@ class CustomerContact {
       _$CustomerContactFromJson(json);
 
   Map<String, dynamic> toJson() => _$CustomerContactToJson(this);
+}
+
+@JsonSerializable()
+class SearchAddressModel {
+  SearchAddressModel();
+  @JsonKey(defaultValue: '')                                  String placeId = '';
+  @JsonKey(name: 'main_text', defaultValue: '')               String name = '';
+  @JsonKey(name: 'secondary_text', defaultValue: '')          String description = '';
+  @JsonKey(defaultValue: '')                                  String state = '';
+  @JsonKey(defaultValue: 0.0)                                 double latitude = 0.0;
+  @JsonKey(defaultValue: 0.0)                                 double longitude = 0.0;
+
+  factory SearchAddressModel.fromJson(Map<String, dynamic> json) =>
+      _$SearchAddressModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SearchAddressModelToJson(this);
 }
