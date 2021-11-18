@@ -5,24 +5,24 @@ import 'package:louzero/controller/extension/decoration.dart';
 class AppCard extends StatelessWidget {
   const AppCard({
     Key? key,
-    required this.child,
+    required this.children,
     this.width = 0,
-    this.pt = 0,
+    this.pt = 32,
     this.pb = 0,
     this.pl = 0,
     this.pr = 0,
-    this.px = 0,
+    this.px = 24,
     this.py = 0,
     this.p = 0,
     this.mt = 0,
-    this.mb = 0,
+    this.mb = 16,
     this.ml = 0,
     this.mr = 0,
-    this.mx = 0,
+    this.mx = 24,
     this.my = 0,
     this.m = 0,
   }) : super(key: key);
-  final Widget child;
+  final List<Widget> children;
   final double width;
   // spacing props (margin / padding)
   final double pt;
@@ -87,16 +87,22 @@ class AppCard extends StatelessWidget {
               : pb,
     );
 
-    return Container(
-      margin: margin,
-      padding: padding,
-      decoration: BoxDecorationEx.shadowEffect(
-          borderRadius: BorderRadius.circular(8),
-          blurRadius: 3,
-          shadowOffset: const Offset(0, 1),
-          shadowRadius: 2,
-          backgroundColor: AppColors.lightest),
-      child: child,
+    return Column(
+      children: [
+        Container(
+          margin: margin,
+          padding: padding,
+          decoration: BoxDecorationEx.shadowEffect(
+              borderRadius: BorderRadius.circular(8),
+              blurRadius: 3,
+              shadowOffset: const Offset(0, 1),
+              shadowRadius: 2,
+              backgroundColor: AppColors.lightest),
+          child: Column(
+            children: children,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -37,12 +37,9 @@ class AppTextHeader extends StatelessWidget {
         children: [
           Visibility(
             visible: icon != null ? true : false,
-            child: SizedBox(
-              height: size,
-              child: Icon(
-                icon,
-                size: size,
-              ),
+            child: Icon(
+              icon,
+              size: size + 3,
             ),
           ),
           SizedBox(width: size * 0.35),

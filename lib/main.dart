@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/auth/login.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 
@@ -49,9 +50,9 @@ class _HomePageState extends State<HomePage> {
         if (value) {
           return const DashboardPage();
         }
+        //return const AccountStart();
         return const LoginPage();
       },
     );
-
   }
 }
