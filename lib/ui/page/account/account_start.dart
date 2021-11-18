@@ -44,14 +44,43 @@ class _AccountStartState extends State<AccountStart> {
           Expanded(
             flex: 3,
             child: PageView(children: const [
-              AppCard(m: 24, p: 24, child: AppTextHeader('Step One')),
-              AppCard(m: 24, p: 24, child: AppTextHeader('Step Two')),
-              AppCard(m: 24, p: 24, child: AppTextHeader('Step Three')),
+              BasePage(label: 'Company Details', icon: Icons.location_city),
+              BasePage(label: 'Customer Types', icon: Icons.person),
+              BasePage(label: 'Job Types', icon: Icons.business_center),
+              BasePage(label: 'Customers', icon: Icons.person, heading: false),
             ]),
           )
         ],
       ),
     );
+  }
+}
+
+class BasePage extends StatelessWidget {
+  const BasePage(
+      {Key? key, required this.label, this.icon, this.heading = true})
+      : super(key: key);
+  final String label;
+  final IconData? icon;
+  final bool heading;
+  @override
+  Widget build(BuildContext context) {
+    var _icon = icon ?? null;
+    return AppCard(
+        m: 24,
+        p: 24,
+        child: Column(
+          children: [
+            Visibility(
+                visible: heading,
+                child: AppTextHeader(
+                  label,
+                  alignLeft: true,
+                  icon: _icon,
+                  size: 24,
+                )),
+          ],
+        ));
   }
 }
 
