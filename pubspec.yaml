@@ -19,13 +19,20 @@ dependencies:
 
   another_flushbar:
   image_picker:
+
   flutter_bloc:
   bloc:
+  equatable:
+  provider:
+
   flutter_switch:
   google_maps_flutter:
   json_annotation: ^4.3.0
   flutter_svg:
   flutter_verification_code: ^1.1.0
+  uuid:
+  country_picker:
+  dio:
 
 dev_dependencies:
   flutter_test:

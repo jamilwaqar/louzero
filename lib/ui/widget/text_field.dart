@@ -4,8 +4,8 @@ import 'package:louzero/controller/constant/colors.dart';
 class LZTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
-
-  const LZTextField({Key? key, required this.controller, required this.label}) : super(key: key);
+  final bool enabled;
+  const LZTextField({Key? key, required this.controller, required this.label, this.enabled = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +26,7 @@ class LZTextField extends StatelessWidget {
               border: Border.all(color: AppColors.light_3, width: 1)
           ),
           child: TextFormField(
+            enabled: enabled,
             controller: controller,
             keyboardAppearance: Brightness.light,
             keyboardType: TextInputType.emailAddress,

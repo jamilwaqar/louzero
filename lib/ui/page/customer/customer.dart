@@ -7,6 +7,7 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_location.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
@@ -14,19 +15,23 @@ import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerProfilePage extends StatefulWidget {
-  const CustomerProfilePage({Key? key}) : super(key: key);
+  final CustomerModel customerModel;
+  const CustomerProfilePage(this.customerModel, {Key? key}) : super(key: key);
 
   @override
   _CustomerProfilePageState createState() => _CustomerProfilePageState();
 }
 
 class _CustomerProfilePageState extends State<CustomerProfilePage> {
+
+  late CustomerModel customerModel;
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController =
       TextEditingController();
 
   @override
   void initState() {
+    customerModel = widget.customerModel;
     super.initState();
   }
 
@@ -42,12 +47,12 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
     return BaseScaffold(
       child: Scaffold(
         appBar: SubAppBar(
-          title: "Archwood House",
+          title: customerModel.name,
           context: context,
           leadingTxt: "Customers",
           hasActions: false,
         ),
-        backgroundColor: AppColors.light_1,
+        backgroundColor: Colors.transparent,
         body: _body(),
       ),
     );
@@ -89,7 +94,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('Archwood House',
+                              Text(customerModel.name,
                                   style: TextStyles.headLineS
                                       .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),
@@ -100,9 +105,11 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text(
-                                  '3486 Archwood Ave., Vancouver, Washington 98665',
-                                  style: TextStyles.bodyL),
+                              Flexible(
+                                flex:4,
+                                child: Text(customerModel.fullServiceAddress,
+                                    style: TextStyles.bodyL, overflow: TextOverflow.ellipsis),
+                              ),
                               const SizedBox(width: 50),
                               appIcon(Icons.attach_money),
                               const SizedBox(width: 3),
@@ -151,8 +158,8 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                         myLocationEnabled: false,
                         myLocationButtonEnabled: false,
                         zoomControlsEnabled: false,
-                        initialCameraPosition: const CameraPosition(
-                          target: LatLng(45.6731541, -122.6928643),
+                        initialCameraPosition: CameraPosition(
+                          target: customerModel.serviceAddress.latLng!,
                           zoom: 18,
                         ),
                         onMapCreated: (GoogleMapController controller) {
@@ -171,7 +178,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                         child: InkWell(
                           onTap: () {
                             NavigationController().pushTo(context,
-                                child: const CustomerLocationPage());
+                                child: CustomerLocationPage(customerModel));
                           },
                           child: Container(
                             width: 40,
@@ -223,13 +230,13 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('Nicole Swanson - Home Owner',
+                            Text(customerModel.customerContacts[0].fullName,
                                 style: TextStyles.bodyL
                                     .copyWith(color: AppColors.dark_3)),
-                            Text('nswanson@emailaddress.net',
+                            Text(customerModel.customerContacts[0].email,
                                 style: TextStyles.bodyL
                                     .copyWith(color: AppColors.dark_3)),
-                            Text('1 (360) 936-7594',
+                            Text(customerModel.customerContacts[0].phone,
                                 style: TextStyles.bodyL
                                     .copyWith(color: AppColors.dark_3)),
                           ],

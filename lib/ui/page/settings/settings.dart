@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
           leadingTxt: "Home",
           hasActions: false,
         ),
-        backgroundColor: AppColors.light_1,
+        backgroundColor: Colors.transparent,
         body: _body(),
       ),
     );

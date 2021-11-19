@@ -99,7 +99,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
             _addSiteProfile()
           ],
         ),
-        backgroundColor: AppColors.light_1,
+        backgroundColor: Colors.transparent,
         body: _body(),
       ),
     );
