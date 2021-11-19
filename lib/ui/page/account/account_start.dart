@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
+import 'package:louzero/common/app_dropdown_multiple.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_body.dart';
@@ -193,8 +194,7 @@ class _CompanyDetails extends StatelessWidget {
               const Divider(
                 color: AppColors.light_3,
               ),
-              AppInputText(
-                  mt: 14,
+              AppDropdownMultiple(
                   controller: _controlTBD,
                   label: 'What Industries do you serve?'),
             ],
