@@ -61,14 +61,14 @@ class _AccountStartState extends State<AccountStart> {
 }
 
 class _AccountJobTypes extends StatelessWidget {
-  _AccountJobTypes({
+  const _AccountJobTypes({
     Key? key,
     required TextEditingController controlTBD,
   })  : _controlTBD = controlTBD,
         super(key: key);
 
   final TextEditingController _controlTBD;
-  var jobTypeText =
+  final jobTypeText =
       'Save time by profiling your common job types. Think about repairs, sales and recurring services. Later, you can build out full templates for each job type in Settings.';
 
   @override
@@ -92,7 +92,7 @@ class _AccountJobTypes extends StatelessWidget {
                   label: 'What Industries do you serve?'),
             ],
           ),
-          AppButtonSubmit(),
+          const AppButtonSubmit(),
         ],
       ),
     );
@@ -100,14 +100,14 @@ class _AccountJobTypes extends StatelessWidget {
 }
 
 class _AccountCustomers extends StatelessWidget {
-  _AccountCustomers({
+  const _AccountCustomers({
     Key? key,
     required TextEditingController controlTBD,
   })  : _controlTBD = controlTBD,
         super(key: key);
 
   final TextEditingController _controlTBD;
-  var customerTypeText =
+  final customerTypeText =
       'Customer Types allow for categorization of customers. Common options are residential and commercial. This categorization will be helpful in reporting on performance.';
 
   @override
@@ -134,7 +134,7 @@ class _AccountCustomers extends StatelessWidget {
                   label: 'What Industries do you serve?'),
             ],
           ),
-          AppButtonSubmit(),
+          const AppButtonSubmit(),
         ],
       ),
     );
@@ -245,7 +245,7 @@ class _CompanyDetails extends StatelessWidget {
               ],
             ),
           ]),
-          AppButtonSubmit(),
+          const AppButtonSubmit(),
         ],
       ),
     );
