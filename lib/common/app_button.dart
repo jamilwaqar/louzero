@@ -40,27 +40,24 @@ class AppButton extends StatelessWidget {
     const textStyle = TextStyle(
         fontFamily: 'Roboto', fontWeight: FontWeight.w500, fontSize: 16);
 
-    return Flex(
-      direction: Axis.horizontal,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(top: mt, bottom: mb),
-            child: FloatingActionButton.extended(
-                foregroundColor: fg,
-                backgroundColor: bg,
-                icon: icon != null ? Icon(icon) : null,
-                elevation: 0,
-                extendedTextStyle: textStyle,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(color: bd, width: 1.0),
-                    borderRadius: BorderRadius.all(Radius.circular(radius))),
-                onPressed: onPressed,
-                label: Text(label)),
-          ),
-        )
-      ],
+    return Container(
+      margin: EdgeInsets.only(
+        top: mt,
+        bottom: mb,
+        left: ml,
+        right: mr,
+      ),
+      child: FloatingActionButton.extended(
+          foregroundColor: fg,
+          backgroundColor: bg,
+          icon: icon != null ? Icon(icon) : null,
+          elevation: 0,
+          extendedTextStyle: textStyle,
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: bd, width: 1.0),
+              borderRadius: BorderRadius.all(Radius.circular(radius))),
+          onPressed: onPressed,
+          label: Text(label)),
     );
   }
 }

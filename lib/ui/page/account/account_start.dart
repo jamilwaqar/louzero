@@ -7,6 +7,7 @@ import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 
 class AccountStart extends StatefulWidget {
@@ -35,7 +36,6 @@ class _AccountStartState extends State<AccountStart> {
                   const AppTextHeader(
                     "To start, let’s get some basic info.",
                     mt: 32,
-                    mb: 58,
                   ),
                   const AppTextBody(
                     'You can always make changes later in Settings',
@@ -47,11 +47,52 @@ class _AccountStartState extends State<AccountStart> {
           Expanded(
             flex: 3,
             child: PageView(children: [
-              _CompanyDetails(controlTBD: _controlTBD),
+              _AccountCustomers(controlTBD: _controlTBD),
               _CompanyDetails(controlTBD: _controlTBD),
               _CompanyDetails(controlTBD: _controlTBD),
             ]),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class _AccountCustomers extends StatelessWidget {
+  const _AccountCustomers({
+    Key? key,
+    required TextEditingController controlTBD,
+  })  : _controlTBD = controlTBD,
+        super(key: key);
+
+  final TextEditingController _controlTBD;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 32),
+      child: Column(
+        children: [
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Customer Types",
+                alignLeft: true,
+                icon: Icons.people,
+                size: 24,
+              ),
+              AppTextBody(
+                  'Customer Types allow for categorization of customers. Common options are residential and commercial. This categorization will be helpful in reporting on performance.'),
+              const Divider(
+                color: AppColors.light_3,
+              ),
+              AppInputText(
+                  mt: 14,
+                  controller: _controlTBD,
+                  label: 'What Industries do you serve?'),
+            ],
+          ),
+          AppButtonSubmit(),
         ],
       ),
     );
@@ -70,33 +111,48 @@ class _CompanyDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 32),
       child: Column(
         children: [
           AppCard(
-            mt: 32,
             children: [
               const AppTextHeader(
                 "Company Details",
                 alignLeft: true,
-                icon: Icons.people,
+                icon: Icons.home_work_sharp,
                 size: 24,
               ),
               AppFlexRow(
                 children: [
                   AppFlexColumn(children: [
                     AppInputText(
-                        controller: _controlTBD, label: 'Company Name'),
-                    AppInputText(controller: _controlTBD, label: 'Website'),
+                      required: true,
+                      controller: _controlTBD,
+                      label: 'Company Name',
+                    ),
+                    AppInputText(
+                      controller: _controlTBD,
+                      label: 'Website',
+                    ),
                   ]),
                   AppFlexColumn(ml: 16, children: [
                     AppInputText(
-                        controller: _controlTBD, label: 'Phone Number'),
+                      controller: _controlTBD,
+                      required: true,
+                      label: 'Phone Number',
+                    ),
                     AppInputText(
-                        controller: _controlTBD, label: 'Email Address')
+                      controller: _controlTBD,
+                      label: 'Email Address',
+                    )
                   ])
                 ],
               ),
+              const Divider(
+                color: AppColors.light_3,
+              ),
               AppInputText(
+                  mt: 14,
                   controller: _controlTBD,
                   label: 'What Industries do you serve?'),
             ],
@@ -108,24 +164,108 @@ class _CompanyDetails extends StatelessWidget {
               icon: Icons.location_on,
               size: 24,
             ),
-            AppInputText(controller: _controlTBD, label: 'Country'),
-            AppInputText(controller: _controlTBD, label: 'Street Address'),
-            AppInputText(controller: _controlTBD, label: 'Apt / Suite / Other'),
+            AppInputText(
+              controller: _controlTBD,
+              label: 'Country',
+            ),
+            AppInputText(
+              controller: _controlTBD,
+              label: 'Street Address',
+            ),
+            AppInputText(
+              controller: _controlTBD,
+              label: 'Apt / Suite / Other',
+              colorBg: AppColors.light_1,
+            ),
             AppFlexRow(
               children: [
                 AppFlexColumn(flex: 2, children: [
-                  AppInputText(controller: _controlTBD, label: 'City'),
+                  AppInputText(
+                    controller: _controlTBD,
+                    label: 'City',
+                    colorBg: AppColors.light_1,
+                  ),
                 ]),
                 AppFlexColumn(ml: 16, children: [
-                  AppInputText(controller: _controlTBD, label: 'State'),
+                  AppInputText(
+                    controller: _controlTBD,
+                    label: 'State',
+                    colorBg: AppColors.light_1,
+                  ),
                 ]),
                 AppFlexColumn(ml: 16, children: [
-                  AppInputText(controller: _controlTBD, label: 'Zip'),
+                  AppInputText(
+                    controller: _controlTBD,
+                    label: 'Zip',
+                    colorBg: AppColors.light_1,
+                  ),
                 ]),
               ],
-            )
+            ),
           ]),
+          AppButtonSubmit(),
         ],
+      ),
+    );
+  }
+}
+
+class AppButtonSubmit extends StatelessWidget {
+  const AppButtonSubmit({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AppDivider(ml: 24, mr: 24, mb: 24),
+        Row(
+          children: const [
+            AppButton(
+              ml: 24,
+              mb: 48,
+              label: 'Save & Continue',
+              color: AppColors.dark_2,
+            )
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class AppDivider extends StatelessWidget {
+  const AppDivider({
+    Key? key,
+    this.mt = 0,
+    this.mb = 24,
+    this.ml = 0,
+    this.mr = 0,
+    this.color = AppColors.light_3,
+    this.size = 2,
+  }) : super(key: key);
+
+  final double mt;
+  final double mb;
+  final double ml;
+  final double mr;
+  final Color color;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(
+        top: mt,
+        bottom: mb,
+        left: ml,
+        right: mr,
+      ),
+      child: Divider(
+        color: color,
+        thickness: size,
+        height: size,
       ),
     );
   }

@@ -11,14 +11,22 @@ class AppInputText extends StatefulWidget {
       this.keyboardType = TextInputType.text,
       this.password = false,
       this.autofocus = false,
+      this.required = false,
+      this.colorTx = AppColors.dark_3,
+      this.colorBd = AppColors.light_3,
+      this.colorBg = AppColors.lightest,
       this.mt = 0,
-      this.mb = 24})
+      this.mb = 16})
       : super(key: key);
 
   final String label;
+  final Color colorBg;
+  final Color colorBd;
+  final Color colorTx;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final bool password;
+  final bool required;
   final double mt;
   final double mb;
   final bool autofocus;
@@ -30,17 +38,20 @@ class AppInputText extends StatefulWidget {
 class _AppInputTextState extends State<AppInputText> {
   @override
   Widget build(BuildContext context) {
-    const inputText = TextStyle(
+    var reqText = widget.required ? '*' : '';
+    var inputText = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 16,
-      color: AppColors.dark_3,
+      color: widget.colorTx,
     );
     var inputContainer = BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: AppColors.light_3,
-          width: 1,
-        ));
+      borderRadius: BorderRadius.circular(8),
+      color: widget.colorBg,
+      border: Border.all(
+        color: widget.colorBd,
+        width: 1,
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,15 +60,15 @@ class _AppInputTextState extends State<AppInputText> {
           height: widget.mt,
         ),
         Text(
-          widget.label,
+          widget.label + reqText,
           style: const TextStyle(
-            color: AppColors.dark_1,
-            fontWeight: FontWeight.w400,
-            fontSize: 16,
+            color: AppColors.dark_2,
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
           ),
         ),
         const SizedBox(
-          height: 4,
+          height: 10,
         ),
         Container(
           height: 48,
