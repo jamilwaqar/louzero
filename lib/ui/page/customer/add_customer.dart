@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,8 +56,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   final List<Widget> _customerContactList = [];
   final List<String> _mockCustomerType = ["Residential", "Commercial"];
   String? _customerType;
-  List<List<CTContactType>> _contactTypes = [[]];
+  final List<List<CTContactType>> _contactTypes = [[]];
   Country? _country;
+  SearchAddressModel? _serviceSearchAddressModel;
+  SearchAddressModel? _billSearchAddressModel;
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     _companyNameController.dispose();
     _parentAccountNameController.dispose();
     _serviceCountryController.dispose();
-
+    widget.customerBloc.add(const SearchAddressEvent(''));
     super.dispose();
   }
 
@@ -94,7 +94,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 context: context,
                 leadingTxt: "Customer",
               ),
-              backgroundColor: AppColors.light_1,
+              backgroundColor: Colors.transparent,
               body: _body(state),
             ),
           );
@@ -478,6 +478,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         city: _serviceCityController.text,
         state: _serviceStateController.text,
         zip: _serviceZipController.text);
+    if (_serviceSearchAddressModel != null) {
+      serviceAddress.latitude = _serviceSearchAddressModel!.latitude;
+      serviceAddress.longitude = _serviceSearchAddressModel!.longitude;
+    }
     if (_sameAsService) {
       billingAddress = serviceAddress;
     } else {
@@ -487,16 +491,21 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           city: _billCityController.text,
           state: _billStateController.text,
           zip: _billZipController.text);
+
+      if (_serviceSearchAddressModel != null) {
+        billingAddress.latitude = _billSearchAddressModel!.latitude;
+        billingAddress.longitude = _billSearchAddressModel!.longitude;
+      }
     }
 
     List<CustomerContact> contacts = [];
     for (int i = 0; i < _customerContactList.length; i++) {
       CustomerContact contact = CustomerContact(
           firstName: _contactFNameControllers[i].text,
-          lastName: _contactFNameControllers[i].text,
-          email: _contactFNameControllers[i].text,
-          phone: _contactFNameControllers[i].text,
-          role: _contactFNameControllers[i].text);
+          lastName: _contactLNameControllers[i].text,
+          email: _contactEmailControllers[i].text,
+          phone: _contactPhoneControllers[i].text,
+          role: _contactRoleControllers[i].text);
       contact.types = _contactTypes[i];
       contacts.add(contact);
     }
@@ -517,12 +526,11 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     NavigationController().notifierInitLoading.value = true;
     try {
       dynamic response = await Backendless.data.of(BLPath.customer).save(data);
-      print('response: $response');
       WarningMessageDialog.showDialog(context, "Saved Customer!");
-      // Map<String, dynamic> map = json.decode(response);
-      // CustomerModel newModel = CustomerModel.fromJson(Map<String, dynamic>.from(map));
-      // print('newModel owner ${newModel.ownerId}');
-      // print('newModel ${newModel.toJson()}');
+      CustomerModel newModel = CustomerModel.fromMap(response);
+      List<CustomerModel> newList = [... widget.customerBloc.state.customers, newModel];
+      widget.customerBloc.add(UpdateCustomerModelListEvent(newList));
+      NavigationController().pop(context, delay: 2);
     } catch(e) {
       print('save data error: ${e.toString()}');
     }
@@ -587,7 +595,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     );
   }
 
-  void _setUpRoute(SearchAddressModel model) async {
+  void _setUpRoute(SearchAddressModel model, {bool isService = true}) async {
     NavigationController().notifierInitLoading.value = true;
     List? res = await widget.customerBloc.getLatLng(model.placeId);
     if (res != null) {
@@ -595,11 +603,23 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       String formattedAddress = res[1];
       model.latitude = latLng.latitude;
       model.longitude = latLng.longitude;
+      if (isService) {
+        _serviceSearchAddressModel = model;
+      } else {
+        _billSearchAddressModel = model;
+      }
+
       List<String> arr = formattedAddress.split(',');
       if (arr.length > 2) {
-        _serviceStreetController.text = arr[0];
-        _serviceCityController.text = arr[1];
-        _serviceStateController.text = model.state;
+        if (isService) {
+          _serviceStreetController.text = arr[0];
+          _serviceCityController.text = arr[1];
+          _serviceStateController.text = model.state;
+        } else {
+          _billStreetController.text = arr[0];
+          _billCityController.text = arr[1];
+          _billStateController.text = model.state;
+        }
         setState(() {});
       }
     }

@@ -38,20 +38,10 @@ class CustomerModel {
   @JsonKey(defaultValue: [])
   List<CustomerContact> customerContacts = [];
 
-  @JsonKey(defaultValue: 0.0)
-  double latitude = 0.0;
-  @JsonKey(defaultValue: 0.0)
-  double longitude = 0.0;
-
-  bool get isValidLocation => latitude != 0 && longitude != 0;
-
-  LatLng? get latLng {
-    if (isValidLocation) {
-      return LatLng(latitude, longitude);
-    } else {
-      return null;
-    }
-  }
+  @JsonKey(defaultValue: [])
+  List<CTSiteProfile> siteProfiles = [];
+  
+  String get fullServiceAddress => "${serviceAddress.street}, ${serviceAddress.city}, ${serviceAddress.state}";
 
   factory CustomerModel.fromMap(Map map) {
     Map serviceAddress = map.remove('serviceAddress');
@@ -86,6 +76,21 @@ class AddressModel {
   String state;
   String zip;
 
+  @JsonKey(defaultValue: 0.0)
+  double latitude = 0.0;
+  @JsonKey(defaultValue: 0.0)
+  double longitude = 0.0;
+
+  bool get isValidLocation => latitude != 0 && longitude != 0;
+
+  LatLng? get latLng {
+    if (isValidLocation) {
+      return LatLng(latitude, longitude);
+    } else {
+      return null;
+    }
+  }
+
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);
 
@@ -108,6 +113,8 @@ class CustomerContact {
   String email;
   String phone;
   String role;
+
+  String get fullName => "$firstName $lastName";
   @JsonKey(defaultValue: []) List<CTContactType> types;
 
   factory CustomerContact.fromJson(Map<String, dynamic> json) =>

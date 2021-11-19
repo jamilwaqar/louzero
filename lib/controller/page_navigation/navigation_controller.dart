@@ -22,8 +22,13 @@ class NavigationController {
             settings: RouteSettings(name: "/$name"),
             child: child));
   }
-  void pop(BuildContext context) {
-    Navigator.pop(context);
+  void pop(BuildContext context, {int delay = 0}) {
+    if (delay == 0) {
+      Navigator.pop(context);
+    } else {
+      Future.delayed(Duration(seconds: delay))
+          .then((value) => Navigator.pop(context));
+    }
   }
 
   void popToFirst(BuildContext context) {

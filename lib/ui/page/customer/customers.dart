@@ -2,7 +2,6 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/bloc/bloc.dart';
-import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/customer_models.dart';
@@ -43,9 +42,13 @@ class _CustomerListPageState extends State<CustomerListPage> {
   }
 
   void _fetchCustomers() {
+    if (mounted) {
+      NavigationController().notifierInitLoading.value = true;
+    }
     Backendless.data.of(BLPath.customer).find().then((res) {
       _customerBloc.add(UpdateCustomerModelListEvent(
           List<Map>.from(res!).map((e) => CustomerModel.fromMap(e)).toList()));
+      NavigationController().notifierInitLoading.value = false;
     });
   }
 
@@ -72,7 +75,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
                             .pushTo(context, child: AddCustomerPage(_customerBloc)))
                   ],
                 ),
-                backgroundColor: AppColors.light_1,
+                backgroundColor: Colors.transparent,
                 body: _body(state),
               ),
             );
@@ -92,10 +95,10 @@ class _CustomerListPageState extends State<CustomerListPage> {
             title: model.name,
             description: "",
             count: 0,
-            buttonTitleLeft: "${model.serviceAddress.street}, ${model.serviceAddress.city}, ${model.serviceAddress.state}",
+            buttonTitleLeft: model.fullServiceAddress,
             buttonTitleRight: "",
             onPressed: () => NavigationController()
-                .pushTo(context, child: const CustomerProfilePage()),
+                .pushTo(context, child: CustomerProfilePage(model)),
             onPressedLeft: () {},
             onPressedRight: () {},
           );

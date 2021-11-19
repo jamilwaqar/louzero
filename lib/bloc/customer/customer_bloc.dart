@@ -37,7 +37,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
     if (text.length < 3) return [];
     dynamic response = await ApiService().googleApi(GoogleApi.AutoComplete, {
       'input': text,
-      'radius': 5000,
+      'radius': 1000 * 5000,
       'sensor': true,
       'components': 'country:$countryCode'
     });

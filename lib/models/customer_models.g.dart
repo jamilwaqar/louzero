@@ -32,9 +32,7 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       ..customerContacts = (json['customerContacts'] as List<dynamic>?)
               ?.map((e) => CustomerContact.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          []
-      ..latitude = (json['latitude'] as num?)?.toDouble() ?? 0.0
-      ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0;
+          [];
 
 Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
     <String, dynamic>{
@@ -45,8 +43,6 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'serviceAddress': instance.serviceAddress,
       'billingAddress': instance.billingAddress,
       'customerContacts': instance.customerContacts,
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
     };
 
 AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
@@ -55,7 +51,9 @@ AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
       city: json['city'] as String,
       state: json['state'] as String,
       zip: json['zip'] as String,
-    );
+    )
+      ..latitude = (json['latitude'] as num?)?.toDouble() ?? 0.0
+      ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0;
 
 Map<String, dynamic> _$AddressModelToJson(AddressModel instance) =>
     <String, dynamic>{
@@ -64,6 +62,8 @@ Map<String, dynamic> _$AddressModelToJson(AddressModel instance) =>
       'city': instance.city,
       'state': instance.state,
       'zip': instance.zip,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
     };
 
 CustomerContact _$CustomerContactFromJson(Map<String, dynamic> json) =>
