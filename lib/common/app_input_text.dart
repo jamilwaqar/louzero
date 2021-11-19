@@ -9,6 +9,7 @@ class AppInputText extends StatefulWidget {
       required this.controller,
       required this.label,
       this.keyboardType = TextInputType.text,
+      this.onChanged,
       this.password = false,
       this.autofocus = false,
       this.required = false,
@@ -30,6 +31,7 @@ class AppInputText extends StatefulWidget {
   final double mt;
   final double mb;
   final bool autofocus;
+  final void Function(String)? onChanged;
 
   @override
   _AppInputTextState createState() => _AppInputTextState();
@@ -84,6 +86,7 @@ class _AppInputTextState extends State<AppInputText> {
             decoration: const InputDecoration(
               border: InputBorder.none,
             ),
+            onChanged: widget.onChanged,
             style: inputText,
           ),
         ),

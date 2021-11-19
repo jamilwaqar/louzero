@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:louzero/bloc/base/base.dart';
 import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
+import 'package:country_picker/country_picker.dart';
+import 'package:provider/provider.dart';
 import 'controller/api/api_manager.dart';
 import 'controller/utils.dart';
 
@@ -20,14 +24,32 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  bool _listenWhenBaseBloc(BaseState preSt, BaseState state) => true;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          scaffoldBackgroundColor: Colors.white,
-          fontFamily: "Roboto"),
-      home: const HomePage(),
+    return MultiProvider(
+      providers: [
+        BlocProvider<BaseBloc>(create: (_) => BaseBloc()..add(BaseInitEvent())),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<BaseBloc, BaseState>(
+            listenWhen: _listenWhenBaseBloc,
+            listener: (BuildContext context, BaseState state) {},
+          ),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: const [
+            CountryLocalizations.delegate,
+          ],
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              scaffoldBackgroundColor: Colors.white,
+              fontFamily: "Roboto"),
+          home: const HomePage(),
+        ),
+      ),
     );
   }
 }

@@ -9,6 +9,8 @@ extension CTContactTypeEx on CTContactType {
         return 'Billing Contact';
       case CTContactType.schedule:
         return 'Scheduling Contact';
+      case CTContactType.other:
+        return 'Other';
     }
   }
 }

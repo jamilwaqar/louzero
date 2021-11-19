@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerLocationPage extends StatefulWidget {
-  const CustomerLocationPage({Key? key}) : super(key: key);
+  final CustomerModel customerModel;
+  const CustomerLocationPage(this.customerModel, {Key? key}) : super(key: key);
 
   @override
   _CustomerLocationPageState createState() => _CustomerLocationPageState();
@@ -34,12 +36,12 @@ class _CustomerLocationPageState extends State<CustomerLocationPage> {
     return BaseScaffold(
       child: Scaffold(
         appBar: SubAppBar(
-          title: "Archwood House",
+          title: widget.customerModel.name,
           context: context,
-          leadingTxt: "Archwood House",
+          leadingTxt: widget.customerModel.name,
           hasActions: false,
         ),
-        backgroundColor: AppColors.light_1,
+        backgroundColor: Colors.transparent,
         body: _body(),
       ),
     );
@@ -51,8 +53,8 @@ class _CustomerLocationPageState extends State<CustomerLocationPage> {
       myLocationEnabled: false,
       myLocationButtonEnabled: false,
       zoomControlsEnabled: true,
-      initialCameraPosition: const CameraPosition(
-        target: LatLng(45.6731541,-122.6928643),
+      initialCameraPosition: CameraPosition(
+        target: widget.customerModel.serviceAddress.latLng!,
         zoom: 18,
       ),
       onMapCreated: (GoogleMapController controller) {
