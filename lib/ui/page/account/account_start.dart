@@ -36,10 +36,12 @@ class _AccountStartState extends State<AccountStart> {
                   const AppTextHeader(
                     "To start, let’s get some basic info.",
                     mt: 32,
+                    mb: 8,
                   ),
                   const AppTextBody(
                     'You can always make changes later in Settings',
                     mb: 32,
+                    bold: true,
                   ),
                   AppStepProgress()
                 ],
@@ -47,9 +49,9 @@ class _AccountStartState extends State<AccountStart> {
           Expanded(
             flex: 3,
             child: PageView(children: [
+              _CompanyDetails(controlTBD: _controlTBD),
               _AccountCustomers(controlTBD: _controlTBD),
-              _CompanyDetails(controlTBD: _controlTBD),
-              _CompanyDetails(controlTBD: _controlTBD),
+              _AccountJobTypes(controlTBD: _controlTBD),
             ]),
           )
         ],
@@ -58,14 +60,55 @@ class _AccountStartState extends State<AccountStart> {
   }
 }
 
-class _AccountCustomers extends StatelessWidget {
-  const _AccountCustomers({
+class _AccountJobTypes extends StatelessWidget {
+  _AccountJobTypes({
     Key? key,
     required TextEditingController controlTBD,
   })  : _controlTBD = controlTBD,
         super(key: key);
 
   final TextEditingController _controlTBD;
+  var jobTypeText =
+      'Save time by profiling your common job types. Think about repairs, sales and recurring services. Later, you can build out full templates for each job type in Settings.';
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 32),
+      child: Column(
+        children: [
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Job Types",
+                alignLeft: true,
+                icon: Icons.business_center_sharp,
+                size: 24,
+              ),
+              AppTextBody(jobTypeText),
+              AppInputText(
+                  mt: 14,
+                  controller: _controlTBD,
+                  label: 'What Industries do you serve?'),
+            ],
+          ),
+          AppButtonSubmit(),
+        ],
+      ),
+    );
+  }
+}
+
+class _AccountCustomers extends StatelessWidget {
+  _AccountCustomers({
+    Key? key,
+    required TextEditingController controlTBD,
+  })  : _controlTBD = controlTBD,
+        super(key: key);
+
+  final TextEditingController _controlTBD;
+  var customerTypeText =
+      'Customer Types allow for categorization of customers. Common options are residential and commercial. This categorization will be helpful in reporting on performance.';
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +124,7 @@ class _AccountCustomers extends StatelessWidget {
                 icon: Icons.people,
                 size: 24,
               ),
-              AppTextBody(
-                  'Customer Types allow for categorization of customers. Common options are residential and commercial. This categorization will be helpful in reporting on performance.'),
+              AppTextBody(customerTypeText),
               const Divider(
                 color: AppColors.light_3,
               ),
