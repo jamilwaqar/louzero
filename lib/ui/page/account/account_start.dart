@@ -158,10 +158,12 @@ class _CompanyDetails extends StatelessWidget {
   final TextEditingController _controlTBD;
   final TextEditingController _streetAddressDropdownSearchControl =
       TextEditingController();
+  final ScrollController _companyDetailsScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: _companyDetailsScrollController,
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(
         top: 32,
@@ -226,6 +228,7 @@ class _CompanyDetails extends StatelessWidget {
               ),
               AppDropdownSearch(
                 controller: _streetAddressDropdownSearchControl,
+                parentScrollController: _companyDetailsScrollController,
                 label: 'Street Address',
               ),
               AppInputText(

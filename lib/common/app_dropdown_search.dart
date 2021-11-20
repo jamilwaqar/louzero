@@ -7,6 +7,7 @@ class AppDropdownSearch extends StatefulWidget {
   final Color colorBd;
   final Color colorTx;
   final TextEditingController controller;
+  final ScrollController? parentScrollController;
   final TextInputType keyboardType;
   final double mt;
   final double mb;
@@ -16,6 +17,7 @@ class AppDropdownSearch extends StatefulWidget {
       {Key? key,
       required this.label,
       required this.controller,
+      this.parentScrollController,
       this.keyboardType = TextInputType.text,
       this.autofocus = false,
       this.colorTx = AppColors.dark_3,
@@ -40,7 +42,7 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
     "2nd Sunrise Ct. Vancouver, WA 98607",
     "1223 Laptop Rd. Vancouver, WA 98622",
   ];
-  TextEditingController controller = TextEditingController();
+
   String filter = "";
   late Offset textFieldPosition;
   late Size widgetSize;
@@ -51,12 +53,13 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
   void initState() {
     super.initState();
     initTextEditingControllerListeners();
+    initScrollControllerControllerListeners();
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    widget.controller.removeListener(onInputEdit);
   }
 
   @override
@@ -116,17 +119,17 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
                     fillColor: Colors.transparent,
                     border: InputBorder.none,
                     suffixIcon: Visibility(
-                      visible: controller.text.isNotEmpty,
+                      visible: widget.controller.text.isNotEmpty,
                       child: IconButton(
                         icon: const Icon(Icons.close),
                         onPressed: () {
-                          controller.clear();
+                          widget.controller.clear();
                           FocusScope.of(context).requestFocus(FocusNode());
                         },
                       ),
                     ),
                   ),
-                  controller: controller,
+                  controller: widget.controller,
                 ),
               ),
             ),
@@ -143,6 +146,7 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: items.length,
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         if (filter == "") {
           return _buildRow(items[index]);
@@ -181,22 +185,47 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
   }
 
   void initTextEditingControllerListeners() {
-    controller.addListener(() {
-      if (controller.text.isEmpty) {
-        closeDrowdownList();
-      }
+    widget.controller.addListener(onInputEdit);
+  }
 
-      setState(() {
-        filter = controller.text;
+  void onInputEdit() {
+    if (widget.controller.text.isEmpty) {
+      closeDrowdownList();
+    } else {
+      if (dropdownListOverlayContainer == null) {
+        showDrowdownList();
+      }
+    }
+
+    setState(() {
+      filter = widget.controller.text;
+    });
+  }
+
+  void initScrollControllerControllerListeners() {
+    if (widget.parentScrollController == null) {
+      assert(widget.parentScrollController == null,
+          '''Scroll Controller is empty in Dropdown Search''');
+      return;
+    }
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      widget.parentScrollController!.position.isScrollingNotifier
+          .addListener(() {
+        if (widget.parentScrollController!.position.isScrollingNotifier.value) {
+          closeDrowdownList();
+          FocusScope.of(context).requestFocus(FocusNode());
+        }
       });
     });
   }
 
   void _selectChoice(String choice) {
     setState(() {
-      controller.text = choice;
+      widget.controller.text = choice;
     });
     closeDrowdownList();
+    FocusScope.of(context).unfocus();
   }
 
   void onTextInput() {
@@ -217,12 +246,14 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
     if (isDrowdownListShown) {
       return;
     }
+
     var overlayEntry = _openMenu();
+
     setState(() {
       dropdownListOverlayContainer = overlayEntry;
     });
-    Overlay.of(context)!.insert(dropdownListOverlayContainer!);
 
+    Overlay.of(context)!.insert(dropdownListOverlayContainer!);
     isDrowdownListShown = true;
   }
 
