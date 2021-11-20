@@ -6,6 +6,7 @@ import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_dropdown_multiple.dart';
 import 'package:louzero/common/app_dropdown_search.dart';
 import 'package:louzero/common/app_input_text.dart';
+import 'package:louzero/common/app_list_draggable.dart';
 import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
@@ -28,6 +29,16 @@ class _AccountStartState extends State<AccountStart> {
   @override
   Widget build(BuildContext context) {
     final _controlTBD = TextEditingController();
+    var _jobTypes = [
+      "Repair",
+      "Sale",
+      "Discount",
+    ];
+    var _customerTypes = [
+      "Residential",
+      "Commerical",
+      "Volunteer",
+    ];
     return BaseScaffold(
       child: Column(
         children: [
@@ -54,7 +65,10 @@ class _AccountStartState extends State<AccountStart> {
               physics: const BouncingScrollPhysics(),
               children: [
                 _CompanyDetails(controlTBD: _controlTBD),
-                _AccountCustomers(controlTBD: _controlTBD),
+                _AccountCustomers(
+                  controlTBD: _controlTBD,
+                  customerTypes: _customerTypes,
+                ),
                 _AccountJobTypes(controlTBD: _controlTBD),
               ],
             ),
@@ -109,10 +123,13 @@ class _AccountCustomers extends StatelessWidget {
   const _AccountCustomers({
     Key? key,
     required TextEditingController controlTBD,
+    required List<String> customerTypes,
   })  : _controlTBD = controlTBD,
+        _customerTypes = customerTypes,
         super(key: key);
 
   final TextEditingController _controlTBD;
+  final List<String> _customerTypes;
   final customerTypeText =
       'Customer Types allow for categorization of customers. Common options are residential and commercial. This categorization will be helpful in reporting on performance.';
 
@@ -132,6 +149,9 @@ class _AccountCustomers extends StatelessWidget {
                 size: 24,
               ),
               AppTextBody(customerTypeText),
+              AppListDraggable(
+                items: _customerTypes,
+              ),
               const Divider(
                 color: AppColors.light_3,
               ),
@@ -279,7 +299,7 @@ class AppButtonSubmit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AppDivider(ml: 24, mr: 24, mb: 24),
+        const AppDivider(ml: 24, mr: 24, mb: 24),
         Row(
           children: const [
             AppButton(
