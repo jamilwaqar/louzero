@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_dropdown_multiple.dart';
+import 'package:louzero/common/app_dropdown_search.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_body.dart';
@@ -44,16 +45,19 @@ class _AccountStartState extends State<AccountStart> {
                     mb: 32,
                     bold: true,
                   ),
-                  AppStepProgress()
+                  AppStepProgress(),
                 ],
               )),
           Expanded(
             flex: 3,
-            child: PageView(children: [
-              _CompanyDetails(controlTBD: _controlTBD),
-              _AccountCustomers(controlTBD: _controlTBD),
-              _AccountJobTypes(controlTBD: _controlTBD),
-            ]),
+            child: PageView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                _CompanyDetails(controlTBD: _controlTBD),
+                _AccountCustomers(controlTBD: _controlTBD),
+                _AccountJobTypes(controlTBD: _controlTBD),
+              ],
+            ),
           )
         ],
       ),
@@ -75,6 +79,7 @@ class _AccountJobTypes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(top: 32),
       child: Column(
         children: [
@@ -114,6 +119,7 @@ class _AccountCustomers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(top: 32),
       child: Column(
         children: [
@@ -143,18 +149,24 @@ class _AccountCustomers extends StatelessWidget {
 }
 
 class _CompanyDetails extends StatelessWidget {
-  const _CompanyDetails({
+  _CompanyDetails({
     Key? key,
     required TextEditingController controlTBD,
   })  : _controlTBD = controlTBD,
         super(key: key);
 
   final TextEditingController _controlTBD;
+  final TextEditingController _streetAddressDropdownSearchControl =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(top: 32),
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(
+        top: 32,
+        bottom: 132,
+      ),
       child: Column(
         children: [
           AppCard(
@@ -199,52 +211,55 @@ class _CompanyDetails extends StatelessWidget {
                   label: 'What Industries do you serve?'),
             ],
           ),
-          AppCard(mt: 24, children: [
-            const AppTextHeader(
-              "Company Address",
-              alignLeft: true,
-              icon: Icons.location_on,
-              size: 24,
-            ),
-            AppInputText(
-              controller: _controlTBD,
-              label: 'Country',
-            ),
-            AppInputText(
-              controller: _controlTBD,
-              label: 'Street Address',
-            ),
-            AppInputText(
-              controller: _controlTBD,
-              label: 'Apt / Suite / Other',
-              colorBg: AppColors.light_1,
-            ),
-            AppFlexRow(
-              children: [
-                AppFlexColumn(flex: 2, children: [
-                  AppInputText(
-                    controller: _controlTBD,
-                    label: 'City',
-                    colorBg: AppColors.light_1,
-                  ),
-                ]),
-                AppFlexColumn(ml: 16, children: [
-                  AppInputText(
-                    controller: _controlTBD,
-                    label: 'State',
-                    colorBg: AppColors.light_1,
-                  ),
-                ]),
-                AppFlexColumn(ml: 16, children: [
-                  AppInputText(
-                    controller: _controlTBD,
-                    label: 'Zip',
-                    colorBg: AppColors.light_1,
-                  ),
-                ]),
-              ],
-            ),
-          ]),
+          AppCard(
+            mt: 24,
+            children: [
+              const AppTextHeader(
+                "Company Address",
+                alignLeft: true,
+                icon: Icons.location_on,
+                size: 24,
+              ),
+              AppInputText(
+                controller: _controlTBD,
+                label: 'Country',
+              ),
+              AppDropdownSearch(
+                controller: _streetAddressDropdownSearchControl,
+                label: 'Street Address',
+              ),
+              AppInputText(
+                controller: _controlTBD,
+                label: 'Apt / Suite / Other',
+                colorBg: AppColors.light_1,
+              ),
+              AppFlexRow(
+                children: [
+                  AppFlexColumn(flex: 2, children: [
+                    AppInputText(
+                      controller: _controlTBD,
+                      label: 'City',
+                      colorBg: AppColors.light_1,
+                    ),
+                  ]),
+                  AppFlexColumn(ml: 16, children: [
+                    AppInputText(
+                      controller: _controlTBD,
+                      label: 'State',
+                      colorBg: AppColors.light_1,
+                    ),
+                  ]),
+                  AppFlexColumn(ml: 16, children: [
+                    AppInputText(
+                      controller: _controlTBD,
+                      label: 'Zip',
+                      colorBg: AppColors.light_1,
+                    ),
+                  ]),
+                ],
+              ),
+            ],
+          ),
           const AppButtonSubmit(),
         ],
       ),
