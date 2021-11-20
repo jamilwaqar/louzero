@@ -50,12 +50,107 @@ class _AccountStartState extends State<AccountStart> {
           Expanded(
             flex: 3,
             child: PageView(children: [
+              _SetupComplete(controlTBD: _controlTBD),
               _CompanyDetails(controlTBD: _controlTBD),
               _AccountCustomers(controlTBD: _controlTBD),
               _AccountJobTypes(controlTBD: _controlTBD),
             ]),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _SetupComplete extends StatelessWidget {
+  const _SetupComplete({
+    Key? key,
+    required TextEditingController controlTBD,
+  })  : _controlTBD = controlTBD,
+        super(key: key);
+
+  final TextEditingController _controlTBD;
+  final welcomText =
+      'There are more settings you can adjust for your company but they aren’t critical to getting started with LOUzero. If you choose to wait, you can find these and more via the Settings page at any time. ';
+
+  @override
+  Widget build(BuildContext context) {
+    var title = 'Set up Site Profile Templates';
+    var subtitle =
+        'Keep track of important information about your customer’s location.';
+    var iconStart = Icons.radio_button_off;
+    var iconEnd = Icons.chevron_right_sharp;
+    var colorBg = AppColors.light_1;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 32),
+      child: Column(
+        children: [
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Welcome to LOuZero",
+                size: 24,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 52, right: 52),
+                child: AppTextBody(
+                  welcomText,
+                  center: true,
+                ),
+              ),
+              AppListTile(
+                title: title,
+                subtitle: subtitle,
+              ),
+              AppListTile(
+                title: title,
+                subtitle: subtitle,
+              ),
+              AppListTile(
+                title: title,
+                subtitle: subtitle,
+              ),
+            ],
+          ),
+          const AppButtonSubmit(),
+        ],
+      ),
+    );
+  }
+}
+
+class AppListTile extends StatelessWidget {
+  const AppListTile({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    this.colorBg = AppColors.light_1,
+    this.iconStart = Icons.radio_button_on,
+    this.iconEnd = Icons.chevron_right_sharp,
+  }) : super(key: key);
+
+  final IconData iconStart;
+  final String title;
+  final String subtitle;
+  final IconData iconEnd;
+  final Color colorBg;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      child: ListTile(
+        leading: SizedBox(
+          height: double.infinity,
+          child: Icon(iconStart),
+        ),
+        title: Text(title),
+        subtitle: Text(subtitle),
+        trailing: SizedBox(
+          height: double.infinity,
+          child: Icon(iconEnd),
+        ),
+        tileColor: colorBg,
       ),
     );
   }
@@ -276,6 +371,33 @@ class AppButtonSubmit extends StatelessWidget {
     );
   }
 }
+
+Widget buildBasicListView() => ListView(
+      children: const [
+        ListTile(
+          leading: Icon(Icons.arrow_forward_ios),
+          title: Text('Favourites'),
+          subtitle: Text('All your favourite widgets'),
+          trailing: Icon(Icons.star, color: Colors.orange),
+        ),
+        ListTile(
+          leading: Icon(Icons.arrow_forward_ios),
+          title: Text('High Ranked'),
+          subtitle: Text('All widgets liked by the community'),
+          trailing: Icon(Icons.mood, color: Colors.blue),
+        ),
+        ListTile(
+          leading: Icon(Icons.arrow_forward_ios),
+          title: Text('Important'),
+          subtitle: Text('All widgets that are important to know'),
+          trailing: Icon(Icons.assistant_photo, color: Colors.black),
+        ),
+        ListTile(
+          leading: Icon(Icons.delete_forever, color: Colors.red),
+          title: Text('Deleted'),
+        ),
+      ],
+    );
 
 class AppDivider extends StatelessWidget {
   const AppDivider({

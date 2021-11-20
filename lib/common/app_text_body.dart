@@ -42,6 +42,7 @@ class AppTextBody extends StatelessWidget {
               children: [
                 Text(
                   text,
+                  textAlign: center ? TextAlign.center : TextAlign.left,
                   style: TextStyle(
                     fontSize: size,
                     fontWeight: bold ? FontWeight.bold : FontWeight.w400,
