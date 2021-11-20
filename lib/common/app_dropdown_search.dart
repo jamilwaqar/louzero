@@ -44,7 +44,7 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
   String filter = "";
   late Offset textFieldPosition;
   late Size widgetSize;
-  bool isHintShown = false;
+  bool isDrowdownListShown = false;
   OverlayEntry? dropdownListOverlayContainer;
 
   @override
@@ -106,10 +106,10 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
                 ),
                 child: TextField(
                   onTap: () {
-                    showHint();
+                    showDrowdownList();
                   },
                   onEditingComplete: () {
-                    closeHint();
+                    closeDrowdownList();
                   },
                   style: inputText,
                   decoration: InputDecoration(
@@ -183,7 +183,7 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
   void initTextEditingControllerListeners() {
     controller.addListener(() {
       if (controller.text.isEmpty) {
-        closeHint();
+        closeDrowdownList();
       }
 
       setState(() {
@@ -196,25 +196,25 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
     setState(() {
       controller.text = choice;
     });
-    closeHint();
+    closeDrowdownList();
   }
 
   void onTextInput() {
-    if (isHintShown) {
-      closeHint();
+    if (isDrowdownListShown) {
+      closeDrowdownList();
     }
   }
 
-  void closeHint() {
+  void closeDrowdownList() {
     setState(() {
       dropdownListOverlayContainer?.remove();
       dropdownListOverlayContainer = null;
-      isHintShown = false;
+      isDrowdownListShown = false;
     });
   }
 
-  void showHint() {
-    if (isHintShown) {
+  void showDrowdownList() {
+    if (isDrowdownListShown) {
       return;
     }
     var overlayEntry = _openMenu();
@@ -223,7 +223,7 @@ class AppDropdownSearchState extends State<AppDropdownSearch> {
     });
     Overlay.of(context)!.insert(dropdownListOverlayContainer!);
 
-    isHintShown = true;
+    isDrowdownListShown = true;
   }
 
   OverlayEntry _openMenu() {
