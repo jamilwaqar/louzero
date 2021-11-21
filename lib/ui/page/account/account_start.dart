@@ -5,6 +5,7 @@ import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_dropdown_multiple.dart';
 import 'package:louzero/common/app_dropdown_search.dart';
+import 'package:louzero/common/app_input_inline_form.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_list_draggable.dart';
 import 'package:louzero/common/app_step_progress.dart';
@@ -21,24 +22,43 @@ class AccountStart extends StatefulWidget {
 }
 
 class _AccountStartState extends State<AccountStart> {
+  final _controlTBD = TextEditingController();
+  final _addCustomerTypeController = TextEditingController();
+
+  final _jobTypes = [
+    "Repair",
+    "Sale",
+    "Discount",
+  ];
+  final _customerTypes = [
+    "Residential",
+    "Commerical",
+    "Volunteer",
+  ];
+
   @override
   void initState() {
     super.initState();
   }
 
+  void addItemToCustomerTypes(String newItem) {
+    if (newItem.isNotEmpty) {
+      setState(() {
+        _customerTypes.add(newItem);
+      });
+    }
+  }
+
+  void addItemToJobTypes(String newItem) {
+    if (newItem.isNotEmpty) {
+      setState(() {
+        _jobTypes.add(newItem);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _controlTBD = TextEditingController();
-    var _jobTypes = [
-      "Repair",
-      "Sale",
-      "Discount",
-    ];
-    var _customerTypes = [
-      "Residential",
-      "Commerical",
-      "Volunteer",
-    ];
     return BaseScaffold(
       child: Column(
         children: [
@@ -66,8 +86,11 @@ class _AccountStartState extends State<AccountStart> {
               children: [
                 _CompanyDetails(controlTBD: _controlTBD),
                 _AccountCustomers(
-                  controlTBD: _controlTBD,
+                  controlTBD: _addCustomerTypeController,
                   customerTypes: _customerTypes,
+                  onBtnClickFunction: () {
+                    addItemToCustomerTypes(_addCustomerTypeController.text);
+                  },
                 ),
                 _AccountJobTypes(controlTBD: _controlTBD),
               ],
@@ -124,12 +147,15 @@ class _AccountCustomers extends StatelessWidget {
     Key? key,
     required TextEditingController controlTBD,
     required List<String> customerTypes,
+    required VoidCallback onBtnClickFunction,
   })  : _controlTBD = controlTBD,
         _customerTypes = customerTypes,
+        _onBtnClickFunction = onBtnClickFunction,
         super(key: key);
 
   final TextEditingController _controlTBD;
   final List<String> _customerTypes;
+  final VoidCallback _onBtnClickFunction;
   final customerTypeText =
       'Customer Types allow for categorization of customers. Common options are residential and commercial. This categorization will be helpful in reporting on performance.';
 
@@ -155,10 +181,13 @@ class _AccountCustomers extends StatelessWidget {
               const Divider(
                 color: AppColors.light_3,
               ),
-              AppInputText(
-                  mt: 14,
-                  controller: _controlTBD,
-                  label: 'What Industries do you serve?'),
+              AppInputInlineForm(
+                mt: 14,
+                controller: _controlTBD,
+                label: 'Add new Customer Type',
+                btnLabel: 'ADD',
+                onPressed: _onBtnClickFunction,
+              ),
             ],
           ),
           const AppButtonSubmit(),

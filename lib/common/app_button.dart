@@ -48,16 +48,17 @@ class AppButton extends StatelessWidget {
         right: mr,
       ),
       child: FloatingActionButton.extended(
-          foregroundColor: fg,
-          backgroundColor: bg,
-          icon: icon != null ? Icon(icon) : null,
-          elevation: 0,
-          extendedTextStyle: textStyle,
-          shape: RoundedRectangleBorder(
-              side: BorderSide(color: bd, width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(radius))),
-          onPressed: onPressed,
-          label: Text(label)),
+        foregroundColor: fg,
+        backgroundColor: bg,
+        icon: icon != null ? Icon(icon) : null,
+        elevation: 0,
+        extendedTextStyle: textStyle,
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color: bd, width: 1.0),
+            borderRadius: BorderRadius.all(Radius.circular(radius))),
+        onPressed: onPressed,
+        label: Text(label),
+      ),
     );
   }
 }
