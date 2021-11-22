@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_dropdown_multiple.dart';
+import 'package:louzero/common/app_dropdown_search.dart';
+import 'package:louzero/common/app_input_inline_form.dart';
 import 'package:louzero/common/app_input_text.dart';
+import 'package:louzero/common/app_list_draggable.dart';
 import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
@@ -19,14 +22,43 @@ class AccountStart extends StatefulWidget {
 }
 
 class _AccountStartState extends State<AccountStart> {
+  final _controlTBD = TextEditingController();
+  final _addCustomerTypeController = TextEditingController();
+
+  final _jobTypes = [
+    "Repair",
+    "Sale",
+    "Discount",
+  ];
+  final _customerTypes = [
+    "Residential",
+    "Commerical",
+    "Volunteer",
+  ];
+
   @override
   void initState() {
     super.initState();
   }
 
+  void addItemToCustomerTypes(String newItem) {
+    if (newItem.isNotEmpty) {
+      setState(() {
+        _customerTypes.add(newItem);
+      });
+    }
+  }
+
+  void addItemToJobTypes(String newItem) {
+    if (newItem.isNotEmpty) {
+      setState(() {
+        _jobTypes.add(newItem);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _controlTBD = TextEditingController();
     return BaseScaffold(
       child: Column(
         children: [
@@ -44,17 +76,26 @@ class _AccountStartState extends State<AccountStart> {
                     mb: 32,
                     bold: true,
                   ),
-                  AppStepProgress()
+                  AppStepProgress(),
                 ],
               )),
           Expanded(
             flex: 3,
-            child: PageView(children: [
-              _SetupComplete(controlTBD: _controlTBD),
-              _CompanyDetails(controlTBD: _controlTBD),
-              _AccountCustomers(controlTBD: _controlTBD),
-              _AccountJobTypes(controlTBD: _controlTBD),
-            ]),
+            child: PageView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                _CompanyDetails(controlTBD: _controlTBD),
+                _AccountCustomers(
+                  controlTBD: _addCustomerTypeController,
+                  customerTypes: _customerTypes,
+                  onBtnClickFunction: () {
+                    addItemToCustomerTypes(_addCustomerTypeController.text);
+                  },
+                ),
+                _AccountJobTypes(controlTBD: _controlTBD),
+                _SetupComplete(controlTBD: _controlTBD),
+              ],
+            ),
           )
         ],
       ),
@@ -206,6 +247,7 @@ class _AccountJobTypes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(top: 32),
       child: Column(
         children: [
@@ -235,16 +277,23 @@ class _AccountCustomers extends StatelessWidget {
   const _AccountCustomers({
     Key? key,
     required TextEditingController controlTBD,
+    required List<String> customerTypes,
+    required VoidCallback onBtnClickFunction,
   })  : _controlTBD = controlTBD,
+        _customerTypes = customerTypes,
+        _onBtnClickFunction = onBtnClickFunction,
         super(key: key);
 
   final TextEditingController _controlTBD;
+  final List<String> _customerTypes;
+  final VoidCallback _onBtnClickFunction;
   final customerTypeText =
       'Customer Types allow for categorization of customers. Common options are residential and commercial. This categorization will be helpful in reporting on performance.';
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(top: 32),
       child: Column(
         children: [
@@ -257,13 +306,19 @@ class _AccountCustomers extends StatelessWidget {
                 size: 24,
               ),
               AppTextBody(customerTypeText),
+              AppListDraggable(
+                items: _customerTypes,
+              ),
               const Divider(
                 color: AppColors.light_3,
               ),
-              AppInputText(
-                  mt: 14,
-                  controller: _controlTBD,
-                  label: 'What Industries do you serve?'),
+              AppInputInlineForm(
+                mt: 14,
+                controller: _controlTBD,
+                label: 'Add new Customer Type',
+                btnLabel: 'ADD',
+                onPressed: _onBtnClickFunction,
+              ),
             ],
           ),
           const AppButtonSubmit(),
@@ -274,18 +329,26 @@ class _AccountCustomers extends StatelessWidget {
 }
 
 class _CompanyDetails extends StatelessWidget {
-  const _CompanyDetails({
+  _CompanyDetails({
     Key? key,
     required TextEditingController controlTBD,
   })  : _controlTBD = controlTBD,
         super(key: key);
 
   final TextEditingController _controlTBD;
+  final TextEditingController _streetAddressDropdownSearchControl =
+      TextEditingController();
+  final ScrollController _companyDetailsScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(top: 32),
+      controller: _companyDetailsScrollController,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(
+        top: 32,
+        bottom: 132,
+      ),
       child: Column(
         children: [
           AppCard(
@@ -330,52 +393,56 @@ class _CompanyDetails extends StatelessWidget {
                   label: 'What Industries do you serve?'),
             ],
           ),
-          AppCard(mt: 24, children: [
-            const AppTextHeader(
-              "Company Address",
-              alignLeft: true,
-              icon: Icons.location_on,
-              size: 24,
-            ),
-            AppInputText(
-              controller: _controlTBD,
-              label: 'Country',
-            ),
-            AppInputText(
-              controller: _controlTBD,
-              label: 'Street Address',
-            ),
-            AppInputText(
-              controller: _controlTBD,
-              label: 'Apt / Suite / Other',
-              colorBg: AppColors.light_1,
-            ),
-            AppFlexRow(
-              children: [
-                AppFlexColumn(flex: 2, children: [
-                  AppInputText(
-                    controller: _controlTBD,
-                    label: 'City',
-                    colorBg: AppColors.light_1,
-                  ),
-                ]),
-                AppFlexColumn(ml: 16, children: [
-                  AppInputText(
-                    controller: _controlTBD,
-                    label: 'State',
-                    colorBg: AppColors.light_1,
-                  ),
-                ]),
-                AppFlexColumn(ml: 16, children: [
-                  AppInputText(
-                    controller: _controlTBD,
-                    label: 'Zip',
-                    colorBg: AppColors.light_1,
-                  ),
-                ]),
-              ],
-            ),
-          ]),
+          AppCard(
+            mt: 24,
+            children: [
+              const AppTextHeader(
+                "Company Address",
+                alignLeft: true,
+                icon: Icons.location_on,
+                size: 24,
+              ),
+              AppInputText(
+                controller: _controlTBD,
+                label: 'Country',
+              ),
+              AppDropdownSearch(
+                controller: _streetAddressDropdownSearchControl,
+                parentScrollController: _companyDetailsScrollController,
+                label: 'Street Address',
+              ),
+              AppInputText(
+                controller: _controlTBD,
+                label: 'Apt / Suite / Other',
+                colorBg: AppColors.light_1,
+              ),
+              AppFlexRow(
+                children: [
+                  AppFlexColumn(flex: 2, children: [
+                    AppInputText(
+                      controller: _controlTBD,
+                      label: 'City',
+                      colorBg: AppColors.light_1,
+                    ),
+                  ]),
+                  AppFlexColumn(ml: 16, children: [
+                    AppInputText(
+                      controller: _controlTBD,
+                      label: 'State',
+                      colorBg: AppColors.light_1,
+                    ),
+                  ]),
+                  AppFlexColumn(ml: 16, children: [
+                    AppInputText(
+                      controller: _controlTBD,
+                      label: 'Zip',
+                      colorBg: AppColors.light_1,
+                    ),
+                  ]),
+                ],
+              ),
+            ],
+          ),
           const AppButtonSubmit(),
         ],
       ),
@@ -392,7 +459,7 @@ class AppButtonSubmit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AppDivider(ml: 24, mr: 24, mb: 24),
+        const AppDivider(ml: 24, mr: 24, mb: 24),
         Row(
           children: const [
             AppButton(
