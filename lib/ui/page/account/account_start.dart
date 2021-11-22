@@ -62,8 +62,14 @@ class _AccountStartState extends State<AccountStart> {
   }
 }
 
+class ListItem {
+  final String title;
+  final String? subtitle;
+  ListItem({required this.title, this.subtitle}) {}
+}
+
 class _SetupComplete extends StatelessWidget {
-  const _SetupComplete({
+  _SetupComplete({
     Key? key,
     required TextEditingController controlTBD,
   })  : _controlTBD = controlTBD,
@@ -73,14 +79,25 @@ class _SetupComplete extends StatelessWidget {
   final welcomText =
       'There are more settings you can adjust for your company but they aren’t critical to getting started with LOUzero. If you choose to wait, you can find these and more via the Settings page at any time. ';
 
+  final List<ListItem> textItems = [
+    ListItem(
+      title: 'Set up Site Profile Templates',
+      subtitle:
+          'Keep track of important information about your customer’s location.',
+    ),
+    ListItem(
+      title: 'Set up your Inventory',
+      subtitle:
+          'Enable quicker billing by defining your common SKUs for quicker billing.   ',
+    ),
+    ListItem(
+      title: 'Set up Users',
+      subtitle: 'Invite others to join your team.',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    var title = 'Set up Site Profile Templates';
-    var subtitle =
-        'Keep track of important information about your customer’s location.';
-    var iconStart = Icons.radio_button_off;
-    var iconEnd = Icons.chevron_right_sharp;
-    var colorBg = AppColors.light_1;
     return SingleChildScrollView(
       padding: const EdgeInsets.only(top: 32),
       child: Column(
@@ -92,23 +109,27 @@ class _SetupComplete extends StatelessWidget {
                 size: 24,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 52, right: 52),
+                padding: const EdgeInsets.only(left: 52, right: 52, bottom: 32),
                 child: AppTextBody(
                   welcomText,
                   center: true,
                 ),
               ),
-              AppListTile(
-                title: title,
-                subtitle: subtitle,
-              ),
-              AppListTile(
-                title: title,
-                subtitle: subtitle,
-              ),
-              AppListTile(
-                title: title,
-                subtitle: subtitle,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  children: textItems.asMap().entries.map((entry) {
+                    int idx = entry.key;
+                    ListItem item = entry.value;
+                    var isOdd = idx % 2 == 0 ? false : true;
+                    return AppListTile(
+                      title: item.title,
+                      subtitle: item.subtitle ?? '',
+                      colorBg:
+                          isOdd ? Colors.grey.shade50 : Colors.grey.shade200,
+                    );
+                  }).toList(),
+                ),
               ),
             ],
           ),
@@ -125,8 +146,12 @@ class AppListTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.colorBg = AppColors.light_1,
-    this.iconStart = Icons.radio_button_on,
+    this.iconStart = Icons.radio_button_off,
     this.iconEnd = Icons.chevron_right_sharp,
+    this.mt = 0,
+    this.mb = 0,
+    this.mr = 0,
+    this.ml = 0,
   }) : super(key: key);
 
   final IconData iconStart;
@@ -134,18 +159,29 @@ class AppListTile extends StatelessWidget {
   final String subtitle;
   final IconData iconEnd;
   final Color colorBg;
+  final double mt;
+  final double mb;
+  final double ml;
+  final double mr;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
       elevation: 0,
       child: ListTile(
         leading: SizedBox(
           height: double.infinity,
           child: Icon(iconStart),
         ),
-        title: Text(title),
-        subtitle: Text(subtitle),
+        title: Transform.translate(
+          offset: Offset(-16, 0),
+          child: Text(title),
+        ),
+        subtitle: Transform.translate(
+          offset: Offset(-16, 0),
+          child: Text(subtitle),
+        ),
         trailing: SizedBox(
           height: double.infinity,
           child: Icon(iconEnd),
