@@ -24,6 +24,7 @@ abstract class Constant {
 
 abstract class BLPath {
   static const String customer = "Customer";
+  static const String customerSiteProfile = "CustomerSiteProfile";
 }
 
 abstract class AppKey {

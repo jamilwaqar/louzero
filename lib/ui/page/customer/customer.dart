@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
@@ -16,7 +17,8 @@ import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerProfilePage extends StatefulWidget {
   final CustomerModel customerModel;
-  const CustomerProfilePage(this.customerModel, {Key? key}) : super(key: key);
+  final CustomerBloc customerBloc;
+  const CustomerProfilePage(this.customerModel, this.customerBloc, {Key? key}) : super(key: key);
 
   @override
   _CustomerProfilePageState createState() => _CustomerProfilePageState();
@@ -32,6 +34,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   @override
   void initState() {
     customerModel = widget.customerModel;
+    widget.customerBloc.add(FetchCustomerSiteProfileEvent(customerModel.objectId!));
     super.initState();
   }
 
@@ -294,7 +297,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           case CustomerCategory.jobs:
             break;
           case CustomerCategory.siteProfiles:
-            categoryPage = const CustomerSiteProfilePage();
+            categoryPage = CustomerSiteProfilePage(widget.customerBloc, customerId: customerModel.objectId);
             break;
           case CustomerCategory.contacts:
             break;

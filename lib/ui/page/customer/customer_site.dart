@@ -1,6 +1,8 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -9,10 +11,14 @@ import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:louzero/ui/widget/widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerSiteProfilePage extends StatefulWidget {
   final bool isTemplate;
-  const CustomerSiteProfilePage({this.isTemplate = false, Key? key}) : super(key: key);
+  final String? customerId;
+  final CustomerBloc customerBloc;
+  const CustomerSiteProfilePage(this.customerBloc,
+      {this.customerId, this.isTemplate = false, Key? key}) : super(key: key);
 
   @override
   _CustomerSiteProfilePageState createState() => _CustomerSiteProfilePageState();
@@ -30,12 +36,13 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
   final String _getStartDes =
       "Create Site Profiles to keep track of information common across many customer locations. Examples might include, gate codes, chemical preferences, pool shapes, number of gallons in pool or spa, animals you may encounter, and other site-specific pieces of information not captured elsewhere.";
-  List<CTSiteProfile>_profiles = [];
+
   bool _showMsg = false;
   bool _isEditing = false;
   bool _showGetStarted = true;
   bool _isAdding = false;
   late bool _isTemplate;
+  late CTSiteProfile _customTemplate;
   final List<ExpandState> _expandedList = [];
 
   @override
@@ -43,22 +50,28 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     _initTextControllers();
     _isTemplate = widget.isTemplate;
     if (_isTemplate) {
-      _profiles = Constant.siteTemplates;
-
+      // _profiles = Constant.siteTemplates;
     } else {
-      _profiles.add(_setMock(0));
-      _profiles.add(_setMock(1));
+      // _profiles.add(_setMock(0));
+      // _profiles.add(_setMock(1));
     }
-    _profiles.forEach((_) {
-      _expandedList.add(ExpandState.collapsed);
-    });
+    widget.customerBloc.add(FetchCustomerSiteProfileEvent(widget.customerId!));
+    _setExpanded( widget.customerBloc.state.siteProfiles);
+    _customTemplate = CTSiteProfile(name: 'Custom', customerId: widget.customerId);
     super.initState();
+  }
+
+  void _setExpanded(List<CTSiteProfile> siteProfiles) {
+    for (var _ in siteProfiles) {
+      _expandedList.add(ExpandState.collapsed);
+    }
   }
 
   @override
   void dispose() {
     _profileNameController.dispose();
     _addNewLabelController.dispose();
+    widget.customerBloc.add(const UpdateCustomerSiteProfilesEvent([]));
     super.dispose();
   }
 
@@ -67,40 +80,55 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     _profileItemValueControllers = List.generate(4, (index) => TextEditingController());
   }
 
-  CTSiteProfile _setMock(int index) {
-    Map<String, dynamic>profileItems = index == 0 ? {
-      "Spa Shape" : "Circle",
-      "Gallons" : "450",
-      "Chemical System" : "Chlorine",
-    } : {
-      "Pool Shape" : "Oval",
-      "Gallons" : "15,000",
-      "Chemical System" : "Chlorine",
-      "Gate Code" : "1145",
-      "Filter" : "Type A",
-    };
-    CTSiteProfile _mockProfile = CTSiteProfile(
-        name: index == 0 ? "Archood Spa" : "Archood Pool",
-        profiles: profileItems);
-    return _mockProfile;
-  }
+  // CTSiteProfile _setMock(int index) {
+  //   Map<String, dynamic>profileItems = index == 0 ? {
+  //     "Spa Shape" : "Circle",
+  //     "Gallons" : "450",
+  //     "Chemical System" : "Chlorine",
+  //   } : {
+  //     "Pool Shape" : "Oval",
+  //     "Gallons" : "15,000",
+  //     "Chemical System" : "Chlorine",
+  //     "Gate Code" : "1145",
+  //     "Filter" : "Type A",
+  //   };
+  //   CTSiteProfile _mockProfile = CTSiteProfile(
+  //       name: index == 0 ? "Archood Spa" : "Archood Pool",
+  //       profiles: profileItems);
+  //   return _mockProfile;
+  // }
 
+  bool listenWhen(CustomerState preState, CustomerState state) {
+    return true;
+  }
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: _isTemplate ? "Site Profile Templates" : "Site Profile",
-          context: context,
-          leadingTxt: _isTemplate ? "Settings" : "Customer Profile",
-          hasActions: _isAdding,
-          actions: [
-            if (!_isAdding)
-            _addSiteProfile()
-          ],
-        ),
-        backgroundColor: Colors.transparent,
-        body: _body(),
+    return BlocListener<CustomerBloc, CustomerState>(
+      bloc: widget.customerBloc,
+      listenWhen: listenWhen,
+      listener: (BuildContext context, CustomerState state) {
+        _setExpanded(state.siteProfiles);
+      },
+      child: BlocBuilder<CustomerBloc, CustomerState>(
+        bloc: widget.customerBloc,
+        builder: (context, state) {
+          return BaseScaffold(
+            child: Scaffold(
+              appBar: SubAppBar(
+                title: _isTemplate ? "Site Profile Templates" : "Site Profile",
+                context: context,
+                leadingTxt: _isTemplate ? "Settings" : "Customer Profile",
+                hasActions: _isAdding,
+                actions: [
+                  if (!_isAdding)
+                  _addSiteProfile()
+                ],
+              ),
+              backgroundColor: Colors.transparent,
+              body: _body(),
+            ),
+          );
+        }
       ),
     );
   }
@@ -125,7 +153,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         itemBuilder: (context, index) {
           return _profileItem(index);
         },
-        itemCount: _profiles.length,
+        itemCount: widget.customerBloc.state.siteProfiles.length,
       );
     }
   }
@@ -167,7 +195,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   Widget _profileItem(int index) {
-    CTSiteProfile profile = _profiles[index];
+    CTSiteProfile profile = widget.customerBloc.state.siteProfiles[index];
     bool isExpanded = _expandedList[index] == ExpandState.expanded;
     String expandCollapse = !isExpanded
         ? "${Constant.imgPrefixPath}/icon-expand.svg"
@@ -440,7 +468,6 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     );
   }
 
-  final CTSiteProfile _customTemplate = CTSiteProfile(name: 'Custom');
   Widget _templates() {
     List<CTSiteProfile>profiles = [... Constant.siteTemplates];
     profiles.add(_customTemplate);
@@ -711,8 +738,8 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     );
   }
 
-  void _save() {
-    CTSiteProfile profile = CTSiteProfile(name: _profileNameController.text);
+  void _save() async {
+    CTSiteProfile profile = CTSiteProfile(name: _profileNameController.text, customerId: widget.customerId);
     Map<String, dynamic> profiles = {};
     for (int i = 0; i < _profileItemLabelControllers.length; i++) {
       String label = _profileItemLabelControllers[i].text;
@@ -721,15 +748,26 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     }
     profile.profiles = profiles;
     setState(() {
-      if (_isTemplate) {
-        Constant.siteTemplates.add(profile);
-      } else {
-        _profiles.add(profile);
-      }
+      // if (_isTemplate) {
+      //   Constant.siteTemplates.add(profile);
+      // } else {
+      //   _profiles.add(profile);
+      // }
       _expandedList.add(ExpandState.collapsed);
       _isAdding = false;
       _isEditing = false;
     });
+    NavigationController().notifierInitLoading.value = true;
+    try {
+      Map<String, dynamic> data = profile.toJson();
+      print('data: $data');
+      dynamic response = await Backendless.data.of(BLPath.customerSiteProfile).save(data);
+      WarningMessageDialog.showDialog(context, "Saved site profiles!");
+      NavigationController().pop(context, delay: 2);
+    } catch(e) {
+      print('save data error: ${e.toString()}');
+    }
+    NavigationController().notifierInitLoading.value = false;
   }
 
   void _gotIt() {

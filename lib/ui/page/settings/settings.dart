@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import 'package:louzero/ui/widget/widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:louzero/bloc/bloc.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -61,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 buttonTitleLeft: "",
                 buttonTitleRight: "",
                 onPressed: () => NavigationController()
-                    .pushTo(context, child: const CustomerSiteProfilePage(isTemplate: true)),
+                    .pushTo(context, child: CustomerSiteProfilePage(CustomerBloc(context.read<BaseBloc>()), isTemplate: true)),
                 onPressedLeft: () {},
                 onPressedRight: () {},
               ),
