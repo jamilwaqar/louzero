@@ -6,10 +6,19 @@ part 'customer_models.g.dart';
 
 @JsonSerializable()
 class CTSiteProfile {
-  CTSiteProfile({required this.name, this.profiles = const {}});
+  CTSiteProfile(
+      {this.customerId, required this.name, this.profiles = const {}});
 
   String name;
+  String? customerId;
   Map<String, dynamic> profiles;
+
+  factory CTSiteProfile.fromMap(Map map) {
+    Map profiles = map.remove('profiles');
+    map['profiles'] = Map<String, dynamic>.from(profiles);
+    Map<String, dynamic> json = Map<String, dynamic>.from(map);
+    return CTSiteProfile.fromJson(json);
+  }
 
   factory CTSiteProfile.fromJson(Map<String, dynamic> json) =>
       _$CTSiteProfileFromJson(json);
@@ -26,8 +35,8 @@ class CustomerModel {
       required this.serviceAddress,
       required this.billingAddress});
 
-  @JsonKey(ignore: true) String? objectId;
-  @JsonKey(ignore: true) String? ownerId;
+  @JsonKey(includeIfNull: false) String? objectId;
+  @JsonKey(includeIfNull: false) String? ownerId;
   String name;
   String type;
   String? parentId;

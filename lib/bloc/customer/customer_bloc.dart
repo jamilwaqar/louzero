@@ -1,8 +1,11 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/controller/api/api_service.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/models/customer_models.dart';
 import '../bloc.dart';
 
@@ -15,10 +18,67 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
 
   @override
   Stream<CustomerState> mapEventToState(CustomerEvent event) async* {
-    if (event is SearchAddressEvent) {
+    if (event is InitCustomerEvent) {
+      yield* _fetchCustomers();
+    } else if (event is FetchCustomerDetailsEvent) {
+      yield* _fetchSiteProfile(event.customerId);
+    } else if (event is SearchAddressEvent) {
       yield* searchAddress(event.input, event.countryCode ?? 'US');
     } else if (event is UpdateCustomerModelListEvent) {
       yield state.copyWith(customers: event.list);
+    } else if (event is UpdateCustomerModelEvent) {
+      yield* _updateCustomerModel(event.model);
+    }
+  }
+
+  Stream<CustomerState> _fetchCustomers() async* {
+    NavigationController().loading(delay: 50);
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "ownerId = '${AuthStateManager.userModel.objectId}'";
+    var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
+    List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
+    yield state.copyWith(customers: list);
+    NavigationController().loading(isLoading: false);
+  }
+
+  Stream<CustomerState> _fetchSiteProfile(String customerId) async* {
+    CustomerModel? model = customerModelById(customerId);
+    if (model != null && model.siteProfiles.isNotEmpty) return;
+    NavigationController().loading(delay: 50);
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "customerId = '$customerId'";
+    List<CTSiteProfile> list = [];
+    try {
+      var response = await Backendless.data
+          .of(BLPath.customerSiteProfile)
+          .find(queryBuilder);
+      list = List<Map>.from(response!)
+          .map((e) => CTSiteProfile.fromMap(e))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+    }
+
+    if (model != null) {
+      model.siteProfiles = list;
+      add(UpdateCustomerModelEvent(model));
+    }
+    NavigationController().loading(isLoading: false);
+  }
+
+  Stream<CustomerState> _updateCustomerModel(CustomerModel model) async* {
+    List<CustomerModel> models = [... state.customers];
+    int index = models.indexWhere((e) => e.objectId == model.objectId);
+    models.removeWhere((e) => e.objectId == model.objectId);
+    models.insert(index, model);
+    yield state.copyWith(customers: models, stateFlag: !state.stateFlag);
+  }
+
+  CustomerModel? customerModelById(String customerId) {
+    try {
+      return state.customers.firstWhere((e) => e.objectId == customerId);
+    } catch(e) {
+      return null;
     }
   }
 
@@ -67,7 +127,6 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
         double lat = result['lat'];
         double lng = result['lng'];
         String address = response['result']['formatted_address'];
-        List<String> array = address.split(',');
         return [LatLng(lat, lng), address];
       } catch (e) {
         return null;

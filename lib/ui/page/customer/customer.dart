@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
@@ -16,7 +18,8 @@ import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerProfilePage extends StatefulWidget {
   final CustomerModel customerModel;
-  const CustomerProfilePage(this.customerModel, {Key? key}) : super(key: key);
+  final CustomerBloc customerBloc;
+  const CustomerProfilePage(this.customerModel, this.customerBloc, {Key? key}) : super(key: key);
 
   @override
   _CustomerProfilePageState createState() => _CustomerProfilePageState();
@@ -32,6 +35,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   @override
   void initState() {
     customerModel = widget.customerModel;
+    widget.customerBloc.add(FetchCustomerDetailsEvent(customerModel.objectId!));
     super.initState();
   }
 
@@ -44,16 +48,28 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: customerModel.name,
-          context: context,
-          leadingTxt: "Customers",
-          hasActions: false,
-        ),
-        backgroundColor: Colors.transparent,
-        body: _body(),
+    return BlocListener<CustomerBloc, CustomerState>(
+      bloc: widget.customerBloc,
+      listener: (context, CustomerState state) {
+        customerModel = widget.customerBloc.customerModelById(customerModel.objectId!) ?? customerModel;
+        setState(() {});
+      },
+      child: BlocBuilder<CustomerBloc, CustomerState>(
+        bloc: widget.customerBloc,
+        builder: (context, state) {
+          return BaseScaffold(
+            child: Scaffold(
+              appBar: SubAppBar(
+                title: customerModel.name,
+                context: context,
+                leadingTxt: "Customers",
+                hasActions: false,
+              ),
+              backgroundColor: Colors.transparent,
+              body: _body(),
+            ),
+          );
+        }
       ),
     );
   }
@@ -287,6 +303,22 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   }
 
   Widget _categoryItem(CustomerCategory category) {
+    int count = 0;
+    switch (category) {
+      case CustomerCategory.jobs:
+        break;
+      case CustomerCategory.siteProfiles:
+        count = customerModel.siteProfiles.length;
+        break;
+      case CustomerCategory.contacts:
+        break;
+      case CustomerCategory.pictures:
+        break;
+      case CustomerCategory.notes:
+        break;
+      case CustomerCategory.subAccounts:
+        break;
+    }
     return InkWell(
       onTap: () {
         Widget? categoryPage;
@@ -294,7 +326,8 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           case CustomerCategory.jobs:
             break;
           case CustomerCategory.siteProfiles:
-            categoryPage = const CustomerSiteProfilePage();
+            count = customerModel.siteProfiles.length;
+            categoryPage = CustomerSiteProfilePage(widget.customerBloc, customerModel.siteProfiles, customerId: customerModel.objectId);
             break;
           case CustomerCategory.contacts:
             break;
@@ -350,8 +383,8 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           shape: BoxShape.circle,
                           color: AppColors.light_2,
                         ),
-                        child: const Text('7',
-                            style: TextStyle(
+                        child: Text('$count',
+                            style: const TextStyle(
                                 fontSize: 14,
                                 color: AppColors.dark_3,
                                 fontWeight: FontWeight.bold)),

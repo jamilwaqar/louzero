@@ -37,4 +37,12 @@ class NavigationController {
     });
   }
 
+  void loading({bool isLoading = true, int delay = 0}) {
+    if (delay == 0) {
+      notifierInitLoading.value = isLoading;
+    } else {
+      Future.delayed(Duration(milliseconds: delay))
+          .then((value) => notifierInitLoading.value = isLoading);
+    }
+  }
 }

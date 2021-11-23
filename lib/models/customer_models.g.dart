@@ -8,6 +8,7 @@ part of 'customer_models.dart';
 
 CTSiteProfile _$CTSiteProfileFromJson(Map<String, dynamic> json) =>
     CTSiteProfile(
+      customerId: json['customerId'] as String?,
       name: json['name'] as String,
       profiles: json['profiles'] as Map<String, dynamic>? ?? const {},
     );
@@ -15,6 +16,7 @@ CTSiteProfile _$CTSiteProfileFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CTSiteProfileToJson(CTSiteProfile instance) =>
     <String, dynamic>{
       'name': instance.name,
+      'customerId': instance.customerId,
       'profiles': instance.profiles,
     };
 
@@ -28,22 +30,39 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       billingAddress:
           AddressModel.fromJson(json['billingAddress'] as Map<String, dynamic>),
     )
+      ..objectId = json['objectId'] as String?
+      ..ownerId = json['ownerId'] as String?
       ..parentId = json['parentId'] as String?
       ..customerContacts = (json['customerContacts'] as List<dynamic>?)
               ?.map((e) => CustomerContact.fromJson(e as Map<String, dynamic>))
               .toList() ??
+          []
+      ..siteProfiles = (json['siteProfiles'] as List<dynamic>?)
+              ?.map((e) => CTSiteProfile.fromJson(e as Map<String, dynamic>))
+              .toList() ??
           [];
 
-Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'type': instance.type,
-      'parentId': instance.parentId,
-      'companyId': instance.companyId,
-      'serviceAddress': instance.serviceAddress,
-      'billingAddress': instance.billingAddress,
-      'customerContacts': instance.customerContacts,
-    };
+Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('objectId', instance.objectId);
+  writeNotNull('ownerId', instance.ownerId);
+  val['name'] = instance.name;
+  val['type'] = instance.type;
+  val['parentId'] = instance.parentId;
+  val['companyId'] = instance.companyId;
+  val['serviceAddress'] = instance.serviceAddress;
+  val['billingAddress'] = instance.billingAddress;
+  val['customerContacts'] = instance.customerContacts;
+  val['siteProfiles'] = instance.siteProfiles;
+  return val;
+}
 
 AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
       country: json['country'] as String,
