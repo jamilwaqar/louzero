@@ -3,6 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
+const Color black = AppColors.dark_2;
+const Color blackText = AppColors.black;
+const Color grey = AppColors.medium_1;
+const Color white = AppColors.lightest;
+
 class AppStepProgress extends StatelessWidget {
   AppStepProgress({Key? key}) : super(key: key);
   final _key = GlobalKey();
@@ -15,8 +20,15 @@ class AppStepProgress extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            _StepNumberDash(stepNumber: 1, startSize: 0, complete: true),
-            _StepNumberDash(stepNumber: 2),
+            _StepNumberDash(
+              stepNumber: 1,
+              startSize: 0,
+              complete: true,
+            ),
+            _StepNumberDash(
+              stepNumber: 2,
+              selected: true,
+            ),
             _StepNumberDash(stepNumber: 3),
             _StepNumberDash(stepNumber: 4, endSize: 0),
           ],
@@ -56,14 +68,17 @@ class _StepNumberDash extends StatelessWidget {
           children: [
             _StepDash(
               size: startSize != 20 ? startSize : dashSize,
+              selected: selected || complete,
             ),
             _StepNumber(
               stepNumber,
+              selected: selected || complete,
               size: stepSize,
               icon: complete ? icon : null,
             ),
             _StepDash(
               size: endSize != 20 ? endSize : dashSize,
+              selected: selected || complete,
             ),
           ],
         ),
@@ -73,38 +88,57 @@ class _StepNumberDash extends StatelessWidget {
 }
 
 class _StepNumber extends StatelessWidget {
-  const _StepNumber(this.step,
-      {Key? key,
-      this.size = 50,
-      this.color = AppColors.lightest,
-      this.colorBorder = AppColors.medium_1,
-      this.colorText = AppColors.black,
-      this.icon})
-      : super(key: key);
+  const _StepNumber(
+    this.step, {
+    Key? key,
+    this.size = 50,
+    this.selected = false,
+    this.color = white,
+    this.colorBorder = grey,
+    this.colorText = black,
+    this.colorSelected = white,
+    this.colorBorderSelected = black,
+    this.colorTextSelected = blackText,
+    this.icon,
+  }) : super(key: key);
+  final bool selected;
   final int step;
   final double size;
   final Color color;
   final Color colorBorder;
   final Color colorText;
+  final Color colorSelected;
+  final Color colorBorderSelected;
+  final Color colorTextSelected;
   final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
+    var tx = icon != null
+        ? color
+        : selected
+            ? colorTextSelected
+            : colorText;
+    var bg = icon != null ? colorBorderSelected : color;
+    var bd = selected || icon != null ? colorBorderSelected : colorBorder;
     return Column(
       children: [
         Container(
           width: size,
           height: size,
           decoration: BoxDecoration(
-              color: color,
+              color: bg,
               shape: BoxShape.circle,
-              border: Border.all(color: colorBorder, width: 2)),
+              border: Border.all(color: bd, width: 2)),
           child: Center(
             child: icon != null
-                ? Icon(icon)
+                ? Icon(
+                    icon,
+                    color: tx,
+                  )
                 : Text(
                     step.toString(),
-                    style: TextStyle(fontSize: size * 0.45, color: colorText),
+                    style: TextStyle(fontSize: size * 0.45, color: tx),
                   ),
           ),
         ),
@@ -114,17 +148,24 @@ class _StepNumber extends StatelessWidget {
 }
 
 class _StepDash extends StatelessWidget {
-  const _StepDash({Key? key, this.size = 50, this.color = AppColors.medium_1})
-      : super(key: key);
+  const _StepDash({
+    Key? key,
+    this.size = 50,
+    this.color = grey,
+    this.colorSelected = black,
+    this.selected = false,
+  }) : super(key: key);
   final double size;
   final Color color;
+  final Color colorSelected;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 2,
       width: size,
-      color: color,
+      color: selected ? colorSelected : color,
     );
   }
 }
