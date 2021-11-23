@@ -77,7 +77,7 @@ class _AccountStartState extends State<AccountStart> {
                     bold: true,
                   ),
                   AppStepProgress(
-                    steps: [
+                    steps: const [
                       'My Company',
                       'Customer Types',
                       'Job Types',
