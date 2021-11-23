@@ -9,29 +9,36 @@ const Color grey = AppColors.medium_1;
 const Color white = AppColors.lightest;
 
 class AppStepProgress extends StatelessWidget {
-  AppStepProgress({Key? key}) : super(key: key);
+  AppStepProgress(
+      {Key? key,
+      this.selected = 0,
+      this.steps = const ['Step One', 'Step Two', 'Step Three']})
+      : super(key: key);
+
   final _key = GlobalKey();
+  final List<String> steps;
+  final int selected;
 
   @override
   Widget build(BuildContext context) {
+    final children = <Widget>[];
+    for (var i = 0; i < steps.length; i++) {
+      children.add(_StepNumberDash(
+        stepNumber: i + 1,
+        complete: i < selected,
+        selected: i == selected,
+        firstStep: i == 0,
+        lastStep: i == steps.length - 1,
+        label: steps[i],
+      ));
+    }
+
     return Column(
       key: _key,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            _StepNumberDash(
-              stepNumber: 1,
-              startSize: 0,
-              complete: true,
-            ),
-            _StepNumberDash(
-              stepNumber: 2,
-              selected: true,
-            ),
-            _StepNumberDash(stepNumber: 3),
-            _StepNumberDash(stepNumber: 4, endSize: 0),
-          ],
+          children: children,
         ),
       ],
     );
@@ -39,17 +46,21 @@ class AppStepProgress extends StatelessWidget {
 }
 
 class _StepNumberDash extends StatelessWidget {
-  const _StepNumberDash(
-      {Key? key,
-      this.stepNumber = 0,
-      this.stepSize = 40,
-      this.dashSize = 40,
-      this.endSize = 20,
-      this.startSize = 20,
-      this.selected = false,
-      this.complete = false})
-      : super(key: key);
+  const _StepNumberDash({
+    Key? key,
+    this.stepNumber = 0,
+    this.stepSize = 40,
+    this.dashSize = 50,
+    this.endSize = 20,
+    this.startSize = 20,
+    this.selected = false,
+    this.complete = false,
+    this.firstStep = false,
+    this.lastStep = false,
+    this.label = "",
+  }) : super(key: key);
 
+  final String label;
   final int stepNumber;
   final double dashSize;
   final double stepSize;
@@ -57,29 +68,50 @@ class _StepNumberDash extends StatelessWidget {
   final double endSize;
   final bool selected;
   final bool complete;
+  final bool firstStep;
+  final bool lastStep;
   final IconData icon = Icons.check;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _StepDash(
-              size: startSize != 20 ? startSize : dashSize,
-              selected: selected || complete,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _StepDash(
+                  size: dashSize,
+                  selected: selected || complete,
+                  color: firstStep ? Colors.black.withOpacity(0) : grey,
+                  colorSelected:
+                      firstStep ? Colors.black.withOpacity(0) : black,
+                ),
+                _StepNumber(
+                  stepNumber,
+                  selected: selected || complete,
+                  size: stepSize,
+                  icon: complete ? icon : null,
+                ),
+                _StepDash(
+                  size: dashSize,
+                  selected: selected || complete,
+                  color: lastStep ? Colors.black.withOpacity(0) : grey,
+                  colorSelected: lastStep ? Colors.black.withOpacity(0) : black,
+                ),
+              ],
             ),
-            _StepNumber(
-              stepNumber,
-              selected: selected || complete,
-              size: stepSize,
-              icon: complete ? icon : null,
+            SizedBox(
+              height: 16,
             ),
-            _StepDash(
-              size: endSize != 20 ? endSize : dashSize,
-              selected: selected || complete,
-            ),
+            Text(label,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    color: selected || complete ? blackText : grey))
           ],
         ),
       ],
