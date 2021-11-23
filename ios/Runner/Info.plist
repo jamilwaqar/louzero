@@ -21,23 +21,23 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>LOUzero would like to use camera to take pictures.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>LOUzero would like to get your location without any problems.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>LOUzero would like to use photo library to take pictures.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>LOUzero would like to get your location without any problems.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
