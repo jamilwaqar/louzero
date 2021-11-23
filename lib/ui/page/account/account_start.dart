@@ -76,7 +76,15 @@ class _AccountStartState extends State<AccountStart> {
                     mb: 32,
                     bold: true,
                   ),
-                  AppStepProgress(),
+                  AppStepProgress(
+                    steps: [
+                      'My Company',
+                      'Customer Types',
+                      'Job Types',
+                      'Done!'
+                    ],
+                    selected: 2,
+                  ),
                 ],
               )),
           Expanded(
