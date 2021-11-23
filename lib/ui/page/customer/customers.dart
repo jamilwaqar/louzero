@@ -1,8 +1,6 @@
-import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/bloc/bloc.dart';
-import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
@@ -29,8 +27,8 @@ class _CustomerListPageState extends State<CustomerListPage> {
 
   @override
   void initState() {
-    _customerBloc =  CustomerBloc(context.read<BaseBloc>());
-    _fetchCustomers();
+    _customerBloc = CustomerBloc(context.read<BaseBloc>())
+      ..add(InitCustomerEvent());
     super.initState();
   }
 
@@ -41,16 +39,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
     super.dispose();
   }
 
-  void _fetchCustomers() {
-    if (mounted) {
-      NavigationController().notifierInitLoading.value = true;
-    }
-    Backendless.data.of(BLPath.customer).find().then((res) {
-      _customerBloc.add(UpdateCustomerModelListEvent(
-          List<Map>.from(res!).map((e) => CustomerModel.fromMap(e)).toList()));
-      NavigationController().notifierInitLoading.value = false;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +87,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
             buttonTitleLeft: model.fullServiceAddress,
             buttonTitleRight: "",
             onPressed: () => NavigationController()
-                .pushTo(context, child: CustomerProfilePage(model)),
+                .pushTo(context, child: CustomerProfilePage(model, _customerBloc)),
             onPressedLeft: () {},
             onPressedRight: () {},
           );
