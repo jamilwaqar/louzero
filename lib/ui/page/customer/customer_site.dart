@@ -17,7 +17,8 @@ class CustomerSiteProfilePage extends StatefulWidget {
   final bool isTemplate;
   final String? customerId;
   final CustomerBloc customerBloc;
-  const CustomerSiteProfilePage(this.customerBloc,
+  final List<CTSiteProfile> siteProfiles;
+  const CustomerSiteProfilePage(this.customerBloc, this.siteProfiles,
       {this.customerId, this.isTemplate = false, Key? key}) : super(key: key);
 
   @override
@@ -55,8 +56,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       // _profiles.add(_setMock(0));
       // _profiles.add(_setMock(1));
     }
-    widget.customerBloc.add(FetchCustomerSiteProfileEvent(widget.customerId!));
-    _setExpanded( widget.customerBloc.state.siteProfiles);
+    _setExpanded(widget.siteProfiles);
     _customTemplate = CTSiteProfile(name: 'Custom', customerId: widget.customerId);
     super.initState();
   }
@@ -71,7 +71,6 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   void dispose() {
     _profileNameController.dispose();
     _addNewLabelController.dispose();
-    widget.customerBloc.add(const UpdateCustomerSiteProfilesEvent([]));
     super.dispose();
   }
 
@@ -107,7 +106,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       bloc: widget.customerBloc,
       listenWhen: listenWhen,
       listener: (BuildContext context, CustomerState state) {
-        _setExpanded(state.siteProfiles);
+
       },
       child: BlocBuilder<CustomerBloc, CustomerState>(
         bloc: widget.customerBloc,
@@ -153,7 +152,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         itemBuilder: (context, index) {
           return _profileItem(index);
         },
-        itemCount: widget.customerBloc.state.siteProfiles.length,
+        itemCount: widget.siteProfiles.length,
       );
     }
   }
@@ -195,7 +194,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   Widget _profileItem(int index) {
-    CTSiteProfile profile = widget.customerBloc.state.siteProfiles[index];
+    CTSiteProfile profile = widget.siteProfiles[index];
     bool isExpanded = _expandedList[index] == ExpandState.expanded;
     String expandCollapse = !isExpanded
         ? "${Constant.imgPrefixPath}/icon-expand.svg"
@@ -762,6 +761,11 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       Map<String, dynamic> data = profile.toJson();
       print('data: $data');
       dynamic response = await Backendless.data.of(BLPath.customerSiteProfile).save(data);
+      CTSiteProfile ctProfile = CTSiteProfile.fromMap(response as Map);
+      List<CTSiteProfile>list = [...widget.siteProfiles, ctProfile];
+      CustomerModel model = widget.customerBloc.customerModelById(widget.customerId!)!;
+      model.siteProfiles = list;
+      widget.customerBloc.add(UpdateCustomerModelEvent(model));
       WarningMessageDialog.showDialog(context, "Saved site profiles!");
       NavigationController().pop(context, delay: 2);
     } catch(e) {

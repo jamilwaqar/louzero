@@ -20,7 +20,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   Stream<CustomerState> mapEventToState(CustomerEvent event) async* {
     if (event is InitCustomerEvent) {
       yield* _fetchCustomers();
-    } else if (event is FetchCustomerSiteProfileEvent) {
+    } else if (event is FetchCustomerDetailsEvent) {
       yield* _fetchSiteProfile(event.customerId);
     } else if (event is SearchAddressEvent) {
       yield* searchAddress(event.input, event.countryCode ?? 'US');
@@ -28,8 +28,6 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       yield state.copyWith(customers: event.list);
     } else if (event is UpdateCustomerModelEvent) {
       yield* _updateCustomerModel(event.model);
-    } else if (event is UpdateCustomerSiteProfilesEvent) {
-      yield state.copyWith(siteProfiles: event.list);
     }
   }
 
@@ -44,7 +42,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   }
 
   Stream<CustomerState> _fetchSiteProfile(String customerId) async* {
-    CustomerModel? model = _customerModelById(customerId);
+    CustomerModel? model = customerModelById(customerId);
     if (model != null && model.siteProfiles.isNotEmpty) return;
     NavigationController().loading(delay: 50);
     DataQueryBuilder queryBuilder = DataQueryBuilder()
@@ -57,7 +55,6 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       list = List<Map>.from(response!)
           .map((e) => CTSiteProfile.fromMap(e))
           .toList();
-      yield state.copyWith(siteProfiles: list);
     } catch (e) {
       print(e.toString());
     }
@@ -74,10 +71,10 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
     int index = models.indexWhere((e) => e.objectId == model.objectId);
     models.removeWhere((e) => e.objectId == model.objectId);
     models.insert(index, model);
-    yield state.copyWith(customers: models);
+    yield state.copyWith(customers: models, stateFlag: !state.stateFlag);
   }
 
-  CustomerModel? _customerModelById(String customerId) {
+  CustomerModel? customerModelById(String customerId) {
     try {
       return state.customers.firstWhere((e) => e.objectId == customerId);
     } catch(e) {

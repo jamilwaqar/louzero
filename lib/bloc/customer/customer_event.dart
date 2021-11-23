@@ -23,17 +23,12 @@ class UpdateCustomerModelListEvent extends CustomerEvent {
   const UpdateCustomerModelListEvent(this.list);
 }
 
-class UpdateCustomerSiteProfilesEvent extends CustomerEvent {
-  final List<CTSiteProfile> list;
-  const UpdateCustomerSiteProfilesEvent(this.list);
-}
-
 class UpdateCustomerModelEvent extends CustomerEvent {
   final CustomerModel model;
   const UpdateCustomerModelEvent(this.model);
 }
 
-class FetchCustomerSiteProfileEvent extends CustomerEvent {
+class FetchCustomerDetailsEvent extends CustomerEvent {
   final String customerId;
-  const FetchCustomerSiteProfileEvent(this.customerId);
+  const FetchCustomerDetailsEvent(this.customerId);
 }
