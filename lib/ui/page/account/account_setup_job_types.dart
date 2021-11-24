@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_card.dart';
-import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 
@@ -24,7 +23,7 @@ class AccountSetupJobTypes extends StatelessWidget {
               size: 24,
             ),
             AppTextBody(jobTypeText),
-            AppTextBody(
+            const AppTextBody(
               "IN PROGRESS",
               mt: 48,
               color: Colors.red,
