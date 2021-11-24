@@ -37,96 +37,91 @@ class _AppListDraggableState extends State<AppListDraggable> {
       fontFamily: 'Roboto',
     );
 
-    return Container(
-      width: double.infinity,
-      child: Column(
-        children: [
-          SizedBox(
-            height: widget.mt,
-          ),
-          ReorderableListView(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            buildDefaultDragHandles: false,
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            children: <Widget>[
-              for (int index = 0; index < widget.items.length; index++)
-                Container(
-                  key: Key('$index'),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color:
-                        index.isOdd ? widget.oddRowColor : widget.evenRowColor,
-                    borderRadius: getDraggableItemBorderRadius(
-                        index, widget.items.length),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        height: 56,
-                        padding: const EdgeInsets.only(
-                          left: 8,
-                          right: 12,
-                        ),
-                        child: ReorderableDragStartListener(
-                          index: index,
-                          child: const Icon(
-                            Icons.drag_handle,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        widget.items[index],
-                        style: draggableItemTextStyle,
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                        width: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                print("triggered edit");
-                              },
-                              child: const Icon(
-                                Icons.edit,
-                                color: AppColors.dark_1,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                removeItem(index);
-                              },
-                              child: const Icon(
-                                Icons.delete,
-                                color: AppColors.dark_1,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+    return Column(
+      children: [
+        SizedBox(
+          height: widget.mt,
+        ),
+        ReorderableListView(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          buildDefaultDragHandles: false,
+          children: <Widget>[
+            for (int index = 0; index < widget.items.length; index++)
+              Container(
+                key: Key('$index'),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: index.isOdd ? widget.oddRowColor : widget.evenRowColor,
+                  borderRadius:
+                      getDraggableItemBorderRadius(index, widget.items.length),
                 ),
-            ],
-            onReorder: (int oldIndex, int newIndex) {
-              setState(
-                () {
-                  if (oldIndex < newIndex) {
-                    newIndex -= 1;
-                  }
-                  final String item = widget.items.removeAt(oldIndex);
-                  widget.items.insert(newIndex, item);
-                },
-              );
-            },
-          ),
-          SizedBox(
-            height: widget.mb,
-          )
-        ],
-      ),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      height: 56,
+                      padding: const EdgeInsets.only(
+                        left: 8,
+                        right: 12,
+                      ),
+                      child: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(
+                          Icons.drag_handle,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      widget.items[index],
+                      style: draggableItemTextStyle,
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      width: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              print("triggered edit");
+                            },
+                            child: const Icon(
+                              Icons.edit,
+                              color: AppColors.dark_1,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              removeItem(index);
+                            },
+                            child: const Icon(
+                              Icons.delete,
+                              color: AppColors.dark_1,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+          ],
+          onReorder: (int oldIndex, int newIndex) {
+            setState(
+              () {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final String item = widget.items.removeAt(oldIndex);
+                widget.items.insert(newIndex, item);
+              },
+            );
+          },
+        ),
+        SizedBox(
+          height: widget.mb,
+        )
+      ],
     );
   }
 

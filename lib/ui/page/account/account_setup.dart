@@ -5,10 +5,12 @@ import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/account/account_setup_complete.dart';
 import 'package:louzero/ui/page/account/account_setup_customers.dart';
 import 'package:louzero/ui/page/account/account_setup_job_types.dart';
+import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 
 class AccountSetup extends StatefulWidget {
@@ -42,7 +44,7 @@ class _AccountSetupState extends State<AccountSetup> {
             flex: 3,
             child: PageView(
               controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
+              //physics: const NeverScrollableScrollPhysics(),
               children: _forms,
             ),
           )
@@ -74,27 +76,37 @@ class _AccountSetupState extends State<AccountSetup> {
 
   Padding _formView({required Widget child}) {
     return Padding(
-      padding: const EdgeInsets.all(40),
+      padding: const EdgeInsets.only(top: 16, left: 40, right: 40),
       child: SingleChildScrollView(
         child: Column(
           children: [
             child,
-            Row(
-              children: [
-                AppButton(
-                  mt: 24,
-                  ml: 24,
-                  label: 'Save & Continue',
-                  onPressed: () {
-                    setState(() {
-                      _currentStep++;
-                    });
-                    _pageController.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease);
-                  },
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
+              child: Column(
+                children: [
+                  const AppDivider(
+                    mb: 24,
+                    color: AppColors.light_2,
+                  ),
+                  Row(
+                    children: [
+                      AppButton(
+                        mb: 48,
+                        label: 'Save & Continue',
+                        onPressed: () {
+                          setState(() {
+                            _currentStep++;
+                          });
+                          _pageController.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
