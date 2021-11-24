@@ -6,6 +6,7 @@ import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/sandbox/grid_list_view.dart';
 import 'package:louzero/sandbox/list_view_ref.dart';
 import 'package:louzero/sandbox/sort_list.dart';
+import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:country_picker/country_picker.dart';
@@ -74,11 +75,7 @@ class _HomePageState extends State<HomePage> {
           return const DashboardPage();
         }
         // return const LoginPage();
-        return const AccountStart();
-        // -----------sandbox-------------
-        //return ListViewRef(title: 'List Views');
-        //return SortList();
-        //return GridListView();
+        return const AccountSetup();
       },
     );
   }
