@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/ui/page/account/account_setup.dart';
+
+import 'app_text_body.dart';
+import 'app_text_header.dart';
 
 const Color black = AppColors.dark_2;
 const Color blackText = AppColors.black;
@@ -9,36 +13,57 @@ const Color grey = AppColors.medium_1;
 const Color white = AppColors.lightest;
 
 class AppStepProgress extends StatelessWidget {
-  AppStepProgress(
-      {Key? key,
-      this.selected = 0,
-      this.steps = const ['Step One', 'Step Two', 'Step Three']})
-      : super(key: key);
+  AppStepProgress({
+    Key? key,
+    this.selected = 0,
+    this.stepItems = const [],
+  }) : super(key: key);
 
   final _key = GlobalKey();
-  final List<String> steps;
+  final List<StepItem> stepItems;
   final int selected;
 
   @override
   Widget build(BuildContext context) {
     final children = <Widget>[];
-    for (var i = 0; i < steps.length; i++) {
+    for (var i = 0; i < stepItems.length; i++) {
       children.add(_StepNumberDash(
         stepNumber: i + 1,
         complete: i < selected,
         selected: i == selected,
         firstStep: i == 0,
-        lastStep: i == steps.length - 1,
-        label: steps[i],
+        lastStep: i == stepItems.length - 1,
+        label: stepItems[i].label,
       ));
     }
+
+    var title = selected >= 0 && selected < stepItems.length
+        ? stepItems[selected].title
+        : '';
+    var subtitle = selected >= 0 && selected < stepItems.length
+        ? stepItems[selected].subtitle
+        : '';
 
     return Column(
       key: _key,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: children,
+        Column(
+          children: [
+            AppTextHeader(
+              title,
+              mt: 32,
+              mb: 8,
+            ),
+            AppTextBody(
+              subtitle,
+              mb: 32,
+              bold: true,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: children,
+            ),
+          ],
         ),
       ],
     );
@@ -103,7 +128,7 @@ class _StepNumberDash extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Text(label,

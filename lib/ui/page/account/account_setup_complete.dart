@@ -7,7 +7,7 @@ import 'package:louzero/common/app_text_header.dart';
 class ListItem {
   final String title;
   final String? subtitle;
-  ListItem({required this.title, this.subtitle}) {}
+  ListItem({required this.title, this.subtitle});
 }
 
 class AccountSetupComplete extends StatelessWidget {

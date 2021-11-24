@@ -3,8 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_step_progress.dart';
-import 'package:louzero/common/app_text_body.dart';
-import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/account/account_setup_complete.dart';
@@ -12,6 +10,17 @@ import 'package:louzero/ui/page/account/account_setup_customers.dart';
 import 'package:louzero/ui/page/account/account_setup_job_types.dart';
 import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
+
+class StepItem {
+  final String title;
+  final String subtitle;
+  final String label;
+  StepItem({
+    required this.title,
+    required this.subtitle,
+    required this.label,
+  });
+}
 
 class AccountSetup extends StatefulWidget {
   const AccountSetup({Key? key}) : super(key: key);
@@ -23,6 +32,29 @@ class AccountSetup extends StatefulWidget {
 class _AccountSetupState extends State<AccountSetup> {
   final _pageController = PageController();
   int _currentStep = 0;
+
+  final List<StepItem> stepItems = [
+    StepItem(
+      label: 'My Company',
+      title: 'To start, let\'s get some basic info.',
+      subtitle: 'You can always make changes later in Settings.',
+    ),
+    StepItem(
+      label: 'Customer Types',
+      title: 'What types of customers do you have?',
+      subtitle: 'You can always make changes later in Settings.',
+    ),
+    StepItem(
+      label: 'Job Types',
+      title: 'What types of jobs do you do?',
+      subtitle: 'You can always make changes later in Settings.',
+    ),
+    StepItem(
+      label: 'Job Types',
+      title: 'You’re all set, (username)!',
+      subtitle: 'You can always manage these later in Settings.',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -38,39 +70,25 @@ class _AccountSetupState extends State<AccountSetup> {
         children: [
           Expanded(
             flex: 1,
-            child: _pageHeading(),
+            child: Column(
+              children: [
+                AppStepProgress(
+                  stepItems: stepItems,
+                  selected: _currentStep,
+                ),
+              ],
+            ),
           ),
           Expanded(
             flex: 3,
             child: PageView(
               controller: _pageController,
-              //physics: const NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               children: _forms,
             ),
           )
         ],
       ),
-    );
-  }
-
-  Column _pageHeading() {
-    return Column(
-      children: [
-        const AppTextHeader(
-          "To start, let’s get some basic info.",
-          mt: 32,
-          mb: 8,
-        ),
-        const AppTextBody(
-          'You can always make changes later in Settings',
-          mb: 32,
-          bold: true,
-        ),
-        AppStepProgress(
-          steps: const ['My Company', 'Customer Types', 'Job Types', 'Done!'],
-          selected: _currentStep,
-        ),
-      ],
     );
   }
 

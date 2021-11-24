@@ -65,25 +65,16 @@ class _AccountStartState extends State<AccountStart> {
           Expanded(
               flex: 1,
               child: Column(
-                children: [
-                  const AppTextHeader(
+                children: const [
+                  AppTextHeader(
                     "To start, let’s get some basic info.",
                     mt: 32,
                     mb: 8,
                   ),
-                  const AppTextBody(
+                  AppTextBody(
                     'You can always make changes later in Settings',
                     mb: 32,
                     bold: true,
-                  ),
-                  AppStepProgress(
-                    steps: const [
-                      'My Company',
-                      'Customer Types',
-                      'Job Types',
-                      'Done!'
-                    ],
-                    selected: 2,
                   ),
                 ],
               )),
@@ -114,7 +105,7 @@ class _AccountStartState extends State<AccountStart> {
 class ListItem {
   final String title;
   final String? subtitle;
-  ListItem({required this.title, this.subtitle}) {}
+  ListItem({required this.title, this.subtitle});
 }
 
 class _SetupComplete extends StatelessWidget {
