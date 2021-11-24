@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     if (kDebugMode) {
       _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "LTQ2dec7";
+      _passwordController.text = "DEmNbdTm";
     }
     super.initState();
   }
@@ -136,10 +136,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onSignIn() async {
-    NavigationController().notifierInitLoading.value = true;
+    NavigationController().loading();
     var res =
         await AuthAPI().login(_emailController.text, _passwordController.text);
-    NavigationController().notifierInitLoading.value = false;
+    NavigationController().loading(isLoading: false);
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);
     } else {

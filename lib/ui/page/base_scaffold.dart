@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
@@ -236,9 +238,10 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       content: "Are you sure you want to sign out?",
       confirmTitle: "Sign Out",
     ) == true) {
-      NavigationController().notifierInitLoading.value = true;
+      GetStorage().write(GSKey.isAuthUser, false);
+      NavigationController().loading();
       await AuthAPI().logout();
-      NavigationController().notifierInitLoading.value = false;
+      NavigationController().loading(isLoading: false);
 
       AuthStateManager().loggedIn.value = false;
     }

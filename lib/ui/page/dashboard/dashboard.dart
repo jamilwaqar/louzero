@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:louzero/bloc/base/base.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
@@ -11,6 +13,12 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  @override
+  void initState() {
+    context.read<BaseBloc>().add(BaseInitEvent());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var spacing = 24.0;

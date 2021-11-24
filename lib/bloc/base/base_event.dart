@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:louzero/models/customer_models.dart';
 
 
 abstract class BaseEvent extends Equatable {
@@ -9,3 +10,8 @@ abstract class BaseEvent extends Equatable {
 }
 
 class BaseInitEvent extends BaseEvent {}
+
+class UpdateSiteTemplateListEvent extends BaseEvent {
+  final List<CTSiteProfile> list;
+  const UpdateSiteTemplateListEvent(this.list);
+}
