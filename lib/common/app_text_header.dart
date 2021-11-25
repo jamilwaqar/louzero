@@ -35,14 +35,12 @@ class AppTextHeader extends StatelessWidget {
             alignLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Visibility(
-            visible: icon != null ? true : false,
-            child: Icon(
+          if (icon != null)
+            Icon(
               icon,
               size: size + 3,
             ),
-          ),
-          SizedBox(width: size * 0.35),
+          SizedBox(width: icon != null ? size * 0.35 : 0),
           Text(text,
               style: TextStyle(
                 fontSize: size,
