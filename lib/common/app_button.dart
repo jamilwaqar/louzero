@@ -41,6 +41,7 @@ class AppButton extends StatelessWidget {
         fontFamily: 'Roboto', fontWeight: FontWeight.w500, fontSize: 16);
 
     return Container(
+      width: double.infinity,
       margin: EdgeInsets.only(
         top: mt,
         bottom: mb,
