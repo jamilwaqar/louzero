@@ -91,13 +91,13 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 22,
                 ),
-                AppButton(onPressed: _onSignIn, label: 'Sign In'),
+                AppButton(onPressed: _onSignIn, label: 'Sign In', wide: true),
                 const AppTextDivider(),
                 AppButton(
-                  onPressed: _onGoogleSignIn,
-                  label: 'Sign In with Google',
-                  primary: false,
-                ),
+                    onPressed: _onGoogleSignIn,
+                    label: 'Sign In with Google',
+                    primary: false,
+                    wide: true),
               ],
             ),
           ),

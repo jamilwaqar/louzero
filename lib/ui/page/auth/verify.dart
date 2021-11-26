@@ -57,7 +57,7 @@ class _VerifyPageState extends State<VerifyPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
     return BaseScaffold(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -101,6 +101,7 @@ class _VerifyPageState extends State<VerifyPage> {
                 AppButton(
                   label: 'Continue',
                   onPressed: _completeSignup,
+                  wide: true,
                 ),
               ],
             ),

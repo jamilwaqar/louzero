@@ -8,9 +8,11 @@ class AppButton extends StatelessWidget {
     Key? key,
     this.label = 'button',
     this.onPressed,
+    this.width,
     this.radius = 999,
     this.icon,
     this.primary = true,
+    this.wide = false,
     this.color = AppColors.dark_3,
     this.colorText = AppColors.lightest,
     // Spacing props:
@@ -23,6 +25,8 @@ class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
   final IconData? icon;
+  final double? width;
+  final bool wide;
   final bool primary;
   final Color color;
   final Color colorText;
@@ -41,7 +45,11 @@ class AppButton extends StatelessWidget {
         fontFamily: 'Roboto', fontWeight: FontWeight.w500, fontSize: 16);
 
     return Container(
-      width: double.infinity,
+      width: wide
+          ? double.infinity
+          : width != null
+              ? width
+              : null,
       margin: EdgeInsets.only(
         top: mt,
         bottom: mb,
