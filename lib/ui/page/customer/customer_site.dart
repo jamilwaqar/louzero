@@ -2,7 +2,10 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:louzero/bloc/bloc.dart';
+import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -14,6 +17,7 @@ import 'package:louzero/ui/widget/widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerSiteProfilePage extends StatefulWidget {
+
   final bool isTemplate;
   final String? customerId;
   final CustomerBloc customerBloc;
@@ -38,26 +42,23 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   final String _getStartDes =
       "Create Site Profiles to keep track of information common across many customer locations. Examples might include, gate codes, chemical preferences, pool shapes, number of gallons in pool or spa, animals you may encounter, and other site-specific pieces of information not captured elsewhere.";
 
-  bool _showMsg = false;
+  final _showMsg = false.obs;
   bool _isEditing = false;
-  bool _showGetStarted = true;
+  late bool _showGetStarted;
   bool _isAdding = false;
   late bool _isTemplate;
   late CTSiteProfile _customTemplate;
   final List<ExpandState> _expandedList = [];
+  List<CTSiteProfile> _siteProfiles = [];
 
   @override
   void initState() {
     _initTextControllers();
     _isTemplate = widget.isTemplate;
-    if (_isTemplate) {
-      // _profiles = Constant.siteTemplates;
-    } else {
-      // _profiles.add(_setMock(0));
-      // _profiles.add(_setMock(1));
-    }
-    _setExpanded(widget.siteProfiles);
+    _siteProfiles = widget.siteProfiles;
+    _setExpanded(_siteProfiles);
     _customTemplate = CTSiteProfile(name: 'Custom', customerId: widget.customerId);
+    _showGetStarted = GetStorage().read(GSKey.showGetStartedSiteProfile) ?? true;
     super.initState();
   }
 
@@ -79,27 +80,10 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     _profileItemValueControllers = List.generate(4, (index) => TextEditingController());
   }
 
-  // CTSiteProfile _setMock(int index) {
-  //   Map<String, dynamic>profileItems = index == 0 ? {
-  //     "Spa Shape" : "Circle",
-  //     "Gallons" : "450",
-  //     "Chemical System" : "Chlorine",
-  //   } : {
-  //     "Pool Shape" : "Oval",
-  //     "Gallons" : "15,000",
-  //     "Chemical System" : "Chlorine",
-  //     "Gate Code" : "1145",
-  //     "Filter" : "Type A",
-  //   };
-  //   CTSiteProfile _mockProfile = CTSiteProfile(
-  //       name: index == 0 ? "Archood Spa" : "Archood Pool",
-  //       profiles: profileItems);
-  //   return _mockProfile;
-  // }
-
   bool listenWhen(CustomerState preState, CustomerState state) {
     return true;
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<CustomerBloc, CustomerState>(
@@ -120,7 +104,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                 hasActions: _isAdding,
                 actions: [
                   if (!_isAdding)
-                  _addSiteProfile()
+                  _addNew()
                 ],
               ),
               backgroundColor: Colors.transparent,
@@ -152,12 +136,12 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         itemBuilder: (context, index) {
           return _profileItem(index);
         },
-        itemCount: widget.siteProfiles.length,
+        itemCount: _siteProfiles.length,
       );
     }
   }
 
-  Widget _addSiteProfile() {
+  Widget _addNew() {
     String label = _isTemplate ? "Add Template" : "Add Site Profile";
     return Container(
       alignment: Alignment.centerLeft,
@@ -167,6 +151,9 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
           _initTextControllers();
           setState(() {
             _isAdding = true;
+            if (!_showGetStarted) {
+              _isEditing = true;
+            }
           });
         },
         padding: EdgeInsets.zero,
@@ -194,7 +181,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   Widget _profileItem(int index) {
-    CTSiteProfile profile = widget.siteProfiles[index];
+    CTSiteProfile profile = _siteProfiles[index];
     bool isExpanded = _expandedList[index] == ExpandState.expanded;
     String expandCollapse = !isExpanded
         ? "${Constant.imgPrefixPath}/icon-expand.svg"
@@ -424,23 +411,21 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     alignment: Alignment.centerLeft,
     child: CupertinoButton(
       onPressed: () {
-        setState(() {
-          _showMsg = !_showMsg;
-        });
+        _showMsg.value = !_showMsg.value;
+        _showGetStarted = !_showMsg.value;
+        GetStorage().write(GSKey.showGetStartedSiteProfile, _showGetStarted);
       },
       padding: EdgeInsets.zero,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Checkbox(
+          Obx(()=> Checkbox(
               checkColor: Colors.white,
-              value: _showMsg,
+              value: _showMsg.value,
               activeColor: AppColors.dark_1,
               onChanged: (val) {
-                setState(() {
-                  _showMsg = val!;
-                });
-              }),
+                  _showMsg.value = val!;
+              }),),
           const SizedBox(width: 8),
           const Text("Don't show this message again.", style: TextStyles.bodyL),
         ],
@@ -468,7 +453,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   Widget _templates() {
-    List<CTSiteProfile>profiles = [... Constant.siteTemplates];
+    List<CTSiteProfile>profiles = [... context.read<BaseBloc>().state.siteProfileTemplates];
     profiles.add(_customTemplate);
     List<Widget> itemList = List.generate(profiles.length,
         (index) => _templateItem(profiles[index])).toList();
@@ -528,8 +513,11 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
           child: Row(
             children: [
               Flexible(
-                child: LZTextField(
+                child: AppInputText(
                   controller: _profileNameController,
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
+                  mb: 32,
                   label: _isTemplate ? "Template Name*" :"Site Profile Name*",
                 ),
               ),
@@ -537,7 +525,6 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
             ],
           ),
         ),
-        const SizedBox(height: 24),
         const Divider(thickness: 1),
         const SizedBox(height: 24),
         _infoInputList(),
@@ -581,9 +568,9 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             const SizedBox(width: 56),
-            Flexible(child: LZTextField(controller: _addNewLabelController, label: "Add New Label")),
+            Flexible(child: AppInputText(controller: _addNewLabelController, label: "Add New Label")),
             const SizedBox(width: 16),
-            Flexible(child: LZTextField(controller: _addNewValueController, label: "Add New Value")),
+            Flexible(child: AppInputText(controller: _addNewValueController, label: "Add New Value")),
             const SizedBox(width: 16),
             Padding(
               padding: const EdgeInsets.only(top: 24.0),
@@ -747,37 +734,45 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     }
     profile.profiles = profiles;
     setState(() {
-      // if (_isTemplate) {
-      //   Constant.siteTemplates.add(profile);
-      // } else {
-      //   _profiles.add(profile);
-      // }
+      // _siteProfiles.add(profile);
       _expandedList.add(ExpandState.collapsed);
       _isAdding = false;
       _isEditing = false;
     });
-    NavigationController().notifierInitLoading.value = true;
+    NavigationController().loading();
     try {
       Map<String, dynamic> data = profile.toJson();
       print('data: $data');
-      dynamic response = await Backendless.data.of(BLPath.customerSiteProfile).save(data);
+      dynamic response = await Backendless.data
+          .of(widget.isTemplate
+              ? BLPath.siteProfileTemplate
+              : BLPath.customerSiteProfile)
+          .save(data);
+      NavigationController().loading(isLoading: false);
       CTSiteProfile ctProfile = CTSiteProfile.fromMap(response as Map);
-      List<CTSiteProfile>list = [...widget.siteProfiles, ctProfile];
-      CustomerModel model = widget.customerBloc.customerModelById(widget.customerId!)!;
-      model.siteProfiles = list;
-      widget.customerBloc.add(UpdateCustomerModelEvent(model));
-      WarningMessageDialog.showDialog(context, "Saved site profiles!");
+
+      if (widget.isTemplate) {
+        BaseBloc baseBloc = context.read<BaseBloc>();
+        List<CTSiteProfile>list = [..._siteProfiles, ctProfile];
+        baseBloc.add(UpdateSiteTemplateListEvent(list));
+        WarningMessageDialog.showDialog(context, "Saved site Template!");
+      } else {
+        List<CTSiteProfile>list = [..._siteProfiles, ctProfile];
+        CustomerModel model = widget.customerBloc.customerModelById(widget.customerId!)!;
+        model.siteProfiles = list;
+        widget.customerBloc.add(UpdateCustomerModelEvent(model));
+        WarningMessageDialog.showDialog(context, "Saved site profiles!");
+      }
       NavigationController().pop(context, delay: 2);
     } catch(e) {
       print('save data error: ${e.toString()}');
     }
-    NavigationController().notifierInitLoading.value = false;
+
   }
 
   void _gotIt() {
     setState(() {
       _isAdding = true;
-      _showGetStarted = false;
       if (_isTemplate) {
         _isEditing = true;
       }

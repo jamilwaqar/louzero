@@ -13,12 +13,21 @@ CTSiteProfile _$CTSiteProfileFromJson(Map<String, dynamic> json) =>
       profiles: json['profiles'] as Map<String, dynamic>? ?? const {},
     );
 
-Map<String, dynamic> _$CTSiteProfileToJson(CTSiteProfile instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'customerId': instance.customerId,
-      'profiles': instance.profiles,
-    };
+Map<String, dynamic> _$CTSiteProfileToJson(CTSiteProfile instance) {
+  final val = <String, dynamic>{
+    'name': instance.name,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('customerId', instance.customerId);
+  val['profiles'] = instance.profiles;
+  return val;
+}
 
 CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
     CustomerModel(

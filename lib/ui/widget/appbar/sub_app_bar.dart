@@ -39,12 +39,12 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   Widget get _leading {
-    return TextButton(
-      onPressed: ()=> NavigationController().pop(context),
+    return InkWell(
+      onTap: ()=> NavigationController().pop(context),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(width: 16),
+          const SizedBox(width: 32),
           const Icon(Icons.arrow_back, color: AppColors.icon),
           const SizedBox(width: 8),
           Text(leadingTxt, style: TextStyles.titleM),

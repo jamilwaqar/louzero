@@ -1,7 +1,6 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:louzero/controller/enum/enums.dart';
-
 part 'customer_models.g.dart';
 
 @JsonSerializable()
@@ -10,7 +9,7 @@ class CTSiteProfile {
       {this.customerId, required this.name, this.profiles = const {}});
 
   String name;
-  String? customerId;
+  @JsonKey(includeIfNull: false) String? customerId;
   Map<String, dynamic> profiles;
 
   factory CTSiteProfile.fromMap(Map map) {

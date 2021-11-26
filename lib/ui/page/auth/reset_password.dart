@@ -76,9 +76,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   void _onResetPassword() async {
-    NavigationController().notifierInitLoading.value = true;
+    NavigationController().loading();
     await AuthAPI().resetPassword(_emailController.text);
-    NavigationController().notifierInitLoading.value = false;
+    NavigationController().loading(isLoading: false);
     NavigationController().pop(context);
   }
 

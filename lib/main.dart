@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:louzero/bloc/base/base.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
-import 'package:louzero/ui/page/account/account_start.dart';
+import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,7 @@ import 'controller/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   // await Backendless.setUrl(APIManager.API_HOST);
   await Backendless.initApp(
       applicationId: APIManager.APPLICATION_ID,
@@ -31,7 +34,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        BlocProvider<BaseBloc>(create: (_) => BaseBloc()..add(BaseInitEvent())),
+        BlocProvider<BaseBloc>(
+            create: (_) => BaseBloc() /*..add(BaseInitEvent())*/),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -68,6 +72,11 @@ class _HomePageState extends State<HomePage> {
     return ValueListenableBuilder<bool>(
       valueListenable: AuthStateManager().loggedIn,
       builder: (ctx, value, child) {
+        if (!value && AuthStateManager().isAuthUser) {
+          NavigationController().loading();
+          return const BaseScaffold();
+        }
+        NavigationController().loading(isLoading: false);
         if (value) {
           return const DashboardPage();
         }

@@ -35,6 +35,9 @@ dependencies:
   country_picker:
   dio:
 
+  get:
+  get_storage:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
