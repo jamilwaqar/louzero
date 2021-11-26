@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/bloc/base/base.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
+import 'package:louzero/ui/page/job/add_job.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -34,7 +37,9 @@ class _DashboardPageState extends State<DashboardPage> {
             Flexible(
               child: Column(
                 children: [
-                  Image.asset('assets/mocks/jobs-card.png'),
+                  InkWell(
+                    onTap: ()=> Get.to(const AddJobPage()),
+                      child: Image.asset('assets/mocks/jobs-card.png')),
                   SizedBox(height: spacing),
                   Image.asset('assets/mocks/reports-card.png'),
                   SizedBox(height: spacing),
@@ -51,10 +56,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   SizedBox(height: spacing),
                   GestureDetector(
                     child: Image.asset('assets/mocks/customer-card.png'),
-                    onTap: () {
-                      NavigationController()
-                          .pushTo(context, child: const CustomerListPage());
-                    },
+                    onTap: ()=> Get.to(const CustomerListPage()),
                   ),
                   SizedBox(height: spacing),
                   Image.asset('assets/mocks/inventory-card.png')
