@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/models/user_models.dart';
 
 class AuthStateManager {
   static final AuthStateManager _singleton = AuthStateManager._internal();
+  bool get isAuthUser => GetStorage().read(GSKey.isAuthUser) ?? false;
   static late UserModel userModel;
   factory AuthStateManager() {
     return _singleton;
@@ -16,10 +19,15 @@ class AuthStateManager {
 
   Future initializeManager() async {
     BackendlessUser? response = await Backendless.userService.getCurrentUser();
-    if (response != null) {
-      userModel = UserModel.fromJson(Map<String, dynamic>.from(response.properties));
-      userModel.objectId = response.getObjectId();
-    }
+    initUser(response);
     loggedIn.value = (await Backendless.userService.isValidLogin()) ?? false;
+  }
+
+  static void initUser(BackendlessUser? user) {
+    if (user != null) {
+      userModel = UserModel.fromJson(Map<String, dynamic>.from(user.properties));
+      userModel.objectId = user.getObjectId();
+      GetStorage().write(GSKey.isAuthUser, true);
+    }
   }
 }

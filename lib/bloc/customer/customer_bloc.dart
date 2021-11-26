@@ -95,7 +95,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   Future<List<SearchAddressModel>> _fetchSuggestionAddresses(String text,
       String countryCode) async {
     if (text.length < 3) return [];
-    dynamic response = await ApiService().googleApi(GoogleApi.AutoComplete, {
+    dynamic response = await ApiService().googleApi(GoogleApi.autoComplete, {
       'input': text,
       'radius': 1000 * 5000,
       'sensor': true,
@@ -119,7 +119,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
 
   Future<List?> getLatLng(String placeId) async {
     dynamic response = await ApiService()
-        .googleApi(GoogleApi.PlaceDetails, {'placeid': placeId});
+        .googleApi(GoogleApi.placeDetails, {'placeid': placeId});
     if (response is Map) {
       try {
         Map<String, dynamic> result =

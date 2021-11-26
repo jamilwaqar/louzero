@@ -9,6 +9,7 @@ class AppInputText extends StatefulWidget {
       required this.controller,
       required this.label,
       this.keyboardType = TextInputType.text,
+      this.textCapitalization,
       this.onChanged,
       this.password = false,
       this.autofocus = false,
@@ -19,6 +20,7 @@ class AppInputText extends StatefulWidget {
   final String label;
   final TextEditingController controller;
   final TextInputType keyboardType;
+  final TextCapitalization? textCapitalization;
   final bool password;
   final double mt;
   final double mb;
@@ -71,6 +73,7 @@ class _AppInputTextState extends State<AppInputText> {
             controller: widget.controller,
             keyboardAppearance: Brightness.light,
             keyboardType: widget.keyboardType,
+            textCapitalization: widget.textCapitalization ?? TextCapitalization.none,
             obscureText: widget.password,
             decoration: const InputDecoration(
               border: InputBorder.none,

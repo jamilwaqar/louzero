@@ -105,10 +105,10 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _onCreateAccount() async {
-    NavigationController().notifierInitLoading.value = true;
+    NavigationController().loading();
     var res =
         await AuthAPI().signup(_emailController.text, _passwordController.text);
-    NavigationController().notifierInitLoading.value = false;
+    NavigationController().loading(isLoading: false);
 
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);

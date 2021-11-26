@@ -18,9 +18,10 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController =
       TextEditingController();
-
+  late BaseBloc _baseBloc;
   @override
   void initState() {
+    _baseBloc = context.read<BaseBloc>();
     super.initState();
   }
 
@@ -33,21 +34,26 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: "Settings",
-          context: context,
-          leadingTxt: "Home",
-          hasActions: false,
-        ),
-        backgroundColor: Colors.transparent,
-        body: _body(),
-      ),
+    return BlocBuilder<BaseBloc, BaseState>(
+      bloc: _baseBloc,
+      builder: (context, state) {
+        return BaseScaffold(
+          child: Scaffold(
+            appBar: SubAppBar(
+              title: "Settings",
+              context: context,
+              leadingTxt: "Home",
+              hasActions: false,
+            ),
+            backgroundColor: Colors.transparent,
+            body: _body(state),
+          ),
+        );
+      }
     );
   }
 
-  Widget _body() {
+  Widget _body(BaseState state) {
     return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         itemCount: 1,
@@ -58,11 +64,14 @@ class _SettingsPageState extends State<SettingsPage> {
               DashboardCell(
                 title: "Site Profile Templates",
                 description: "Description...",
-                count: 3,
+                count: state.siteProfileTemplates.length,
                 buttonTitleLeft: "",
                 buttonTitleRight: "",
-                onPressed: () => NavigationController()
-                    .pushTo(context, child: CustomerSiteProfilePage(CustomerBloc(context.read<BaseBloc>()), const [], isTemplate: true)),
+                onPressed: () => NavigationController().pushTo(context,
+                    child: CustomerSiteProfilePage(
+                        CustomerBloc(_baseBloc),
+                        state.siteProfileTemplates,
+                        isTemplate: true)),
                 onPressedLeft: () {},
                 onPressedRight: () {},
               ),

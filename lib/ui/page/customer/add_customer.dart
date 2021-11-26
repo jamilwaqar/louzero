@@ -523,7 +523,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     data['customerContacts'] =  contacts.map((e) => e.toJson()).toList();
 
     print('Data: $data');
-    NavigationController().notifierInitLoading.value = true;
+    NavigationController().loading();
     try {
       dynamic response = await Backendless.data.of(BLPath.customer).save(data);
       WarningMessageDialog.showDialog(context, "Saved Customer!");
@@ -534,7 +534,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     } catch(e) {
       print('save data error: ${e.toString()}');
     }
-    NavigationController().notifierInitLoading.value = false;
+    NavigationController().loading(isLoading: false);
   }
 
   Widget _searchedAddressListView() {
@@ -596,7 +596,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   void _setUpRoute(SearchAddressModel model, {bool isService = true}) async {
-    NavigationController().notifierInitLoading.value = true;
+    NavigationController().loading();
     List? res = await widget.customerBloc.getLatLng(model.placeId);
     if (res != null) {
       LatLng latLng = res[0];
@@ -624,6 +624,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       }
     }
     widget.customerBloc.add(const SearchAddressEvent(''));
-    NavigationController().notifierInitLoading.value = false;
+    NavigationController().loading(isLoading: false);
   }
 }
