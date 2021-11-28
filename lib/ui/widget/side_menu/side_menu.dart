@@ -6,10 +6,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/account/account_setup.dart';
+import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/settings/settings.dart';
 import 'package:louzero/ui/widget/cell/list/side_menu.dart';
 import 'package:louzero/ui/widget/dialolg/popup/camera_option.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SideMenuView extends StatefulWidget {
   const SideMenuView({Key? key, this.sideMenuKey}) : super(key: key);
@@ -40,8 +43,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 topRight: Radius.circular(32),
                 bottomRight: Radius.circular(32),
               ),
-              backgroundColor: AppColors.light_1
-          ),
+              backgroundColor: AppColors.light_1),
           child: Column(
             children: [
               Padding(
@@ -74,19 +76,21 @@ class _SideMenuViewState extends State<SideMenuView> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(48),
                           color: AppColors.medium_2,
-                          image: _profileImagePath == null ? null : DecorationImage(
-                            image: FileImage(File(_profileImagePath!)),
-                            fit: BoxFit.cover
-                          )
-                      ),
-                      child: _profileImagePath != null ? null : const Text(
-                        "MA",
-                        style: TextStyle(
-                          color: AppColors.lightest,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 40,
-                        ),
-                      ),
+                          image: _profileImagePath == null
+                              ? null
+                              : DecorationImage(
+                                  image: FileImage(File(_profileImagePath!)),
+                                  fit: BoxFit.cover)),
+                      child: _profileImagePath != null
+                          ? null
+                          : const Text(
+                              "MA",
+                              style: TextStyle(
+                                color: AppColors.lightest,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 40,
+                              ),
+                            ),
                     ),
                     Positioned(
                       bottom: 1,
@@ -97,7 +101,8 @@ class _SideMenuViewState extends State<SideMenuView> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.light_1, width: 1),
+                          border:
+                              Border.all(color: AppColors.light_1, width: 1),
                           color: AppColors.medium_3,
                         ),
                         child: const Icon(
@@ -110,7 +115,9 @@ class _SideMenuViewState extends State<SideMenuView> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16,),
+              const SizedBox(
+                height: 16,
+              ),
               const Text(
                 "Mark Austen",
                 style: TextStyle(
@@ -131,13 +138,17 @@ class _SideMenuViewState extends State<SideMenuView> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               Container(
                 color: AppColors.light_2,
                 width: 176,
                 height: 2,
               ),
-              const SizedBox(height: 16,),
+              const SizedBox(
+                height: 16,
+              ),
               Expanded(
                 child: ListView(
                   children: [
@@ -160,12 +171,16 @@ class _SideMenuViewState extends State<SideMenuView> {
                       count: 0,
                       onPressed: () {
                         _pop();
-                        NavigationController().pushTo(context, child: const CustomerListPage());
+                        NavigationController()
+                            .pushTo(context, child: const CustomerListPage());
                       },
                     ),
                     SideMenuCell(
                       title: "Jobs",
-                      icon: Image.asset("assets/icons/menu/jobs.png"),
+                      icon: const Icon(
+                        MdiIcons.briefcase,
+                        color: AppColors.dark_2,
+                      ),
                       count: 0,
                       onPressed: () {
                         _pop();
@@ -173,14 +188,20 @@ class _SideMenuViewState extends State<SideMenuView> {
                     ),
                     SideMenuCell(
                       title: "Schedule",
-                      icon: Image.asset("assets/icons/menu/schedule.png"),
+                      icon: const Icon(
+                        MdiIcons.calendar,
+                        color: AppColors.dark_2,
+                      ),
                       onPressed: () {
                         _pop();
                       },
                     ),
                     SideMenuCell(
                       title: "Inventory",
-                      icon: Image.asset("assets/icons/menu/inventory.png"),
+                      icon: const Icon(
+                        MdiIcons.clipboardText,
+                        color: AppColors.dark_2,
+                      ),
                       onPressed: () {
                         _pop();
                       },
@@ -195,17 +216,6 @@ class _SideMenuViewState extends State<SideMenuView> {
                         _pop();
                       },
                     ),
-                    const SizedBox(height: 20,),
-                    Column(
-                      children: [
-                        Container(
-                          color: AppColors.light_2,
-                          width: 176,
-                          height: 2,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16,),
                     SideMenuCell(
                       title: "Settings",
                       icon: const Icon(
@@ -214,19 +224,42 @@ class _SideMenuViewState extends State<SideMenuView> {
                       ),
                       onPressed: () {
                         _pop();
-                        NavigationController().pushTo(context, child: const SettingsPage());
+                        NavigationController()
+                            .pushTo(context, child: const SettingsPage());
                       },
                     ),
-
                   ],
                 ),
-              )
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SideMenuCell(
+                      title: "Account Setup",
+                      icon: const Icon(
+                        Icons.coffee_rounded,
+                        color: AppColors.icon,
+                      ),
+                      onPressed: () {
+                        _pop();
+                        NavigationController()
+                            .pushTo(context, child: const AccountSetup());
+                      },
+                    ),
+                    SizedBox(
+                      height: 24,
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
   void _changeProfileImage() async {
     var option = await CameraOption.showCameraOptions(context);
     if (option is ImageSource) {
@@ -238,7 +271,5 @@ class _SideMenuViewState extends State<SideMenuView> {
     }
   }
 
-  void _pop()=> NavigationController().pop(context);
+  void _pop() => NavigationController().pop(context);
 }
-
-

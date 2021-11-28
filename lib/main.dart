@@ -6,6 +6,7 @@ import 'package:louzero/bloc/base/base.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
+import 'package:louzero/ui/page/auth/login.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:country_picker/country_picker.dart';
@@ -80,8 +81,8 @@ class _HomePageState extends State<HomePage> {
         if (value) {
           return const DashboardPage();
         }
-        // return const LoginPage();
-        return const AccountSetup();
+        return const LoginPage();
+        //return const AccountSetup();
       },
     );
   }

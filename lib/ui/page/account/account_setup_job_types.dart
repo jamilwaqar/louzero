@@ -5,6 +5,7 @@ import 'package:louzero/common/app_list_draggable.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AccountSetupJobTypes extends StatefulWidget {
   const AccountSetupJobTypes({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _AccountSetupJobTypesState extends State<AccountSetupJobTypes> {
             const AppTextHeader(
               "Job Types",
               alignLeft: true,
-              icon: Icons.business_center_sharp,
+              icon: MdiIcons.briefcase,
               size: 24,
             ),
             AppTextBody(jobTypeText, mb: 24),
