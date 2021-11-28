@@ -9,6 +9,7 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
+import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:louzero/ui/page/settings/settings.dart';
 import 'package:louzero/ui/widget/cell/list/side_menu.dart';
 import 'package:louzero/ui/widget/dialolg/popup/camera_option.dart';
@@ -160,6 +161,8 @@ class _SideMenuViewState extends State<SideMenuView> {
                       ),
                       onPressed: () {
                         _pop();
+                        NavigationController()
+                            .pushTo(context, child: const DashboardPage());
                       },
                     ),
                     SideMenuCell(
@@ -235,21 +238,18 @@ class _SideMenuViewState extends State<SideMenuView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SideMenuCell(
-                      title: "Account Setup",
-                      icon: const Icon(
-                        Icons.coffee_rounded,
-                        color: AppColors.icon,
-                      ),
-                      onPressed: () {
+                    AppListTile(
+                      ml: 10,
+                      mb: 24,
+                      iconStart: Icons.content_paste_rounded,
+                      title: 'Account Setup',
+                      subtitle: '',
+                      onTap: () {
                         _pop();
                         NavigationController()
                             .pushTo(context, child: const AccountSetup());
                       },
                     ),
-                    SizedBox(
-                      height: 24,
-                    )
                   ],
                 ),
               ),

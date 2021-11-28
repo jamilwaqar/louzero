@@ -82,7 +82,6 @@ class _HomePageState extends State<HomePage> {
           return const DashboardPage();
         }
         return const LoginPage();
-        //return const AccountSetup();
       },
     );
   }

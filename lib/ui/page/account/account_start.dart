@@ -8,7 +8,6 @@ import 'package:louzero/common/app_dropdown_search.dart';
 import 'package:louzero/common/app_input_inline_form.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_list_draggable.dart';
-import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
@@ -192,11 +191,13 @@ class AppListTile extends StatelessWidget {
     this.mb = 0,
     this.mr = 0,
     this.ml = 0,
+    this.onTap,
   }) : super(key: key);
 
   final IconData iconStart;
   final String title;
   final String subtitle;
+  final VoidCallback? onTap;
   final IconData iconEnd;
   final Color colorBg;
   final double mt;
@@ -207,7 +208,7 @@ class AppListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+      margin: EdgeInsets.only(left: ml, right: mr, top: mt, bottom: mb),
       elevation: 0,
       child: ListTile(
         leading: SizedBox(
@@ -215,13 +216,20 @@ class AppListTile extends StatelessWidget {
           child: Icon(iconStart),
         ),
         title: Transform.translate(
-          offset: Offset(-16, 0),
+          offset: const Offset(-16, 0),
           child: Text(title),
         ),
-        subtitle: Transform.translate(
-          offset: Offset(-16, 0),
-          child: Text(subtitle),
-        ),
+        subtitle: subtitle != ''
+            ? Transform.translate(
+                offset: const Offset(-16, 0),
+                child: Text(subtitle),
+              )
+            : null,
+        onTap: () {
+          if (onTap != null) {
+            onTap!();
+          }
+        },
         trailing: SizedBox(
           height: double.infinity,
           child: Icon(iconEnd),
