@@ -50,6 +50,7 @@ class AppButton extends StatelessWidget {
           : width != null
               ? width
               : null,
+      height: 40,
       margin: EdgeInsets.only(
         top: mt,
         bottom: mb,
@@ -61,12 +62,19 @@ class AppButton extends StatelessWidget {
         backgroundColor: bg,
         icon: icon != null ? Icon(icon) : null,
         elevation: 0,
+        extendedPadding: EdgeInsetsDirectional.only(
+          start: 16,
+          end: 16,
+        ),
         extendedTextStyle: textStyle,
         shape: RoundedRectangleBorder(
             side: BorderSide(color: bd, width: 1.0),
             borderRadius: BorderRadius.all(Radius.circular(radius))),
         onPressed: onPressed,
-        label: Text(label),
+        label: Text(
+          label,
+          style: TextStyle(fontSize: 14),
+        ),
       ),
     );
   }

@@ -24,6 +24,7 @@ class AppRowFlex extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: mt, bottom: mb, left: ml, right: mr),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: children.asMap().entries.map((entry) {
           return Flexible(
             flex: entry.key < flex.length ? flex[entry.key] : 1,

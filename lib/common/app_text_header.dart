@@ -11,10 +11,11 @@ class AppTextHeader extends StatelessWidget {
     Key? key,
     this.size = 33.0,
     this.color = AppColors.dark_2,
+    this.icon,
     this.mt = 0.0,
     this.mb = 16,
     this.alignLeft = false,
-    this.icon,
+    this.bold = false,
   }) : super(key: key);
 
   final IconData? icon;
@@ -24,6 +25,7 @@ class AppTextHeader extends StatelessWidget {
   final double mt; // margin top (defalt:0)
   final double mb; // margin bottom (default:20)
   final bool alignLeft;
+  final bool bold;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +45,11 @@ class AppTextHeader extends StatelessWidget {
           SizedBox(width: icon != null ? size * 0.35 : 0),
           Text(text,
               style: TextStyle(
-                fontSize: size,
-                color: color,
-                fontFamily: 'Roboto',
-                letterSpacing: -0.75,
-              )),
+                  fontSize: size,
+                  color: color,
+                  fontFamily: 'Roboto',
+                  letterSpacing: -0.75,
+                  fontWeight: bold ? FontWeight.w600 : FontWeight.w400)),
         ],
       ),
     );
