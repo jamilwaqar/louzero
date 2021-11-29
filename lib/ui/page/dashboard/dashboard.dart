@@ -14,12 +14,12 @@ import 'chart_list_item.dart';
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key? key}) : super(key: key);
 
-  final List<chartListItem> chartDataJobs = [
+  List<chartListItem> chartDataJobs = [
     chartListItem(
       title: 'Booked Solid',
       color: AppColors.dark_2,
       subtitle: '(27)',
-      amount: 70,
+      amount: 80,
     ),
     chartListItem(
       title: 'Estimate',
@@ -41,7 +41,7 @@ class DashboardPage extends StatefulWidget {
     )
   ];
 
-  final List<chartListItem> chartDataCustomer = [
+  List<chartListItem> chartDataCustomer = [
     chartListItem(
       title: 'Total Customers',
       color: AppColors.dark_2,

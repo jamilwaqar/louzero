@@ -36,7 +36,7 @@ class _AccountSetupState extends State<AccountSetup> {
   final _pageController = PageController();
   int _currentStep = 0;
 
-  final List<StepItem> stepItems = [
+  List<StepItem> stepItems = [
     StepItem(
       label: 'My Company',
       title: 'To start, let\'s get some basic info.',
@@ -53,7 +53,7 @@ class _AccountSetupState extends State<AccountSetup> {
       subtitle: 'You can always make changes later in Settings.',
     ),
     StepItem(
-      label: 'Job Types',
+      label: 'Done!',
       title: 'You’re all set, (username)!',
       subtitle: 'You can always manage these later in Settings.',
     ),
