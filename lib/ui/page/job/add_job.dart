@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_add_button.dart';
+import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/enum/enums.dart';
+import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
@@ -22,7 +25,9 @@ class _AddJobPageState extends State<AddJobPage> {
   final TextEditingController _parentAccountNameController = TextEditingController();
 
   final TextEditingController _serviceCountryController = TextEditingController();
-
+  final TextEditingController _descriptionController = TextEditingController();
+  final List<String> _mockCustomerType = ["Residential", "Commercial"];
+  String? _jobType;
 
   @override
   void initState() {
@@ -55,9 +60,9 @@ class _AddJobPageState extends State<AddJobPage> {
 
   Widget _body() {
     List<Widget> list = [
-      _customerDetails(),
+      _selectCustomerWidget(),
       const SizedBox(height: 24),
-      _serviceAddress(),
+      _jobDetailsWidget(),
       const SizedBox(height: 32),
       const Divider(),
       const SizedBox(height: 32),
@@ -69,7 +74,7 @@ class _AddJobPageState extends State<AddJobPage> {
     );
   }
 
-  Widget _customerDetails() {
+  Widget _selectCustomerWidget() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
@@ -98,7 +103,7 @@ class _AddJobPageState extends State<AddJobPage> {
     );
   }
 
-  Widget _serviceAddress() {
+  Widget _jobDetailsWidget() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
@@ -109,11 +114,54 @@ class _AddJobPageState extends State<AddJobPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _itemTitle("Service Address", Icons.shopping_bag),
+          _itemTitle("Job Details", Icons.shopping_bag),
           const SizedBox(height: 32),
+          Row(
+            children: [
+              Flexible(child: LZTextField(controller: _companyNameController, label: "Company or Account Name")),
+              const SizedBox(width: 32),
+              Flexible(child: AppDropDown(label: "Customer Type*",itemList: _mockCustomerType, initValue: _jobType, onChanged: (value){
+                setState(() {
+                  _jobType = value;
+                });
+              },)),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text("Job Status", style: TextStyles.bodyL),
+          const SizedBox(height: 10),
+          _jobStatusItem(JobStatus.estimate),
+          const SizedBox(height: 8),
+          _jobStatusItem(JobStatus.booked),
+          AppInputText(controller: _descriptionController, label: "Job Description", height: 128,),
+          // Text("Job Description", style: TextStyles.bodyL),
         ],
       ),
     );
+  }
+
+  Widget _jobStatusItem(JobStatus status) {
+    return Container(
+      height: 35,
+      alignment: Alignment.centerLeft,
+      child: CupertinoButton(
+        onPressed: ()=> _onChangedContactType(status),
+        padding: EdgeInsets.zero,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            appIcon(Icons.check_circle_outlined),
+            const SizedBox(width: 8,),
+            Text(status.name.capitalize, style: TextStyles.bodyL),
+            // if (status != CTContactType.schedule) const SizedBox(width: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onChangedContactType(JobStatus status) {
+
   }
 
   Widget _itemTitle(String label, IconData iconData) {

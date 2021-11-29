@@ -6,7 +6,7 @@ import 'package:louzero/controller/api/api_service.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_state.dart';
-import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/models.dart';
 import '../bloc.dart';
 
 class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {

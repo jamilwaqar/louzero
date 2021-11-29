@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/extension/decoration.dart';
+import 'package:louzero/controller/extension/extensions.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({

@@ -4,28 +4,6 @@ import 'package:louzero/controller/enum/enums.dart';
 part 'customer_models.g.dart';
 
 @JsonSerializable()
-class CTSiteProfile {
-  CTSiteProfile(
-      {this.customerId, required this.name, this.profiles = const {}});
-
-  String name;
-  @JsonKey(includeIfNull: false) String? customerId;
-  Map<String, dynamic> profiles;
-
-  factory CTSiteProfile.fromMap(Map map) {
-    Map profiles = map.remove('profiles');
-    map['profiles'] = Map<String, dynamic>.from(profiles);
-    Map<String, dynamic> json = Map<String, dynamic>.from(map);
-    return CTSiteProfile.fromJson(json);
-  }
-
-  factory CTSiteProfile.fromJson(Map<String, dynamic> json) =>
-      _$CTSiteProfileFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CTSiteProfileToJson(this);
-}
-
-@JsonSerializable()
 class CustomerModel {
   CustomerModel(
       {required this.companyId,
@@ -67,6 +45,28 @@ class CustomerModel {
       _$CustomerModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$CustomerModelToJson(this);
+}
+
+@JsonSerializable()
+class CTSiteProfile {
+  CTSiteProfile(
+      {this.customerId, required this.name, this.profiles = const {}});
+
+  String name;
+  @JsonKey(includeIfNull: false) String? customerId;
+  Map<String, dynamic> profiles;
+
+  factory CTSiteProfile.fromMap(Map map) {
+    Map profiles = map.remove('profiles');
+    map['profiles'] = Map<String, dynamic>.from(profiles);
+    Map<String, dynamic> json = Map<String, dynamic>.from(map);
+    return CTSiteProfile.fromJson(json);
+  }
+
+  factory CTSiteProfile.fromJson(Map<String, dynamic> json) =>
+      _$CTSiteProfileFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CTSiteProfileToJson(this);
 }
 
 @JsonSerializable()

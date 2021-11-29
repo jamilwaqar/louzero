@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/bloc/base/base.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';

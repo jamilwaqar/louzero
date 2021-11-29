@@ -9,7 +9,7 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
-import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_location.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';

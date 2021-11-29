@@ -21,3 +21,10 @@ enum CustomerCategory {
   notes,
   subAccounts
 }
+
+enum JobStatus {
+  estimate,
+  booked,
+  invoiced,
+  canceled,
+}

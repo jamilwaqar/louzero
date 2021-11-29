@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/models.dart';
 
 class CustomerState extends Equatable {
   final bool isUpdating;
