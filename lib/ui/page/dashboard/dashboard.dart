@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/bloc/base/base.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
@@ -37,7 +38,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: Column(
                 children: [
                   InkWell(
-                    onTap: ()=> Get.to(const AddJobPage()),
+                    onTap: ()=> Get.to(()=> AddJobPage(), binding: JobBinding()),
                       child: Image.asset('assets/mocks/jobs-card.png')),
                   SizedBox(height: spacing),
                   Image.asset('assets/mocks/reports-card.png'),
@@ -55,7 +56,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   SizedBox(height: spacing),
                   GestureDetector(
                     child: Image.asset('assets/mocks/customer-card.png'),
-                    onTap: ()=> Get.to(const CustomerListPage()),
+                    onTap: ()=> Get.to(()=> const CustomerListPage()),
                   ),
                   SizedBox(height: spacing),
                   Image.asset('assets/mocks/inventory-card.png')

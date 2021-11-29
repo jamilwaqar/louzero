@@ -1,47 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
-import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
-import 'package:louzero/controller/extension/extensions.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
-class AddJobPage extends StatefulWidget {
-  const AddJobPage({Key? key}) : super(key: key);
-
-
-  @override
-  _AddJobPageState createState() => _AddJobPageState();
+enum SelectCustomerType {
+  none,
+  search,
+  select
 }
 
-class _AddJobPageState extends State<AddJobPage> {
-
-  final TextEditingController _companyNameController = TextEditingController();
-  final TextEditingController _parentAccountNameController = TextEditingController();
-
-  final TextEditingController _serviceCountryController = TextEditingController();
+class AddJobPage extends GetWidget<JobController> {
+  final TextEditingController _customerNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final List<String> _mockCustomerType = ["Residential", "Commercial"];
-  String? _jobType;
+  
+  final List<String> _mockJobType = ["Repair"];
+  final List<String> _mockCustomerList = ["Residential", "Commercial"];
+  final _status = JobStatus.estimate.obs;
+  final _jobType = Rx<String?>(null);
+  final _customerId = Rx<String?>(null);
+  final _selectCustomerType = SelectCustomerType.none.obs;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _companyNameController.dispose();
-    _parentAccountNameController.dispose();
-    _serviceCountryController.dispose();
-    // widget.customerBloc.add(const SearchAddressEvent(''));
-    super.dispose();
-  }
+  AddJobPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +46,12 @@ class _AddJobPageState extends State<AddJobPage> {
 
   Widget _body() {
     List<Widget> list = [
-      _selectCustomerWidget(),
+      _addCustomer(),
       const SizedBox(height: 24),
       _jobDetailsWidget(),
       const SizedBox(height: 32),
       const Divider(),
-      const SizedBox(height: 32),
+      const SizedBox(height: 24),
       _saveOrCancel(),
     ];
     return ListView(
@@ -74,7 +60,7 @@ class _AddJobPageState extends State<AddJobPage> {
     );
   }
 
-  Widget _selectCustomerWidget() {
+  Widget _addCustomer() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
@@ -88,14 +74,25 @@ class _AddJobPageState extends State<AddJobPage> {
         children: [
           _itemTitle("Customer", Icons.person),
           const SizedBox(height: 32),
+          const Text(
+            "Select Customer",
+            style: TextStyle(
+              color: AppColors.dark_1,
+              fontWeight: FontWeight.w400,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 8),
           Row(
             children: [
-              Flexible(child: AppInputText(controller: _companyNameController, label: "Select Customer")),
+              Flexible(child: _chooseCustomer()),
               const SizedBox(width: 32),
-              Flexible(child: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: AppAddButton("Add New Customer", onPressed: () {  },),
-              ),),
+              Flexible(
+                child: AppAddButton(
+                  "Add New Customer",
+                  onPressed: () {},
+                ),
+              ),
             ],
           )
         ],
@@ -103,8 +100,62 @@ class _AddJobPageState extends State<AddJobPage> {
     );
   }
 
+  Widget _chooseCustomer() {
+    return Obx(() => Container(
+        height: 48,
+        alignment: Alignment.center,
+        padding: _selectCustomerType.value == SelectCustomerType.none
+            ? const EdgeInsets.symmetric(horizontal: 16)
+            : EdgeInsets.zero,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: AppColors.light_3,
+              width: 1,
+            )),
+        child: _selectCustomerType.value == SelectCustomerType.none
+            ? Row(
+                children: [
+                  const Expanded(child: SizedBox()),
+                  InkWell(
+                      onTap: () =>
+                          _selectCustomerType.value = SelectCustomerType.search,
+                      child: appIcon(Icons.search)),
+                  const SizedBox(width: 8),
+                  InkWell(
+                      onTap: () =>
+                          _selectCustomerType.value = SelectCustomerType.select,
+                      child: appIcon(Icons.arrow_drop_down)),
+                ],
+              )
+            : _selectCustomerType.value == SelectCustomerType.search
+                ? Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: TextFormField(
+                      autofocus: true,
+                      controller: _customerNameController,
+                      keyboardAppearance: Brightness.light,
+                      keyboardType: TextInputType.name,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          suffixIcon: InkWell(
+                            onTap: ()=> _selectCustomerType.value = SelectCustomerType.none,
+                            child: appIcon(Icons.close),
+                          )),
+                      onChanged: (val) {},
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: AppColors.dark_3,
+                      ),
+                    ),
+                )
+                : _customerDropdown()));
+  }
+
   Widget _jobDetailsWidget() {
-    return Container(
+    return Obx(()=> Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.light_2, width: 1),
@@ -114,54 +165,95 @@ class _AddJobPageState extends State<AddJobPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _itemTitle("Job Details", Icons.shopping_bag),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset("assets/icons/icon-bag.png", width: 24, height: 24),
+              const SizedBox(width: 8),
+              const Text("Job Details", style: TextStyles.titleM),
+            ],
+          ),
+          // _itemTitle("Job Details", Icons.shopping_bag),
           const SizedBox(height: 32),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _companyNameController, label: "Company or Account Name")),
+              Flexible(
+                  child: AppDropDown(
+                    label: "Job Type*",
+                    itemList: _mockJobType,
+                    initValue: _jobType.value,
+                    onChanged: (value) {
+                      _jobType.value = value;
+                    },
+                  )),
               const SizedBox(width: 32),
-              Flexible(child: AppDropDown(label: "Customer Type*",itemList: _mockCustomerType, initValue: _jobType, onChanged: (value){
-                setState(() {
-                  _jobType = value;
-                });
-              },)),
+              const Flexible(
+                  child: SizedBox()),
             ],
           ),
           const SizedBox(height: 24),
-          Text("Job Status", style: TextStyles.bodyL),
+          const Text("Job Status", style: TextStyles.bodyL),
           const SizedBox(height: 10),
           _jobStatusItem(JobStatus.estimate),
           const SizedBox(height: 8),
           _jobStatusItem(JobStatus.booked),
-          AppInputText(controller: _descriptionController, label: "Job Description", height: 128,),
-          // Text("Job Description", style: TextStyles.bodyL),
+          const SizedBox(height: 24),
+          _jobDescription(),
         ],
       ),
-    );
+    ));
   }
 
-  Widget _jobStatusItem(JobStatus status) {
-    return Container(
-      height: 35,
-      alignment: Alignment.centerLeft,
-      child: CupertinoButton(
-        onPressed: ()=> _onChangedContactType(status),
-        padding: EdgeInsets.zero,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            appIcon(Icons.check_circle_outlined),
-            const SizedBox(width: 8,),
-            Text(status.name.capitalize, style: TextStyles.bodyL),
-            // if (status != CTContactType.schedule) const SizedBox(width: 16),
-          ],
+  Widget _customerDropdown() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: InputDecorator(
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          labelStyle:  TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            color: AppColors.dark_3,
+          ),
+          errorStyle:
+           TextStyle(color: Colors.redAccent, fontSize: 16.0),
+          // hintText: hint,
+        ),
+        isEmpty: _customerId.value == null,
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            value: _customerId.value,
+            isDense: true,
+            onChanged: (val)=> _customerId.value = val,
+            items: _mockCustomerList.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
   }
 
-  void _onChangedContactType(JobStatus status) {
-
+  Widget _jobStatusItem(JobStatus status) {
+    return Obx(()=> Container(
+      height: 35,
+      alignment: Alignment.centerLeft,
+      child: CupertinoButton(
+        onPressed: () => _status.value = status,
+        padding: EdgeInsets.zero,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            appIcon(_status.value == status ? Icons.radio_button_checked_outlined : Icons.radio_button_off),
+            const SizedBox(width: 8),
+            Text(status.name.capitalizeFirst!, style: TextStyles.bodyL),
+          ],
+        ),
+      ),
+    ));
   }
 
   Widget _itemTitle(String label, IconData iconData) {
@@ -183,7 +275,7 @@ class _AddJobPageState extends State<AddJobPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CupertinoButton(
-            padding: EdgeInsets.zero,
+              padding: EdgeInsets.zero,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 height: 56,
@@ -192,9 +284,12 @@ class _AddJobPageState extends State<AddJobPage> {
                   color: AppColors.dark_2,
                   borderRadius: BorderRadius.circular(28),
                 ),
-                child: Text("SAVE JOB", style: TextStyles.bodyL.copyWith(color: Colors.white),),
+                child: Text(
+                  "SAVE JOB",
+                  style: TextStyles.bodyL.copyWith(color: Colors.white),
+                ),
               ),
-              onPressed: _save),
+              onPressed: ()=> controller.save()),
           const SizedBox(width: 8),
           CupertinoButton(
               child: Container(
@@ -203,14 +298,52 @@ class _AddJobPageState extends State<AddJobPage> {
                 alignment: Alignment.center,
                 child: const Text("CANCEL", style: TextStyles.bodyL),
               ),
-              onPressed: () {
-                NavigationController().pop(context);
-              }),
+              onPressed: () => Get.back()),
         ],
       ),
     );
   }
 
-  void _save() async {
+  Widget _jobDescription() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Job Description",
+          style: TextStyle(
+            color: AppColors.dark_1,
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 128,
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: AppColors.light_3,
+                width: 1,
+              )),
+          child: TextFormField(
+            controller: _descriptionController,
+            keyboardAppearance: Brightness.light,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: const InputDecoration(
+              border: InputBorder.none
+            ),
+            maxLength: null,
+            maxLines: null,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              color: AppColors.dark_3,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

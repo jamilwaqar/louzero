@@ -46,7 +46,9 @@ dev_dependencies:
   build_runner:
 
 flutter:
+
   uses-material-design: true
+
   assets:
     - assets/
     - assets/mocks/
@@ -57,6 +59,7 @@ flutter:
     - assets/icons/menu/
     - assets/icons/menu/2.0x/
     - assets/icons/menu/3.0x/
+
   fonts:
     - family: Roboto
       fonts:
