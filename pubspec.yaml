@@ -38,6 +38,7 @@ dependencies:
 
   get:
   get_storage:
+  fl_chart: ^0.40.2
 
 dev_dependencies:
   flutter_test:
