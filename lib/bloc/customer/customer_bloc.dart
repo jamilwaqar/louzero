@@ -38,6 +38,9 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
     var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
     List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
     yield state.copyWith(customers: list);
+    if (list.isNotEmpty) {
+      tempCustomerModel = list[0];
+    }
     NavigationController().loading(isLoading: false);
   }
 

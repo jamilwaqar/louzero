@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
+import 'package:louzero/ui/page/customer/add_customer.dart';
+import 'package:louzero/ui/widget/customer_info.dart';
 import 'package:louzero/ui/widget/widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum SelectCustomerType {
   none,
@@ -21,7 +26,7 @@ class AddJobPage extends GetWidget<JobController> {
   final TextEditingController _descriptionController = TextEditingController();
   
   final List<String> _mockJobType = ["Repair"];
-  final List<String> _mockCustomerList = ["Residential", "Commercial"];
+  final List<String> _mockCustomerList = ["Test", "Mark"];
   final _status = JobStatus.estimate.obs;
   final _jobType = Rx<String?>(null);
   final _customerId = Rx<String?>(null);
@@ -61,43 +66,46 @@ class AddJobPage extends GetWidget<JobController> {
   }
 
   Widget _addCustomer() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.light_2, width: 1),
-        color: AppColors.lightest,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _itemTitle("Customer", Icons.person),
-          const SizedBox(height: 32),
-          const Text(
-            "Select Customer",
-            style: TextStyle(
-              color: AppColors.dark_1,
-              fontWeight: FontWeight.w400,
-              fontSize: 16,
+    return Obx(() => _customerId.value != null && tempCustomerModel != null
+        ? CustomerInfo(tempCustomerModel!, fromJob: true,)
+        : Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.light_2, width: 1),
+              color: AppColors.lightest,
+              borderRadius: BorderRadius.circular(16),
             ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Flexible(child: _chooseCustomer()),
-              const SizedBox(width: 32),
-              Flexible(
-                child: AppAddButton(
-                  "Add New Customer",
-                  onPressed: () {},
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _itemTitle("Customer", Icons.person),
+                const SizedBox(height: 32),
+                const Text(
+                  "Select Customer",
+                  style: TextStyle(
+                    color: AppColors.dark_1,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Flexible(child: _chooseCustomer()),
+                    const SizedBox(width: 32),
+                    Flexible(
+                      child: AppAddButton(
+                        "Add New Customer",
+                        onPressed: () => Get.to(() => AddCustomerPage(
+                            CustomerBloc(Get.context!.read<BaseBloc>()))),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ));
   }
 
   Widget _chooseCustomer() {

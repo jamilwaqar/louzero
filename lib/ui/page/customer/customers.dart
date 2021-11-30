@@ -39,8 +39,6 @@ class _CustomerListPageState extends State<CustomerListPage> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

@@ -1,7 +1,9 @@
+import 'package:louzero/models/customer_models.dart';
+
 abstract class Constant {
   static const String imgPrefixPath = 'assets/icons';
 }
-
+CustomerModel? tempCustomerModel;
 /// Backendless Data Paths
 abstract class BLPath {
   static const String customer = "Customer";
