@@ -39,6 +39,7 @@ dependencies:
   get:
   get_storage:
   fl_chart: ^0.40.2
+  multi_select_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
