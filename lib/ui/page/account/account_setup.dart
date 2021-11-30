@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
+import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_header.dart';
@@ -11,7 +12,6 @@ import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/account/account_setup_complete.dart';
 import 'package:louzero/ui/page/account/account_setup_customers.dart';
 import 'package:louzero/ui/page/account/account_setup_job_types.dart';
-import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 
 class StepItem {
@@ -107,24 +107,41 @@ class _AccountSetupState extends State<AccountSetup> {
               padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
               child: Column(
                 children: [
-                  const AppDivider(
-                    mb: 24,
-                    color: AppColors.light_2,
-                  ),
+                  if (_currentStep < 3)
+                    AppDivider(
+                      mb: 24,
+                      color: AppColors.light_2,
+                    ),
                   Row(
                     children: [
-                      AppButton(
-                        mb: 48,
-                        label: 'Save & Continue',
-                        onPressed: () {
-                          setState(() {
-                            _currentStep++;
-                          });
-                          _pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.ease);
-                        },
-                      ),
+                      if (_currentStep < 3)
+                        AppButton(
+                          mb: 48,
+                          label: 'Save & Continue',
+                          onPressed: () {
+                            setState(() {
+                              _currentStep++;
+                            });
+                            _pageController.nextPage(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.ease);
+                          },
+                        ),
+                      if (_currentStep > 0 && _currentStep < 3)
+                        AppButton(
+                          mb: 48,
+                          label: 'Skip for Now',
+                          textOnly: true,
+                          ml: 16,
+                          onPressed: () {
+                            setState(() {
+                              _currentStep++;
+                            });
+                            _pageController.nextPage(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.ease);
+                          },
+                        ),
                     ],
                   ),
                 ],
