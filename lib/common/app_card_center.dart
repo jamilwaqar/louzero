@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_card.dart';
-import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/extension/decoration.dart';
+
 
 class AppCardCenter extends StatelessWidget {
   const AppCardCenter({

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/widget/appbar_action.dart';
@@ -23,7 +24,7 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
       : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(55);
+  Size get preferredSize => const Size.fromHeight(88);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
 
   Widget get _leading {
     return InkWell(
-      onTap: ()=> NavigationController().pop(context),
+      onTap: ()=> Get.back(),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

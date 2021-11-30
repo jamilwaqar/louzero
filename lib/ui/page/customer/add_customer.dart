@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/bloc/bloc.dart';
+import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
@@ -12,7 +13,7 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
-import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
@@ -374,27 +375,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Widget _addContactWidget() {
     return Container(
       alignment: Alignment.centerLeft,
-      child: CupertinoButton(
-        onPressed: _addContact,
-        padding: EdgeInsets.zero,
-        child: Container(
-          height: 36,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            color: AppColors.light_4,
-            borderRadius: BorderRadius.circular(18)
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              appIcon(Icons.add_circle, color: AppColors.medium_2),
-              const SizedBox(width: 8),
-              const Text("Add Another Contact", style: TextStyles.bodyL),
-              const SizedBox(width: 16),
-            ],
-          ),
-        ),
-      ),
+      child: AppAddButton("Add Another Contact", onPressed: _addContact),
     );
   }
 

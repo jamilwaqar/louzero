@@ -1,7 +1,6 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/services.dart';
 import 'package:louzero/controller/state/auth_state.dart';
-import 'package:louzero/models/user_models.dart';
 
 class AuthAPI {
   Future login(String email, String password) async {

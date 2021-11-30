@@ -6,7 +6,7 @@ import 'jsonable.dart';
 enum RestCallType { get, post, formPost, put, delete, patch}
 
 class BaseClient {
-  Dio _dio = Dio();
+  final Dio _dio = Dio();
 
   Future<T?> delete<T extends Jsonable>(
       String path, {
@@ -233,9 +233,7 @@ class BaseClient {
     bool reAuthRequired = false;
     T? model;
     do {
-      if (headers == null) {
-        headers = {};
-      }
+      headers ??= {};
 //      List<String> cookies = await CookieUtils.getCookies();
 //      if (cookies != null) {
 //        Map<String, List<String>> cookieHeaders = {'cookie': cookies};
@@ -318,9 +316,7 @@ class BaseClient {
     Response? response;
 
     print(path);
-    if (headers == null) {
-      headers = {};
-    }
+    headers ??= {};
     try {
       if (callType == RestCallType.get) {
         response = await _dio.get(

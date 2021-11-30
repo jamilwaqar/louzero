@@ -50,3 +50,9 @@ extension CustomerCategoryEx on CustomerCategory {
     }
   }
 }
+
+extension JobStatusEx on JobStatus {
+  String get name {
+    return toString().split('.').last;
+  }
+}
