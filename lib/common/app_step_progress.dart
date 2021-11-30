@@ -58,6 +58,7 @@ class AppStepProgress extends StatelessWidget {
               subtitle,
               mb: 32,
               bold: true,
+              center: true,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

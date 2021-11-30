@@ -15,7 +15,7 @@ class AppButton extends StatelessWidget {
     this.wide = false,
     this.color = AppColors.dark_3,
     this.colorText = AppColors.lightest,
-    // Spacing props:
+    this.height = 40,
     this.mb = 0, // margin bottom
     this.mt = 0, // margin top
     this.ml = 0, // margin left
@@ -31,6 +31,7 @@ class AppButton extends StatelessWidget {
   final Color color;
   final Color colorText;
   final double radius;
+  final double height;
   final double mt;
   final double mb;
   final double ml;
@@ -41,16 +42,18 @@ class AppButton extends StatelessWidget {
     var fg = primary ? colorText : color;
     var bg = primary ? color : AppColors.lightest;
     var bd = primary ? color : color;
-    const textStyle = TextStyle(
-        fontFamily: 'Roboto', fontWeight: FontWeight.w500, fontSize: 16);
+    var iconSize = height / 1.5;
+    var textSize = height / 2.5;
+    var textStyle = TextStyle(
+        fontFamily: 'Roboto', fontWeight: FontWeight.w500, fontSize: textSize);
 
     return Container(
+      height: height,
       width: wide
           ? double.infinity
           : width != null
               ? width
               : null,
-      height: 40,
       margin: EdgeInsets.only(
         top: mt,
         bottom: mb,
@@ -60,11 +63,11 @@ class AppButton extends StatelessWidget {
       child: FloatingActionButton.extended(
         foregroundColor: fg,
         backgroundColor: bg,
-        icon: icon != null ? Icon(icon) : null,
+        icon: icon != null ? Icon(icon, size: iconSize) : null,
         elevation: 0,
         extendedPadding: EdgeInsetsDirectional.only(
-          start: 16,
-          end: 16,
+          start: textSize,
+          end: textSize,
         ),
         extendedTextStyle: textStyle,
         shape: RoundedRectangleBorder(
@@ -73,7 +76,6 @@ class AppButton extends StatelessWidget {
         onPressed: onPressed,
         label: Text(
           label,
-          style: TextStyle(fontSize: 14),
         ),
       ),
     );

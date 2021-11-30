@@ -62,7 +62,7 @@ class AppCard extends StatelessWidget {
           ? m
           : my > 0
               ? my
-              : mt,
+              : mb,
     );
     var padding = EdgeInsets.only(
       top: p > 0
@@ -88,6 +88,8 @@ class AppCard extends StatelessWidget {
     );
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           margin: margin,
@@ -100,6 +102,7 @@ class AppCard extends StatelessWidget {
               backgroundColor: AppColors.lightest),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: children,
           ),
         ),

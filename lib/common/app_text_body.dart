@@ -39,6 +39,10 @@ class AppTextBody extends StatelessWidget {
         children: [
           Expanded(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: center
+                  ? CrossAxisAlignment.center
+                  : CrossAxisAlignment.stretch,
               children: [
                 Text(
                   text,

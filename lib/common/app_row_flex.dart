@@ -8,6 +8,7 @@ class AppRowFlex extends StatelessWidget {
     Key? key,
     required this.children,
     this.flex = const [],
+    this.align = CrossAxisAlignment.center,
     this.mt = 0,
     this.mb = 16,
     this.mr = 0,
@@ -15,6 +16,7 @@ class AppRowFlex extends StatelessWidget {
   }) : super(key: key);
   final List<Widget> children;
   final List<int> flex;
+  final CrossAxisAlignment align;
   final double mt;
   final double mb;
   final double mr;
@@ -24,7 +26,7 @@ class AppRowFlex extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: mt, bottom: mb, left: ml, right: mr),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: align,
         children: children.asMap().entries.map((entry) {
           return Flexible(
             flex: entry.key < flex.length ? flex[entry.key] : 1,
