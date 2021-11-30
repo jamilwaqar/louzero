@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_list_tile.dart';
 import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/dashboard/dashboard.dart';
 
 class ListItem {
   final String title;
@@ -67,6 +72,19 @@ class AccountSetupComplete extends StatelessWidget {
                 }).toList(),
               ),
             ),
+            AppTextDivider(
+              ml: 150,
+              mr: 150,
+            ),
+            AppButton(
+              label: 'Go to Your Dashboard',
+              color: AppColors.dark_2,
+              fontSize: 13,
+              onPressed: () {
+                NavigationController().pop(context);
+                NavigationController().pushTo(context, child: DashboardPage());
+              },
+            )
           ],
         ),
       ],
