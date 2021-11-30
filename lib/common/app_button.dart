@@ -8,11 +8,13 @@ class AppButton extends StatelessWidget {
     Key? key,
     this.label = 'button',
     this.onPressed,
+    this.fontSize,
     this.width,
     this.radius = 999,
     this.icon,
     this.primary = true,
     this.wide = false,
+    this.textOnly = false,
     this.color = AppColors.dark_3,
     this.colorText = AppColors.lightest,
     this.height = 40,
@@ -24,10 +26,12 @@ class AppButton extends StatelessWidget {
 
   final VoidCallback? onPressed;
   final String label;
+  final double? fontSize;
   final IconData? icon;
   final double? width;
   final bool wide;
   final bool primary;
+  final bool textOnly;
   final Color color;
   final Color colorText;
   final double radius;
@@ -43,9 +47,15 @@ class AppButton extends StatelessWidget {
     var bg = primary ? color : AppColors.lightest;
     var bd = primary ? color : color;
     var iconSize = height / 1.5;
-    var textSize = height / 2.5;
+    var textSize = fontSize != null ? fontSize : height / 2.5;
     var textStyle = TextStyle(
         fontFamily: 'Roboto', fontWeight: FontWeight.w500, fontSize: textSize);
+
+    if (textOnly) {
+      bg = Colors.transparent;
+      bd = Colors.transparent;
+      fg = color;
+    }
 
     return Container(
       height: height,
@@ -66,8 +76,8 @@ class AppButton extends StatelessWidget {
         icon: icon != null ? Icon(icon, size: iconSize) : null,
         elevation: 0,
         extendedPadding: EdgeInsetsDirectional.only(
-          start: textSize,
-          end: textSize,
+          start: 24,
+          end: 24,
         ),
         extendedTextStyle: textStyle,
         shape: RoundedRectangleBorder(

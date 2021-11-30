@@ -5,19 +5,21 @@ class AppListTile extends StatelessWidget {
   const AppListTile({
     Key? key,
     required this.title,
-    required this.subtitle,
-    this.colorBg = AppColors.light_1,
+    this.subtitle,
+    this.onTap,
     this.iconStart = Icons.radio_button_off,
     this.iconEnd = Icons.chevron_right_sharp,
+    this.colorBg = AppColors.light_1,
     this.mt = 0,
     this.mb = 0,
     this.mr = 0,
     this.ml = 0,
   }) : super(key: key);
 
-  final IconData iconStart;
   final String title;
-  final String subtitle;
+  final String? subtitle;
+  final VoidCallback? onTap;
+  final IconData iconStart;
   final IconData iconEnd;
   final Color colorBg;
   final double mt;
@@ -31,6 +33,11 @@ class AppListTile extends StatelessWidget {
       margin: const EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
       elevation: 0,
       child: ListTile(
+        onTap: () {
+          if (onTap != null) {
+            onTap!();
+          }
+        },
         leading: SizedBox(
           height: double.infinity,
           child: Icon(iconStart),
@@ -39,10 +46,12 @@ class AppListTile extends StatelessWidget {
           offset: const Offset(-16, 0),
           child: Text(title),
         ),
-        subtitle: Transform.translate(
-          offset: const Offset(-16, 0),
-          child: Text(subtitle),
-        ),
+        subtitle: subtitle != null
+            ? Transform.translate(
+                offset: const Offset(-16, 0),
+                child: Text(subtitle!),
+              )
+            : null,
         trailing: SizedBox(
           height: double.infinity,
           child: Icon(iconEnd),
