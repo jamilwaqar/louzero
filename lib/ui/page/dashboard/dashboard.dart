@@ -19,7 +19,7 @@ class DashboardPage extends StatefulWidget {
       title: 'Booked Solid',
       color: AppColors.dark_2,
       subtitle: '(27)',
-      amount: 80,
+      amount: 10,
     ),
     chartListItem(
       title: 'Estimate',
@@ -67,6 +67,9 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
   }
 
+  double btnSize = 13;
+  double btnHeight = 34;
+
   @override
   Widget build(BuildContext context) {
     var spacing = 24.0;
@@ -87,8 +90,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   AppCardChartPie(
                     items: widget.chartDataJobs,
                     title: 'Jobs',
-                    footer: const [
+                    footer: [
                       AppButton(
+                        fontSize: btnSize,
+                        height: btnHeight,
                         mr: 8,
                         label: 'Add Job',
                         color: AppColors.dark_1,
@@ -96,6 +101,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         primary: false,
                       ),
                       AppButton(
+                        fontSize: btnSize,
+                        height: btnHeight,
                         color: AppColors.dark_1,
                         label: 'Search Jobs',
                       )
@@ -120,7 +127,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     items: widget.chartDataCustomer,
                     title: 'Customers',
                     footer: [
-                      const AppButton(
+                      AppButton(
+                        fontSize: btnSize,
+                        height: btnHeight,
                         mr: 8,
                         label: 'Add Customer',
                         color: AppColors.dark_1,
@@ -128,6 +137,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         primary: false,
                       ),
                       AppButton(
+                        fontSize: btnSize,
+                        height: btnHeight,
                         color: AppColors.dark_1,
                         label: 'View All',
                         onPressed: () {
