@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
@@ -119,15 +119,12 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
     }
     return InkWell(
       onTap: () {
-        Widget? categoryPage;
         switch (category) {
           case CustomerCategory.jobs:
             break;
           case CustomerCategory.siteProfiles:
             count = customerModel.siteProfiles.length;
-            categoryPage = CustomerSiteProfilePage(
-                widget.customerBloc, customerModel.siteProfiles,
-                customerId: customerModel.objectId);
+            Get.to(()=> CustomerSiteProfilePage(widget.customerBloc, customerModel.siteProfiles, customerId: customerModel.objectId));
             break;
           case CustomerCategory.contacts:
             break;
@@ -137,10 +134,6 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
             break;
           case CustomerCategory.subAccounts:
             break;
-        }
-
-        if (categoryPage != null) {
-          NavigationController().pushTo(context, child: categoryPage);
         }
       },
       child: Container(

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
-import 'package:louzero/ui/page/job/add_job.dart';
+import 'package:louzero/ui/page/job/jobs.dart';
 
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
@@ -111,9 +111,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     ],
                   ),
                   InkWell(
-                      onTap: () =>
-                          Get.to(() => AddJobPage(), binding: JobBinding()),
-                      child: Image.asset('assets/mocks/jobs-card.png')),
+                    onTap: ()=> Get.to(()=> const JobListPage(), binding: JobBinding()),
+                    child: Image.asset('assets/mocks/jobs-card.png')),
                   SizedBox(height: spacing),
                   Image.asset('assets/mocks/reports-card.png'),
                   SizedBox(height: spacing),

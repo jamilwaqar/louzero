@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_list_tile.dart';
@@ -42,7 +43,7 @@ class AccountSetupComplete extends StatelessWidget {
 
   _goToDashboard(context) {
     NavigationController().pop(context);
-    NavigationController().pushTo(context, child: DashboardPage());
+    Get.to(()=> DashboardPage());
   }
 
   @override

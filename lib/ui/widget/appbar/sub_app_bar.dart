@@ -12,6 +12,8 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool hasActions;
   final BuildContext context;
   final Function()? onPressed;
+  final bool centerTitle;
+  final double leadingWidth;
 
   const SubAppBar(
       {required this.title,
@@ -20,6 +22,8 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
         this.leading,
         this.leadingTxt = '',
         this.hasActions = true,
+        this.centerTitle = true,
+        this.leadingWidth = 200,
         this.onPressed, Key? key})
       : super(key: key);
 
@@ -32,9 +36,9 @@ class SubAppBar extends StatelessWidget with PreferredSizeWidget {
       shadowColor: Colors.transparent,
       backgroundColor: Colors.transparent,
       title: Text(title, style: TextStyles.headLineM.copyWith(color: AppColors.dark_3)),
-      centerTitle: true,
+      centerTitle: centerTitle,
       leading: leading ?? _leading,
-      leadingWidth: 200,
+      leadingWidth: leadingWidth,
       actions: actions ?? (hasActions ? [_cancel] : null),
     );
   }

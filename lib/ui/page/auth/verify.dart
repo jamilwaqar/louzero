@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
@@ -126,7 +127,7 @@ class _VerifyPageState extends State<VerifyPage> {
   }
 
   void _completeSignup() {
-    NavigationController().pushTo(context, child: const CompletePage());
+    Get.to(()=> const CompletePage());
   }
 
   void _methodTBD() {}

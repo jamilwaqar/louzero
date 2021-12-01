@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:louzero/common/app_list_tile.dart';
 import 'package:louzero/controller/constant/colors.dart';
@@ -161,8 +162,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                       ),
                       onPressed: () {
                         _pop();
-                        NavigationController()
-                            .pushTo(context, child: DashboardPage());
+                        Get.to(()=> DashboardPage());
                       },
                     ),
                     SideMenuCell(
@@ -174,8 +174,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                       count: 0,
                       onPressed: () {
                         _pop();
-                        NavigationController()
-                            .pushTo(context, child: const CustomerListPage());
+                        Get.to(()=> const CustomerListPage());
                       },
                     ),
                     SideMenuCell(
@@ -227,8 +226,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                       ),
                       onPressed: () {
                         _pop();
-                        NavigationController()
-                            .pushTo(context, child: const SettingsPage());
+                        Get.to(()=> const SettingsPage());
                       },
                     ),
                   ],
@@ -245,8 +243,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                       title: 'Account Setup',
                       onTap: () {
                         _pop();
-                        NavigationController()
-                            .pushTo(context, child: const AccountSetup());
+                        Get.to(()=> const AccountSetup());
                       },
                     ),
                   ],

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_input_text.dart';
@@ -128,11 +129,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onCreateAccount() {
-    NavigationController().pushTo(context, child: const SignUpPage());
+    Get.to(()=> const SignUpPage());
   }
 
   void _onAcceptInvite() {
-    NavigationController().pushTo(context, child: const AcceptInvitePage());
+    Get.to(()=>  const AcceptInvitePage());
   }
 
   void _onSignIn() async {
@@ -149,11 +150,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onRememberDevice() {}
   void _onResetPassword() {
-    NavigationController().pushTo(context, child: const ResetPasswordPage());
+    Get.to(()=> const ResetPasswordPage());
   }
 
   void _verificationCode() {
-    NavigationController().pushTo(context, child: const VerifyPage());
+    Get.to(()=> const VerifyPage());
   }
 
   void _onGoogleSignIn() {}

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
@@ -103,6 +104,6 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
   }
 
   void _completeSignup() {
-    NavigationController().pushTo(context, child: const CompletePage());
+    Get.to(()=> const CompletePage());
   }
 }

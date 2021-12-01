@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
@@ -66,11 +66,8 @@ class _CustomerListPageState extends State<CustomerListPage> {
                           color: AppColors.medium_3,
                           height: 32,
                           icon: Icons.add_circle,
-                          onPressed: () => NavigationController().pushTo(
-                              context,
-                              child: AddCustomerPage(_customerBloc))),
+                          onPressed: () => Get.to(()=> AddCustomerPage(_customerBloc)))),
                     ),
-                  )
                 ],
               ),
               backgroundColor: Colors.transparent,
@@ -98,8 +95,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  NavigationController().pushTo(context,
-                      child: CustomerProfilePage(model, _customerBloc));
+          Get.to(()=> CustomerProfilePage(model, _customerBloc));
                 },
                 child: AppRowFlex(
                     flex: const [1, 5, 2, 0],

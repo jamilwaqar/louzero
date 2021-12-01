@@ -40,6 +40,13 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
     yield state.copyWith(customers: list);
     if (list.isNotEmpty) {
       tempCustomerModel = list[0];
+      tempJobModels = [];
+      JobModel jobModel = JobModel(
+          status: "Repair",
+          description:
+              "Need to fix something imporant at this job. Maybe this request is very long? How long are these on average?");
+      jobModel.customerIds = [tempCustomerModel!.objectId!];
+      tempJobModels!.add(jobModel);
     }
     NavigationController().loading(isLoading: false);
   }
