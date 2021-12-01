@@ -13,10 +13,14 @@ class AppInputText extends StatefulWidget {
       this.onChanged,
       this.password = false,
       this.autofocus = false,
+<<<<<<< HEAD
       this.required = false,
       this.colorTx = AppColors.dark_3,
       this.colorBd = AppColors.light_3,
       this.colorBg = AppColors.lightest,
+=======
+      this.height = 48,
+>>>>>>> dev
       this.mt = 0,
       this.mb = 16})
       : super(key: key);
@@ -33,6 +37,7 @@ class AppInputText extends StatefulWidget {
   final double mt;
   final double mb;
   final bool autofocus;
+  final double height;
   final void Function(String)? onChanged;
 
   @override
@@ -75,7 +80,7 @@ class _AppInputTextState extends State<AppInputText> {
           height: 10,
         ),
         Container(
-          height: 48,
+          height: widget.height,
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: inputContainer,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/bloc/base/base.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
             listener: (BuildContext context, BaseState state) {},
           ),
         ],
-        child: MaterialApp(
+        child: GetMaterialApp(
           localizationsDelegates: const [
             CountryLocalizations.delegate,
           ],

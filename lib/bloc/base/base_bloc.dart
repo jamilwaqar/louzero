@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/state/auth_state.dart';
-import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/models.dart';
 import '../bloc.dart';
 
 class BaseBloc extends Bloc<BaseEvent, BaseState> {

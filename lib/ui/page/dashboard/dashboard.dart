@@ -4,9 +4,11 @@ import 'package:louzero/bloc/base/base.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:get/get.dart';
+import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
+import 'package:louzero/ui/page/job/add_job.dart';
 
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
@@ -108,6 +110,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       )
                     ],
                   ),
+                  InkWell(
+                      onTap: () =>
+                          Get.to(() => AddJobPage(), binding: JobBinding()),
+                      child: Image.asset('assets/mocks/jobs-card.png')),
                   SizedBox(height: spacing),
                   Image.asset('assets/mocks/reports-card.png'),
                   SizedBox(height: spacing),
@@ -124,30 +130,27 @@ class _DashboardPageState extends State<DashboardPage> {
                   Image.asset('assets/mocks/schedule-card.png'),
                   SizedBox(height: spacing),
                   AppCardChartPie(
-                    items: widget.chartDataCustomer,
-                    title: 'Customers',
-                    footer: [
-                      AppButton(
-                        fontSize: btnSize,
-                        height: btnHeight,
-                        mr: 8,
-                        label: 'Add Customer',
-                        color: AppColors.dark_1,
-                        colorText: AppColors.darkest,
-                        primary: false,
-                      ),
-                      AppButton(
-                        fontSize: btnSize,
-                        height: btnHeight,
-                        color: AppColors.dark_1,
-                        label: 'View All',
-                        onPressed: () {
-                          NavigationController()
-                              .pushTo(context, child: const CustomerListPage());
-                        },
-                      )
-                    ],
-                  ),
+                      items: widget.chartDataCustomer,
+                      title: 'Customers',
+                      footer: [
+                        AppButton(
+                          fontSize: btnSize,
+                          height: btnHeight,
+                          mr: 8,
+                          label: 'Add Customer',
+                          color: AppColors.dark_1,
+                          colorText: AppColors.darkest,
+                          primary: false,
+                        ),
+                        AppButton(
+                          fontSize: btnSize,
+                          height: btnHeight,
+                          color: AppColors.dark_1,
+                          label: 'View All',
+                          onPressed: () =>
+                              Get.to(() => const CustomerListPage()),
+                        )
+                      ]),
                   SizedBox(height: spacing),
                   Image.asset('assets/mocks/inventory-card.png')
                 ],
