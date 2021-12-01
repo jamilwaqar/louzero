@@ -13,14 +13,11 @@ class AppInputText extends StatefulWidget {
       this.onChanged,
       this.password = false,
       this.autofocus = false,
-<<<<<<< HEAD
       this.required = false,
       this.colorTx = AppColors.dark_3,
       this.colorBd = AppColors.light_3,
       this.colorBg = AppColors.lightest,
-=======
       this.height = 48,
->>>>>>> dev
       this.mt = 0,
       this.mb = 16})
       : super(key: key);
@@ -89,7 +86,8 @@ class _AppInputTextState extends State<AppInputText> {
             controller: widget.controller,
             keyboardAppearance: Brightness.light,
             keyboardType: widget.keyboardType,
-            textCapitalization: widget.textCapitalization ?? TextCapitalization.none,
+            textCapitalization:
+                widget.textCapitalization ?? TextCapitalization.none,
             obscureText: widget.password,
             decoration: const InputDecoration(
               border: InputBorder.none,
