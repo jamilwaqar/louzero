@@ -80,7 +80,7 @@ class AccountSetupComplete extends StatelessWidget {
                 }).toList(),
               ),
             ),
-            AppTextDivider(
+            const AppTextDivider(
               ml: 150,
               mr: 150,
             ),

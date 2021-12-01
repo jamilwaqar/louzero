@@ -33,7 +33,7 @@ class AppDropdownSearch extends StatefulWidget {
 }
 
 class AppDropdownSearchState extends State<AppDropdownSearch> {
-  //TODO: Mpve temp data to property
+  //TODO: Move temp data to property
   List<String> items = <String>[
     "1234 Street St. Vancouver, WA 98607",
     "4282 Sunrise St. Vancouver, WA 98607",

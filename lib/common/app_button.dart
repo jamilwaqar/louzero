@@ -47,7 +47,7 @@ class AppButton extends StatelessWidget {
     var bg = primary ? color : AppColors.lightest;
     var bd = primary ? color : color;
     var iconSize = height / 1.5;
-    var textSize = fontSize != null ? fontSize : height / 2.5;
+    var textSize = fontSize ?? height / 2.5;
     var textStyle = TextStyle(
         fontFamily: 'Roboto', fontWeight: FontWeight.w500, fontSize: textSize);
 
@@ -59,11 +59,7 @@ class AppButton extends StatelessWidget {
 
     return Container(
       height: height,
-      width: wide
-          ? double.infinity
-          : width != null
-              ? width
-              : null,
+      width: wide ? double.infinity : width ?? null,
       margin: EdgeInsets.only(
         top: mt,
         bottom: mb,
@@ -75,7 +71,7 @@ class AppButton extends StatelessWidget {
         backgroundColor: bg,
         icon: icon != null ? Icon(icon, size: iconSize) : null,
         elevation: 0,
-        extendedPadding: EdgeInsetsDirectional.only(
+        extendedPadding: const EdgeInsetsDirectional.only(
           start: 24,
           end: 24,
         ),

@@ -82,9 +82,7 @@ class _AppListDraggableState extends State<AppListDraggable> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              print("triggered edit");
-                            },
+                            onTap: () {},
                             child: const Icon(
                               Icons.edit,
                               color: AppColors.dark_1,
