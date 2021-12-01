@@ -40,6 +40,11 @@ class AccountSetupComplete extends StatelessWidget {
     ),
   ];
 
+  _goToDashboard(context) {
+    NavigationController().pop(context);
+    NavigationController().pushTo(context, child: DashboardPage());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -68,6 +73,9 @@ class AccountSetupComplete extends StatelessWidget {
                     title: item.title,
                     subtitle: item.subtitle ?? '',
                     colorBg: isOdd ? Colors.grey.shade50 : Colors.grey.shade200,
+                    onTap: () {
+                      _goToDashboard(context);
+                    },
                   );
                 }).toList(),
               ),
@@ -81,8 +89,7 @@ class AccountSetupComplete extends StatelessWidget {
               color: AppColors.dark_2,
               fontSize: 13,
               onPressed: () {
-                NavigationController().pop(context);
-                NavigationController().pushTo(context, child: DashboardPage());
+                _goToDashboard(context);
               },
             )
           ],
