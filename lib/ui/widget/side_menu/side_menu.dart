@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:louzero/common/app_list_tile.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/decoration.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
-import 'package:louzero/ui/page/account/account_start.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:louzero/ui/page/settings/settings.dart';
@@ -243,7 +243,6 @@ class _SideMenuViewState extends State<SideMenuView> {
                       mb: 24,
                       iconStart: Icons.content_paste_rounded,
                       title: 'Account Setup',
-                      subtitle: '',
                       onTap: () {
                         _pop();
                         NavigationController()
