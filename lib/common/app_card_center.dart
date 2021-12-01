@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_card.dart';
 
-
 class AppCardCenter extends StatelessWidget {
   const AppCardCenter({
     Key? key,
@@ -23,12 +22,13 @@ class AppCardCenter extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AppCard(
-            child: child,
-            ml: _width,
-            mr: _width,
-            px: 24,
-            py: 32,
+          Padding(
+            padding: EdgeInsets.only(left: _width, right: _width),
+            child: AppCard(
+              children: [child],
+              px: 24,
+              py: 32,
+            ),
           )
         ],
       ),

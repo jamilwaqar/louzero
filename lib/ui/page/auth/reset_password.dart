@@ -42,34 +42,37 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     const body =
         "Not to worry. Enter the email address you use to sign in to LOUzero below and we'll send you instructions on how to set a new password. ";
     return BaseScaffold(
-      child: AppCardCenter(
-        child: Column(
-          children: [
-            const AppTextHeader(
-              title,
-            ),
-            const AppTextBody(
-              body,
-              px: 24,
-              mb: 32,
-            ),
-            AppInputText(
-              controller: _emailController,
-              label: "Your Email",
-              keyboardType: TextInputType.emailAddress,
-            ),
-            AppButton(
-              label: 'Email Reset Instructions',
-              onPressed: _onResetPassword,
-            ),
-            const SizedBox(
-              height: 14,
-            ),
-            AppTextHelpLink(
-                label: 'Never mind, go back to ',
-                linkText: 'Sign In',
-                onPressed: _onSignIn),
-          ],
+      child: Center(
+        child: AppCardCenter(
+          child: Column(
+            children: [
+              const AppTextHeader(
+                title,
+              ),
+              const AppTextBody(
+                body,
+                px: 24,
+                mb: 32,
+              ),
+              AppInputText(
+                controller: _emailController,
+                label: "Your Email",
+                keyboardType: TextInputType.emailAddress,
+              ),
+              AppButton(
+                label: 'Email Reset Instructions',
+                onPressed: _onResetPassword,
+                wide: true,
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+              AppTextHelpLink(
+                  label: 'Never mind, go back to ',
+                  linkText: 'Sign In',
+                  onPressed: _onSignIn),
+            ],
+          ),
         ),
       ),
     );

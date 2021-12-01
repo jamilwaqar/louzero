@@ -35,15 +35,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        BlocProvider<BaseBloc>(create:(_) => BaseBloc()/*..add(BaseInitEvent())*/),
+        BlocProvider<BaseBloc>(
+            create: (_) => BaseBloc() /*..add(BaseInitEvent())*/),
       ],
       child: MultiBlocListener(
         listeners: [
           BlocListener<BaseBloc, BaseState>(
             listenWhen: _listenWhenBaseBloc,
-            listener: (BuildContext context, BaseState state) {
-
-            },
+            listener: (BuildContext context, BaseState state) {},
           ),
         ],
         child: GetMaterialApp(
@@ -80,7 +79,7 @@ class _HomePageState extends State<HomePage> {
         }
         NavigationController().loading(isLoading: false);
         if (value) {
-          return const DashboardPage();
+          return DashboardPage();
         }
         return const LoginPage();
       },

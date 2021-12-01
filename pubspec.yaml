@@ -22,6 +22,7 @@ dependencies:
 
   flutter_bloc:
   bloc:
+  dropdown_search:
   equatable:
   provider:
 
@@ -30,12 +31,15 @@ dependencies:
   json_annotation: ^4.3.0
   flutter_svg:
   flutter_verification_code: ^1.1.0
+  material_design_icons_flutter: 5.0.5955-rc.1
   uuid:
   country_picker:
   dio:
 
   get:
   get_storage:
+  fl_chart: ^0.40.2
+  multi_select_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:

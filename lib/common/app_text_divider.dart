@@ -4,18 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class AppTextDivider extends StatelessWidget {
-  const AppTextDivider(
-      {Key? key, this.label = 'or', this.mt = 24, this.mb = 24})
-      : super(key: key);
+  const AppTextDivider({
+    Key? key,
+    this.label = 'or',
+    this.mt = 24,
+    this.mb = 24,
+    this.ml = 0,
+    this.mr = 0,
+  }) : super(key: key);
 
   final String label;
   final double mt;
   final double mb;
+  final double ml;
+  final double mr;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: mt, bottom: mt),
+      margin: EdgeInsets.only(top: mt, bottom: mt, left: ml, right: mr),
       child: Row(
         children: [
           Expanded(

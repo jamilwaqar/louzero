@@ -14,14 +14,14 @@ import 'package:louzero/ui/widget/widget.dart';
 class CustomerProfilePage extends StatefulWidget {
   final CustomerModel customerModel;
   final CustomerBloc customerBloc;
-  const CustomerProfilePage(this.customerModel, this.customerBloc, {Key? key}) : super(key: key);
+  const CustomerProfilePage(this.customerModel, this.customerBloc, {Key? key})
+      : super(key: key);
 
   @override
   _CustomerProfilePageState createState() => _CustomerProfilePageState();
 }
 
 class _CustomerProfilePageState extends State<CustomerProfilePage> {
-
   late CustomerModel customerModel;
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController =
@@ -46,26 +46,27 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
     return BlocListener<CustomerBloc, CustomerState>(
       bloc: widget.customerBloc,
       listener: (context, CustomerState state) {
-        customerModel = widget.customerBloc.customerModelById(customerModel.objectId!) ?? customerModel;
+        customerModel =
+            widget.customerBloc.customerModelById(customerModel.objectId!) ??
+                customerModel;
         setState(() {});
       },
       child: BlocBuilder<CustomerBloc, CustomerState>(
-        bloc: widget.customerBloc,
-        builder: (context, state) {
-          return BaseScaffold(
-            child: Scaffold(
-              appBar: SubAppBar(
-                title: customerModel.name,
-                context: context,
-                leadingTxt: "Customers",
-                hasActions: false,
+          bloc: widget.customerBloc,
+          builder: (context, state) {
+            return BaseScaffold(
+              child: Scaffold(
+                appBar: SubAppBar(
+                  title: customerModel.name,
+                  context: context,
+                  leadingTxt: "Customers",
+                  hasActions: false,
+                ),
+                backgroundColor: Colors.transparent,
+                body: _body(),
               ),
-              backgroundColor: Colors.transparent,
-              body: _body(),
-            ),
-          );
-        }
-      ),
+            );
+          }),
     );
   }
 
@@ -76,7 +77,11 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
         itemBuilder: (context, index) {
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: [CustomerInfo(customerModel), const SizedBox(height: 24), _category()],
+            children: [
+              CustomerInfo(customerModel),
+              const SizedBox(height: 24),
+              _category()
+            ],
           );
         });
   }
@@ -120,7 +125,9 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
             break;
           case CustomerCategory.siteProfiles:
             count = customerModel.siteProfiles.length;
-            categoryPage = CustomerSiteProfilePage(widget.customerBloc, customerModel.siteProfiles, customerId: customerModel.objectId);
+            categoryPage = CustomerSiteProfilePage(
+                widget.customerBloc, customerModel.siteProfiles,
+                customerId: customerModel.objectId);
             break;
           case CustomerCategory.contacts:
             break;
