@@ -6,7 +6,6 @@ import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_dropdown_multiple.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_row_flex.dart';
-import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
