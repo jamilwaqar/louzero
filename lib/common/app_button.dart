@@ -69,6 +69,7 @@ class AppButton extends StatelessWidget {
       child: FloatingActionButton.extended(
         foregroundColor: fg,
         backgroundColor: bg,
+        heroTag: null,
         icon: icon != null ? Icon(icon, size: iconSize) : null,
         elevation: 0,
         extendedPadding: const EdgeInsetsDirectional.only(
