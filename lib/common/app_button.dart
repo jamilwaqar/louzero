@@ -67,6 +67,7 @@ class AppButton extends StatelessWidget {
         right: mr,
       ),
       child: FloatingActionButton.extended(
+        heroTag: null,
         foregroundColor: fg,
         backgroundColor: bg,
         icon: icon != null ? Icon(icon, size: iconSize) : null,
