@@ -49,6 +49,66 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _formKey = GlobalKey<FormState>();
   var _model = CompanyModel();
 
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            AppCard(
+              children: [
+                _headingDetails(),
+                AppRowFlex(children: [
+                  _inputCompany(),
+                  _inputPhone(),
+                ]),
+                AppRowFlex(children: [
+                  _inputWebsite(),
+                  _inputEmail(),
+                ]),
+                const Divider(
+                  color: AppColors.light_3,
+                ),
+                AppDropdownMultiple(
+                  label: 'What Industries do you serve?',
+                  controller: _controlTBD,
+                ),
+              ],
+            ),
+            AppCard(
+              mt: 24,
+              children: [
+                _headingAddress(),
+                _inputCountry(),
+                _inputStreet(),
+                _inputSuite(),
+                AppRowFlex(flex: const [
+                  2,
+                  1,
+                  1
+                ], children: [
+                  _inputCountry(),
+                  _inputState(),
+                  _inputZip(),
+                ])
+              ],
+            ),
+            AppRowFlex(ml: 16, children: [
+              AppButton(
+                label: 'Submit',
+                onPressed: () {
+                  var isValid = _formKey.currentState?.validate();
+                  if (isValid != null && isValid) {
+                    _formKey.currentState?.save();
+                    inspect(_model);
+                  }
+                },
+              ),
+            ])
+          ],
+        ));
+  }
+
   String? _validatePhone(String? value) {
     RegExp regex = RegExp('^(?:[+0]9)?[0-9]{10}\$');
 
@@ -71,143 +131,87 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     }
   }
 
-  Widget inputPhone() => AppInputText(
+  _headingAddress() => const AppTextHeader(
+        'Company Address',
+        alignLeft: true,
+        icon: Icons.location_on,
+        size: 24,
+      );
+
+  _headingDetails() => const AppTextHeader(
+        'Company Details',
+        alignLeft: true,
+        icon: Icons.home_work_sharp,
+        size: 24,
+      );
+
+  _inputPhone() => AppInputText(
         required: true,
         label: 'Phone Number',
         keyboardType: TextInputType.phone,
+        validator: _validatePhone,
         onSaved: (val) {
           _model.phone = val;
         },
-        validator: _validatePhone,
       );
 
-  Widget inputCompany() => AppInputText(
+  _inputCompany() => AppInputText(
         required: true,
         label: 'Company Name',
+        validator: _validateName,
         onSaved: (val) {
           _model.name = val;
         },
-        validator: _validateName,
       );
 
-  Widget inputWebsite() => AppInputText(
+  _inputWebsite() => AppInputText(
         label: 'Website',
         onSaved: (val) {
           _model.website = val;
         },
       );
 
-  Widget inputEmail() => AppInputText(
+  _inputEmail() => AppInputText(
         label: 'Email Address',
         onSaved: (val) {
           _model.email = val;
         },
       );
-  Widget inputCountry() => AppInputText(
+  _inputCountry() => AppInputText(
         label: 'Country',
         onSaved: (val) {
           _model.country = val;
         },
       );
-  Widget inputStreet() => AppInputText(
+  _inputStreet() => AppInputText(
         label: 'Street',
         onSaved: (val) {
           _model.street = val;
         },
       );
-  Widget inputSuite() => AppInputText(
+  _inputSuite() => AppInputText(
         label: 'Suite',
         onSaved: (val) {
           _model.suite = val;
         },
       );
-  Widget inputCity() => AppInputText(
+  _inputCity() => AppInputText(
         label: 'City',
         onSaved: (val) {
           _model.city = val;
         },
       );
-  Widget inputState() => AppInputText(
+  _inputState() => AppInputText(
         label: 'State',
         options: listStateNames,
         onSaved: (val) {
           _model.state = val;
         },
       );
-  Widget inputZip() => AppInputText(
+  _inputZip() => AppInputText(
         label: 'Zip',
         onSaved: (val) {
           _model.zip = val;
         },
       );
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            AppCard(
-              children: [
-                const AppTextHeader(
-                  'Company Deets',
-                  alignLeft: true,
-                  icon: Icons.home_work_sharp,
-                  size: 24,
-                ),
-                AppRowFlex(children: [
-                  inputCompany(),
-                  inputPhone(),
-                ]),
-                AppRowFlex(children: [
-                  inputWebsite(),
-                  inputEmail(),
-                ]),
-                const Divider(
-                  color: AppColors.light_3,
-                ),
-                AppDropdownMultiple(
-                  label: 'What Industries do you serve?',
-                  controller: _controlTBD,
-                ),
-              ],
-            ),
-            AppCard(
-              mt: 24,
-              children: [
-                const AppTextHeader(
-                  'Company Address',
-                  alignLeft: true,
-                  icon: Icons.location_on,
-                  size: 24,
-                ),
-                inputCountry(),
-                inputStreet(),
-                inputSuite(),
-                AppRowFlex(flex: const [
-                  2,
-                  1,
-                  1
-                ], children: [
-                  inputCountry(),
-                  inputState(),
-                  inputZip(),
-                ])
-              ],
-            ),
-            AppRowFlex(ml: 16, children: [
-              AppButton(
-                label: 'Submit',
-                onPressed: () {
-                  var isValid = _formKey.currentState?.validate();
-                  if (isValid != null && isValid) {
-                    _formKey.currentState?.save();
-                    inspect(_model);
-                  }
-                },
-              ),
-            ])
-          ],
-        ));
-  }
 }
