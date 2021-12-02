@@ -20,9 +20,10 @@ class AppCardChartPie extends StatelessWidget {
     return AppCard(
       ml: 0,
       mr: 0,
-      pt: 0,
-      px: 16,
-      py: 16,
+      pl: 16,
+      pr: 16,
+      pt: 16,
+      pb: 16,
       mb: 24,
       children: [
         AppTextHeader(

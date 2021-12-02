@@ -93,8 +93,6 @@ class _CustomerListPageState extends State<CustomerListPage> {
           CustomerModel model = state.customers[index];
           return AppCard(
             mb: 8,
-            px: 24,
-            py: 24,
             children: [
               GestureDetector(
                 onTap: () {
