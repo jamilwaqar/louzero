@@ -41,7 +41,7 @@ class AppCard extends StatelessWidget {
     );
 
     return _elevatedContainer(
-        elevation: 4,
+        elevation: 2,
         margin: margin,
         padding: padding,
         child: Column(
@@ -54,7 +54,7 @@ class AppCard extends StatelessWidget {
       {required Widget child,
       EdgeInsets? margin,
       EdgeInsets? padding,
-      double elevation = 1}) {
+      double elevation = 0}) {
     return Container(
       margin: margin,
       child: Material(
@@ -67,7 +67,7 @@ class AppCard extends StatelessWidget {
             decoration: BoxDecoration(
                 color: AppColors.lightest,
                 border: Border.all(
-                    color: AppColors.light_2.withOpacity(.5), width: 1),
+                    color: AppColors.medium_1.withOpacity(.5), width: 1),
                 borderRadius: BorderRadius.circular(8)),
             child: child),
       ),

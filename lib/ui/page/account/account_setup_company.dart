@@ -36,7 +36,7 @@ class CompanyModel {
 }
 
 class AccountSetupCompany extends StatefulWidget {
-  AccountSetupCompany({
+  const AccountSetupCompany({
     Key? key,
   }) : super(key: key);
 
@@ -47,7 +47,7 @@ class AccountSetupCompany extends StatefulWidget {
 class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final TextEditingController _controlTBD = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var _model = CompanyModel();
+  final _model = CompanyModel();
 
   @override
   Widget build(BuildContext context) {
