@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
-import 'package:louzero/common/app_dropdown_multiple.dart';
+import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_header.dart';
@@ -58,60 +58,83 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             AppCard(
               children: [
                 _headingDetails(),
-                AppRowFlex(children: [
-                  _inputCompany(),
-                  _inputPhone(),
-                ]),
-                AppRowFlex(children: [
-                  _inputWebsite(),
-                  _inputEmail(),
-                ]),
-                const Divider(
-                  color: AppColors.light_3,
+                Row(
+                  children: [
+                    Expanded(
+                      child: _inputCompany(),
+                    ),
+                    gapX(24),
+                    Expanded(
+                      child: _inputPhone(),
+                    ),
+                  ],
                 ),
-                AppDropdownMultiple(
-                  label: 'What Industries do you serve?',
-                  controller: _controlTBD,
+                Row(
+                  children: [
+                    Expanded(
+                      child: _inputWebsite(),
+                    ),
+                    gapX(24),
+                    Expanded(
+                      child: _inputEmail(),
+                    ),
+                  ],
                 ),
+                const AppDivider(
+                  mt: 16,
+                  mb: 24,
+                  color: AppColors.light_2,
+                ),
+                _inputTags(),
               ],
             ),
             AppCard(
               mt: 24,
               children: [
-                _headingAddress(),
                 _inputCountry(),
                 _inputStreet(),
                 _inputSuite(),
-                AppRowFlex(flex: const [
-                  2,
-                  1,
-                  1
-                ], children: [
-                  _inputCountry(),
-                  _inputState(),
-                  _inputZip(),
-                ])
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: _inputCity(),
+                    ),
+                    gapX(24),
+                    Expanded(
+                      flex: 3,
+                      child: _inputState(),
+                    ),
+                    gapX(24),
+                    Expanded(
+                      flex: 2,
+                      child: _inputZip(),
+                    ),
+                  ],
+                ),
               ],
             ),
             AppRowFlex(ml: 16, children: [
               AppButton(
                 label: 'Submit',
-                onPressed: () {
-                  var isValid = _formKey.currentState?.validate();
-                  if (isValid != null && isValid) {
-                    _formKey.currentState?.save();
-                    if(widget.onChange != null){
-                      widget.onChange!(_model)
-                    }
-                    inspect(_model);
-                  }
-                },
+                onPressed: _submit,
               ),
             ])
           ],
         ));
   }
 
+  void _submit() {
+    var isValid = _formKey.currentState?.validate();
+    if (isValid != null && isValid) {
+      _formKey.currentState?.save();
+      if (widget.onChange != null) {
+        widget.onChange!(_model);
+      }
+    }
+  }
+
+  // Validation:
   String? _validatePhone(String? value) {
     RegExp regex = RegExp('^(?:[+0]9)?[0-9]{10}\$');
 
@@ -176,10 +199,17 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
   _inputEmail() => AppInputText(
         label: 'Email Address',
+        required: true,
         onSaved: (val) {
           _model.email = val;
         },
       );
+  _inputTags() => AppInputText(
+      label: 'What Industries do you Serve?',
+      onSaved: (val) {
+        _model.email = val;
+      },
+      mb: 0);
   _inputCountry() => AppInputText(
         label: 'Country',
         onSaved: (val) {
@@ -217,4 +247,37 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           _model.zip = val;
         },
       );
+
+  // Utility Functions
+  Widget gapX(double gap) {
+    return SizedBox(width: gap);
+  }
+
+  Widget gapY(double gap) {
+    return SizedBox(height: gap);
+  }
+}
+
+class ExpandedRow extends StatelessWidget {
+  const ExpandedRow({
+    Key? key,
+    required this.children,
+  }) : super(key: key);
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> items = children.asMap().entries.map((entry) {
+      return Expanded(flex: 1, child: entry.value);
+    }).toList();
+
+    // for (var i = 0; i < items.length; i++) {
+    //   items.insert(i + 1, SizedBox(width: 24));
+    // }
+
+    return Row(
+      children: [...items],
+    );
+  }
 }

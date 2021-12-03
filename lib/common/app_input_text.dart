@@ -89,7 +89,8 @@ class _AppInputTextState extends State<AppInputText> {
     );
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisSize: MainAxisSize.
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppTextBody(widget.label + reqText,
             size: 14,
