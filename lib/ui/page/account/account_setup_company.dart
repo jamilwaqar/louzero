@@ -36,9 +36,9 @@ class CompanyModel {
 }
 
 class AccountSetupCompany extends StatefulWidget {
-  const AccountSetupCompany({
-    Key? key,
-  }) : super(key: key);
+  const AccountSetupCompany({Key? key, this.onChange}) : super(key: key);
+
+  final CompanyModel Function(CompanyModel)? onChange;
 
   @override
   State<AccountSetupCompany> createState() => _AccountSetupCompanyState();
@@ -100,6 +100,9 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                   var isValid = _formKey.currentState?.validate();
                   if (isValid != null && isValid) {
                     _formKey.currentState?.save();
+                    if(widget.onChange != null){
+                      widget.onChange!(_model)
+                    }
                     inspect(_model);
                   }
                 },
