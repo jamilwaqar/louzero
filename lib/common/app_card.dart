@@ -40,7 +40,7 @@ class AppCard extends StatelessWidget {
       bottom: pb,
     );
 
-    return _elevatedContainer(
+    return _appCard(
         elevation: 2,
         margin: margin,
         padding: padding,
@@ -50,27 +50,25 @@ class AppCard extends StatelessWidget {
         ));
   }
 
-  Widget _elevatedContainer(
+  Widget _appCard(
       {required Widget child,
       EdgeInsets? margin,
       EdgeInsets? padding,
       double elevation = 0}) {
     return Container(
       margin: margin,
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
-        elevation: elevation,
-        shadowColor: AppColors.darkest.withOpacity(0.5),
-        child: Container(
+      child: Card(
+          color: AppColors.lightest,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: AppColors.light_2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          elevation: elevation,
+          shadowColor: AppColors.darkest.withOpacity(0.5),
+          child: Container(
             padding: padding,
-            decoration: BoxDecoration(
-                color: AppColors.lightest,
-                border: Border.all(
-                    color: AppColors.medium_1.withOpacity(.5), width: 1),
-                borderRadius: BorderRadius.circular(8)),
-            child: child),
-      ),
+            child: child,
+          )),
     );
   }
 }
