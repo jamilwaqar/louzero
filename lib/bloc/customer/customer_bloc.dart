@@ -43,6 +43,8 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       tempJobModels = [];
       JobModel jobModel = JobModel(
           status: "Repair",
+          billingLineModel:
+          BillingLineModel(items: {"Clean Pool": '1', "Replaced Value": '4'}),
           description:
               "Need to fix something imporant at this job. Maybe this request is very long? How long are these on average?");
       jobModel.customerIds = [tempCustomerModel!.objectId!];
