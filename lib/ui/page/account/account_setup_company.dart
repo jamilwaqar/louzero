@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
@@ -9,45 +8,24 @@ import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
-
-class CompanyModel {
-  String? name;
-  String? email;
-  String? website;
-  String? phone;
-  String? street;
-  String? suite;
-  String? country;
-  String? city;
-  String? state;
-  String? zip;
-
-  CompanyModel(
-      {this.name,
-      this.email,
-      this.website,
-      this.phone,
-      this.street,
-      this.suite,
-      this.country,
-      this.city,
-      this.state,
-      this.zip});
-}
+import 'models/company_model.dart';
 
 class AccountSetupCompany extends StatefulWidget {
-  const AccountSetupCompany({Key? key, this.onChange}) : super(key: key);
+  const AccountSetupCompany({
+    Key? key,
+    required this.data,
+    this.onChange,
+  }) : super(key: key);
 
-  final CompanyModel Function(CompanyModel)? onChange;
+  final void Function(CompanyModel)? onChange;
+  final CompanyModel data;
 
   @override
   State<AccountSetupCompany> createState() => _AccountSetupCompanyState();
 }
 
 class _AccountSetupCompanyState extends State<AccountSetupCompany> {
-  final TextEditingController _controlTBD = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final _model = CompanyModel();
 
   @override
   Widget build(BuildContext context) {
@@ -57,27 +35,24 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           children: [
             AppCard(
               children: [
-                _headingDetails(),
+                const AppTextHeader(
+                  'Company Details',
+                  alignLeft: true,
+                  icon: Icons.home_work_sharp,
+                  size: 24,
+                ),
                 Row(
                   children: [
-                    Expanded(
-                      child: _inputCompany(),
-                    ),
+                    Expand(_companyName()),
                     gapX(24),
-                    Expanded(
-                      child: _inputPhone(),
-                    ),
+                    Expand(_phone())
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(
-                      child: _inputWebsite(),
-                    ),
+                    Expand(_email()),
                     gapX(24),
-                    Expanded(
-                      child: _inputEmail(),
-                    ),
+                    Expand(_website()),
                   ],
                 ),
                 const AppDivider(
@@ -85,38 +60,34 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                   mb: 24,
                   color: AppColors.light_2,
                 ),
-                _inputTags(),
+                _tags(),
               ],
             ),
             AppCard(
-              mt: 24,
               children: [
-                _inputCountry(),
-                _inputStreet(),
-                _inputSuite(),
+                const AppTextHeader(
+                  'Company Address',
+                  alignLeft: true,
+                  icon: Icons.location_on,
+                  size: 24,
+                ),
+                _country(),
+                _street(),
+                _suite(),
                 Row(
                   children: [
-                    Expanded(
-                      flex: 4,
-                      child: _inputCity(),
-                    ),
+                    Expand(_city(), 4),
                     gapX(24),
-                    Expanded(
-                      flex: 3,
-                      child: _inputState(),
-                    ),
+                    Expand(_state(), 3),
                     gapX(24),
-                    Expanded(
-                      flex: 2,
-                      child: _inputZip(),
-                    ),
+                    Expand(_zip(), 2),
                   ],
                 ),
               ],
             ),
             AppRowFlex(ml: 16, children: [
               AppButton(
-                label: 'Submit',
+                label: 'Save & Continue',
                 onPressed: _submit,
               ),
             ])
@@ -124,24 +95,21 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         ));
   }
 
+  Widget Expand(Widget child, [flex = 1]) {
+    return Expanded(child: child, flex: flex);
+  }
+
   void _submit() {
-    var isValid = _formKey.currentState?.validate();
-    if (isValid != null && isValid) {
-      _formKey.currentState?.save();
-      if (widget.onChange != null) {
-        widget.onChange!(_model);
-      }
-    }
+    _formKey.currentState!.save();
+    if (widget.onChange != null) widget.onChange!(widget.data);
   }
 
   // Validation:
   String? _validatePhone(String? value) {
     RegExp regex = RegExp('^(?:[+0]9)?[0-9]{10}\$');
-
     if (value != null && value.isEmpty) {
       return 'Phone Number is required';
     }
-
     if (value != null && !regex.hasMatch(value)) {
       return 'Enter Valid Phone Number';
     } else {
@@ -157,94 +125,80 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     }
   }
 
-  _headingAddress() => const AppTextHeader(
-        'Company Address',
-        alignLeft: true,
-        icon: Icons.location_on,
-        size: 24,
-      );
-
-  _headingDetails() => const AppTextHeader(
-        'Company Details',
-        alignLeft: true,
-        icon: Icons.home_work_sharp,
-        size: 24,
-      );
-
-  _inputPhone() => AppInputText(
+  _phone() => AppInputText(
         required: true,
         label: 'Phone Number',
         keyboardType: TextInputType.phone,
         validator: _validatePhone,
         onSaved: (val) {
-          _model.phone = val;
+          widget.data.phone = val;
         },
       );
 
-  _inputCompany() => AppInputText(
+  _companyName() => AppInputText(
         required: true,
         label: 'Company Name',
         validator: _validateName,
         onSaved: (val) {
-          _model.name = val;
+          widget.data.name = val;
         },
       );
 
-  _inputWebsite() => AppInputText(
+  _website() => AppInputText(
         label: 'Website',
         onSaved: (val) {
-          _model.website = val;
+          widget.data.website = val;
         },
       );
 
-  _inputEmail() => AppInputText(
+  _email() => AppInputText(
         label: 'Email Address',
         required: true,
         onSaved: (val) {
-          _model.email = val;
+          widget.data.email = val;
         },
       );
-  _inputTags() => AppInputText(
+  _tags() => AppInputText(
       label: 'What Industries do you Serve?',
       onSaved: (val) {
-        _model.email = val;
+        widget.data.email = val;
       },
       mb: 0);
-  _inputCountry() => AppInputText(
+  _country() => AppInputText(
         label: 'Country',
         onSaved: (val) {
-          _model.country = val;
+          widget.data.country = val;
         },
       );
-  _inputStreet() => AppInputText(
+  _street() => AppInputText(
         label: 'Street',
         onSaved: (val) {
-          _model.street = val;
+          widget.data.street = val;
         },
       );
-  _inputSuite() => AppInputText(
+  _suite() => AppInputText(
         label: 'Suite',
         onSaved: (val) {
-          _model.suite = val;
+          widget.data.suite = val;
         },
       );
-  _inputCity() => AppInputText(
+  _city() => AppInputText(
         label: 'City',
         onSaved: (val) {
-          _model.city = val;
+          widget.data.city = val;
         },
       );
-  _inputState() => AppInputText(
+  _state() => AppInputText(
         label: 'State',
         options: listStateNames,
         onSaved: (val) {
-          _model.state = val;
+          widget.data.state = val;
         },
       );
-  _inputZip() => AppInputText(
+  _zip() => AppInputText(
         label: 'Zip',
         onSaved: (val) {
-          _model.zip = val;
+          widget.data.zip = val;
         },
       );
 
@@ -255,29 +209,5 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
   Widget gapY(double gap) {
     return SizedBox(height: gap);
-  }
-}
-
-class ExpandedRow extends StatelessWidget {
-  const ExpandedRow({
-    Key? key,
-    required this.children,
-  }) : super(key: key);
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> items = children.asMap().entries.map((entry) {
-      return Expanded(flex: 1, child: entry.value);
-    }).toList();
-
-    // for (var i = 0; i < items.length; i++) {
-    //   items.insert(i + 1, SizedBox(width: 24));
-    // }
-
-    return Row(
-      children: [...items],
-    );
   }
 }

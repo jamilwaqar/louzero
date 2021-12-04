@@ -2,15 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/ui/page/account/account_setup.dart';
-
 import 'app_text_body.dart';
 import 'app_text_header.dart';
 
-const Color black = AppColors.dark_2;
-const Color blackText = AppColors.black;
-const Color grey = AppColors.medium_1;
-const Color white = AppColors.lightest;
+class StepProgressItem {
+  final String title;
+  final String subtitle;
+  final String label;
+  StepProgressItem({
+    required this.title,
+    required this.subtitle,
+    required this.label,
+  });
+}
 
 class AppStepProgress extends StatelessWidget {
   AppStepProgress({
@@ -20,7 +24,7 @@ class AppStepProgress extends StatelessWidget {
   }) : super(key: key);
 
   final _key = GlobalKey();
-  final List<StepItem> stepItems;
+  final List<StepProgressItem> stepItems;
   final int selected;
 
   @override
@@ -111,9 +115,12 @@ class _StepNumberDash extends StatelessWidget {
                 _StepDash(
                   size: dashSize,
                   selected: selected || complete,
-                  color: firstStep ? Colors.black.withOpacity(0) : grey,
-                  colorSelected:
-                      firstStep ? Colors.black.withOpacity(0) : black,
+                  color: firstStep
+                      ? Colors.black.withOpacity(0)
+                      : AppColors.medium_1,
+                  colorSelected: firstStep
+                      ? Colors.black.withOpacity(0)
+                      : AppColors.dark_2,
                 ),
                 _StepNumber(
                   stepNumber,
@@ -124,8 +131,11 @@ class _StepNumberDash extends StatelessWidget {
                 _StepDash(
                   size: dashSize,
                   selected: selected || complete,
-                  color: lastStep ? Colors.black.withOpacity(0) : grey,
-                  colorSelected: lastStep ? Colors.black.withOpacity(0) : black,
+                  color: lastStep
+                      ? Colors.black.withOpacity(0)
+                      : AppColors.medium_1,
+                  colorSelected:
+                      lastStep ? Colors.black.withOpacity(0) : AppColors.dark_2,
                 ),
               ],
             ),
@@ -137,7 +147,9 @@ class _StepNumberDash extends StatelessWidget {
                     fontSize: 16,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w600,
-                    color: selected || complete ? blackText : grey))
+                    color: selected || complete
+                        ? AppColors.black
+                        : AppColors.medium_1))
           ],
         ),
       ],
@@ -151,12 +163,12 @@ class _StepNumber extends StatelessWidget {
     Key? key,
     this.size = 50,
     this.selected = false,
-    this.color = white,
-    this.colorBorder = grey,
-    this.colorText = black,
-    this.colorSelected = white,
-    this.colorBorderSelected = black,
-    this.colorTextSelected = blackText,
+    this.color = AppColors.lightest,
+    this.colorBorder = AppColors.medium_1,
+    this.colorText = AppColors.dark_2,
+    this.colorSelected = AppColors.lightest,
+    this.colorBorderSelected = AppColors.dark_2,
+    this.colorTextSelected = AppColors.black,
     this.icon,
   }) : super(key: key);
   final bool selected;
@@ -209,8 +221,8 @@ class _StepDash extends StatelessWidget {
   const _StepDash({
     Key? key,
     this.size = 50,
-    this.color = grey,
-    this.colorSelected = black,
+    this.color = AppColors.medium_1,
+    this.colorSelected = AppColors.dark_2,
     this.selected = false,
   }) : super(key: key);
   final double size;
