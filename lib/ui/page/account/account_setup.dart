@@ -1,18 +1,20 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_input_inline_form.dart';
 import 'package:louzero/common/app_list_draggable.dart';
+import 'package:louzero/common/app_list_tile.dart';
 import 'package:louzero/common/app_step_progress.dart';
 import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
-import 'package:louzero/ui/page/account/account_setup_complete.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
+import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'models/company_model.dart';
 
@@ -38,29 +40,6 @@ class _AccountSetupState extends State<AccountSetup> {
 
   final jobTypeController = TextEditingController();
 
-  List<StepProgressItem> stepItems = [
-    StepProgressItem(
-      label: 'My Company',
-      title: 'To start, let\'s get some basic info.',
-      subtitle: 'You can always make changes later in Settings.',
-    ),
-    StepProgressItem(
-      label: 'Customer Types',
-      title: 'What types of customers do you have?',
-      subtitle: 'You can always make changes later in Settings.',
-    ),
-    StepProgressItem(
-      label: 'Job Types',
-      title: 'What types of jobs do you do?',
-      subtitle: 'You can always make changes later in Settings.',
-    ),
-    StepProgressItem(
-      label: 'Done!',
-      title: 'You’re all set, (username)!',
-      subtitle: 'You can always manage these later in Settings.',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
@@ -71,7 +50,7 @@ class _AccountSetupState extends State<AccountSetup> {
             child: Column(
               children: [
                 AppStepProgress(
-                  stepItems: stepItems,
+                  stepItems: AccountSetupModel.stepItems,
                   selected: _step,
                 ),
               ],
@@ -81,16 +60,16 @@ class _AccountSetupState extends State<AccountSetup> {
             flex: 3,
             child: PageView(
               controller: _pageController,
-              // physics: const NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               children: [
-                _formView(
+                _pageView(
                     child: AccountSetupCompany(
                   data: _companyModel,
-                  onChange: (data) => _updateCompany(data),
+                  onChange: (data) => _saveFormInput(data: data),
                 )),
-                _formView(child: _customersCard()),
-                _formView(child: _jobsCard()),
-                _formView(child: AccountSetupComplete()),
+                _pageView(child: _customersCard()),
+                _pageView(child: _jobsCard()),
+                _pageView(child: _completeCard()),
               ],
             ),
           )
@@ -99,14 +78,20 @@ class _AccountSetupState extends State<AccountSetup> {
     );
   }
 
-  void _updateCompany(CompanyModel data) {
+  void _saveFormInput({CompanyModel? data}) {
+    // save data changes
+    if (data != null) {
+      _companyModel = data;
+    }
+    _nextStep();
+  }
+
+  void _nextStep() {
     setState(() {
       _step++;
-      _companyModel = data;
     });
     _pageController.nextPage(
         duration: const Duration(milliseconds: 500), curve: Curves.ease);
-    inspect(data);
   }
 
   _addCustomer() {
@@ -129,7 +114,12 @@ class _AccountSetupState extends State<AccountSetup> {
     }
   }
 
-  Widget _formView({required Widget child}) {
+  _goToDashboard(context) {
+    NavigationController().pop(context);
+    NavigationController().pushTo(context, child: DashboardPage());
+  }
+
+  Widget _pageView({required Widget child}) {
     return Padding(
       padding: const EdgeInsets.only(top: 16, left: 0, right: 0),
       child: SingleChildScrollView(
@@ -138,54 +128,136 @@ class _AccountSetupState extends State<AccountSetup> {
     );
   }
 
-  Widget _customersCard() => AppCard(
+  Widget _customersCard() => Column(
         children: [
-          const AppTextHeader(
-            "Customer Types",
-            alignLeft: true,
-            icon: Icons.people,
-            size: 24,
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Customer Types",
+                alignLeft: true,
+                icon: Icons.people,
+                size: 24,
+              ),
+              const AppTextBody(AccountSetupModel.setupCompanyText),
+              AppListDraggable(
+                items: customerTypes,
+              ),
+              const Divider(
+                color: AppColors.light_3,
+              ),
+              AppInputInlineForm(
+                mt: 14,
+                controller: customerTypeController,
+                label: 'Add new Customer Type',
+                btnLabel: 'ADD',
+                onPressed: _addCustomer,
+              ),
+            ],
           ),
-          const AppTextBody(
-              'Customer Types allow for categorization of customers. Common options are residential and commercial. This categorization will be helpful in reporting on performance.'),
-          AppListDraggable(
-            items: customerTypes,
-          ),
-          const Divider(
-            color: AppColors.light_3,
-          ),
-          AppInputInlineForm(
-            mt: 14,
-            controller: customerTypeController,
-            label: 'Add new Customer Type',
-            btnLabel: 'ADD',
-            onPressed: _addCustomer,
+          Row(
+            children: [
+              AppButton(
+                  ml: 24,
+                  mb: 64,
+                  label: 'Save & Continue',
+                  onPressed: () {
+                    _saveFormInput();
+                  }),
+            ],
           ),
         ],
       );
 
-  Widget _jobsCard() => AppCard(
+  Widget _jobsCard() => Column(
         children: [
-          const AppTextHeader(
-            "Job Types",
-            alignLeft: true,
-            icon: MdiIcons.briefcase,
-            size: 24,
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Job Types",
+                alignLeft: true,
+                icon: MdiIcons.briefcase,
+                size: 24,
+              ),
+              const AppTextBody(AccountSetupModel.setupJobsText),
+              AppListDraggable(
+                items: jobTypes,
+              ),
+              const Divider(
+                color: AppColors.light_3,
+              ),
+              AppInputInlineForm(
+                mt: 14,
+                controller: jobTypeController,
+                label: 'Add new Customer Type',
+                btnLabel: 'ADD',
+                onPressed: _addJobType,
+              ),
+            ],
           ),
-          const AppTextBody(
-              'Save time by profiling your common job types. Think about repairs, sales and recurring services. Later, you can build out full templates for each job type in Settings.'),
-          AppListDraggable(
-            items: jobTypes,
+          Row(
+            children: [
+              AppButton(
+                  ml: 24,
+                  mb: 64,
+                  label: 'Save & Continue',
+                  onPressed: () {
+                    _saveFormInput();
+                  }),
+            ],
           ),
-          const Divider(
-            color: AppColors.light_3,
-          ),
-          AppInputInlineForm(
-            mt: 14,
-            controller: jobTypeController,
-            label: 'Add new Customer Type',
-            btnLabel: 'ADD',
-            onPressed: _addJobType,
+        ],
+      );
+
+  Widget _completeCard() => Column(
+        children: [
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Welcome to LOuZero",
+                size: 24,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 52, right: 52, bottom: 32),
+                child: AppTextBody(
+                  AccountSetupModel.setupCompleteText,
+                  center: true,
+                ),
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  children: AccountSetupModel.nextStepItems
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    int idx = entry.key;
+                    ListItem item = entry.value;
+                    var isOdd = idx % 2 == 0 ? false : true;
+                    return AppListTile(
+                      title: item.title ?? '',
+                      subtitle: item.subtitle ?? '',
+                      colorBg:
+                          isOdd ? Colors.grey.shade50 : Colors.grey.shade200,
+                      onTap: () {
+                        _goToDashboard(context);
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+              const AppTextDivider(
+                ml: 150,
+                mr: 150,
+              ),
+              AppButton(
+                label: 'Go to Your Dashboard',
+                color: AppColors.dark_2,
+                fontSize: 13,
+                onPressed: () {
+                  _goToDashboard(context);
+                },
+              )
+            ],
           ),
         ],
       );

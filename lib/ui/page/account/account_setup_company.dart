@@ -1,10 +1,8 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
-import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
@@ -43,16 +41,16 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                 ),
                 Row(
                   children: [
-                    Expand(_companyName()),
+                    expand(_companyName()),
                     gapX(24),
-                    Expand(_phone())
+                    expand(_phone())
                   ],
                 ),
                 Row(
                   children: [
-                    Expand(_email()),
+                    expand(_email()),
                     gapX(24),
-                    Expand(_website()),
+                    expand(_website()),
                   ],
                 ),
                 const AppDivider(
@@ -76,26 +74,30 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                 _suite(),
                 Row(
                   children: [
-                    Expand(_city(), 4),
+                    expand(_city(), 4),
                     gapX(24),
-                    Expand(_state(), 3),
+                    expand(_state(), 3),
                     gapX(24),
-                    Expand(_zip(), 2),
+                    expand(_zip(), 2),
                   ],
                 ),
               ],
             ),
-            AppRowFlex(ml: 16, children: [
-              AppButton(
-                label: 'Save & Continue',
-                onPressed: _submit,
-              ),
-            ])
+            Row(
+              children: [
+                AppButton(
+                  ml: 24,
+                  mb: 64,
+                  label: 'Save & Continue',
+                  onPressed: _submit,
+                ),
+              ],
+            ),
           ],
         ));
   }
 
-  Widget Expand(Widget child, [flex = 1]) {
+  Widget expand(Widget child, [flex = 1]) {
     return Expanded(child: child, flex: flex);
   }
 
