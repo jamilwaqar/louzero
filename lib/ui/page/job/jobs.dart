@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
@@ -10,7 +11,7 @@ import 'package:louzero/ui/widget/appbar_action.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
 class JobListPage extends GetWidget<JobController> {
-  const JobListPage({Key? key}) : super(key: key);
+  JobListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class JobListPage extends GetWidget<JobController> {
     );
   }
 
+
   Widget _body() {
     return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -44,7 +46,7 @@ class JobListPage extends GetWidget<JobController> {
             count: 0,
             buttonTitleLeft: "",
             buttonTitleRight: "",
-            onPressed: ()=> Get.to(()=> JobDetailPage()),
+            onPressed: ()=> Get.to(()=> JobDetailPage(tempJobModels![index])),
             onPressedLeft: () {},
             onPressedRight: () {},
           );

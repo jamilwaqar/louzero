@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/utils.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
 import 'package:louzero/ui/widget/widget.dart';
+import 'package:louzero/utils/utils.dart';
 
 enum JobCategory {
   details,
@@ -29,8 +32,9 @@ extension JobCategoryEx on JobCategory {
 }
 
 class JobDetailPage extends GetWidget<JobController> {
-  JobDetailPage({Key? key}) : super(key: key);
+  JobDetailPage(this.jobModel, {Key? key}) : super(key: key);
   final _jobCategory = JobCategory.details.obs;
+  final JobModel jobModel;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +47,8 @@ class JobDetailPage extends GetWidget<JobController> {
           leadingTxt: "Jobs",
           leadingWidth: 130,
           actions: [
-            _estimate()
+            // _estimate()
+            _moreActionsWidget()
           ],
         ),
         backgroundColor: Colors.transparent,
@@ -72,31 +77,27 @@ class JobDetailPage extends GetWidget<JobController> {
   }
 
   Widget _estimate() {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      onPressed: () {  },
-      child: Container(
-        height: 40,
-        margin: const EdgeInsets.only(right: 32.0),
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: AppColors.lightest,
-            border: Border.all(color: AppColors.dark_3),
-            borderRadius: BorderRadius.circular(20)
-        ),
-        child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset('assets/icons/icon-calculator.png', width: 10, height: 15,),
-          const SizedBox(width: 8),
-          Text("Job Status: ", style: TextStyles.labelL.copyWith(color: AppColors.dark_3)),
-          Text("Estimate", style: TextStyles.labelL.copyWith(color: AppColors.dark_3, fontWeight: FontWeight.bold)),
-          const SizedBox(width: 8),
-          appIcon(Icons.arrow_drop_down)
-        ],
+    return Container(
+      height: 40,
+      margin: const EdgeInsets.only(right: 32.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: AppColors.lightest,
+          border: Border.all(color: AppColors.dark_3),
+          borderRadius: BorderRadius.circular(20)
       ),
-      ),
+      child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Image.asset('assets/icons/icon-calculator.png', width: 18, height: 18,),
+        const SizedBox(width: 8),
+        Text("Job Status: ", style: TextStyles.labelL.copyWith(color: AppColors.dark_3)),
+        Text("Estimate", style: TextStyles.labelL.copyWith(color: AppColors.dark_3, fontWeight: FontWeight.bold)),
+        const SizedBox(width: 8),
+        appIcon(Icons.arrow_drop_down)
+      ],
+    ),
     );
   }
 
@@ -111,18 +112,7 @@ class JobDetailPage extends GetWidget<JobController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           _jobCategoryTabBar(),
-          _jobDetails(),
-          const Divider(height: 24, indent: 24, endIndent: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-            child: Row(
-              children: [
-                Expanded(child: _categoryItem(true)),
-                const SizedBox(width: 24),
-                Expanded(child: _categoryItem(false)),
-              ],
-            ),
-          ),
+          _jobCategoryWidget(),
         ],
       ),
     );
@@ -140,6 +130,38 @@ class JobDetailPage extends GetWidget<JobController> {
     );
   }
 
+  Widget _jobCategoryWidget() {
+    return Obx(() {
+      switch (_jobCategory.value) {
+        case JobCategory.details:
+          return _jobDetailsWidget();
+        case JobCategory.schedule:
+          return _jobDetailsWidget();
+        case JobCategory.billing:
+          return _reorderList();
+      }
+    }) ;
+  }
+
+  Widget _jobDetailsWidget() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _jobDetails(),
+        const Divider(height: 24, indent: 24, endIndent: 24),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: Row(
+            children: [
+              Expanded(child: _categoryItem(true)),
+              const SizedBox(width: 24),
+              Expanded(child: _categoryItem(false)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
   Widget _tabItem(JobCategory category) {
     return Obx(() => InkWell(
           onTap: () => _jobCategory.value = category,
@@ -292,5 +314,112 @@ class JobDetailPage extends GetWidget<JobController> {
         ),
       ),
     );
+  }
+
+  _moreActionsWidget() => PopupMenuButton<OverflowMenuItem>(
+      icon: _estimate(),
+      iconSize: 264,
+      offset: const Offset(-40, 60),
+      onSelected: (item) => item.onTap(),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: Colors.white,
+      itemBuilder: (_) => _appBarPopUpActions()
+          .map((item) => PopupMenuItem<OverflowMenuItem>(
+          value: item, child: _moreActionItem(item)))
+          .toList());
+
+  Widget _moreActionItem(OverflowMenuItem item) =>
+      Row(mainAxisSize: MainAxisSize.min, children: [
+        item.icon!,
+        const SizedBox(width: 8),
+        Text(item.title,
+            style: const TextStyle(color: Colors.black87, fontSize: 16)),
+        const SizedBox(width: 110),
+      ]);
+
+  List<OverflowMenuItem> _appBarPopUpActions() {
+    List<JobStatus> list = [...JobStatus.values];
+    return List.generate(
+        list.length,
+            (index) {
+          String label = list[index].name.capitalizeFirst!;
+          return OverflowMenuItem(
+              title: label,
+              icon: Image.asset(list[index].icon, width: 24, height: 24),
+              onTap: () => _moreAction(list[index]));
+        });
+  }
+
+  final Color _oddItemColor = const Color(0xFFF1F2F4);
+  final Color _evenItemColor = const Color(0xFFF8F9FB);
+  Widget _reorderList() {
+    Map<String, dynamic>items = jobModel.billingLineModel.items;
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+      child: ReorderableListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          for (int index = 0; index < items.length; index++)
+            Container(
+              key: Key('$index'),
+              width: double.infinity,
+              height: 64,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(index == 0 ? 8 : 0),
+                    topRight: Radius.circular(index == 0 ? 8 : 0),
+                    bottomLeft: Radius.circular(index == items.length - 1 ? 8 : 0),
+                    bottomRight: Radius.circular(index == items.length - 1 ? 8 : 0)),
+                color: index.isOdd ? _oddItemColor : _evenItemColor,
+              ),
+              child: Row(
+                children: [
+                  const SizedBox(width: 16),
+                  appIcon(Icons.menu, color: AppColors.medium_2),
+                  const SizedBox(width: 16),
+                  Expanded(child: _textField(items.keys.toList()[index])),
+                  const SizedBox(width: 16),
+                  Expanded(child: _textField(items[items.keys.toList()[index]])),
+                  const SizedBox(width: 32),
+                  InkWell(
+                    onTap: () {
+
+                    },
+                    child: appIcon(Icons.delete, color: AppColors.medium_2),
+                  ),
+                  const SizedBox(width: 32),
+                ],
+              ),
+            ),
+        ],
+        onReorder: (int oldIndex, int newIndex) {
+
+        },
+      ),
+    );
+  }
+
+  Widget _textField(String label) {
+    return Container(
+      height: 48,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.light_3, width: 1),
+          color: Colors.white
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            color: AppColors.dark_3),
+      ),
+    );
+  }
+
+  void _moreAction(JobStatus status) {
+
   }
 }

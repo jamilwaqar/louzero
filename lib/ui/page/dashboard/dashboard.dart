@@ -109,7 +109,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         height: btnHeight,
                         color: AppColors.dark_1,
                         label: 'Search Jobs',
-                        onPressed: ()=> Get.to(()=> const JobListPage(), binding: JobBinding()),
+                        onPressed: ()=> Get.to(()=> JobListPage(), binding: JobBinding()),
                       )
                     ],
                   ),

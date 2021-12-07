@@ -13,6 +13,7 @@ class TopLeftButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
         onPressed: () {  },
+        padding: EdgeInsets.zero,
     child: Container(
       width: size,
       height: size,
