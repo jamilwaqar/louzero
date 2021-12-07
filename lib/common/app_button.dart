@@ -15,6 +15,7 @@ class AppButton extends StatelessWidget {
     this.primary = true,
     this.wide = false,
     this.textOnly = false,
+    this.alignLeft = false,
     this.color = AppColors.dark_3,
     this.colorText = AppColors.lightest,
     this.height = 40,
@@ -32,6 +33,7 @@ class AppButton extends StatelessWidget {
   final bool wide;
   final bool primary;
   final bool textOnly;
+  final bool alignLeft;
   final Color color;
   final Color colorText;
   final double radius;
@@ -81,8 +83,12 @@ class AppButton extends StatelessWidget {
             side: BorderSide(color: bd, width: 1.0),
             borderRadius: BorderRadius.all(Radius.circular(radius))),
         onPressed: onPressed,
-        label: Text(
-          label,
+        label: Row(
+          children: [
+            Text(
+              label,
+            ),
+          ],
         ),
       ),
     );
