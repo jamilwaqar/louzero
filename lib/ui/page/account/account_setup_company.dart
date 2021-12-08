@@ -4,6 +4,7 @@ import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/multiselect/app_select_dropdown.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'models/company_model.dart';
@@ -160,7 +161,8 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           widget.data.email = val;
         },
       );
-  _tags() => AppInputText(
+  _tags() => AppSelectDropdown();
+  x_tags() => AppInputText(
       label: 'What Industries do you Serve?',
       onSaved: (val) {
         widget.data.email = val;

@@ -90,7 +90,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(height: 400, child: AppSelectDropdown()),
+                  AppSelectDropdown(),
                   AppCardChartPie(
                     items: widget.chartDataJobs,
                     title: 'Jobs',
