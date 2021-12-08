@@ -43,36 +43,32 @@ class _AccountSetupState extends State<AccountSetup> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
+      hasKeyboard: true,
       child: Column(
         children: [
           Expanded(
-            flex: 1,
-            child: Column(
+              flex: 0,
+              child: AppStepProgress(
+                stepItems: AccountSetupModel.stepItems,
+                selected: _step,
+              )),
+          SizedBox(height: 32),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              // physics: const NeverScrollableScrollPhysics(),
               children: [
-                AppStepProgress(
-                  stepItems: AccountSetupModel.stepItems,
-                  selected: _step,
+                _scrollView(
+                  AccountSetupCompany(
+                    data: _companyModel,
+                  ),
                 ),
+                _scrollView(customerCard()),
+                _scrollView(jobsCard()),
+                _scrollView(completeCard())
               ],
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _pageView(
-                    child: AccountSetupCompany(
-                  data: _companyModel,
-                  onChange: (data) => _saveFormInput(data: data),
-                )),
-                _pageView(child: _customersCard()),
-                _pageView(child: _jobsCard()),
-                _pageView(child: _completeCard()),
-              ],
-            ),
-          )
         ],
       ),
     );
@@ -119,16 +115,11 @@ class _AccountSetupState extends State<AccountSetup> {
     NavigationController().pushTo(context, child: DashboardPage());
   }
 
-  Widget _pageView({required Widget child}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16, left: 0, right: 0),
-      child: SingleChildScrollView(
-        child: child,
-      ),
-    );
+  Widget _scrollView(Widget child) {
+    return SingleChildScrollView(child: child);
   }
 
-  Widget _customersCard() => Column(
+  Widget customerCard() => Column(
         children: [
           AppCard(
             children: [
@@ -168,7 +159,7 @@ class _AccountSetupState extends State<AccountSetup> {
         ],
       );
 
-  Widget _jobsCard() => Column(
+  Widget jobsCard() => Column(
         children: [
           AppCard(
             children: [
@@ -208,7 +199,7 @@ class _AccountSetupState extends State<AccountSetup> {
         ],
       );
 
-  Widget _completeCard() => Column(
+  Widget completeCard() => Column(
         children: [
           AppCard(
             children: [
