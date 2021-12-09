@@ -1,17 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_checkbox.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
-import 'package:louzero/common/app_text_link.dart';
+import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/ui/page/dashboard/dashboard.dart';
+import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 import '../base_scaffold.dart';
 
 class CompletePage extends StatefulWidget {
-  const CompletePage({Key? key}) : super(key: key);
+  final String email;
+  const CompletePage(this.email, {Key? key}) : super(key: key);
 
   @override
   _CompletePageState createState() => _CompletePageState();
@@ -87,20 +92,31 @@ class _CompletePageState extends State<CompletePage> {
                     });
                   },
                 ),
+                const SizedBox(height: 24),
+                AppButton(
+                  label: 'Create Account',
+                  onPressed: _completeSignup,
+                  wide: true,
+                ),
               ],
             ),
           ),
-          AppTextLink(
-            'Back',
-            onPressed: _goBack,
-          )
         ],
       ),
     );
   }
 
-  void _goBack() async {
-    NavigationController().pop(context);
-    // NavigationController().pushTo(context, child: const AcceptInvitePage());
+  void _completeSignup() async {
+    NavigationController().loading();
+    var res = await AuthAPI().signup(widget.email, _passwordController.text);
+    if (res is String) {
+      NavigationController().loading(isLoading: false);
+      WarningMessageDialog.showDialog(context, res);
+    } else {
+      var res = await AuthAPI().login(widget.email, _passwordController.text);
+      NavigationController().loading(isLoading: false);
+      AuthStateManager().loggedIn.value = true;
+      NavigationController().pushTo(context, child: DashboardPage());
+    }
   }
 }

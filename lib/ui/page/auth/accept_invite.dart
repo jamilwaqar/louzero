@@ -103,6 +103,6 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
   }
 
   void _completeSignup() {
-    NavigationController().pushTo(context, child: const CompletePage());
+    // NavigationController().pushTo(context, child: const CompletePage());
   }
 }
