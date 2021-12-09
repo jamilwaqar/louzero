@@ -26,6 +26,18 @@ class AccountSetupCompany extends StatefulWidget {
 class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _formKey = GlobalKey<FormState>();
 
+  List<SelectItem> industries = [
+    SelectItem(id: '23', label: 'Residential', value: 'res'),
+    SelectItem(id: '24', label: 'Comercial', value: 'com'),
+    SelectItem(id: '25', label: 'Industrial', value: 'ind'),
+    SelectItem(id: '26', label: 'Public', value: 'pub'),
+    SelectItem(id: '27', label: 'Government', value: 'gov'),
+    SelectItem(id: '28', label: 'Entertainment', value: 'res'),
+    SelectItem(id: '29', label: 'Non Profit', value: 'com'),
+    SelectItem(id: '31', label: 'Rural', value: 'pub'),
+    SelectItem(id: '32', label: 'Scientific', value: 'gov'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -161,13 +173,11 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           widget.data.email = val;
         },
       );
-  _tags() => AppSelectDropdown();
-  x_tags() => AppInputText(
-      label: 'What Industries do you Serve?',
-      onSaved: (val) {
-        widget.data.email = val;
-      },
-      mb: 0);
+  _tags() => AppSelectDropdown(
+        width: 400,
+        items: industries,
+        label: 'What Industries do you Serve?',
+      );
   _country() => AppInputText(
         label: 'Country',
         onSaved: (val) {

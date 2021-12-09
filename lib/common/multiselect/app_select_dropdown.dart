@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_divider.dart';
@@ -9,83 +7,92 @@ class SelectItem {
   final String label;
   final String id;
   final String value;
-  final bool selected;
   const SelectItem(
-      {required this.label,
-      required this.id,
-      required this.value,
-      required this.selected});
+      {required this.label, required this.id, required this.value});
 }
 
 class AppSelectDropdown extends StatefulWidget {
-  const AppSelectDropdown({Key? key}) : super(key: key);
+  const AppSelectDropdown(
+      {Key? key,
+      this.items = const [],
+      this.label = 'Select Options',
+      this.width = 300})
+      : super(key: key);
+  final List<SelectItem> items;
+  final String label;
+  final double width;
 
   @override
   State<AppSelectDropdown> createState() => _AppSelectDropdownState();
 }
 
 class _AppSelectDropdownState extends State<AppSelectDropdown> {
-  Future<void> OpenDialog() async {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            // title: Text('Select Stuff'),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16.0))),
-            contentPadding: EdgeInsets.only(left: 0, right: 0, top: 32),
-            content: SingleChildScrollView(
-              child: SizedBox(
-                width: 350,
-                child: Column(
-                  children: items.map((item) {
-                    return SelectListTile(
-                      isSelected: item.selected,
-                      item: item,
-                      onSelectItem: onSelectItem,
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16, top: 16),
-                child: AppButton(
-                  label: "Done",
-                  primary: false,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16, right: 16, top: 16),
-                child: AppButton(
-                  label: "Cancel",
-                  primary: false,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              )
-            ],
-          );
-        });
+  List<SelectItem> selectedItems = [];
+
+  late List<SelectItem> items;
+
+  @override
+  void initState() {
+    items = widget.items.isNotEmpty
+        ? widget.items
+        : [
+            SelectItem(id: '1', label: 'Option One', value: 'val'),
+            SelectItem(id: '2', label: 'Option Two', value: 'val'),
+            SelectItem(id: '3', label: 'Option Three', value: 'val'),
+          ];
   }
 
-  final List<SelectItem> items = const [
-    SelectItem(id: '23', label: 'Residential', value: 'res', selected: false),
-    SelectItem(id: '24', label: 'Comercial', value: 'com', selected: true),
-    SelectItem(id: '25', label: 'Industrial', value: 'ind', selected: true),
-    SelectItem(id: '26', label: 'Public', value: 'pub', selected: false),
-    SelectItem(id: '27', label: 'Government', value: 'gov', selected: false),
-    SelectItem(id: '28', label: 'Entertainment', value: 'res', selected: false),
-    SelectItem(id: '29', label: 'Non Profit', value: 'com', selected: true),
-    SelectItem(id: '31', label: 'Rural', value: 'pub', selected: false),
-    SelectItem(id: '32', label: 'Scientific', value: 'gov', selected: false),
-  ];
+  Future<void> OpenDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        int? selectedRadio = 0;
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(32.0))),
+          contentPadding: EdgeInsets.only(top: 16),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ...items.map((item) {
+                      return SelectListTile(
+                        isSelected: selectedItems.contains(item),
+                        item: item,
+                        onSelectItem: (item) {
+                          setState(() {
+                            onSelectItem(item);
+                          });
+                        },
+                      );
+                    }).toList(),
+                    SizedBox(
+                      width: widget.width,
+                    ),
+                    AppButton(
+                      mt: 16,
+                      ml: 16,
+                      mr: 16,
+                      mb: 16,
+                      wide: true,
+                      label: "Done",
+                      primary: false,
+                      color: AppColors.medium_3,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +104,23 @@ class _AppSelectDropdownState extends State<AppSelectDropdown> {
   Widget _selectButton() => MaterialButton(
       padding: EdgeInsets.all(0),
       child: ListTile(
-          title: Text('Open Dialog'),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 8,
+                children: [
+                  if (selectedItems.isNotEmpty)
+                    ...selectedItems.map((item) {
+                      return _tag(label: item.label);
+                    }).toList(),
+                  if (selectedItems.isEmpty)
+                    Text(widget.label,
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                ],
+              )
+            ],
+          ),
           trailing: Icon(Icons.arrow_drop_down),
           horizontalTitleGap: 0,
           tileColor: AppColors.lightest,
@@ -111,10 +134,25 @@ class _AppSelectDropdownState extends State<AppSelectDropdown> {
       onPressed: () {});
 
   void onSelectItem(SelectItem item) {
-    print('Selected:');
-    inspect(item);
+    final isSelected = selectedItems.contains(item);
+    setState(() =>
+        isSelected ? selectedItems.remove(item) : selectedItems.add(item));
   }
 }
+
+Widget _tag({label = 'chip'}) => Chip(
+      backgroundColor: Colors.black12,
+      labelPadding: EdgeInsets.only(left: 14, right: 14),
+      label: Text(label,
+          style:
+              TextStyle(fontWeight: FontWeight.w600, color: AppColors.dark_3)),
+      deleteIconColor: AppColors.medium_2,
+      // deleteIcon: const Icon(
+      //   Icons.remove_circle,
+      //   size: 20,
+      // ),
+      // onDeleted: () {},
+    );
 
 class SelectListTile extends StatelessWidget {
   final SelectItem item;
