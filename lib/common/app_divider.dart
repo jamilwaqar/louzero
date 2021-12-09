@@ -10,7 +10,7 @@ class AppDivider extends StatelessWidget {
     this.ml = 0,
     this.mr = 0,
     this.color = AppColors.light_3,
-    this.size = 2,
+    this.size = 1,
   }) : super(key: key);
 
   final double mt;

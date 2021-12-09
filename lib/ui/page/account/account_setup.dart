@@ -3,27 +3,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
-import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_row_flex.dart';
+import 'package:louzero/common/app_input_inline_form.dart';
+import 'package:louzero/common/app_list_draggable.dart';
+import 'package:louzero/common/app_list_tile.dart';
 import 'package:louzero/common/app_step_progress.dart';
+import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
-import 'package:louzero/ui/page/account/account_setup_complete.dart';
-import 'package:louzero/ui/page/account/account_setup_customers.dart';
-import 'package:louzero/ui/page/account/account_setup_job_types.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
-
-class StepItem {
-  final String title;
-  final String subtitle;
-  final String label;
-  StepItem({
-    required this.title,
-    required this.subtitle,
-    required this.label,
-  });
-}
+import 'package:louzero/ui/page/dashboard/dashboard.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'models/company_model.dart';
 
 class AccountSetup extends StatefulWidget {
   const AccountSetup({Key? key}) : super(key: key);
@@ -34,253 +27,232 @@ class AccountSetup extends StatefulWidget {
 
 class _AccountSetupState extends State<AccountSetup> {
   final _pageController = PageController();
-  int _currentStep = 0;
 
-  List<StepItem> stepItems = [
-    StepItem(
-      label: 'My Company',
-      title: 'To start, let\'s get some basic info.',
-      subtitle: 'You can always make changes later in Settings.',
-    ),
-    StepItem(
-      label: 'Customer Types',
-      title: 'What types of customers do you have?',
-      subtitle: 'You can always make changes later in Settings.',
-    ),
-    StepItem(
-      label: 'Job Types',
-      title: 'What types of jobs do you do?',
-      subtitle: 'You can always make changes later in Settings.',
-    ),
-    StepItem(
-      label: 'Done!',
-      title: 'You’re all set, (username)!',
-      subtitle: 'You can always manage these later in Settings.',
-    ),
-  ];
+  var _step = 0;
+
+  CompanyModel _companyModel = CompanyModel();
+
+  final customerTypes = ["Residential", "Commerical"];
+
+  final customerTypeController = TextEditingController();
+
+  final jobTypes = ["Installation", "Consulting", "Estimate"];
+
+  final jobTypeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _forms = [
-      _formView(child: AccountSetupCompany()),
-      _formView(child: AccountSetupCustomers()),
-      _formView(child: AccountSetupJobTypes()),
-      _formView(child: AccountSetupComplete()),
-      _formView(child: SampleForm()),
-    ];
-
     return BaseScaffold(
+      hasKeyboard: true,
       child: Column(
         children: [
           Expanded(
-            flex: 1,
-            child: Column(
+              flex: 0,
+              child: AppStepProgress(
+                stepItems: AccountSetupModel.stepItems,
+                selected: _step,
+              )),
+          SizedBox(height: 32),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              // physics: const NeverScrollableScrollPhysics(),
               children: [
-                AppStepProgress(
-                  stepItems: stepItems,
-                  selected: _currentStep,
+                _scrollView(
+                  AccountSetupCompany(
+                    data: _companyModel,
+                    onChange: (data) {
+                      _saveFormInput(data: data);
+                    },
+                  ),
                 ),
+                _scrollView(customerCard()),
+                _scrollView(jobsCard()),
+                _scrollView(completeCard())
               ],
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: _forms,
-            ),
-          )
         ],
       ),
     );
   }
 
-  Padding _formView({required Widget child}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16, left: 0, right: 0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            child,
-            Padding(
-              padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
-              child: Column(
-                children: [
-                  if (_currentStep < 3)
-                    AppDivider(
-                      mb: 24,
-                      color: AppColors.light_2,
-                    ),
-                  Row(
-                    children: [
-                      if (_currentStep < 3)
-                        AppButton(
-                          mb: 48,
-                          label: 'Save & Continue',
-                          onPressed: () {
-                            setState(() {
-                              _currentStep++;
-                            });
-                            _pageController.nextPage(
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.ease);
-                          },
-                        ),
-                      if (_currentStep > 0 && _currentStep < 3)
-                        AppButton(
-                          mb: 48,
-                          label: 'Skip for Now',
-                          textOnly: true,
-                          ml: 16,
-                          onPressed: () {
-                            setState(() {
-                              _currentStep++;
-                            });
-                            _pageController.nextPage(
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.ease);
-                          },
-                        ),
-                    ],
-                  ),
-                ],
+  void _saveFormInput({CompanyModel? data}) {
+    // save data changes
+    if (data != null) {
+      _companyModel = data;
+    }
+    _nextStep();
+  }
+
+  void _nextStep() {
+    setState(() {
+      _step++;
+    });
+    _pageController.nextPage(
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  _addCustomer() {
+    if (customerTypes.contains(customerTypeController.value.text)) {
+      return;
+    } else {
+      setState(() {
+        customerTypes.add(customerTypeController.value.text);
+      });
+    }
+  }
+
+  _addJobType() {
+    if (jobTypes.contains(jobTypeController.value.text)) {
+      return;
+    } else {
+      setState(() {
+        jobTypes.add(jobTypeController.value.text);
+      });
+    }
+  }
+
+  _goToDashboard(context) {
+    NavigationController().pop(context);
+    NavigationController().pushTo(context, child: DashboardPage());
+  }
+
+  Widget _scrollView(Widget child) {
+    return SingleChildScrollView(child: child);
+  }
+
+  Widget customerCard() => Column(
+        children: [
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Customer Types",
+                alignLeft: true,
+                icon: Icons.people,
+                size: 24,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+              const AppTextBody(AccountSetupModel.setupCompanyText),
+              AppListDraggable(
+                items: customerTypes,
+              ),
+              const Divider(
+                color: AppColors.light_3,
+              ),
+              AppInputInlineForm(
+                mt: 14,
+                controller: customerTypeController,
+                label: 'Add new Customer Type',
+                btnLabel: 'ADD',
+                onPressed: _addCustomer,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              AppButton(
+                  ml: 24,
+                  mb: 64,
+                  label: 'Save & Continue',
+                  onPressed: () {
+                    _saveFormInput();
+                  }),
+            ],
+          ),
+        ],
+      );
 
-class SampleForm extends StatelessWidget {
-  const SampleForm({Key? key}) : super(key: key);
+  Widget jobsCard() => Column(
+        children: [
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Job Types",
+                alignLeft: true,
+                icon: MdiIcons.briefcase,
+                size: 24,
+              ),
+              const AppTextBody(AccountSetupModel.setupJobsText),
+              AppListDraggable(
+                items: jobTypes,
+              ),
+              const Divider(
+                color: AppColors.light_3,
+              ),
+              AppInputInlineForm(
+                mt: 14,
+                controller: jobTypeController,
+                label: 'Add new Customer Type',
+                btnLabel: 'ADD',
+                onPressed: _addJobType,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              AppButton(
+                  ml: 24,
+                  mb: 64,
+                  label: 'Save & Continue',
+                  onPressed: () {
+                    _saveFormInput();
+                  }),
+            ],
+          ),
+        ],
+      );
 
-  Widget getFormFeild(String label) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(),
-      ),
-    );
-  }
-
-  // Complex form layout example:
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AppCard(
-          mb: 24,
-          children: [
-            const AppTextHeader(
-              'Location',
-              icon: Icons.location_on_sharp,
-              alignLeft: true,
-              size: 28,
-              mb: 24,
-            ),
-            AppRowFlex(
-              flex: const [2, 1],
-              children: [
-                getFormFeild('Street Address'),
-                getFormFeild('Suite'),
-              ],
-            ),
-            AppRowFlex(
-              flex: const [3, 2, 1],
-              children: [
-                getFormFeild('City'),
-                getFormFeild('State'),
-                getFormFeild('Zip'),
-              ],
-            ),
-            AppRowFlex(
-              flex: const [1, 1],
-              children: [
-                getFormFeild('Email'),
-                getFormFeild('Phone'),
-              ],
-            ),
-            AppRowFlex(
-              mb: 0,
-              mt: 8,
-              flex: [3, 2, 1],
-              children: [
-                Container(),
-                const AppButton(
-                  label: 'Update Location',
-                  wide: true,
+  Widget completeCard() => Column(
+        children: [
+          AppCard(
+            children: [
+              const AppTextHeader(
+                "Welcome to LOuZero",
+                size: 24,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 52, right: 52, bottom: 32),
+                child: AppTextBody(
+                  AccountSetupModel.setupCompleteText,
+                  center: true,
                 ),
-                const AppButton(
-                  label: 'cancel',
-                  primary: false,
-                  wide: true,
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  children: AccountSetupModel.nextStepItems
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    int idx = entry.key;
+                    ListItem item = entry.value;
+                    var isOdd = idx % 2 == 0 ? false : true;
+                    return AppListTile(
+                      title: item.title ?? '',
+                      subtitle: item.subtitle ?? '',
+                      colorBg:
+                          isOdd ? Colors.grey.shade50 : Colors.grey.shade200,
+                      onTap: () {
+                        _goToDashboard(context);
+                      },
+                    );
+                  }).toList(),
                 ),
-              ],
-            ),
-          ],
-        ),
-        AppCard(
-          mt: 24,
-          children: [
-            const AppTextHeader(
-              'Character',
-              icon: Icons.emoji_emotions_outlined,
-              alignLeft: true,
-              size: 28,
-              mb: 24,
-            ),
-            AppRowFlex(
-              flex: const [1, 1, 1],
-              children: [
-                Container(
-                  height: 60,
-                  color: Colors.grey.shade100,
-                ),
-                getFormFeild('Super Power'),
-                getFormFeild('Battle Cry'),
-              ],
-            ),
-            AppRowFlex(
-              children: [
-                getFormFeild('Nickname'),
-                getFormFeild('Title'),
-                Container(
-                  height: 60,
-                  color: Colors.grey.shade100,
-                ),
-              ],
-            ),
-            AppRowFlex(
-              flex: const [4, 1],
-              children: [
-                getFormFeild('Short Description Here...'),
-              ],
-            ),
-            AppRowFlex(
-              mb: 0,
-              mt: 8,
-              flex: [4, 2, 2],
-              children: [
-                Container(),
-                AppButton(
-                    label: 'Level Up!',
-                    wide: true,
-                    color: Colors.blueGrey.shade800),
-                AppButton(
-                  label: 'cancel',
-                  primary: false,
-                  wide: true,
-                  color: Colors.red.shade200,
-                ),
-              ],
-            ),
-          ],
-        )
-      ],
-    );
-  }
+              ),
+              const AppTextDivider(
+                ml: 150,
+                mr: 150,
+              ),
+              AppButton(
+                label: 'Go to Your Dashboard',
+                color: AppColors.dark_2,
+                fontSize: 13,
+                onPressed: () {
+                  _goToDashboard(context);
+                },
+              )
+            ],
+          ),
+        ],
+      );
 }

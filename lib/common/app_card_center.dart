@@ -26,8 +26,6 @@ class AppCardCenter extends StatelessWidget {
             padding: EdgeInsets.only(left: _width, right: _width),
             child: AppCard(
               children: [child],
-              px: 24,
-              py: 32,
             ),
           )
         ],

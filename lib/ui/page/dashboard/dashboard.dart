@@ -101,6 +101,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         color: AppColors.dark_1,
                         colorText: AppColors.darkest,
                         primary: false,
+                        onPressed: () =>
+                            Get.to(() => AddJobPage(), binding: JobBinding()),
                       ),
                       AppButton(
                         fontSize: btnSize,
@@ -110,11 +112,6 @@ class _DashboardPageState extends State<DashboardPage> {
                       )
                     ],
                   ),
-                  InkWell(
-                      onTap: () =>
-                          Get.to(() => AddJobPage(), binding: JobBinding()),
-                      child: Image.asset('assets/mocks/jobs-card.png')),
-                  SizedBox(height: spacing),
                   Image.asset('assets/mocks/reports-card.png'),
                   SizedBox(height: spacing),
                   Image.asset('assets/mocks/payments-card.png')
