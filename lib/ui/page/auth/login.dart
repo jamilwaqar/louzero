@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _verificationCode() {
-    NavigationController().pushTo(context, child: const VerifyPage());
+    // NavigationController().pushTo(context, child: const VerifyPage());
   }
 
   void _onGoogleSignIn() {}
