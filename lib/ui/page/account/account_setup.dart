@@ -61,6 +61,9 @@ class _AccountSetupState extends State<AccountSetup> {
                 _scrollView(
                   AccountSetupCompany(
                     data: _companyModel,
+                    onChange: (data) {
+                      _saveFormInput(data: data);
+                    },
                   ),
                 ),
                 _scrollView(customerCard()),
