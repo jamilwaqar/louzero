@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
-
 import 'app_text_body.dart';
 
-class AppInputText extends StatefulWidget {
+class AppInputText extends StatelessWidget {
   const AppInputText(
       {Key? key,
       required this.label,
@@ -45,26 +44,21 @@ class AppInputText extends StatefulWidget {
   final void Function(String)? onChanged;
   final List<String>? options;
 
-  @override
-  _AppInputTextState createState() => _AppInputTextState();
-}
+  //Input border props:
+  final double _radius = 4;
+  final double _width = 1;
+  final Color _color = AppColors.light_3;
+  final Color _focus = AppColors.darkest;
 
-class _AppInputTextState extends State<AppInputText> {
   @override
   Widget build(BuildContext context) {
-    var reqText = widget.required ? '*' : '';
+    var reqText = required ? '*' : '';
     var inputText = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 16,
-      color: widget.colorTx,
+      color: colorTx,
     );
-
-    //Input border props:
-    double _radius = 4;
-    double _width = 1;
-    Color _color = AppColors.light_3;
-    Color _focus = AppColors.darkest;
-
+    
     InputDecoration inputStyle = InputDecoration(
       filled: true,
       fillColor: AppColors.lightest,
@@ -92,28 +86,28 @@ class _AppInputTextState extends State<AppInputText> {
       // mainAxisSize: MainAxisSize.
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppTextBody(widget.label + reqText,
+        AppTextBody(label + reqText,
             size: 14,
             color: AppColors.dark_2,
             bold: true,
             mb: 8,
-            mt: widget.mt),
+            mt: mt),
         TextFormField(
-          autofocus: widget.autofocus,
-          controller: widget.controller,
+          autofocus: autofocus,
+          controller: controller,
           keyboardAppearance: Brightness.light,
-          keyboardType: widget.keyboardType,
-          obscureText: widget.password,
-          onChanged: widget.onChanged,
-          onSaved: widget.onSaved,
-          validator: widget.validator,
+          keyboardType: keyboardType,
+          obscureText: password,
+          onChanged: onChanged,
+          onSaved: onSaved,
+          validator: validator,
           style: inputText,
           textCapitalization:
-              widget.textCapitalization ?? TextCapitalization.none,
+              textCapitalization ?? TextCapitalization.none,
           decoration: inputStyle,
         ),
         SizedBox(
-          height: widget.mb,
+          height: mb,
         )
       ],
     );

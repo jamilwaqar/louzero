@@ -151,8 +151,7 @@ class _AccountSetupState extends State<AccountSetup> {
           Row(
             children: [
               AppButton(
-                  ml: 24,
-                  mb: 64,
+                  margin: const EdgeInsets.only(left: 24, bottom: 64),
                   label: 'Save & Continue',
                   onPressed: () {
                     _saveFormInput();
@@ -191,8 +190,7 @@ class _AccountSetupState extends State<AccountSetup> {
           Row(
             children: [
               AppButton(
-                  ml: 24,
-                  mb: 64,
+                  margin: const EdgeInsets.only(left: 24, bottom: 64),
                   label: 'Save & Continue',
                   onPressed: () {
                     _saveFormInput();

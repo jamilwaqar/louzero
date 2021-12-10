@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class AppInputInlineForm extends StatefulWidget {
@@ -61,9 +62,10 @@ class _AppInputInlineFormState extends State<AppInputInlineForm> {
     });
   }
 
+  final btnWidth = Get.width * 0.50;
+
   @override
   Widget build(BuildContext context) {
-    var btnWidth = MediaQuery.of(context).size.width * 0.50;
 
     var inputText = TextStyle(
       fontWeight: FontWeight.w500,

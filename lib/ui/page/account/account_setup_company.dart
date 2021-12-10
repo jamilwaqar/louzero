@@ -101,8 +101,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             Row(
               children: [
                 AppButton(
-                  ml: 24,
-                  mb: 64,
+                  margin: const EdgeInsets.only(left: 24, bottom: 64),
                   label: 'Save & Continue',
                   onPressed: _submit,
                 ),

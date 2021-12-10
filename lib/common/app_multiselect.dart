@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_text_body.dart';
-import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 // SeletItem Model
@@ -54,9 +53,9 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
       builder: (BuildContext context) {
         int? selectedRadio = 0;
         return AlertDialog(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(32.0))),
-          contentPadding: EdgeInsets.only(top: 16),
+          contentPadding: const EdgeInsets.only(top: 16),
           title: AppTextBody(
             widget.label,
             size: 24,
@@ -95,10 +94,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
   }
 
   Widget _doneButton() => AppButton(
-        mt: 16,
-        ml: 16,
-        mr: 16,
-        mb: 16,
+        margin: const EdgeInsets.all(16),
         wide: true,
         label: "Done",
         primary: true,
