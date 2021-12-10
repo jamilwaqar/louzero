@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
@@ -8,6 +9,7 @@ import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
+import 'package:louzero/ui/page/auth/invite.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer.dart';
@@ -120,7 +122,47 @@ class _CustomerListPageState extends State<CustomerListPage> {
                       AppTextBody(
                         model.type,
                       ),
-                      Icon(Icons.more_vert)
+                      PopupMenuButton(
+                          offset: const Offset(0, 40),
+                          onSelected: (value) {
+                              if (value == 1) {
+                                Get.to(()=> InviteCustomerPage(email: model.customerContacts.first.email));
+                              }
+                          },
+                          elevation: 2,
+                          shape: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                  color: AppColors.medium_2,
+                                  width: 0)),
+                          child: const Icon(Icons.more_vert),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: SizedBox(
+                                width: 100,
+                                height: 60,
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.supervised_user_circle,
+                                      color: AppColors.icon,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text("Invite",
+                                        style: TextStyle(
+                                          color: AppColors.icon,
+                                          fontWeight:
+                                          FontWeight.w400,
+                                          fontSize: 16,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              value: 1,
+                            ),
+                          ]),
+                      // Icon(Icons.more_vert)
                     ]),
               )
             ],

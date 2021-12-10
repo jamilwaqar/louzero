@@ -48,6 +48,22 @@ class AuthAPI {
     }
   }
 
+  Future sendInvitationCode(String email, int code) async {
+    try {
+      EmailEnvelope envelope = EmailEnvelope();
+      envelope.to = {email};
+      Map<String, String>json = {
+        'senderName': AuthStateManager.userModel.fullName,
+        'senderEmail': AuthStateManager.userModel.email,
+        'code': code.toString(),
+      };
+      Backendless.messaging.sendEmailFromTemplate("Invite Customer", envelope, json).then(
+              (response) => print("ASYNC: email has been sent"));
+    } on PlatformException catch (e) {
+      return e.message;
+    }
+  }
+
   Future resetPassword(String email) async {
     try {
       await Backendless.userService.restorePassword(email);

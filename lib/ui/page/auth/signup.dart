@@ -112,6 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
     var code = Random().nextInt(999999);
     var email = _emailController.text;
     var res = await AuthAPI().sendVerificationCode(email, code);
+    await Future.delayed(const Duration(seconds: 1));
     NavigationController().loading(isLoading: false);
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);
