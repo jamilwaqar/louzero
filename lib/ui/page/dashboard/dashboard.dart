@@ -96,7 +96,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       AppButton(
                         fontSize: btnSize,
                         height: btnHeight,
-                        mr: 8,
+                        margin: const EdgeInsets.only(right: 8),
                         label: 'Add Job',
                         color: AppColors.dark_1,
                         colorText: AppColors.darkest,
@@ -133,7 +133,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         AppButton(
                           fontSize: btnSize,
                           height: btnHeight,
-                          mr: 8,
+                          margin: const EdgeInsets.only(right: 8),
                           label: 'Add Customer',
                           color: AppColors.dark_1,
                           colorText: AppColors.darkest,
