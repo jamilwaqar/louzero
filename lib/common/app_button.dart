@@ -36,7 +36,7 @@ class AppButton extends StatelessWidget {
   final double radius;
   final double height;
 
-  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
