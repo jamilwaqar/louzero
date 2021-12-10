@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/app_multiselect.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'models/company_model.dart';
@@ -24,6 +27,18 @@ class AccountSetupCompany extends StatefulWidget {
 
 class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _formKey = GlobalKey<FormState>();
+
+  List<SelectItem> industries = [
+    SelectItem(id: '23', label: 'Residential', value: 'res'),
+    SelectItem(id: '24', label: 'Comercial', value: 'com'),
+    SelectItem(id: '25', label: 'Industrial', value: 'ind'),
+    SelectItem(id: '26', label: 'Public', value: 'pub'),
+    SelectItem(id: '27', label: 'Government', value: 'gov'),
+    SelectItem(id: '28', label: 'Entertainment', value: 'res'),
+    SelectItem(id: '29', label: 'Non Profit', value: 'com'),
+    SelectItem(id: '31', label: 'Rural', value: 'pub'),
+    SelectItem(id: '32', label: 'Scientific', value: 'gov'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +101,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             Row(
               children: [
                 AppButton(
-                  ml: 24,
-                  mb: 64,
+                  margin: const EdgeInsets.only(left: 24, bottom: 64),
                   label: 'Save & Continue',
                   onPressed: _submit,
                 ),
@@ -163,12 +177,15 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           widget.data.email = val;
         },
       );
-  _tags() => AppInputText(
-      label: 'What Industries do you Serve?',
-      onSaved: (val) {
-        widget.data.email = val;
-      },
-      mb: 0);
+  _tags() => AppMultiSelect(
+        width: 448,
+        initialItems: [industries[0], industries[1], industries[4]],
+        items: industries,
+        onChange: (items) {
+          inspect(items);
+        },
+        label: 'What Industries do you Serve?',
+      );
   _country() => AppInputText(
         label: 'Country',
         onSaved: (val) {

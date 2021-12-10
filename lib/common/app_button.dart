@@ -19,10 +19,7 @@ class AppButton extends StatelessWidget {
     this.color = AppColors.dark_3,
     this.colorText = AppColors.lightest,
     this.height = 40,
-    this.mb = 0, // margin bottom
-    this.mt = 0, // margin top
-    this.ml = 0, // margin left
-    this.mr = 0, // margin right
+    this.margin = EdgeInsets.zero,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
@@ -38,10 +35,8 @@ class AppButton extends StatelessWidget {
   final Color colorText;
   final double radius;
   final double height;
-  final double mt;
-  final double mb;
-  final double ml;
-  final double mr;
+
+  final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +57,7 @@ class AppButton extends StatelessWidget {
     return Container(
       height: height,
       width: wide ? double.infinity : width ?? null,
-      margin: EdgeInsets.only(
-        top: mt,
-        bottom: mb,
-        left: ml,
-        right: mr,
-      ),
+      margin: margin,
       child: FloatingActionButton.extended(
         heroTag: null,
         foregroundColor: fg,
