@@ -30,4 +30,14 @@ class AuthStateManager {
       GetStorage().write(GSKey.isAuthUser, true);
     }
   }
+
+  Future updateUser() async {
+    BackendlessUser? user = await Backendless.userService.getCurrentUser();
+    if (user == null) return;
+    user.setProperties(
+      {... user.properties, ... userModel.toJson()}
+    );
+    var res = await Backendless.userService.update(user);
+    return res;
+  }
 }

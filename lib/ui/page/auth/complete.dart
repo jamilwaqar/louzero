@@ -116,6 +116,9 @@ class _CompletePageState extends State<CompletePage> {
       var res = await AuthAPI().login(widget.email, _passwordController.text);
       NavigationController().loading(isLoading: false);
       AuthStateManager().loggedIn.value = true;
+      AuthStateManager.userModel.firstname = _firstNameController.text;
+      AuthStateManager.userModel.lastname = _lastNameController.text;
+      await AuthStateManager().updateUser();
       NavigationController().pushTo(context, child: DashboardPage());
     }
   }

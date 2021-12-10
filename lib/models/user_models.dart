@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-
 part 'user_models.g.dart';
 
 @JsonSerializable()
@@ -9,11 +8,11 @@ class UserModel {
   Uri? avatar;
   @JsonKey(defaultValue: '')   String email = '';
   @JsonKey(ignore: true)       String? objectId;
-  @JsonKey(defaultValue: '')   String firstName = '';
-  @JsonKey(defaultValue: '')   String lastName = '';
+  @JsonKey(defaultValue: '')   String firstname = '';
+  @JsonKey(defaultValue: '')   String lastname = '';
 
-  String get fullName => "$firstName $lastName";
-
+  String get fullName => "$firstname $lastname";
+  String get initials => "${fullName[0]}${lastname[0]}";
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
