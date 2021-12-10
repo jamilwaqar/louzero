@@ -117,8 +117,11 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   }
 
   void _submit() {
-    _formKey.currentState!.save();
-    if (widget.onChange != null) widget.onChange!(widget.data);
+    bool valid = _formKey.currentState!.validate();
+    if (valid) {
+      _formKey.currentState!.save();
+      if (widget.onChange != null) widget.onChange!(widget.data);
+    }
   }
 
   // Validation:

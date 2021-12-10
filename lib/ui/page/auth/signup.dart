@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_input_text.dart';
@@ -73,16 +76,16 @@ class _SignUpPageState extends State<SignUpPage> {
                   label: 'Your Email',
                   keyboardType: TextInputType.emailAddress,
                 ),
-                AppInputText(
-                  mb: 32,
-                  controller: _passwordController,
-                  label: 'Your Password',
-                  password: true,
-                ),
+                // AppInputText(
+                //   mb: 32,
+                //   controller: _passwordController,
+                //   label: 'Your Password',
+                //   password: true,
+                // ),
                 AppButton(
-                  label: 'Create Account',
+                  label: 'Continue',
                   // icon: Icons.lock,
-                  onPressed: _onCreateAccount,
+                  onPressed: _onSendVerificationCode,
                 ),
               ],
             ),
@@ -92,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
             fontWeight: FontWeight.w700,
             textDecoration: TextDecoration.underline,
             onPressed: () {
-              NavigationController().pushTo(context, child: const VerifyPage());
+              // NavigationController().pushTo(context, child: const VerifyPage());
             },
           ),
         ],
@@ -104,16 +107,16 @@ class _SignUpPageState extends State<SignUpPage> {
     NavigationController().pop(context);
   }
 
-  void _onCreateAccount() async {
+  void _onSendVerificationCode() async {
     NavigationController().loading();
-    var res =
-        await AuthAPI().signup(_emailController.text, _passwordController.text);
+    var code = Random().nextInt(999999);
+    var email = _emailController.text;
+    var res = await AuthAPI().sendVerificationCode(email, code);
     NavigationController().loading(isLoading: false);
-
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);
     } else {
-      AuthStateManager().loggedIn.value = true;
+      Get.to(()=> VerifyPage(email: email, code: code));
     }
   }
 
