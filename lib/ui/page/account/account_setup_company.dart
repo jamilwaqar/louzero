@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
-import 'package:louzero/common/multiselect/app_select_dropdown.dart';
+import 'package:louzero/common/app_multiselect.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'models/company_model.dart';
@@ -173,9 +175,13 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           widget.data.email = val;
         },
       );
-  _tags() => AppSelectDropdown(
-        width: 400,
+  _tags() => AppMultiSelect(
+        width: 448,
+        initialItems: [industries[0], industries[1], industries[4]],
         items: industries,
+        onChange: (items) {
+          inspect(items);
+        },
         label: 'What Industries do you Serve?',
       );
   _country() => AppInputText(

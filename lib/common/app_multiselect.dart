@@ -1,45 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_divider.dart';
+import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
+// SeletItem Model
 class SelectItem {
   final String label;
   final String id;
   final String value;
+
   const SelectItem(
       {required this.label, required this.id, required this.value});
 }
 
-class AppSelectDropdown extends StatefulWidget {
-  const AppSelectDropdown(
-      {Key? key,
-      this.items = const [],
-      this.label = 'Select Options',
-      this.width = 300})
-      : super(key: key);
+// MultiSelect Widget
+class AppMultiSelect extends StatefulWidget {
+  const AppMultiSelect({
+    Key? key,
+    this.items = const [],
+    this.initialItems = const [],
+    this.label = 'Select Options',
+    this.width = 300,
+    this.onChange,
+  }) : super(key: key);
   final List<SelectItem> items;
+  final List<SelectItem> initialItems;
   final String label;
   final double width;
+  final void Function(List<SelectItem>)? onChange;
 
   @override
-  State<AppSelectDropdown> createState() => _AppSelectDropdownState();
+  State<AppMultiSelect> createState() => _AppMultiSelectState();
 }
 
-class _AppSelectDropdownState extends State<AppSelectDropdown> {
+class _AppMultiSelectState extends State<AppMultiSelect> {
   List<SelectItem> selectedItems = [];
 
   late List<SelectItem> items;
 
   @override
   void initState() {
-    items = widget.items.isNotEmpty
-        ? widget.items
-        : [
-            SelectItem(id: '1', label: 'Option One', value: 'val'),
-            SelectItem(id: '2', label: 'Option Two', value: 'val'),
-            SelectItem(id: '3', label: 'Option Three', value: 'val'),
-          ];
+    items = widget.items.isNotEmpty ? widget.items : [];
+    if (widget.initialItems.isNotEmpty) {
+      selectedItems = widget.initialItems;
+    }
   }
 
   Future<void> OpenDialog() async {
@@ -51,6 +57,12 @@ class _AppSelectDropdownState extends State<AppSelectDropdown> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(32.0))),
           contentPadding: EdgeInsets.only(top: 16),
+          title: AppTextBody(
+            widget.label,
+            size: 24,
+            bold: true,
+            center: true,
+          ),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
@@ -71,19 +83,7 @@ class _AppSelectDropdownState extends State<AppSelectDropdown> {
                     SizedBox(
                       width: widget.width,
                     ),
-                    AppButton(
-                      mt: 16,
-                      ml: 16,
-                      mr: 16,
-                      mb: 16,
-                      wide: true,
-                      label: "Done",
-                      primary: false,
-                      color: AppColors.medium_3,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                    _doneButton(),
                   ],
                 ),
               );
@@ -94,6 +94,20 @@ class _AppSelectDropdownState extends State<AppSelectDropdown> {
     );
   }
 
+  Widget _doneButton() => AppButton(
+        mt: 16,
+        ml: 16,
+        mr: 16,
+        mb: 16,
+        wide: true,
+        label: "Done",
+        primary: true,
+        color: AppColors.medium_3,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -103,55 +117,81 @@ class _AppSelectDropdownState extends State<AppSelectDropdown> {
 
   Widget _selectButton() => MaterialButton(
       padding: EdgeInsets.all(0),
-      child: ListTile(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Wrap(
-                spacing: 8,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (selectedItems.isNotEmpty)
+            AppTextBody(widget.label,
+                color: AppColors.dark_2, mb: 8, bold: true, size: 14),
+          ListTile(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (selectedItems.isNotEmpty)
-                    ...selectedItems.map((item) {
-                      return _tag(label: item.label);
-                    }).toList(),
-                  if (selectedItems.isEmpty)
-                    Text(widget.label,
-                        style: TextStyle(fontWeight: FontWeight.w600)),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      if (selectedItems.isNotEmpty)
+                        ...selectedItems.map((item) {
+                          return _tag(
+                              label: item.label,
+                              onDeleted: () {
+                                onRemoveItem(item);
+                              });
+                        }).toList(),
+                      if (selectedItems.isEmpty)
+                        AppTextBody(widget.label,
+                            color: AppColors.dark_2,
+                            mb: 0,
+                            bold: true,
+                            size: 14),
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
-          trailing: Icon(Icons.arrow_drop_down),
-          horizontalTitleGap: 0,
-          tileColor: AppColors.lightest,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: AppColors.light_3),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          onTap: () {
-            OpenDialog();
-          }),
+              ),
+              trailing: Icon(Icons.arrow_drop_down),
+              horizontalTitleGap: 0,
+              tileColor: AppColors.lightest,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: AppColors.light_3),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              onTap: () {
+                OpenDialog();
+              }),
+        ],
+      ),
       onPressed: () {});
 
   void onSelectItem(SelectItem item) {
     final isSelected = selectedItems.contains(item);
-    setState(() =>
-        isSelected ? selectedItems.remove(item) : selectedItems.add(item));
+    setState(() {
+      isSelected ? selectedItems.remove(item) : selectedItems.add(item);
+    });
+    if (widget.onChange != null) {
+      widget.onChange!(selectedItems);
+    }
+  }
+
+  void onRemoveItem(SelectItem item) {
+    final isSelected = selectedItems.contains(item);
+    if (isSelected) {
+      setState(() => selectedItems.remove(item));
+    }
   }
 }
 
-Widget _tag({label = 'chip'}) => Chip(
+Widget _tag({label = 'chip', VoidCallback? onDeleted}) => Chip(
       backgroundColor: Colors.black12,
       labelPadding: EdgeInsets.only(left: 14, right: 14),
       label: Text(label,
           style:
               TextStyle(fontWeight: FontWeight.w600, color: AppColors.dark_3)),
       deleteIconColor: AppColors.medium_2,
-      // deleteIcon: const Icon(
-      //   Icons.remove_circle,
-      //   size: 20,
-      // ),
-      // onDeleted: () {},
+      deleteIcon: const Icon(
+        Icons.remove_circle,
+        size: 20,
+      ),
+      onDeleted: onDeleted ?? () {},
     );
 
 class SelectListTile extends StatelessWidget {
