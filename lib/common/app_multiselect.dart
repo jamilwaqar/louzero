@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_text_body.dart';
-import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 // SeletItem Model
@@ -48,15 +47,14 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
     }
   }
 
-  Future<void> OpenDialog() async {
+  Future<void> openDialog() async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        int? selectedRadio = 0;
         return AlertDialog(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(32.0))),
-          contentPadding: EdgeInsets.only(top: 16),
+          contentPadding: const EdgeInsets.only(top: 16),
           title: AppTextBody(
             widget.label,
             size: 24,
@@ -70,7 +68,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ...items.map((item) {
-                      return SelectListTile(
+                      return SelectTile(
                         isSelected: selectedItems.contains(item),
                         item: item,
                         onSelectItem: (item) {
@@ -132,7 +130,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
                     children: [
                       if (selectedItems.isNotEmpty)
                         ...selectedItems.map((item) {
-                          return _tag(
+                          return SelectChip(
                               label: item.label,
                               onDeleted: () {
                                 onRemoveItem(item);
@@ -148,15 +146,15 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
                   )
                 ],
               ),
-              trailing: Icon(Icons.arrow_drop_down),
+              trailing: const Icon(Icons.arrow_drop_down),
               horizontalTitleGap: 0,
               tileColor: AppColors.lightest,
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: AppColors.light_3),
+                side: const BorderSide(color: AppColors.light_3),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               onTap: () {
-                OpenDialog();
+                openDialog();
               }),
         ],
       ),
@@ -180,12 +178,21 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
   }
 }
 
-Widget _tag({label = 'chip', VoidCallback? onDeleted}) => Chip(
+class SelectChip extends StatelessWidget {
+  final VoidCallback? onDeleted;
+  final String label;
+
+  const SelectChip({Key? key, this.onDeleted, this.label = 'Sample'})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
       backgroundColor: Colors.black12,
-      labelPadding: EdgeInsets.only(left: 14, right: 14),
+      labelPadding: const EdgeInsets.only(left: 14, right: 14),
       label: Text(label,
-          style:
-              TextStyle(fontWeight: FontWeight.w600, color: AppColors.dark_3)),
+          style: const TextStyle(
+              fontWeight: FontWeight.w600, color: AppColors.dark_3)),
       deleteIconColor: AppColors.medium_2,
       deleteIcon: const Icon(
         Icons.remove_circle,
@@ -193,15 +200,17 @@ Widget _tag({label = 'chip', VoidCallback? onDeleted}) => Chip(
       ),
       onDeleted: onDeleted ?? () {},
     );
+  }
+}
 
-class SelectListTile extends StatelessWidget {
+class SelectTile extends StatelessWidget {
   final SelectItem item;
   final bool isSelected;
   final ValueChanged<SelectItem> onSelectItem;
   final IconData? iconSelected;
   final IconData? iconUnselected;
 
-  const SelectListTile({
+  const SelectTile({
     Key? key,
     required this.item,
     required this.isSelected,
@@ -217,7 +226,7 @@ class SelectListTile extends StatelessWidget {
       children: [
         ListTile(
           contentPadding:
-              EdgeInsets.only(left: 32, right: 32, top: 0, bottom: 0),
+              const EdgeInsets.only(left: 32, right: 32, top: 0, bottom: 0),
           leading: Icon(
             isSelected ? iconSelected : iconUnselected,
             color: AppColors.dark_1,
@@ -228,7 +237,7 @@ class SelectListTile extends StatelessWidget {
           ),
           onTap: () => onSelectItem(item),
         ),
-        AppDivider(mb: 0, mt: 0, color: AppColors.light_1)
+        const AppDivider(mb: 0, mt: 0, color: AppColors.light_1)
       ],
     );
   }
