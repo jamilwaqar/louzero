@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import 'package:louzero/ui/widget/widget.dart';
@@ -56,28 +58,51 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _body(BaseState state) {
     return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DashboardCell(
-                title: "Site Profile Templates",
-                description: "Description...",
-                count: state.siteProfileTemplates.length,
-                buttonTitleLeft: "",
-                buttonTitleRight: "",
-                onPressed: () => NavigationController().pushTo(context,
-                    child: CustomerSiteProfilePage(
-                        CustomerBloc(_baseBloc),
-                        state.siteProfileTemplates,
-                        isTemplate: true)),
-                onPressedLeft: () {},
-                onPressedRight: () {},
-              ),
-              const SizedBox(height: 24),
-            ],
-          );
-        });
+        itemCount: 2,
+        itemBuilder: (context, index)=> _listItem(state, index));
+  }
+
+  Widget _listItem(BaseState state, int index) {
+    if (index == 0) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DashboardCell(
+            title: "Site Profile Templates",
+            description: "Description...",
+            count: state.siteProfileTemplates.length,
+            buttonTitleLeft: "",
+            buttonTitleRight: "",
+            onPressed: () => NavigationController().pushTo(context,
+                child: CustomerSiteProfilePage(
+                    CustomerBloc(_baseBloc),
+                    state.siteProfileTemplates,
+                    isTemplate: true)),
+            onPressedLeft: () {},
+            onPressedRight: () {},
+          ),
+          const SizedBox(height: 24),
+        ],
+      );
+    } else if (index == 1) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DashboardCell(
+            title: "Setup Company",
+            description: "Description...",
+            count: state.siteProfileTemplates.length,
+            buttonTitleLeft: "",
+            buttonTitleRight: "",
+            onPressed: () => Get.to(()=> AccountSetup()),
+            onPressedLeft: () {},
+            onPressedRight: () {},
+          ),
+          const SizedBox(height: 24),
+        ],
+      );
+    } else  {
+      return Container();
+    }
   }
 }

@@ -10,6 +10,7 @@ abstract class BLPath {
   static const String customerSiteProfile = "CustomerSiteProfile";
   static const String siteProfileTemplate = "SiteProfileTemplate";
   static const String invites = "invites";
+  static const String company = "Company";
 }
 
 /// GetStoreKeys

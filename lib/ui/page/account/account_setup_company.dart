@@ -28,9 +28,9 @@ class AccountSetupCompany extends StatefulWidget {
 class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _formKey = GlobalKey<FormState>();
 
-  List<SelectItem> industries = [
+  List<SelectItem> industries = const [
     SelectItem(id: '23', label: 'Residential', value: 'res'),
-    SelectItem(id: '24', label: 'Comercial', value: 'com'),
+    SelectItem(id: '24', label: 'Commercial', value: 'com'),
     SelectItem(id: '25', label: 'Industrial', value: 'ind'),
     SelectItem(id: '26', label: 'Public', value: 'pub'),
     SelectItem(id: '27', label: 'Government', value: 'gov'),

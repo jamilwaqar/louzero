@@ -10,6 +10,7 @@ import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
@@ -210,7 +211,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             Row(
               children: [
                 Flexible(child: InkWell(
-                    onTap: _showCountryPicker,
+                    onTap:()=> countryPicker(context, (country) {
+                      _country = country;
+                      setState(() {
+                        _serviceCountryController.text = country.name;
+                      });
+                    }),
                     child: LZTextField(controller: isService ? _serviceCountryController : _billCountryController, label: "Country", enabled: false,))),
                 const SizedBox(width: 32),
                 const Flexible(child: SizedBox()),
@@ -399,19 +405,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         const SizedBox(width: 8),
         Text(label, style: TextStyles.titleM),
       ],
-    );
-  }
-
-  void _showCountryPicker() {
-    showCountryPicker(
-      context: context,
-      showPhoneCode: true, // optional. Shows phone code before the country name.
-      onSelect: (Country country) {
-        _country = country;
-        setState(() {
-          _serviceCountryController.text = country.name;
-        });
-      },
     );
   }
 
