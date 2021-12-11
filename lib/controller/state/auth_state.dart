@@ -7,7 +7,10 @@ import 'package:louzero/models/user_models.dart';
 class AuthStateManager {
   static final AuthStateManager _singleton = AuthStateManager._internal();
   bool get isAuthUser => GetStorage().read(GSKey.isAuthUser) ?? false;
+
   static late UserModel userModel;
+  static String? guestUserId;
+  static String? inviteModelId;
   factory AuthStateManager() {
     return _singleton;
   }

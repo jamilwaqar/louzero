@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +7,9 @@ import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
@@ -56,7 +56,7 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
 
   @override
   build(BuildContext context) {
-    _code = Random().nextInt(999999);
+    _code = verificationCode();
     return BaseScaffold(
       child: Stack(
         children: [
@@ -65,14 +65,46 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
               child: Column(
                 children: [
                   const AppTextHeader('Invite Customer'),
-                  // const AppTextBody('We sent a verification code to'),
+                  const SizedBox(height: 10),
+                  const AppTextBody('We will sent a verification code to'),
                   AppTextBody(widget.email,
                     color: AppColors.dark_3,
                     bold: true,
                   ),
-                  // const AppTextBody('Enter that code to continue',
-                  //     mt: 24, mb: 16),
-                  AppTextHeader(_code!.toString()),
+                  const SizedBox(height: 40),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const SizedBox(width: 40),
+                      Text(
+                        _code!.toString(),
+                        style: const TextStyle(
+                            fontSize: 55,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 10),
+                      ),
+                      const SizedBox(width: 10),
+                      CupertinoButton(
+                        onPressed: () {
+                          setState(() {
+
+                          });
+                        },
+                        padding: EdgeInsets.zero,
+                        child: Container(
+                            width: 30,
+                            height: 30,
+                            margin: const EdgeInsets.only(bottom: 10),
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                              color: AppColors.medium_1,
+                              shape: BoxShape.circle,
+                            ),
+                            child: appIcon(Icons.refresh, color: Colors.white)),
+                      )
+                    ],
+                  ),
                   const SizedBox(height: 40),
                   AppButton(
                     label: 'Invite',
@@ -102,10 +134,11 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
   void _inviteCustomer() async {
     NavigationController().loading();
     var res = await AuthAPI().sendInvitationCode(widget.email, _code!);
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
+    NavigationController().loading(isLoading: false);
     var msg = res is String ? res : 'Sent an invitation with the code!';
     WarningMessageDialog.showDialog(context, msg);
-    NavigationController().loading(isLoading: false);
+    await Future.delayed(const Duration(milliseconds: 2500));
     Get.back();
   }
 }

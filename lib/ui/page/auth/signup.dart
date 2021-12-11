@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +11,12 @@ import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
+import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 import '../base_scaffold.dart';
+import 'accept_invite.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -95,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
             fontWeight: FontWeight.w700,
             textDecoration: TextDecoration.underline,
             onPressed: () {
-              // NavigationController().pushTo(context, child: const VerifyPage());
+              Get.to(()=> AcceptInvitePage());
             },
           ),
         ],
@@ -109,7 +108,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _onSendVerificationCode() async {
     NavigationController().loading();
-    var code = Random().nextInt(999999);
+    var code = verificationCode();
     var email = _emailController.text;
     var res = await AuthAPI().sendVerificationCode(email, code);
     await Future.delayed(const Duration(seconds: 1));

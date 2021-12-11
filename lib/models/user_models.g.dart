@@ -18,3 +18,19 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'firstname': instance.firstname,
       'lastname': instance.lastname,
     };
+
+InviteModel _$InviteModelFromJson(Map<String, dynamic> json) => InviteModel()
+  ..email = json['email'] as String? ?? ''
+  ..objectId = json['objectId'] as String?
+  ..inviteCode = json['inviteCode'] as String? ?? ''
+  ..created = json['created'] == null
+      ? null
+      : DateTime.parse(json['created'] as String);
+
+Map<String, dynamic> _$InviteModelToJson(InviteModel instance) =>
+    <String, dynamic>{
+      'email': instance.email,
+      'objectId': instance.objectId,
+      'inviteCode': instance.inviteCode,
+      'created': instance.created?.toIso8601String(),
+    };

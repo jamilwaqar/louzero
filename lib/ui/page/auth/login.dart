@@ -14,7 +14,6 @@ import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/page/auth/accept_invite.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
-import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 
@@ -32,8 +31,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     if (kDebugMode) {
-      _emailController.text = "josh.coolman@singlemindconsulting.com";
-      _passwordController.text = "!1QAwsEDrf";
+      // _emailController.text = "josh.coolman@singlemindconsulting.com";
+      // _passwordController.text = "!1QAwsEDrf";
+      _emailController.text = "mark.austen@singlemindconsulting.com";
+      _passwordController.text = "111111";
     }
     super.initState();
   }
