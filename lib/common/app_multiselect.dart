@@ -93,10 +93,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
   }
 
   Widget _doneButton() => AppButton(
-        mt: 16,
-        ml: 16,
-        mr: 16,
-        mb: 16,
+        margin: const EdgeInsets.all(16),
         wide: true,
         label: "Done",
         primary: true,
