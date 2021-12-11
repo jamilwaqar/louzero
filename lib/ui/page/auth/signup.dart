@@ -94,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
             fontWeight: FontWeight.w700,
             textDecoration: TextDecoration.underline,
             onPressed: () {
-              Get.to(()=> AcceptInvitePage());
+              Get.to(()=> const AcceptInvitePage());
             },
           ),
         ],

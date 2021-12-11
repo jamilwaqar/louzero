@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_input_text.dart';
@@ -105,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
           AppTextLink(
             "HAVE AN INVITATION CODE?",
             fontWeight: FontWeight.w700,
-            onPressed: _verificationCode,
+            onPressed: ()=> Get.to(()=> const AcceptInvitePage()),
           ),
           Expanded(
               child: Flex(
@@ -151,10 +152,6 @@ class _LoginPageState extends State<LoginPage> {
   void _onRememberDevice() {}
   void _onResetPassword() {
     NavigationController().pushTo(context, child: const ResetPasswordPage());
-  }
-
-  void _verificationCode() {
-    // NavigationController().pushTo(context, child: const VerifyPage());
   }
 
   void _onGoogleSignIn() {}

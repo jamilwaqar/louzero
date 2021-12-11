@@ -39,12 +39,22 @@ class InviteModel {
       _$InviteModelFromJson(json);
 
   factory InviteModel.fromMap(Map map) {
-    int created = map['created'];
-    var date = DateTime.fromMillisecondsSinceEpoch(created);
-    map.remove('created');
+    var created = map['created'];
+    DateTime? date;
+    if (created is! DateTime) {
+      date = DateTime.fromMillisecondsSinceEpoch(created);
+      map.remove('created');
+    } else {
+      map.remove('created');
+    }
+
     Map<String, dynamic> json = Map<String, dynamic>.from(map);
     var model = InviteModel.fromJson(json);
-    model.created = date;
+    if (date != null) {
+      model.created = date;
+    } else {
+      model.created = created;
+    }
     return model;
   }
 
