@@ -47,7 +47,6 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
 
   @override
   Widget build(BuildContext context) {
-    _emailController.text = 'flowera0912@gmail.com';
     return BaseScaffold(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
