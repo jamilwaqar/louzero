@@ -7,7 +7,10 @@ import 'package:louzero/models/user_models.dart';
 class AuthStateManager {
   static final AuthStateManager _singleton = AuthStateManager._internal();
   bool get isAuthUser => GetStorage().read(GSKey.isAuthUser) ?? false;
+
   static late UserModel userModel;
+  static String? guestUserId;
+  static String? inviteModelId;
   factory AuthStateManager() {
     return _singleton;
   }
@@ -29,5 +32,15 @@ class AuthStateManager {
       userModel.objectId = user.getObjectId();
       GetStorage().write(GSKey.isAuthUser, true);
     }
+  }
+
+  Future updateUser() async {
+    BackendlessUser? user = await Backendless.userService.getCurrentUser();
+    if (user == null) return;
+    user.setProperties(
+      {... user.properties, ... userModel.toJson()}
+    );
+    var res = await Backendless.userService.update(user);
+    return res;
   }
 }

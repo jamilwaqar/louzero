@@ -13,6 +13,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:provider/provider.dart';
 import 'controller/api/api_manager.dart';
 import 'controller/utils.dart';
+import 'ui/page/auth/accept_invite.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

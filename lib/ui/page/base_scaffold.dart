@@ -96,16 +96,14 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                                 border: Border.all(
                                                     color: AppColors.medium_1,
                                                     width: 1)),
-                                            child: const Text("MA",
-                                                style: TextStyle(
+                                            child: Text(AuthStateManager.userModel.initials,
+                                                style: const TextStyle(
                                                   color: AppColors.lightest,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 14,
                                                 )),
                                           ),
-                                          const SizedBox(
-                                            width: 4,
-                                          ),
+                                          const SizedBox(width: 4),
                                           const Icon(
                                             Icons.arrow_drop_down,
                                             color: AppColors.light_3,

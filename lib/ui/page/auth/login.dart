@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_input_text.dart';
@@ -14,7 +15,6 @@ import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/page/auth/accept_invite.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
-import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 
@@ -32,8 +32,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     if (kDebugMode) {
-      _emailController.text = "josh.coolman@singlemindconsulting.com";
-      _passwordController.text = "!1QAwsEDrf";
+      // _emailController.text = "josh.coolman@singlemindconsulting.com";
+      // _passwordController.text = "!1QAwsEDrf";
+      _emailController.text = "mark.austen@singlemindconsulting.com";
+      _passwordController.text = "111111";
     }
     super.initState();
   }
@@ -104,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
           AppTextLink(
             "HAVE AN INVITATION CODE?",
             fontWeight: FontWeight.w700,
-            onPressed: _verificationCode,
+            onPressed: ()=> Get.to(()=> const AcceptInvitePage()),
           ),
           Expanded(
               child: Flex(
@@ -150,10 +152,6 @@ class _LoginPageState extends State<LoginPage> {
   void _onRememberDevice() {}
   void _onResetPassword() {
     NavigationController().pushTo(context, child: const ResetPasswordPage());
-  }
-
-  void _verificationCode() {
-    // NavigationController().pushTo(context, child: const VerifyPage());
   }
 
   void _onGoogleSignIn() {}
