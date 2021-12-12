@@ -10,9 +10,9 @@ class AppNavButton extends StatelessWidget {
     this.count,
     this.onPressed,
     this.selected = false,
-    this.color = AppColors.darkest,
-    this.colorIco = AppColors.dark_1,
-    this.colorBg = AppColors.light_2,
+    this.color = AppColors.secondary_20,
+    this.colorIco = AppColors.secondary_60,
+    this.colorBg = AppColors.light_1,
     this.mt = 0,
     this.mb = 0,
     this.ml = 0,
@@ -41,7 +41,7 @@ class AppNavButton extends StatelessWidget {
         // height: 48,
         margin: EdgeInsets.only(right: mr, left: ml, top: mt, bottom: mb),
         decoration: BoxDecoration(
-            color: selected ? colorBg : Colors.transparent,
+            color: selected ? AppColors.secondary_95 : Colors.transparent,
             borderRadius: const BorderRadius.all(Radius.circular(999))),
         padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
         child: Row(
@@ -50,8 +50,8 @@ class AppNavButton extends StatelessWidget {
               margin: EdgeInsets.only(right: 12),
               child: Icon(
                 icon,
-                color: colorIco,
-                size: 22,
+                color: selected ? AppColors.primary_1 : colorIco,
+                size: 24,
               ),
             ),
             Expanded(
@@ -60,7 +60,7 @@ class AppNavButton extends StatelessWidget {
                 style: TextStyle(
                   color: color,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
               ),
             )

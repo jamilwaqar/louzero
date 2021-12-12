@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_list_tile.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
@@ -36,28 +34,101 @@ class _SideMenuViewState extends State<SideMenuView> {
       data: Theme.of(context).copyWith(
         canvasColor: Colors.transparent,
       ),
-      child: Drawer(
-        key: widget.sideMenuKey,
-        elevation: 0,
-        child: Container(
-          padding: const EdgeInsets.only(top: 10),
-          decoration: BoxDecorationEx.shadowEffect(
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(16),
-              bottomRight: Radius.circular(16),
+      child: Container(
+        width: 360,
+        child: Drawer(
+          elevation: 0,
+          key: widget.sideMenuKey,
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.only(top: 10),
+            decoration: BoxDecorationEx.shadowEffect(
+              shadowOffset: Offset(0, 6),
+              shadowRadius: 3,
+              shadowColor: Colors.black.withOpacity(0.3),
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
+              backgroundColor: AppColors.secondary_99,
             ),
-            backgroundColor: AppColors.light_1,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 48, bottom: 8),
+                  child: _profile(),
+                ),
+                _primaryNav(),
+                _secondaryNav()
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _primaryNav() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 48, bottom: 8),
-                child: _profile(),
+              AppNavButton(
+                title: "Dashboard",
+                selected: true,
+                icon: Icons.dashboard,
+                onPressed: () {
+                  _pop();
+                  NavigationController()
+                      .pushTo(context, child: DashboardPage());
+                },
               ),
-              Expanded(
-                child: _primaryNav(),
+              AppNavButton(
+                title: "Customers",
+                icon: Icons.person,
+                onPressed: () {
+                  _pop();
+                  NavigationController()
+                      .pushTo(context, child: const CustomerListPage());
+                },
               ),
-              _secondaryNav()
+              AppNavButton(
+                title: "Jobs",
+                icon: MdiIcons.briefcase,
+                onPressed: () {
+                  _pop();
+                },
+              ),
+              AppNavButton(
+                title: "Schedule",
+                icon: MdiIcons.calendar,
+                onPressed: () {
+                  _pop();
+                },
+              ),
+              AppNavButton(
+                title: "Inventory",
+                icon: MdiIcons.clipboardText,
+                onPressed: () {
+                  _pop();
+                },
+              ),
+              AppNavButton(
+                title: "Reports",
+                icon: Icons.bar_chart,
+                onPressed: () {
+                  _pop();
+                },
+              ),
+              AppNavButton(
+                title: "Settings",
+                icon: Icons.settings,
+                onPressed: () {
+                  _pop();
+                  NavigationController()
+                      .pushTo(context, child: const SettingsPage());
+                },
+              ),
             ],
           ),
         ),
@@ -65,109 +136,23 @@ class _SideMenuViewState extends State<SideMenuView> {
     );
   }
 
-  Widget _closeButton() {
+  Widget _secondaryNav() {
     return Padding(
-      padding: const EdgeInsets.only(right: 10, bottom: 42),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      child: Column(
         children: [
-          CupertinoButton(
-            padding: EdgeInsets.zero,
+          AppNavButton(
+            title: "Sign Out",
+            icon: MdiIcons.logout,
+            colorIco: AppColors.primary_1,
             onPressed: () {
-              Navigator.pop(context);
+              _pop();
+              NavigationController()
+                  .pushTo(context, child: const AccountSetup());
             },
-            child: const Icon(
-              Icons.close,
-              color: AppColors.medium_3,
-            ),
-          )
+          ),
         ],
       ),
-    );
-  }
-
-  Widget _primaryNav() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            AppNavButton(
-              title: "Dashboard",
-              selected: true,
-              icon: Icons.dashboard,
-              onPressed: () {
-                _pop();
-                NavigationController().pushTo(context, child: DashboardPage());
-              },
-            ),
-            AppNavButton(
-              title: "Customers",
-              icon: Icons.person,
-              onPressed: () {
-                _pop();
-                NavigationController()
-                    .pushTo(context, child: const CustomerListPage());
-              },
-            ),
-            AppNavButton(
-              title: "Jobs",
-              icon: MdiIcons.briefcase,
-              onPressed: () {
-                _pop();
-              },
-            ),
-            AppNavButton(
-              title: "Schedule",
-              icon: MdiIcons.calendar,
-              onPressed: () {
-                _pop();
-              },
-            ),
-            AppNavButton(
-              title: "Inventory",
-              icon: MdiIcons.clipboardText,
-              onPressed: () {
-                _pop();
-              },
-            ),
-            AppNavButton(
-              title: "Reports",
-              icon: Icons.bar_chart,
-              onPressed: () {
-                _pop();
-              },
-            ),
-            AppNavButton(
-              title: "Settings",
-              icon: Icons.settings,
-              onPressed: () {
-                _pop();
-                NavigationController()
-                    .pushTo(context, child: const SettingsPage());
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _secondaryNav() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        AppListTile(
-          ml: 10,
-          mb: 24,
-          iconStart: Icons.content_paste_rounded,
-          title: 'Account Setup',
-          onTap: () {
-            _pop();
-            NavigationController().pushTo(context, child: const AccountSetup());
-          },
-        ),
-      ],
     );
   }
 

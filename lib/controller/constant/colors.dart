@@ -17,28 +17,49 @@ abstract class AppColors {
   static const Color light_3 = Color(0xFFBABDC5);
   static const Color light_4 = Color(0xFFE2E2E3);
 
+  static const Color primary_1 = Color(0xFFE77C33);
+  static const Color secondary_20 = Color(0xFF37474F);
+  static const Color secondary_60 = Color(0xFF78909C);
+  static const Color secondary_95 = Color(0xFFECEFF1);
+  static const Color secondary_99 = Color(0xFFF1F3F5);
+
   static const Color icon = Color(0xFF323232);
   static const Color black = Colors.black;
 }
 
 abstract class TextStyles {
-  static const TextStyle displayL = TextStyle(color: AppColors.dark_1, fontSize: 57);
-  static const TextStyle displayM = TextStyle(color: AppColors.dark_1, fontSize: 45);
-  static const TextStyle displayS = TextStyle(color: AppColors.dark_1, fontSize: 36);
+  static const TextStyle displayL =
+      TextStyle(color: AppColors.dark_1, fontSize: 57);
+  static const TextStyle displayM =
+      TextStyle(color: AppColors.dark_1, fontSize: 45);
+  static const TextStyle displayS =
+      TextStyle(color: AppColors.dark_1, fontSize: 36);
 
-  static const TextStyle headLineL = TextStyle(color: AppColors.dark_1, fontSize: 32);
-  static const TextStyle headLineM = TextStyle(color: AppColors.dark_1, fontSize: 28);
-  static const TextStyle headLineS = TextStyle(color: AppColors.dark_1, fontSize: 24);
+  static const TextStyle headLineL =
+      TextStyle(color: AppColors.dark_1, fontSize: 32);
+  static const TextStyle headLineM =
+      TextStyle(color: AppColors.dark_1, fontSize: 28);
+  static const TextStyle headLineS =
+      TextStyle(color: AppColors.dark_1, fontSize: 24);
 
-  static const TextStyle titleL = TextStyle(color: AppColors.dark_1, fontSize: 22, fontWeight: FontWeight.w500);
-  static const TextStyle titleM = TextStyle(color: AppColors.dark_1, fontSize: 16, fontWeight: FontWeight.w500);
-  static const TextStyle titleS = TextStyle(color: AppColors.dark_1, fontSize: 14, fontWeight: FontWeight.w500);
+  static const TextStyle titleL = TextStyle(
+      color: AppColors.dark_1, fontSize: 22, fontWeight: FontWeight.w500);
+  static const TextStyle titleM = TextStyle(
+      color: AppColors.dark_1, fontSize: 16, fontWeight: FontWeight.w500);
+  static const TextStyle titleS = TextStyle(
+      color: AppColors.dark_1, fontSize: 14, fontWeight: FontWeight.w500);
 
-  static const TextStyle labelL = TextStyle(color: AppColors.dark_1, fontSize: 14, fontWeight: FontWeight.w500);
-  static const TextStyle labelM = TextStyle(color: AppColors.dark_1, fontSize: 12, fontWeight: FontWeight.w500);
-  static const TextStyle labelS = TextStyle(color: AppColors.dark_1, fontSize: 11, fontWeight: FontWeight.w500);
+  static const TextStyle labelL = TextStyle(
+      color: AppColors.dark_1, fontSize: 14, fontWeight: FontWeight.w500);
+  static const TextStyle labelM = TextStyle(
+      color: AppColors.dark_1, fontSize: 12, fontWeight: FontWeight.w500);
+  static const TextStyle labelS = TextStyle(
+      color: AppColors.dark_1, fontSize: 11, fontWeight: FontWeight.w500);
 
-  static const TextStyle bodyL = TextStyle(color: AppColors.dark_1, fontSize: 16);
-  static const TextStyle bodyM = TextStyle(color: AppColors.dark_1, fontSize: 16);
-  static const TextStyle bodyS = TextStyle(color: AppColors.dark_1, fontSize: 16);
+  static const TextStyle bodyL =
+      TextStyle(color: AppColors.dark_1, fontSize: 16);
+  static const TextStyle bodyM =
+      TextStyle(color: AppColors.dark_1, fontSize: 16);
+  static const TextStyle bodyS =
+      TextStyle(color: AppColors.dark_1, fontSize: 16);
 }
