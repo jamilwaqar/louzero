@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/bloc/base/base.dart';
@@ -12,11 +13,12 @@ import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:provider/provider.dart';
 import 'controller/api/api_manager.dart';
+import 'controller/get/base_controller.dart';
 import 'controller/utils.dart';
-import 'ui/page/auth/accept_invite.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Get.put(BaseController());
   await GetStorage.init();
   // await Backendless.setUrl(APIManager.API_HOST);
   await Backendless.initApp(

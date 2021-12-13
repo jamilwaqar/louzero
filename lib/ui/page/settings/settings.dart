@@ -89,9 +89,9 @@ class _SettingsPageState extends State<SettingsPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           DashboardCell(
-            title: "Setup Company",
+            title: "Companies",
             description: "Description...",
-            count: state.siteProfileTemplates.length,
+            count: 3,
             buttonTitleLeft: "",
             buttonTitleRight: "",
             onPressed: () => Get.to(()=> AccountSetup()),

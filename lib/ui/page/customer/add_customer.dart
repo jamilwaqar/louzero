@@ -531,7 +531,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Widget _searchAddressItem(int index) {
     SearchAddressModel model = widget.customerBloc.state.searchedAddressList[index];
     return InkWell(
-      onTap: () => _setUpRoute(model),
+      onTap: () => _onSelectAddress(model),
       child: Container(
         height: 42,
         alignment: Alignment.centerLeft,
@@ -569,7 +569,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     );
   }
 
-  void _setUpRoute(SearchAddressModel model, {bool isService = true}) async {
+  void _onSelectAddress(SearchAddressModel model, {bool isService = true}) async {
     NavigationController().loading();
     List? res = await widget.customerBloc.getLatLng(model.placeId);
     if (res != null) {
