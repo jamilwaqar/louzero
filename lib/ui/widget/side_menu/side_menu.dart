@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:louzero/common/app_avatar.dart';
 import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/app_icon_button.dart';
+import 'package:louzero/common/app_nav_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -12,9 +13,8 @@ import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:louzero/ui/page/settings/settings.dart';
-import 'package:louzero/ui/widget/cell/list/side_menu.dart';
-import 'package:louzero/ui/widget/dialolg/popup/camera_option.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SideMenuView extends StatefulWidget {
   const SideMenuView({Key? key, this.sideMenuKey}) : super(key: key);
@@ -25,7 +25,7 @@ class SideMenuView extends StatefulWidget {
 }
 
 class _SideMenuViewState extends State<SideMenuView> {
-  String? _profileImagePath;
+  String? _profileImagePath = 'assets/mocks/profile_corey_2.png';
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _SideMenuViewState extends State<SideMenuView> {
           child: Container(
             clipBehavior: Clip.hardEdge,
             margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.only(top: 10),
+            // padding: const EdgeInsets.only(top: 10),
             decoration: BoxDecorationEx.shadowEffect(
               shadowOffset: Offset(0, 6),
               shadowRadius: 3,
@@ -52,8 +52,18 @@ class _SideMenuViewState extends State<SideMenuView> {
             ),
             child: Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    AppIconButton(
+                      onTap: () {
+                        _pop();
+                      },
+                    )
+                  ],
+                ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 48, bottom: 8),
+                  padding: const EdgeInsets.only(top: 32, bottom: 8),
                   child: _profile(),
                 ),
                 _primaryNav(),
@@ -159,63 +169,31 @@ class _SideMenuViewState extends State<SideMenuView> {
   Widget _profile() {
     return Column(
       children: [
-        Stack(
-          children: [
-            Container(
-              width: 96,
-              height: 96,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(48),
-                  color: AppColors.medium_2,
-                  image: _profileImagePath == null
-                      ? null
-                      : DecorationImage(
-                          image: FileImage(File(_profileImagePath!)),
-                          fit: BoxFit.cover)),
-              child: _profileImagePath != null
-                  ? null
-                  : const Text(
-                      "AW",
-                      style: TextStyle(
-                        color: AppColors.lightest,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 40,
-                      ),
-                    ),
-            ),
-          ],
-        ),
-        const AppTextBody(
-          'Allan Whitaker',
-          size: 24,
-          mt: 8,
-          mb: 8,
-          color: AppColors.darkest,
-          center: true,
-        ),
-        const AppTextBody(
-          'My Account',
-          mb: 24,
-          center: true,
+        AppAvatar(path: _profileImagePath, size: 96),
+        const SizedBox(height: 8),
+        Text('Corey Holton',
+            style: GoogleFonts.barlowCondensed(
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+              fontSize: 24,
+            )),
+        const SizedBox(height: 8),
+        Text(
+          'Patio Pools and Spas',
+          style: GoogleFonts.lato(
+              color: AppColors.secondary_20,
+              fontSize: 16,
+              fontWeight: FontWeight.w400),
         ),
         const AppDivider(
+          mt: 32,
           ml: 90,
           mr: 90,
+          size: 2,
+          color: AppColors.primary_50,
         )
       ],
     );
-  }
-
-  void _changeProfileImage() async {
-    var option = await CameraOption.showCameraOptions(context);
-    if (option is ImageSource) {
-      var selectedImage = await ImagePicker().pickImage(source: option);
-      setState(() {
-        _profileImagePath = selectedImage?.path;
-      });
-      // selectedImage.
-    }
   }
 
   void _pop() => NavigationController().pop(context);
