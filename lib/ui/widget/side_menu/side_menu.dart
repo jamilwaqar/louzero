@@ -63,7 +63,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 32, bottom: 8),
+                  padding: const EdgeInsets.only(top: 0, bottom: 8),
                   child: _profile(),
                 ),
                 _primaryNav(),
