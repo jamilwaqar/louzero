@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
@@ -8,37 +9,45 @@ import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_multiselect.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
-import 'models/company_model.dart';
+import 'package:louzero/models/company_models.dart';
+import 'package:louzero/models/models.dart';
 
 class AccountSetupCompany extends StatefulWidget {
   const AccountSetupCompany({
     Key? key,
-    required this.data,
     this.onChange,
   }) : super(key: key);
 
-  final void Function(CompanyModel)? onChange;
-  final CompanyModel data;
+  final void Function()? onChange;
+
 
   @override
   State<AccountSetupCompany> createState() => _AccountSetupCompanyState();
 }
 
+List<SelectItem> industries = const [
+  SelectItem(id: '23', label: 'Residential', value: 'res'),
+  SelectItem(id: '24', label: 'Commercial', value: 'com'),
+  SelectItem(id: '25', label: 'Industrial', value: 'ind'),
+  SelectItem(id: '26', label: 'Public', value: 'pub'),
+  SelectItem(id: '27', label: 'Government', value: 'gov'),
+  SelectItem(id: '28', label: 'Entertainment', value: 'res'),
+  SelectItem(id: '29', label: 'Non Profit', value: 'com'),
+  SelectItem(id: '31', label: 'Rural', value: 'pub'),
+  SelectItem(id: '32', label: 'Scientific', value: 'gov'),
+];
+
 class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _formKey = GlobalKey<FormState>();
 
-  List<SelectItem> industries = const [
-    SelectItem(id: '23', label: 'Residential', value: 'res'),
-    SelectItem(id: '24', label: 'Commercial', value: 'com'),
-    SelectItem(id: '25', label: 'Industrial', value: 'ind'),
-    SelectItem(id: '26', label: 'Public', value: 'pub'),
-    SelectItem(id: '27', label: 'Government', value: 'gov'),
-    SelectItem(id: '28', label: 'Entertainment', value: 'res'),
-    SelectItem(id: '29', label: 'Non Profit', value: 'com'),
-    SelectItem(id: '31', label: 'Rural', value: 'pub'),
-    SelectItem(id: '32', label: 'Scientific', value: 'gov'),
-  ];
+  final CompanyModel _companyModel = CompanyModel();
+  final AddressModel _addressModel = AddressModel(country: '', street: '', city: '', state: '', zip: '');
+  final _countryController = TextEditingController();
+  SearchAddressModel? _searchAddressModel;
+
+  List<SelectItem> _industries = [industries[0], industries[1], industries[4]];
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +128,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     bool valid = _formKey.currentState!.validate();
     if (valid) {
       _formKey.currentState!.save();
-      if (widget.onChange != null) widget.onChange!(widget.data);
+      if (widget.onChange != null) widget.onChange!();
     }
   }
 
@@ -150,7 +159,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         keyboardType: TextInputType.phone,
         validator: _validatePhone,
         onSaved: (val) {
-          widget.data.phone = val;
+          _companyModel.phone = val ?? '';
         },
       );
 
@@ -159,14 +168,14 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         label: 'Company Name',
         validator: _validateName,
         onSaved: (val) {
-          widget.data.name = val;
+          _companyModel.name = val ?? '';
         },
       );
 
   _website() => AppInputText(
         label: 'Website',
         onSaved: (val) {
-          widget.data.website = val;
+          _companyModel.website = val ?? '';
         },
       );
 
@@ -174,53 +183,63 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         label: 'Email Address',
         required: true,
         onSaved: (val) {
-          widget.data.email = val;
+          _companyModel.email = val ?? '';
         },
       );
   _tags() => AppMultiSelect(
         width: 448,
-        initialItems: [industries[0], industries[1], industries[4]],
+        initialItems: _industries,
         items: industries,
         onChange: (items) {
           inspect(items);
+          _industries = items;
         },
         label: 'What Industries do you Serve?',
       );
-  _country() => AppInputText(
-        label: 'Country',
-        onSaved: (val) {
-          widget.data.country = val;
-        },
-      );
+  _country() => InkWell(
+    onTap: ()=> countryPicker(context, (country) {
+      setState(() {
+        _countryController.text = country.name;
+      });
+    }),
+    child: AppInputText(
+          label: 'Country',
+          enabled: false,
+          controller: _countryController,
+          onSaved: (val) {
+            _addressModel.country = val ?? '';
+          },
+        ),
+  );
   _street() => AppInputText(
         label: 'Street',
         onSaved: (val) {
-          widget.data.street = val;
+          _addressModel.street = val ?? '';
         },
       );
   _suite() => AppInputText(
         label: 'Suite',
         onSaved: (val) {
-          widget.data.suite = val;
+          _addressModel.suite = val;
         },
       );
   _city() => AppInputText(
         label: 'City',
         onSaved: (val) {
-          widget.data.city = val;
+          _addressModel.city = val ?? '';
         },
       );
   _state() => AppInputText(
         label: 'State',
         options: listStateNames,
         onSaved: (val) {
-          widget.data.state = val;
+          _addressModel.state = val ?? '';
         },
       );
   _zip() => AppInputText(
         label: 'Zip',
         onSaved: (val) {
-          widget.data.zip = val;
+          _addressModel.zip = val ?? '';
         },
       );
 

@@ -12,6 +12,7 @@ import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/models/company_models.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
@@ -30,9 +31,7 @@ class _AccountSetupState extends State<AccountSetup> {
 
   var _step = 0;
 
-  CompanyModel _companyModel = CompanyModel();
-
-  final customerTypes = ["Residential", "Commerical"];
+  final customerTypes = ["Residential", "Commercial"];
 
   final customerTypeController = TextEditingController();
 
@@ -52,7 +51,7 @@ class _AccountSetupState extends State<AccountSetup> {
                 stepItems: AccountSetupModel.stepItems,
                 selected: _step,
               )),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           Expanded(
             child: PageView(
               controller: _pageController,
@@ -60,10 +59,7 @@ class _AccountSetupState extends State<AccountSetup> {
               children: [
                 _scrollView(
                   AccountSetupCompany(
-                    data: _companyModel,
-                    onChange: (data) {
-                      _saveFormInput(data: data);
-                    },
+                    onChange: _saveFormInput,
                   ),
                 ),
                 _scrollView(customerCard()),
@@ -77,11 +73,7 @@ class _AccountSetupState extends State<AccountSetup> {
     );
   }
 
-  void _saveFormInput({CompanyModel? data}) {
-    // save data changes
-    if (data != null) {
-      _companyModel = data;
-    }
+  void _saveFormInput() {
     _nextStep();
   }
 

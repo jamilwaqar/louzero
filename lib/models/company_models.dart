@@ -6,14 +6,15 @@ part 'company_models.g.dart';
 
 @JsonSerializable()
 class CompanyModel {
-  CompanyModel({required this.address});
+  CompanyModel();
 
   String? objectId;
+  @JsonKey(defaultValue: '')   String website = '';
   @JsonKey(defaultValue: '')   String name = '';
   @JsonKey(defaultValue: '')   String phone = '';
   @JsonKey(defaultValue: '')   String email = '';
   @JsonKey(defaultValue: [])   List<String> industries = [];
-  AddressModel address;
+  AddressModel? address;
 
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>

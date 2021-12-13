@@ -81,6 +81,7 @@ class AddressModel {
   String country;
   String street;
   String city;
+  String? suite;
   String state;
   String zip;
 

@@ -6,21 +6,24 @@ part of 'company_models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel(
-      address: AddressModel.fromJson(json['address'] as Map<String, dynamic>),
-    )
-      ..objectId = json['objectId'] as String?
-      ..name = json['name'] as String? ?? ''
-      ..phone = json['phone'] as String? ?? ''
-      ..email = json['email'] as String? ?? ''
-      ..industries = (json['industries'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [];
+CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel()
+  ..objectId = json['objectId'] as String?
+  ..website = json['website'] as String? ?? ''
+  ..name = json['name'] as String? ?? ''
+  ..phone = json['phone'] as String? ?? ''
+  ..email = json['email'] as String? ?? ''
+  ..industries = (json['industries'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      []
+  ..address = json['address'] == null
+      ? null
+      : AddressModel.fromJson(json['address'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$CompanyModelToJson(CompanyModel instance) =>
     <String, dynamic>{
       'objectId': instance.objectId,
+      'website': instance.website,
       'name': instance.name,
       'phone': instance.phone,
       'email': instance.email,

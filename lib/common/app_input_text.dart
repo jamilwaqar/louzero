@@ -77,6 +77,10 @@ class AppInputText extends StatelessWidget {
         borderRadius: BorderRadius.circular(_radius),
         borderSide: BorderSide(color: _color, width: _width),
       ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(_radius),
+        borderSide: BorderSide(color: _color, width: _width),
+      ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_radius),
         borderSide: BorderSide(color: _focus, width: _width),
