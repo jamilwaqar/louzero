@@ -10,13 +10,24 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel()
   ..avatar = json['avatar'] == null ? null : Uri.parse(json['avatar'] as String)
   ..email = json['email'] as String? ?? ''
   ..firstname = json['firstname'] as String? ?? ''
-  ..lastname = json['lastname'] as String? ?? '';
+  ..lastname = json['lastname'] as String? ?? ''
+  ..activeCompanyId = json['activeCompanyId'] as String? ?? ''
+  ..customerTypes = (json['customerTypes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      []
+  ..jobTypes =
+      (json['jobTypes'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+          [];
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'avatar': instance.avatar?.toString(),
       'email': instance.email,
       'firstname': instance.firstname,
       'lastname': instance.lastname,
+      'activeCompanyId': instance.activeCompanyId,
+      'customerTypes': instance.customerTypes,
+      'jobTypes': instance.jobTypes,
     };
 
 InviteModel _$InviteModelFromJson(Map<String, dynamic> json) => InviteModel()

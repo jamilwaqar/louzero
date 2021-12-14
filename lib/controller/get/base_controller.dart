@@ -12,7 +12,7 @@ class BaseController extends GetxController {
     searchedAddresses.value = list;
   }
 
-  searchAddress(String input, String countryCode) async* {
+  searchAddress(String input, String countryCode) async {
     if (input.isEmpty) {
       searchedAddressList = [];
       return;
@@ -33,7 +33,7 @@ class BaseController extends GetxController {
     });
     if (response is Map) {
       List<dynamic> list = response['predictions'];
-      return list.map((e) {
+      List<SearchAddressModel> list1 = list.map((e) {
         SearchAddressModel addressModel =
         SearchAddressModel.fromJson(e['structured_formatting']);
         addressModel.placeId = e['place_id'];
@@ -43,6 +43,7 @@ class BaseController extends GetxController {
         }
         return addressModel;
       }).toList();
+      return list1;
     }
     return [];
   }

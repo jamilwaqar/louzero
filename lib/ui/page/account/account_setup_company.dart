@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,11 +10,14 @@ import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_multiselect.dart';
+import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
 
@@ -42,8 +46,6 @@ class AccountSetupCompany extends StatefulWidget {
   State<AccountSetupCompany> createState() => _AccountSetupCompanyState();
 }
 
-
-
 class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _formKey = GlobalKey<FormState>();
 
@@ -53,11 +55,11 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _streetController = TextEditingController();
   final _cityController = TextEditingController();
   final _stateController = TextEditingController();
+  Country? _selectCountry;
 
   SearchAddressModel? _searchAddressModel;
   final BaseController _baseController = Get.find();
-  List<SelectItem> _industries = [industries[0], industries[1], industries[4]];
-
+  List<SelectItem> _initialIndustries = [industries[0], industries[1], industries[4]];
 
   @override
   Widget build(BuildContext context) {
@@ -97,24 +99,39 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             ),
             AppCard(
               children: [
-                const AppTextHeader(
-                  'Company Address',
-                  alignLeft: true,
-                  icon: Icons.location_on,
-                  size: 24,
-                ),
-                _country(),
-                _street(),
-                _suite(),
-                Row(
+                Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    expand(_city(), 4),
-                    gapX(24),
-                    expand(_state(), 3),
-                    gapX(24),
-                    expand(_zip(), 2),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const AppTextHeader(
+                          'Company Address',
+                          alignLeft: true,
+                          icon: Icons.location_on,
+                          size: 24,
+                        ),
+                        _country(),
+                        _street(),
+                        _suite(),
+                        Row(
+                          children: [
+                            expand(_city(), 4),
+                            gapX(24),
+                            expand(_state(), 3),
+                            gapX(24),
+                            expand(_zip(), 2),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Positioned(
+                        left: 0,
+                        right: 0,
+                        top: 225,
+                        child: _searchedAddressListView()),
                   ],
-                ),
+                )
               ],
             ),
             Row(
@@ -134,12 +151,24 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     return Expanded(child: child, flex: flex);
   }
 
-  void _submit() {
+  void _submit() async {
     bool valid = _formKey.currentState!.validate();
-    if (valid) {
-      _formKey.currentState!.save();
-      if (widget.onChange != null) widget.onChange!();
+    if (!valid) return;
+    _formKey.currentState!.save();
+    NavigationController().loading();
+    Map<String, dynamic> data = _companyModel.toJson();
+    _addressModel.latitude = _searchAddressModel?.latitude ?? 0;
+    _addressModel.longitude = _searchAddressModel?.longitude ?? 0;
+    data['address'] = _addressModel.toJson();
+
+    var res = await APIManager.save(BLPath.company, data);
+    if (res is Map) {
+      AuthManager.userModel.activeCompanyId = res['objectId'];
+      await AuthManager().updateUser();
     }
+    if (widget.onChange != null) widget.onChange!();
+    NavigationController().loading(isLoading: false);
+
   }
 
   // Validation:
@@ -198,16 +227,18 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       );
   _tags() => AppMultiSelect(
         width: 448,
-        initialItems: _industries,
+        initialItems: _initialIndustries,
         items: industries,
         onChange: (items) {
           inspect(items);
-          _industries = items;
+          _initialIndustries = items;
+          _companyModel.industries = items.map((e) => e.value).toList();
         },
         label: 'What Industries do you Serve?',
       );
   _country() => InkWell(
     onTap: ()=> countryPicker(context, (country) {
+      _selectCountry = country;
       setState(() {
         _countryController.text = country.name;
       });
@@ -221,35 +252,35 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           },
         ),
   );
-  _street() => Stack(
-    children: [
-      AppInputText(
-            label: 'Street',
-            onSaved: (val) {
-              _addressModel.street = val ?? '';
-            },
-        onChanged: (val) {
-              _baseController.searchAddress(val, 'US');
+
+  _street() => AppInputText(
+        label: 'Street',
+        controller: _streetController,
+        onSaved: (val) {
+          _addressModel.street = val ?? '';
         },
-          ),
-      Positioned(
-          left: 0, right: 0, top: 180, child: _searchedAddressListView()),
-    ],
-  );
+        onChanged: (val) {
+          _baseController.searchAddress(val, _selectCountry?.countryCode ?? 'US');
+        },
+      );
   _suite() => AppInputText(
         label: 'Suite',
         onSaved: (val) {
           _addressModel.suite = val;
         },
       );
+
   _city() => AppInputText(
         label: 'City',
+        controller: _cityController,
         onSaved: (val) {
           _addressModel.city = val ?? '';
         },
       );
+
   _state() => AppInputText(
         label: 'State',
+        controller: _stateController,
         options: listStateNames,
         onSaved: (val) {
           _addressModel.state = val ?? '';
@@ -263,21 +294,26 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       );
 
   Widget _searchedAddressListView() {
-    return Obx(() => _baseController.searchedAddresses.value.isEmpty
-        ? Container()
-        : Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.light_1,
-              border: Border.all(color: AppColors.dark_1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (_, int index) => _searchAddressItem(index),
-                separatorBuilder: (_, __) => const Divider(),
-                itemCount: _baseController.searchedAddresses.value.length),
-          ));
+    return Obx(() {
+      if (_baseController.searchedAddresses.value.isEmpty) {
+        return Container();
+      }
+      return Container(
+        padding: const EdgeInsets.all(8),
+        height: 200,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.light_1,
+          border: Border.all(color: AppColors.dark_1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (_, int index) => _searchAddressItem(index),
+            separatorBuilder: (_, __) => const Divider(),
+            itemCount: _baseController.searchedAddresses.value.length),
+      );
+    });
   }
 
   Widget _searchAddressItem(int index) {
@@ -343,8 +379,16 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       }
     }
     _baseController.searchedAddressList = [];
+
+    // AddressModel address = AddressModel(
+    //     country: _selectCountry!.name,
+    //     street: _streetController.text,
+    //     city: _cityController.text,
+    //     state: _stateController.text,
+    //     zip: _addressModel.zip);
     NavigationController().loading(isLoading: false);
   }
+
   // Utility Functions
   Widget gapX(double gap) {
     return SizedBox(width: gap);

@@ -8,11 +8,11 @@ import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
-import 'package:louzero/controller/api/auth/auth.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/auth/complete.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
@@ -171,7 +171,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
     }
     NavigationController().loading(isLoading: false);
     _inviteModel = list.first;
-    AuthStateManager.inviteModelId = _inviteModel?.objectId;
+    AuthManager.inviteModelId = _inviteModel?.objectId;
     return;
   }
 }

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
-import 'package:louzero/controller/api/auth/auth.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';

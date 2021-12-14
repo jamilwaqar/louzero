@@ -6,10 +6,11 @@ abstract class Constant {
 CustomerModel? tempCustomerModel;
 /// Backendless Data Paths
 abstract class BLPath {
+  static const String user = "Users";
   static const String customer = "Customer";
   static const String customerSiteProfile = "CustomerSiteProfile";
   static const String siteProfileTemplate = "SiteProfileTemplate";
-  static const String invites = "invites";
+  static const String invites = "Invites";
   static const String company = "Company";
 }
 
