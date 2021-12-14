@@ -4,8 +4,16 @@ import 'package:louzero/controller/constant/colors.dart';
 class AppAvatar extends StatelessWidget {
   final String? path;
   final String? text;
+  final Color? borderColor;
+  final Color? backgroundColor;
   final double size;
-  const AppAvatar({Key? key, this.path, this.text = '', this.size = 96})
+  const AppAvatar(
+      {Key? key,
+      this.path,
+      this.borderColor,
+      this.backgroundColor,
+      this.text = '',
+      this.size = 96})
       : super(key: key);
 
   @override
@@ -14,8 +22,11 @@ class AppAvatar extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
+      padding: borderColor == null ? EdgeInsets.all(0) : EdgeInsets.all(2),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(999), color: AppColors.medium_2),
+          border: Border.all(color: borderColor ?? Colors.transparent),
+          borderRadius: BorderRadius.circular(999),
+          color: backgroundColor ?? Colors.transparent),
       child: path == null
           ? Text(
               text!,
