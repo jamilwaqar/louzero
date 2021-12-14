@@ -8,7 +8,7 @@ class AuthManager {
   static final AuthManager _singleton = AuthManager._internal();
   bool get isAuthUser => GetStorage().read(GSKey.isAuthUser) ?? false;
 
-  static late UserModel userModel;
+  static UserModel? userModel;
   static String? guestUserId;
   static String? inviteModelId;
   factory AuthManager() {
@@ -29,7 +29,7 @@ class AuthManager {
   static void initUser(BackendlessUser? user) {
     if (user != null) {
       userModel = UserModel.fromJson(Map<String, dynamic>.from(user.properties));
-      userModel.objectId = user.getObjectId();
+      userModel!.objectId = user.getObjectId();
       GetStorage().write(GSKey.isAuthUser, true);
     }
   }
@@ -38,7 +38,7 @@ class AuthManager {
     BackendlessUser? user = await Backendless.userService.getCurrentUser();
     if (user == null) return;
     user.setProperties(
-      {... user.properties, ... userModel.toJson()}
+      {... user.properties, ... userModel!.toJson()}
     );
     var res = await Backendless.userService.update(user);
     return res;

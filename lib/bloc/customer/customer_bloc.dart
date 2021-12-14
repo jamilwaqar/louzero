@@ -34,7 +34,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   Stream<CustomerState> _fetchCustomers() async* {
     NavigationController().loading(delay: 50);
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${AuthManager.userModel.objectId}'";
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
     var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
     List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
     yield state.copyWith(customers: list);

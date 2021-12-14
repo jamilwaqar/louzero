@@ -81,7 +81,7 @@ class AddressModel {
   String country;
   String street;
   String city;
-  String? suite;
+  @JsonKey(defaultValue: '') String suite = '';
   String state;
   String zip;
 

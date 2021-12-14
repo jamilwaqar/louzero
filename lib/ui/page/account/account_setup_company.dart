@@ -4,6 +4,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_divider.dart';
@@ -20,6 +21,7 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 List<SelectItem> industries = const [
   SelectItem(id: '23', label: 'Residential', value: 'res'),
@@ -49,17 +51,47 @@ class AccountSetupCompany extends StatefulWidget {
 class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _formKey = GlobalKey<FormState>();
 
-  final CompanyModel _companyModel = CompanyModel();
-  final AddressModel _addressModel = AddressModel(country: '', street: '', city: '', state: '', zip: '');
+  CompanyModel _companyModel = CompanyModel();
+  AddressModel _addressModel = AddressModel(country: '', street: '', city: '', state: '', zip: '');
+
+  final _companyNameController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _webController = TextEditingController();
+
   final _countryController = TextEditingController();
   final _streetController = TextEditingController();
   final _cityController = TextEditingController();
   final _stateController = TextEditingController();
+  final _suiteController = TextEditingController();
+  final _zipController = TextEditingController();
   Country? _selectCountry;
 
   SearchAddressModel? _searchAddressModel;
   final BaseController _baseController = Get.find();
   List<SelectItem> _initialIndustries = [industries[0], industries[1], industries[4]];
+
+  @override
+  void initState() {
+    BaseBloc baseBloc = context.read<BaseBloc>();
+    if (baseBloc.state.activeCompany != null) {
+      _companyModel = baseBloc.state.activeCompany!;
+      _addressModel = baseBloc.state.activeCompany!.address!;
+      _companyNameController.text = _companyModel.name;
+      _phoneController.text = _companyModel.phone;
+      _emailController.text = _companyModel.email;
+      _webController.text = _companyModel.website;
+
+      _countryController.text = _addressModel.country;
+      _streetController.text = _addressModel.street;
+      _cityController.text = _addressModel.city;
+      _stateController.text = _addressModel.state;
+      _suiteController.text = _addressModel.suite;
+      _zipController.text = _addressModel.zip;
+    }
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +195,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
     var res = await APIManager.save(BLPath.company, data);
     if (res is Map) {
-      AuthManager.userModel.activeCompanyId = res['objectId'];
+      AuthManager.userModel!.activeCompanyId = res['objectId'];
       await AuthManager().updateUser();
     }
     if (widget.onChange != null) widget.onChange!();
@@ -193,6 +225,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   }
 
   _phone() => AppInputText(
+        controller: _phoneController,
         required: true,
         label: 'Phone Number',
         keyboardType: TextInputType.phone,
@@ -203,6 +236,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       );
 
   _companyName() => AppInputText(
+        controller: _companyNameController,
         required: true,
         label: 'Company Name',
         validator: _validateName,
@@ -212,6 +246,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       );
 
   _website() => AppInputText(
+        controller: _webController,
         label: 'Website',
         onSaved: (val) {
           _companyModel.website = val ?? '';
@@ -219,6 +254,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       );
 
   _email() => AppInputText(
+        controller: _emailController,
         label: 'Email Address',
         required: true,
         onSaved: (val) {
@@ -264,9 +300,10 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
   _suite() => AppInputText(
+      controller: _suiteController,
         label: 'Suite',
         onSaved: (val) {
-          _addressModel.suite = val;
+          _addressModel.suite = val ?? '';
         },
       );
 
@@ -287,6 +324,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
   _zip() => AppInputText(
+        controller: _zipController,
         label: 'Zip',
         onSaved: (val) {
           _addressModel.zip = val ?? '';

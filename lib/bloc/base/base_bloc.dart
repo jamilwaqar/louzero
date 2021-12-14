@@ -10,7 +10,6 @@ import '../bloc.dart';
 class BaseBloc extends Bloc<BaseEvent, BaseState> {
   final String tag = 'BaseBloc';
 
-
   BaseBloc() : super(const BaseState());
 
   @override
@@ -23,16 +22,20 @@ class BaseBloc extends Bloc<BaseEvent, BaseState> {
   }
 
   Stream<BaseState> _fetchInitialData() async* {
+    if (AuthManager.userModel == null) return;
     /// Company
     var companies = await _fetchCompanies();
+    CompanyModel? companyModel;
+
     if (companies is List) {
       try {
-        CompanyModel companyModel = (companies as List<CompanyModel>).firstWhere((com) => com.objectId == AuthManager.userModel.activeCompanyId);
-        yield state.copyWith(activeCompany: companyModel);
+        companyModel = (companies as List<CompanyModel>)
+            .firstWhere(
+                (com) => com.objectId == AuthManager.userModel!.activeCompanyId);
       } catch (e) {
         print(e.toString());
       }
-      yield state.copyWith(companies: companies as List<CompanyModel>);
+      yield state.copyWith(companies: companies as List<CompanyModel>, activeCompany: companyModel);
     }
     /// Site Profile Template
     var templates = await _fetchSiteProfileTemplate();
@@ -43,7 +46,7 @@ class BaseBloc extends Bloc<BaseEvent, BaseState> {
 
   Future _fetchSiteProfileTemplate() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${AuthManager.userModel.objectId}'";
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
     List<CTSiteProfile> list = [];
     try {
       var response = await Backendless.data
@@ -60,7 +63,7 @@ class BaseBloc extends Bloc<BaseEvent, BaseState> {
 
   Future _fetchCompanies() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${AuthManager.userModel.objectId}'";
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
     List<CompanyModel> list = [];
     try {
       var response = await Backendless.data

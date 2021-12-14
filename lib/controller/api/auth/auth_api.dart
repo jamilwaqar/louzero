@@ -70,8 +70,8 @@ class AuthAPI {
       EmailEnvelope envelope = EmailEnvelope();
       envelope.to = {email};
       Map<String, String> json = {
-        'senderName': AuthManager.userModel.fullName,
-        'senderEmail': AuthManager.userModel.email,
+        'senderName': AuthManager.userModel!.fullName,
+        'senderEmail': AuthManager.userModel!.email,
         'code': code.toString(),
       };
       await Backendless.messaging

@@ -13,7 +13,6 @@ import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
-import 'package:louzero/models/company_models.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
@@ -32,13 +31,26 @@ class _AccountSetupState extends State<AccountSetup> {
 
   var _step = 0;
 
-  final customerTypes = ["Residential", "Commercial"];
+  var customerTypes = ["Residential", "Commercial"];
 
   final customerTypeController = TextEditingController();
 
-  final jobTypes = ["Installation", "Consulting", "Estimate"];
+  var jobTypes = ["Installation", "Consulting", "Estimate"];
 
   final jobTypeController = TextEditingController();
+
+  @override
+  void initState() {
+    if (AuthManager.userModel!.customerTypes.isNotEmpty) {
+      customerTypes = AuthManager.userModel!.customerTypes;
+    }
+
+    if (AuthManager.userModel!.jobTypes.isNotEmpty) {
+      jobTypes = AuthManager.userModel!.jobTypes;
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +159,7 @@ class _AccountSetupState extends State<AccountSetup> {
                   margin: const EdgeInsets.only(left: 24, bottom: 64),
                   label: 'Save & Continue',
                   onPressed: () async {
-                    AuthManager.userModel.customerTypes = customerTypes;
+                    AuthManager.userModel!.customerTypes = customerTypes;
                     NavigationController().loading();
                     await AuthManager().updateUser();
                     NavigationController().loading(isLoading: false);
@@ -190,7 +202,7 @@ class _AccountSetupState extends State<AccountSetup> {
                   margin: const EdgeInsets.only(left: 24, bottom: 64),
                   label: 'Save & Continue',
                   onPressed: () async {
-                    AuthManager.userModel.jobTypes = jobTypes;
+                    AuthManager.userModel!.jobTypes = jobTypes;
                     NavigationController().loading();
                     await AuthManager().updateUser();
                     NavigationController().loading(isLoading: false);

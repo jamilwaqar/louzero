@@ -96,7 +96,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                                 border: Border.all(
                                                     color: AppColors.medium_1,
                                                     width: 1)),
-                                            child: Text(AuthManager.userModel.initials,
+                                            child: Text(AuthManager.userModel?.initials ?? '',
                                                 style: const TextStyle(
                                                   color: AppColors.lightest,
                                                   fontWeight: FontWeight.w500,
