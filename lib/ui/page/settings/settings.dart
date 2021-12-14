@@ -19,6 +19,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _parentAccountNameController =
       TextEditingController();
   late BaseBloc _baseBloc;
+  
   @override
   void initState() {
     _baseBloc = context.read<BaseBloc>();

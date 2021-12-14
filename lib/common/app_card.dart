@@ -60,7 +60,7 @@ class AppCard extends StatelessWidget {
       child: Card(
           color: AppColors.lightest,
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: AppColors.light_2),
+            side: const BorderSide(color: AppColors.light_2),
             borderRadius: BorderRadius.circular(8),
           ),
           elevation: elevation,

@@ -56,7 +56,7 @@ class AppButton extends StatelessWidget {
 
     return Container(
       height: height,
-      width: wide ? double.infinity : width ?? null,
+      width: wide ? double.infinity : width,
       margin: margin,
       child: FloatingActionButton.extended(
         heroTag: null,

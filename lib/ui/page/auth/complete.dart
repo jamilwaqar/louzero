@@ -114,8 +114,14 @@ class _CompletePageState extends State<CompletePage> {
       WarningMessageDialog.showDialog(context, res);
     } else {
       var res = await AuthAPI().login(widget.email, _passwordController.text);
+      if (AuthStateManager.guestUserId != null) {
+        await AuthAPI().cleanupGuestUser();
+      }
       NavigationController().loading(isLoading: false);
       AuthStateManager().loggedIn.value = true;
+      AuthStateManager.userModel.firstname = _firstNameController.text;
+      AuthStateManager.userModel.lastname = _lastNameController.text;
+      await AuthStateManager().updateUser();
       NavigationController().pushTo(context, child: DashboardPage());
     }
   }
