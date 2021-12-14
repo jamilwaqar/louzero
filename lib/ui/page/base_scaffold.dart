@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/app_avatar.dart';
 import 'package:louzero/common/app_pop_menu.dart';
-import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_state.dart';
 import 'package:louzero/ui/widget/side_menu/side_menu.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 

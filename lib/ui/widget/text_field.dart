@@ -14,7 +14,7 @@ class LZTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyles.bodyL,
+          style: TextStyles.bodyL.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4,),
         Container(

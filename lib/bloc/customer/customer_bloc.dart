@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/controller/api/api_service.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/models.dart';
 import '../bloc.dart';
 
@@ -34,7 +34,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   Stream<CustomerState> _fetchCustomers() async* {
     NavigationController().loading(delay: 50);
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${AuthStateManager.userModel.objectId}'";
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
     var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
     List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
     yield state.copyWith(customers: list);

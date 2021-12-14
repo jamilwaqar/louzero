@@ -80,6 +80,7 @@ AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
       state: json['state'] as String,
       zip: json['zip'] as String,
     )
+      ..suite = json['suite'] as String? ?? ''
       ..latitude = (json['latitude'] as num?)?.toDouble() ?? 0.0
       ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0;
 
@@ -88,6 +89,7 @@ Map<String, dynamic> _$AddressModelToJson(AddressModel instance) =>
       'country': instance.country,
       'street': instance.street,
       'city': instance.city,
+      'suite': instance.suite,
       'state': instance.state,
       'zip': instance.zip,
       'latitude': instance.latitude,

@@ -1,12 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:louzero/common/app_avatar.dart';
+=======
+import 'package:image_picker/image_picker.dart';
+>>>>>>> b494e7711116143812fa084584be5f56e9292871
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_icon_button.dart';
 import 'package:louzero/common/app_nav_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+<<<<<<< HEAD
+=======
+import 'package:louzero/controller/state/auth_manager.dart';
+>>>>>>> b494e7711116143812fa084584be5f56e9292871
 import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
@@ -167,6 +175,7 @@ class _SideMenuViewState extends State<SideMenuView> {
   Widget _profile() {
     return Column(
       children: [
+<<<<<<< HEAD
         AppAvatar(path: _profileImagePath, size: 96),
         const SizedBox(height: 8),
         Text('Corey Holton',
@@ -182,6 +191,47 @@ class _SideMenuViewState extends State<SideMenuView> {
               color: AppColors.secondary_20,
               fontSize: 16,
               fontWeight: FontWeight.w400),
+=======
+        Stack(
+          children: [
+            Container(
+              width: 96,
+              height: 96,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(48),
+                  color: AppColors.medium_2,
+                  image: _profileImagePath == null
+                      ? null
+                      : DecorationImage(
+                          image: FileImage(File(_profileImagePath!)),
+                          fit: BoxFit.cover)),
+              child: _profileImagePath != null
+                  ? null
+                  : Text(
+                      AuthManager.userModel!.initials,
+                      style: const TextStyle(
+                        color: AppColors.lightest,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 40,
+                      ),
+                    ),
+            ),
+          ],
+        ),
+        AppTextBody(
+          AuthManager.userModel!.fullName,
+          size: 24,
+          mt: 8,
+          mb: 8,
+          color: AppColors.darkest,
+          center: true,
+        ),
+        const AppTextBody(
+          'My Account',
+          mb: 24,
+          center: true,
+>>>>>>> b494e7711116143812fa084584be5f56e9292871
         ),
         const AppDivider(
           mt: 32,

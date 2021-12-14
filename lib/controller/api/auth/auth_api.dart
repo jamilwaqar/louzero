@@ -2,14 +2,14 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/services.dart';
 import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 
 class AuthAPI {
 
   Future login(String email, String password) async {
     try {
       var authUser = await Backendless.userService.login(email, password, true);
-      AuthStateManager.initUser(authUser);
+      AuthManager.initUser(authUser);
       if (authUser != null) {
         return authUser;
       } else {
@@ -23,7 +23,7 @@ class AuthAPI {
   Future loginGuest(String email, String password) async {
     try {
       var authUser = await Backendless.userService.loginAsGuest();
-      AuthStateManager.guestUserId = authUser?.getObjectId();
+      AuthManager.guestUserId = authUser?.getObjectId();
       // AuthStateManager.initUser(authUser);
       if (authUser != null) {
         return authUser;
@@ -70,8 +70,8 @@ class AuthAPI {
       EmailEnvelope envelope = EmailEnvelope();
       envelope.to = {email};
       Map<String, String> json = {
-        'senderName': AuthStateManager.userModel.fullName,
-        'senderEmail': AuthStateManager.userModel.email,
+        'senderName': AuthManager.userModel!.fullName,
+        'senderEmail': AuthManager.userModel!.email,
         'code': code.toString(),
       };
       await Backendless.messaging
@@ -121,9 +121,9 @@ class AuthAPI {
   }
 
   Future cleanupGuestUser() async {
-    await deleteAccount(AuthStateManager.guestUserId!);
-    if (AuthStateManager.inviteModelId != null) {
-      await APIManager.delete(BLPath.invites, AuthStateManager.inviteModelId!);
+    await deleteAccount(AuthManager.guestUserId!);
+    if (AuthManager.inviteModelId != null) {
+      await APIManager.delete(BLPath.invites, AuthManager.inviteModelId!);
     }
     return;
   }
