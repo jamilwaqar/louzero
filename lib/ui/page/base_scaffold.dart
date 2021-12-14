@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/app_avatar.dart';
+import 'package:louzero/common/app_pop_menu.dart';
 import 'package:louzero/controller/api/auth/auth.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
@@ -64,23 +65,20 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                       AppPopMenu(
                         items: [
                           PopMenuItem(
-                              label: 'My Account',
-                              icon: Icons.person_rounded,
-                              onTap: () {
-                                print("account");
-                              }),
+                            label: 'My Account',
+                            icon: Icons.person_rounded,
+                            onTap: () {},
+                          ),
                           PopMenuItem(
-                              label: 'Settings',
-                              icon: Icons.settings,
-                              onTap: () {
-                                print("settings");
-                              }),
+                            label: 'Settings',
+                            icon: Icons.settings,
+                            onTap: () {},
+                          ),
                           PopMenuItem(
-                              label: 'Account Setup',
-                              icon: MdiIcons.briefcase,
-                              onTap: () {
-                                print("settings");
-                              }),
+                            label: 'Account Setup',
+                            icon: MdiIcons.briefcase,
+                            onTap: () {},
+                          ),
                           PopMenuItem(
                             label: 'Log Out',
                             icon: Icons.exit_to_app,
@@ -97,7 +95,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                         ],
                       )
                   ]),
-              drawer: isLoggedIn ? SideMenuView() : null,
+              drawer: isLoggedIn ? const SideMenuView() : null,
               body: Container(
                 color: const Color(0xFFF1F3F5),
                 child: widget.child,
@@ -107,53 +105,5 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         );
       },
     );
-  }
-}
-
-class PopMenuItem {
-  final String label;
-  final IconData? icon;
-  final VoidCallback? onTap;
-  const PopMenuItem({
-    required this.label,
-    this.icon,
-    this.onTap,
-  });
-}
-
-class AppPopMenu extends StatelessWidget {
-  final List<PopMenuItem> items;
-  final List<Widget> button;
-  const AppPopMenu({Key? key, this.items = const [], this.button = const []})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-        child: Row(children: [
-          if (button.isEmpty) const Icon(Icons.more_vert),
-          if (button.isNotEmpty) ...button
-        ]),
-        elevation: 2,
-        shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: AppColors.medium_2, width: 0)),
-        itemBuilder: (BuildContext context) => items.map((item) {
-              return popItem(item.label,
-                  onTap: item.onTap, icon: item.icon ?? Icons.chevron_right);
-            }).toList());
-  }
-
-  PopupMenuItem popItem(String label,
-      {IconData icon = Icons.chevron_right, VoidCallback? onTap}) {
-    return PopupMenuItem(
-        onTap: onTap,
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.black),
-            const SizedBox(width: 8),
-            Text(label)
-          ],
-        ));
   }
 }

@@ -42,7 +42,7 @@ class _SideMenuViewState extends State<SideMenuView> {
             margin: const EdgeInsets.all(16),
             // padding: const EdgeInsets.only(top: 10),
             decoration: BoxDecorationEx.shadowEffect(
-              shadowOffset: Offset(0, 6),
+              shadowOffset: const Offset(0, 6),
               shadowRadius: 3,
               shadowColor: Colors.black.withOpacity(0.3),
               borderRadius: const BorderRadius.all(Radius.circular(16)),

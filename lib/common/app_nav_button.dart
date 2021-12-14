@@ -12,8 +12,8 @@ class AppNavButton extends StatelessWidget {
     this.onPressed,
     this.selected = false,
     this.color = AppColors.secondary_20,
-    this.colorIco = AppColors.secondary_60,
-    this.colorBg = AppColors.light_1,
+    this.colorIco = AppColors.primary_60,
+    this.colorBg,
     this.mt = 0,
     this.mb = 0,
     this.ml = 0,
@@ -21,7 +21,7 @@ class AppNavButton extends StatelessWidget {
   }) : super(key: key);
 
   final Color color;
-  final Color colorBg;
+  final Color? colorBg;
   final Color colorIco;
   final String title;
   final IconData? icon;
@@ -43,7 +43,7 @@ class AppNavButton extends StatelessWidget {
         margin: EdgeInsets.only(right: mr, left: ml, top: mt, bottom: mb),
         decoration: BoxDecoration(
             color: selected
-                ? AppColors.secondary_60.withOpacity(0.2)
+                ? colorBg ?? AppColors.secondary_60.withOpacity(0.2)
                 : Colors.transparent,
             borderRadius: const BorderRadius.all(Radius.circular(999))),
         padding: const EdgeInsets.only(left: 16, top: 12, bottom: 12),
@@ -53,7 +53,7 @@ class AppNavButton extends StatelessWidget {
               margin: EdgeInsets.only(right: 12),
               child: Icon(
                 icon,
-                color: selected ? AppColors.primary_1 : colorIco,
+                color: selected ? colorIco : AppColors.secondary_60,
                 size: 24,
               ),
             ),
@@ -61,9 +61,7 @@ class AppNavButton extends StatelessWidget {
               child: Text(
                 title,
                 style: GoogleFonts.lato(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: AppColors.secondary_20),
+                    fontWeight: FontWeight.w700, fontSize: 16, color: color),
               ),
             )
           ],
