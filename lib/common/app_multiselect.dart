@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_text_body.dart';
@@ -55,11 +56,17 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(32.0))),
           contentPadding: const EdgeInsets.only(top: 16),
-          title: AppTextBody(
-            widget.label,
-            size: 24,
-            bold: true,
-            center: true,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.label,
+                  style: GoogleFonts.barlowCondensed(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.secondary_30,
+                  )),
+              AppDivider(color: AppColors.secondary_90, mt: 16, mb: 0)
+            ],
           ),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
@@ -93,11 +100,12 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
   }
 
   Widget _doneButton() => AppButton(
+        key: Key('done'),
         margin: const EdgeInsets.all(16),
         wide: true,
         label: "Done",
         primary: true,
-        color: AppColors.medium_3,
+        color: AppColors.orange,
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -111,6 +119,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
   }
 
   Widget _selectButton() => MaterialButton(
+      key: Key('select'),
       padding: EdgeInsets.all(0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,15 +194,17 @@ class SelectChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      backgroundColor: Colors.black12,
+      backgroundColor: AppColors.secondary_99,
+      shape: StadiumBorder(side: BorderSide(color: AppColors.secondary_70)),
       labelPadding: const EdgeInsets.only(left: 14, right: 14),
       label: Text(label,
           style: const TextStyle(
               fontWeight: FontWeight.w600, color: AppColors.dark_3)),
       deleteIconColor: AppColors.medium_2,
       deleteIcon: const Icon(
-        Icons.remove_circle,
+        Icons.close,
         size: 20,
+        color: AppColors.secondary_40,
       ),
       onDeleted: onDeleted ?? () {},
     );
@@ -212,29 +223,32 @@ class SelectTile extends StatelessWidget {
     required this.item,
     required this.isSelected,
     required this.onSelectItem,
-    this.iconSelected = Icons.check_circle,
-    this.iconUnselected = Icons.add_circle_outline,
+    this.iconSelected = Icons.check_box_sharp,
+    this.iconUnselected = Icons.check_box_outline_blank,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const _style = TextStyle(color: AppColors.darkest, fontSize: 18);
+    const _style = TextStyle(color: AppColors.darkest, fontSize: 16);
     return Column(
       children: [
         ListTile(
+          dense: true,
           contentPadding:
               const EdgeInsets.only(left: 32, right: 32, top: 0, bottom: 0),
           leading: Icon(
             isSelected ? iconSelected : iconUnselected,
-            color: AppColors.dark_1,
+            color: isSelected ? AppColors.primary_60 : AppColors.dark_1,
           ),
           title: Transform.translate(
             offset: const Offset(-16, 0),
-            child: Text(item.label, style: _style),
+            child: Text(item.label,
+                style: GoogleFonts.lato(
+                    fontSize: 16, color: AppColors.secondary_20)),
           ),
           onTap: () => onSelectItem(item),
         ),
-        const AppDivider(mb: 0, mt: 0, color: AppColors.light_1)
+        // const AppDivider(mb: 0, mt: 0, color: AppColors.light_1)
       ],
     );
   }
