@@ -32,8 +32,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     if (kDebugMode) {
-      // _emailController.text = "josh.coolman@singlemindconsulting.com";
-      // _passwordController.text = "!1QAwsEDrf";
       _emailController.text = "mark.austen@singlemindconsulting.com";
       _passwordController.text = "111111";
     }
@@ -106,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
           AppTextLink(
             "HAVE AN INVITATION CODE?",
             fontWeight: FontWeight.w700,
-            onPressed: ()=> Get.to(()=> const AcceptInvitePage()),
+            onPressed: () => Get.to(() => const AcceptInvitePage()),
           ),
           Expanded(
               child: Flex(
