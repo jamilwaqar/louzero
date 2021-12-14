@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:louzero/controller/api/auth/auth.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/widget/dialolg/confirmation.dart';
 import 'package:louzero/ui/widget/side_menu/side_menu.dart';
@@ -35,7 +35,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                 FocusScope.of(context).requestFocus(FocusNode());
               },
               child: ValueListenableBuilder<bool>(
-                valueListenable: AuthStateManager().loggedIn,
+                valueListenable: AuthManager().loggedIn,
                 builder: (ctx, isLoggedIn, child) {
                   return Scaffold(
                     key: _key,
@@ -96,7 +96,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                                                 border: Border.all(
                                                     color: AppColors.medium_1,
                                                     width: 1)),
-                                            child: Text(AuthStateManager.userModel.initials,
+                                            child: Text(AuthManager.userModel?.initials ?? '',
                                                 style: const TextStyle(
                                                   color: AppColors.lightest,
                                                   fontWeight: FontWeight.w500,
@@ -253,7 +253,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       await AuthAPI().logout();
       NavigationController().loading(isLoading: false);
 
-      AuthStateManager().loggedIn.value = false;
+      AuthManager().loggedIn.value = false;
     }
   }
 }

@@ -7,10 +7,10 @@ import 'package:louzero/common/app_checkbox.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
-import 'package:louzero/controller/api/auth/auth.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_state.dart';
-import 'package:louzero/ui/page/dashboard/dashboard.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 import '../base_scaffold.dart';
 
@@ -114,15 +114,15 @@ class _CompletePageState extends State<CompletePage> {
       WarningMessageDialog.showDialog(context, res);
     } else {
       var res = await AuthAPI().login(widget.email, _passwordController.text);
-      if (AuthStateManager.guestUserId != null) {
+      if (AuthManager.guestUserId != null) {
         await AuthAPI().cleanupGuestUser();
       }
       NavigationController().loading(isLoading: false);
-      AuthStateManager().loggedIn.value = true;
-      AuthStateManager.userModel.firstname = _firstNameController.text;
-      AuthStateManager.userModel.lastname = _lastNameController.text;
-      await AuthStateManager().updateUser();
-      NavigationController().pushTo(context, child: DashboardPage());
+      AuthManager().loggedIn.value = true;
+      AuthManager.userModel!.firstname = _firstNameController.text;
+      AuthManager.userModel!.lastname = _lastNameController.text;
+      await AuthManager().updateUser();
+      NavigationController().pushTo(context, child: const AccountSetup());
     }
   }
 }

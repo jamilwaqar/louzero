@@ -10,6 +10,7 @@ import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
@@ -210,7 +211,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             Row(
               children: [
                 Flexible(child: InkWell(
-                    onTap: _showCountryPicker,
+                    onTap:()=> countryPicker(context, (country) {
+                      _country = country;
+                      setState(() {
+                        _serviceCountryController.text = country.name;
+                      });
+                    }),
                     child: LZTextField(controller: isService ? _serviceCountryController : _billCountryController, label: "Country", enabled: false,))),
                 const SizedBox(width: 32),
                 const Flexible(child: SizedBox()),
@@ -402,19 +408,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     );
   }
 
-  void _showCountryPicker() {
-    showCountryPicker(
-      context: context,
-      showPhoneCode: true, // optional. Shows phone code before the country name.
-      onSelect: (Country country) {
-        _country = country;
-        setState(() {
-          _serviceCountryController.text = country.name;
-        });
-      },
-    );
-  }
-
   Widget _saveOrCancel() {
     return Container(
       padding: const EdgeInsets.only(left: 24),
@@ -538,7 +531,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Widget _searchAddressItem(int index) {
     SearchAddressModel model = widget.customerBloc.state.searchedAddressList[index];
     return InkWell(
-      onTap: () => _setUpRoute(model),
+      onTap: () => _onSelectAddress(model),
       child: Container(
         height: 42,
         alignment: Alignment.centerLeft,
@@ -576,7 +569,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     );
   }
 
-  void _setUpRoute(SearchAddressModel model, {bool isService = true}) async {
+  void _onSelectAddress(SearchAddressModel model, {bool isService = true}) async {
     NavigationController().loading();
     List? res = await widget.customerBloc.getLatLng(model.placeId);
     if (res != null) {

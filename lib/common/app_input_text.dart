@@ -20,6 +20,7 @@ class AppInputText extends StatelessWidget {
       this.colorTx = AppColors.dark_3,
       this.colorBd = AppColors.light_3,
       this.colorBg = AppColors.lightest,
+      this.enabled = true,
       this.height = 48,
       this.mt = 0,
       this.mb = 16,
@@ -43,7 +44,7 @@ class AppInputText extends StatelessWidget {
   final double height;
   final void Function(String)? onChanged;
   final List<String>? options;
-
+  final bool enabled;
   //Input border props:
   final double _radius = 4;
   final double _width = 1;
@@ -76,6 +77,10 @@ class AppInputText extends StatelessWidget {
         borderRadius: BorderRadius.circular(_radius),
         borderSide: BorderSide(color: _color, width: _width),
       ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(_radius),
+        borderSide: BorderSide(color: _color, width: _width),
+      ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_radius),
         borderSide: BorderSide(color: _focus, width: _width),
@@ -102,6 +107,7 @@ class AppInputText extends StatelessWidget {
           onSaved: onSaved,
           validator: validator,
           style: inputText,
+          enabled: enabled,
           textCapitalization:
               textCapitalization ?? TextCapitalization.none,
           decoration: inputStyle,

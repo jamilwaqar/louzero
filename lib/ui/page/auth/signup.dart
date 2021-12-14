@@ -10,7 +10,7 @@ import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/common/app_text_link.dart';
-import 'package:louzero/controller/api/auth/auth.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
