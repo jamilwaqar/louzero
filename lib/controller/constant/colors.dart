@@ -17,11 +17,16 @@ abstract class AppColors {
   static const Color light_3 = Color(0xFFBABDC5);
   static const Color light_4 = Color(0xFFE2E2E3);
 
+  static const Color orange = Color(0xFFEC6A3A);
   static const Color primary_1 = Color(0xFFE77C33);
   static const Color primary_50 = Color(0xFFCE6620);
   static const Color primary_60 = Color(0xFFE77C33);
   static const Color secondary_20 = Color(0xFF37474F);
+  static const Color secondary_30 = Color(0xFF455A64);
+  static const Color secondary_40 = Color(0xFF546E7A);
   static const Color secondary_60 = Color(0xFF78909C);
+  static const Color secondary_70 = Color(0xFF90A4AE);
+  static const Color secondary_90 = Color(0xFFCFD8DC);
   static const Color secondary_95 = Color(0xFFECEFF1);
   static const Color secondary_99 = Color(0xFFF1F3F5);
 
