@@ -33,72 +33,13 @@ class demo extends StatelessWidget {
     );
   }
 
-  Tab _tab(String text) {
-    return Tab(
-      child: Text(
-        text,
-        style: GoogleFonts.barlowCondensed(
-            fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
       child: SingleChildScrollView(
         child: Column(
           children: [
-            AppCard(mt: 24, pl: 0, pr: 0, pt: 0, pb: 0, children: [
-              DefaultTabController(
-                  length: 3,
-                  child: Container(
-                    height: 400,
-                    child: Column(
-                      children: [
-                        DecoratedBox(
-                          // color: AppColors.secondary_99,
-                          decoration: BoxDecoration(
-                            color: AppColors.secondary_99.withOpacity(0.5),
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: AppColors.secondary_90, width: 2)),
-                          ),
-                          child: TabBar(
-                            labelColor: AppColors.secondary_30,
-                            indicatorColor: AppColors.orange,
-                            padding: EdgeInsets.symmetric(horizontal: 0),
-                            tabs: [
-                              _tab('JOB DETAILS'),
-                              _tab('SCHEDULE'),
-                              _tab('BILLING'),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                            child: TabBarView(
-                          children: [
-                            Container(
-                              color: AppColors.lightest,
-                              child: Icon(Icons.airplane_ticket,
-                                  size: 150, color: AppColors.orange),
-                            ),
-                            Container(
-                              color: AppColors.lightest,
-                              child: Icon(Icons.location_pin,
-                                  size: 150, color: AppColors.orange),
-                            ),
-                            Container(
-                              color: AppColors.lightest,
-                              child: Icon(Icons.loupe_sharp,
-                                  size: 150, color: AppColors.orange),
-                            ),
-                          ],
-                        ))
-                      ],
-                    ),
-                  ))
-            ]),
+            AppCardTabs(),
             AppCard(mt: 24, children: [
               AppTextHeader(
                 'MultiSelect Widget',
@@ -167,5 +108,74 @@ class demo extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AppCardTabs extends StatelessWidget {
+  const AppCardTabs({Key? key}) : super(key: key);
+
+  Tab _tab(String text) {
+    return Tab(
+      child: Text(
+        text,
+        style: GoogleFonts.barlowCondensed(
+            fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(mt: 24, pl: 0, pr: 0, pt: 0, pb: 0, children: [
+      DefaultTabController(
+        length: 3,
+        child: Container(
+          height: 400,
+          child: Column(
+            children: [
+              DecoratedBox(
+                // color: AppColors.secondary_99,
+                decoration: BoxDecoration(
+                  color: AppColors.secondary_99.withOpacity(0.5),
+                  border: Border(
+                      bottom:
+                          BorderSide(color: AppColors.secondary_90, width: 2)),
+                ),
+                child: TabBar(
+                  labelColor: AppColors.secondary_30,
+                  indicatorColor: AppColors.orange,
+                  padding: EdgeInsets.symmetric(horizontal: 0),
+                  tabs: [
+                    _tab('JOB DETAILS'),
+                    _tab('SCHEDULE'),
+                    _tab('BILLING'),
+                  ],
+                ),
+              ),
+              Expanded(
+                  child: TabBarView(
+                children: [
+                  Container(
+                    color: AppColors.lightest,
+                    child: Icon(Icons.airplane_ticket,
+                        size: 150, color: AppColors.orange),
+                  ),
+                  Container(
+                    color: AppColors.lightest,
+                    child: Icon(Icons.location_pin,
+                        size: 150, color: AppColors.orange),
+                  ),
+                  Container(
+                    color: AppColors.lightest,
+                    child: Icon(Icons.loupe_sharp,
+                        size: 150, color: AppColors.orange),
+                  ),
+                ],
+              ))
+            ],
+          ),
+        ),
+      )
+    ]);
   }
 }
