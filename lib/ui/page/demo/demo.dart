@@ -20,13 +20,32 @@ class demo extends StatelessWidget {
     SelectItem(id: '5', value: '', label: 'Five'),
   ];
 
+  List<Widget> tabItems = [
+    Container(
+      color: AppColors.lightest,
+      child: Icon(Icons.airplane_ticket, size: 150, color: AppColors.orange),
+    ),
+    Container(
+      color: AppColors.lightest,
+      child: Icon(Icons.location_pin, size: 150, color: AppColors.orange),
+    ),
+    Container(
+      color: AppColors.lightest,
+      child: Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
       child: SingleChildScrollView(
         child: Column(
           children: [
-            AppCardTabs(),
+            AppCardTabs(
+              length: 3,
+              tabNames: ['One', 'Schedule', 'Billing'],
+              children: tabItems,
+            ),
             _multiSelect(),
             _buttonsAndMenus(),
           ],
@@ -53,10 +72,22 @@ class demo extends StatelessWidget {
         AppMultiSelect(
           items: selectItems,
         ),
+        AppInputRow(
+          flex: [2, 1, 1],
+          children: [
+            AppInputText(label: 'Name', mb: 0, mt: 24),
+            AppInputText(label: 'Phone', mb: 0, mt: 24),
+            AppInputText(label: 'Email', mb: 0, mt: 24)
+          ],
+        ),
         Row(
           children: [
             Expanded(
               child: AppInputText(label: 'Name', mb: 0, mt: 24),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: AppInputText(label: 'Phone', mb: 0, mt: 24),
             ),
             SizedBox(width: 16),
             Expanded(
@@ -104,13 +135,51 @@ class demo extends StatelessWidget {
       ]);
 }
 
+class AppInputRow extends StatelessWidget {
+  AppInputRow(
+      {Key? key, this.children = const <Widget>[], this.flex = const <int>[]})
+      : super(key: key);
+
+  final List<int> flex;
+  final List<Widget> children;
+  List<Widget> items = [];
+
+  @override
+  Widget build(BuildContext context) {
+    for (var i = 0; i < children.length; i++) {
+      int _flex = flex.asMap().containsKey(i) ? flex[i] : 1;
+
+      items.add(Expanded(flex: _flex, child: children[i]));
+      if (i < children.length - 1) {
+        items.add(const SizedBox(width: 16));
+      }
+    }
+
+    return Row(
+      children: items.toList(),
+    );
+  }
+}
+
 class AppCardTabs extends StatelessWidget {
-  const AppCardTabs({Key? key}) : super(key: key);
+  const AppCardTabs(
+      {Key? key,
+      required this.children,
+      required this.length,
+      required this.tabNames,
+      this.uppercase = true})
+      : super(key: key);
+
+  final bool uppercase;
+  final int length;
+  final List<Widget> children;
+  final List<String> tabNames;
 
   Tab _tab(String text) {
+    String _label = uppercase ? text.toUpperCase() : text;
     return Tab(
       child: Text(
-        text,
+        _label,
         style: GoogleFonts.barlowCondensed(
             fontSize: 16, fontWeight: FontWeight.bold),
       ),
@@ -130,40 +199,22 @@ class AppCardTabs extends StatelessWidget {
                 // color: AppColors.secondary_99,
                 decoration: BoxDecoration(
                   color: AppColors.secondary_99.withOpacity(0.5),
-                  border: Border(
+                  border: const Border(
                       bottom:
                           BorderSide(color: AppColors.secondary_90, width: 2)),
                 ),
                 child: TabBar(
                   labelColor: AppColors.secondary_30,
                   indicatorColor: AppColors.orange,
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  tabs: [
-                    _tab('JOB DETAILS'),
-                    _tab('SCHEDULE'),
-                    _tab('BILLING'),
-                  ],
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  tabs: tabNames.map((name) {
+                    return _tab(name);
+                  }).toList(),
                 ),
               ),
               Expanded(
                   child: TabBarView(
-                children: [
-                  Container(
-                    color: AppColors.lightest,
-                    child: Icon(Icons.airplane_ticket,
-                        size: 150, color: AppColors.orange),
-                  ),
-                  Container(
-                    color: AppColors.lightest,
-                    child: Icon(Icons.location_pin,
-                        size: 150, color: AppColors.orange),
-                  ),
-                  Container(
-                    color: AppColors.lightest,
-                    child: Icon(Icons.loupe_sharp,
-                        size: 150, color: AppColors.orange),
-                  ),
-                ],
+                children: children,
               ))
             ],
           ),
