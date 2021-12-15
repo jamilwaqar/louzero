@@ -20,6 +20,21 @@ class demo extends StatelessWidget {
     SelectItem(id: '5', value: '', label: 'Five'),
   ];
 
+  @override
+  Widget build(BuildContext context) {
+    return BaseScaffold(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            AppCardTabs(),
+            _multiSelect(),
+            _buttonsAndMenus(),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _heading(String text,
       [icon = Icons.chevron_right, double px = 0, double py = 0]) {
     return Padding(
@@ -33,82 +48,60 @@ class demo extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            AppCardTabs(),
-            AppCard(mt: 24, children: [
-              AppTextHeader(
-                'MultiSelect Widget',
-                alignLeft: true,
-                icon: Icons.list,
-                size: 24,
-              ),
-              AppMultiSelect(
-                items: selectItems,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: AppInputText(label: 'Name', mb: 0, mt: 24),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: AppInputText(label: 'Phone', mb: 0, mt: 24),
-                  )
-                ],
-              )
-            ]),
-            AppCard(mt: 24, children: [
-              AppTextHeader(
-                'Buttons and Menus',
-                alignLeft: true,
-                icon: Icons.list,
-                size: 24,
-              ),
-              Row(
-                children: const [
-                  Expanded(
-                    child: AppButton(
-                      label: 'Primary',
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: AppButton(
-                      label: 'Secondary',
-                      primary: false,
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    flex: 0,
-                    child: AppPopMenu(
-                      button: [
-                        AppButton(label: 'Secondary', color: Colors.blueAccent)
-                      ],
-                      items: [
-                        PopMenuItem(label: 'Action One', icon: Icons.settings),
-                        PopMenuItem(
-                            label: 'Action Two',
-                            icon: Icons.location_city_outlined),
-                        PopMenuItem(
-                            label: 'Action Three',
-                            icon: Icons.mail_outline_rounded),
-                      ],
-                    ),
-                  )
-                ],
-              )
-            ])
-          ],
+  Widget _multiSelect() => AppCard(mt: 24, children: [
+        _heading('MultiSelect Widget', Icons.list),
+        AppMultiSelect(
+          items: selectItems,
         ),
-      ),
-    );
-  }
+        Row(
+          children: [
+            Expanded(
+              child: AppInputText(label: 'Name', mb: 0, mt: 24),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: AppInputText(label: 'Phone', mb: 0, mt: 24),
+            )
+          ],
+        )
+      ]);
+
+  Widget _buttonsAndMenus() => AppCard(mt: 24, children: [
+        _heading('Buttons and Menus', Icons.control_point_rounded),
+        Row(
+          children: const [
+            Expanded(
+              child: AppButton(
+                label: 'Primary',
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              flex: 0,
+              child: AppPopMenu(
+                button: [
+                  Icon(Icons.control_point_rounded,
+                      size: 40, color: AppColors.orange)
+                ],
+                items: [
+                  PopMenuItem(label: 'Action One', icon: Icons.settings),
+                  PopMenuItem(
+                      label: 'Action Two', icon: Icons.location_city_outlined),
+                  PopMenuItem(
+                      label: 'Action Three', icon: Icons.mail_outline_rounded),
+                ],
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: AppButton(
+                label: 'Secondary',
+                primary: false,
+              ),
+            ),
+          ],
+        )
+      ]);
 }
 
 class AppCardTabs extends StatelessWidget {
