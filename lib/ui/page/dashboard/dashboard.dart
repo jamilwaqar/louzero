@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:louzero/bloc/base/base.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:louzero/common/app_button.dart';
+import 'package:louzero/common/app_nav_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/bindings/job_binding.dart';

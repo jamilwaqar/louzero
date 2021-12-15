@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppNavButton extends StatelessWidget {
   AppNavButton({
@@ -10,9 +11,9 @@ class AppNavButton extends StatelessWidget {
     this.count,
     this.onPressed,
     this.selected = false,
-    this.color = AppColors.darkest,
-    this.colorIco = AppColors.dark_1,
-    this.colorBg = AppColors.light_2,
+    this.color = AppColors.secondary_20,
+    this.colorIco = AppColors.primary_60,
+    this.colorBg,
     this.mt = 0,
     this.mb = 0,
     this.ml = 0,
@@ -20,7 +21,7 @@ class AppNavButton extends StatelessWidget {
   }) : super(key: key);
 
   final Color color;
-  final Color colorBg;
+  final Color? colorBg;
   final Color colorIco;
   final String title;
   final IconData? icon;
@@ -41,27 +42,26 @@ class AppNavButton extends StatelessWidget {
         // height: 48,
         margin: EdgeInsets.only(right: mr, left: ml, top: mt, bottom: mb),
         decoration: BoxDecoration(
-            color: selected ? colorBg : Colors.transparent,
+            color: selected
+                ? colorBg ?? AppColors.secondary_60.withOpacity(0.2)
+                : Colors.transparent,
             borderRadius: const BorderRadius.all(Radius.circular(999))),
-        padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+        padding: const EdgeInsets.only(left: 16, top: 12, bottom: 12),
         child: Row(
           children: [
             Container(
               margin: EdgeInsets.only(right: 12),
               child: Icon(
                 icon,
-                color: colorIco,
-                size: 22,
+                color: selected ? colorIco : AppColors.secondary_60,
+                size: 24,
               ),
             ),
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
+                style: GoogleFonts.lato(
+                    fontWeight: FontWeight.w700, fontSize: 16, color: color),
               ),
             )
           ],
