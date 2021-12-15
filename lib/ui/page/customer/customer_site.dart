@@ -8,6 +8,7 @@ import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
@@ -50,7 +51,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   late CTSiteProfile _customTemplate;
   final List<ExpandState> _expandedList = [];
   List<CTSiteProfile> _siteProfiles = [];
-
+  final BaseController _baseController = Get.find();
   @override
   void initState() {
     _initTextControllers();
@@ -453,7 +454,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   Widget _templates() {
-    List<CTSiteProfile>profiles = [... context.read<BaseBloc>().state.siteProfileTemplates];
+    List<CTSiteProfile>profiles = [... _baseController.siteProfileTemplates.value];
     profiles.add(_customTemplate);
     List<Widget> itemList = List.generate(profiles.length,
         (index) => _templateItem(profiles[index])).toList();
@@ -752,9 +753,8 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       CTSiteProfile ctProfile = CTSiteProfile.fromMap(response as Map);
 
       if (widget.isTemplate) {
-        BaseBloc baseBloc = context.read<BaseBloc>();
         List<CTSiteProfile>list = [..._siteProfiles, ctProfile];
-        baseBloc.add(UpdateSiteTemplateListEvent(list));
+        _baseController.siteProfileTemplates.value = list;
         WarningMessageDialog.showDialog(context, "Saved site Template!");
       } else {
         List<CTSiteProfile>list = [..._siteProfiles, ctProfile];

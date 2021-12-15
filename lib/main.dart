@@ -32,33 +32,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  bool _listenWhenBaseBloc(BaseState preSt, BaseState state) => true;
-
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        BlocProvider<BaseBloc>(
-            create: (_) => BaseBloc() /*..add(BaseInitEvent())*/),
+    return GetMaterialApp(
+      localizationsDelegates: const [
+        CountryLocalizations.delegate,
       ],
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<BaseBloc, BaseState>(
-            listenWhen: _listenWhenBaseBloc,
-            listener: (BuildContext context, BaseState state) {},
-          ),
-        ],
-        child: GetMaterialApp(
-          localizationsDelegates: const [
-            CountryLocalizations.delegate,
-          ],
-          theme: ThemeData(
-              primarySwatch: Colors.blue,
-              scaffoldBackgroundColor: Colors.white,
-              fontFamily: "Roboto"),
-          home: const HomePage(),
-        ),
-      ),
+      theme: ThemeData(
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.white,
+          fontFamily: "Roboto"),
+      home: const HomePage(),
     );
   }
 }

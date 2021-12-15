@@ -4,7 +4,6 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_divider.dart';
@@ -21,7 +20,6 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 List<SelectItem> industries = const [
   SelectItem(id: '23', label: 'Residential', value: 'res'),
@@ -73,10 +71,10 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
   @override
   void initState() {
-    BaseBloc baseBloc = context.read<BaseBloc>();
-    if (baseBloc.state.activeCompany != null) {
-      _companyModel = baseBloc.state.activeCompany!;
-      _addressModel = baseBloc.state.activeCompany!.address!;
+
+    if (_baseController.activeCompany.value != null) {
+      _companyModel = _baseController.activeCompany.value!;
+      _addressModel = _baseController.activeCompany.value!.address!;
       _companyNameController.text = _companyModel.name;
       _phoneController.text = _companyModel.phone;
       _emailController.text = _companyModel.email;

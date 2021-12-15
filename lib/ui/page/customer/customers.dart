@@ -7,6 +7,7 @@ import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/auth/invite.dart';
@@ -30,10 +31,10 @@ class _CustomerListPageState extends State<CustomerListPage> {
   late CustomerBloc _customerBloc;
 
   int mockId = 8520;
-
+  final BaseController _baseController = Get.find();
   @override
   void initState() {
-    _customerBloc = CustomerBloc(context.read<BaseBloc>())
+    _customerBloc = CustomerBloc(_baseController.customers.value)
       ..add(InitCustomerEvent());
     super.initState();
   }

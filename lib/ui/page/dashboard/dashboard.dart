@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:louzero/bloc/base/base.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_nav_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:get/get.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
@@ -64,9 +64,10 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  BaseController _baseController = Get.find();
   @override
   void initState() {
-    context.read<BaseBloc>().add(BaseInitEvent());
+    _baseController.fetchInitialData();
     super.initState();
   }
 

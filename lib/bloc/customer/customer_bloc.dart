@@ -12,9 +12,7 @@ import '../bloc.dart';
 class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   final String tag = 'CustomerBloc';
 
-  final BaseBloc _baseBloc;
-
-  CustomerBloc(this._baseBloc) : super(CustomerState(customers: _baseBloc.state.customers));
+  CustomerBloc(List<CustomerModel>customers) : super(CustomerState(customers: customers));
 
   @override
   Stream<CustomerState> mapEventToState(CustomerEvent event) async* {
