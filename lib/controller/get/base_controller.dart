@@ -1,10 +1,97 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/controller/api/api_service.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/customer_models.dart';
 
 class BaseController extends GetxController {
+
+  final isUpdating = false.obs;
+
+  final companies = Rx<List<CompanyModel>>([]);
+  final customers = Rx<List<CustomerModel>>([]);
+  final siteProfileTemplates = Rx<List<CTSiteProfile>>([]);
+  final activeCompany = Rx<CompanyModel?>(null);
+
+  fetchInitialData() async {
+    if (AuthManager.userModel == null) return;
+    /// Company
+    var companyList = await _fetchCompanies();
+    CompanyModel? companyModel;
+    if (companyList is List) {
+      try {
+        companyModel = (companyList as List<CompanyModel>)
+            .firstWhere(
+                (com) => com.objectId == AuthManager.userModel!.activeCompanyId);
+      } catch (e) {
+        print(e.toString());
+      }
+      companies.value = companyList as List<CompanyModel>;
+      activeCompany.value = companyModel;
+    }
+    /// Site Profile Template
+    var templates = await _fetchSiteProfileTemplate();
+    if (templates is List) {
+      siteProfileTemplates.value = templates as List<CTSiteProfile>;
+    }
+    /// Customers
+    var customerList = await _fetchCustomers();
+    if (customerList is List) {
+      customers.value = customerList as List<CustomerModel>;
+    }
+  }
+
+  Future _fetchSiteProfileTemplate() async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+    List<CTSiteProfile> list = [];
+    try {
+      var response = await Backendless.data
+          .of(BLPath.siteProfileTemplate)
+          .find(queryBuilder);
+      list = List<Map>.from(response!)
+          .map((e) => CTSiteProfile.fromMap(e))
+          .toList();
+      return list;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future _fetchCompanies() async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+    List<CompanyModel> list = [];
+    try {
+      var response = await Backendless.data
+          .of(BLPath.company)
+          .find(queryBuilder);
+      list = List<Map>.from(response!)
+          .map((e) => CompanyModel.fromMap(e))
+          .toList();
+      return list;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future _fetchCustomers() async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+    try {
+      var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
+      List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
+      if (list.isNotEmpty) {
+        tempCustomerModel = list[0];
+      }
+      return list;
+    } catch (e) {
+      return e.toString();
+    }
+  }
 
   final searchedAddresses = Rx<List<SearchAddressModel>>([]);
 

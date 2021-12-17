@@ -2,9 +2,8 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/app_input_text.dart';
@@ -12,7 +11,9 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/enum/enums.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
@@ -20,9 +21,7 @@ import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
 
 class AddCustomerPage extends StatefulWidget {
-  const AddCustomerPage(this.customerBloc, {Key? key}) : super(key: key);
-
-  final CustomerBloc customerBloc;
+  const AddCustomerPage({Key? key}) : super(key: key);
 
   @override
   _AddCustomerPageState createState() => _AddCustomerPageState();
@@ -56,17 +55,18 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   bool _subAccount = false;
   bool _sameAsService = true;
   final List<Widget> _customerContactList = [];
-  final List<String> _mockCustomerType = ["Residential", "Commercial"];
+
   String? _customerType;
   final List<List<CTContactType>> _contactTypes = [[]];
   Country? _country;
   SearchAddressModel? _serviceSearchAddressModel;
   SearchAddressModel? _billSearchAddressModel;
+  final BaseController _baseController = Get.find();
 
   @override
   void initState() {
     _customerContactList.add(_customerContact(0));
-    _customerType = _mockCustomerType[0];
+    _customerType = AuthManager.userModel!.customerTypes[0];
     super.initState();
   }
 
@@ -75,37 +75,26 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     _companyNameController.dispose();
     _parentAccountNameController.dispose();
     _serviceCountryController.dispose();
-    widget.customerBloc.add(const SearchAddressEvent(''));
+    _baseController.searchedAddressList = [];
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CustomerBloc, CustomerState>(
-      bloc: widget.customerBloc,
-      listener: (context, state) {
-
-      },
-      child: BlocBuilder<CustomerBloc, CustomerState>(
-        bloc: widget.customerBloc,
-        builder: (context, state) {
-          return BaseScaffold(
-            child: Scaffold(
-              appBar: SubAppBar(
-                title: "Add New Customer",
-                context: context,
-                leadingTxt: "Customer",
-              ),
-              backgroundColor: Colors.transparent,
-              body: _body(state),
-            ),
-          );
-        }
+    return BaseScaffold(
+      child: Scaffold(
+        appBar: SubAppBar(
+          title: "Add New Customer",
+          context: context,
+          leadingTxt: "Customer",
+        ),
+        backgroundColor: Colors.transparent,
+        body: _body(),
       ),
     );
   }
 
-  Widget _body(CustomerState state) {
+  Widget _body() {
     List<Widget> list = [
       _customerDetails(),
       const SizedBox(height: 24),
@@ -143,7 +132,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             children: [
               Flexible(child: LZTextField(controller: _companyNameController, label: "Company or Account Name")),
               const SizedBox(width: 32),
-              Flexible(child: AppDropDown(label: "Customer Type*",itemList: _mockCustomerType, initValue: _customerType, onChanged: (value){
+              Flexible(child: AppDropDown(label: "Customer Type*",itemList: AuthManager.userModel!.customerTypes, initValue: _customerType, onChanged: (value){
                 setState(() {
                   _customerType = value;
                 });
@@ -201,7 +190,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   Widget _addressWidget(bool isService) {
-    return Stack(
+    return Obx(()=> Stack(
       clipBehavior: Clip.none,
       children: [
         Column(
@@ -225,10 +214,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             const SizedBox(height: 24),
             AppInputText(
               controller:
-                  isService ? _serviceStreetController : _billStreetController,
+              isService ? _serviceStreetController : _billStreetController,
               label: "Street Address",
-              onChanged: (value) {
-                widget.customerBloc.add(SearchAddressEvent(value, countryCode: _country?.countryCode));
+              onChanged: (val) {
+                _baseController.searchAddress(val, _country?.countryCode ?? 'US');
               },
             ),
             AppInputText(controller: isService ? _serviceAtController : _billAtController, label: "Apt / Suite / Other"),
@@ -259,7 +248,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         Positioned(
             left: 0, right: 0, top: 180, child: _searchedAddressListView()),
       ],
-    );
+    ));
   }
 
   Widget _billingAddress() {
@@ -502,8 +491,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       dynamic response = await Backendless.data.of(BLPath.customer).save(data);
       WarningMessageDialog.showDialog(context, "Saved Customer!");
       CustomerModel newModel = CustomerModel.fromMap(response);
-      List<CustomerModel> newList = [... widget.customerBloc.state.customers, newModel];
-      widget.customerBloc.add(UpdateCustomerModelListEvent(newList));
+      List<CustomerModel> newList = [... _baseController.customers.value, newModel];
+      _baseController.customers.value = newList;
       NavigationController().pop(context, delay: 2);
     } catch(e) {
       print('save data error: ${e.toString()}');
@@ -512,7 +501,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   Widget _searchedAddressListView() {
-    if (widget.customerBloc.state.searchedAddressList.isEmpty) return Container();
+    if (_baseController.searchedAddresses.value.isEmpty) return Container();
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -524,12 +513,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           shrinkWrap: true,
           itemBuilder: (_, int index) => _searchAddressItem(index),
           separatorBuilder: (_, __) => const Divider(),
-          itemCount: widget.customerBloc.state.searchedAddressList.length),
+          itemCount: _baseController.searchedAddresses.value.length),
     );
   }
 
   Widget _searchAddressItem(int index) {
-    SearchAddressModel model = widget.customerBloc.state.searchedAddressList[index];
+    SearchAddressModel model = _baseController.searchedAddresses.value[index];
     return InkWell(
       onTap: () => _onSelectAddress(model),
       child: Container(
@@ -571,7 +560,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   void _onSelectAddress(SearchAddressModel model, {bool isService = true}) async {
     NavigationController().loading();
-    List? res = await widget.customerBloc.getLatLng(model.placeId);
+    List? res = await _baseController.getLatLng(model.placeId);
     if (res != null) {
       LatLng latLng = res[0];
       String formattedAddress = res[1];
@@ -597,7 +586,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         setState(() {});
       }
     }
-    widget.customerBloc.add(const SearchAddressEvent(''));
+    _baseController.searchedAddressList = [];
     NavigationController().loading(isLoading: false);
   }
 }

@@ -1,19 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
 import 'package:louzero/ui/widget/widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum SelectCustomerType {
   none,
@@ -31,6 +30,8 @@ class AddJobPage extends GetWidget<JobController> {
   final _jobType = Rx<String?>(null);
   final _customerId = Rx<String?>(null);
   final _selectCustomerType = SelectCustomerType.none.obs;
+
+  final BaseController _baseController = Get.find();
 
   AddJobPage({Key? key}) : super(key: key);
 
@@ -97,8 +98,7 @@ class AddJobPage extends GetWidget<JobController> {
                     Flexible(
                       child: AppAddButton(
                         "Add New Customer",
-                        onPressed: () => Get.to(() => AddCustomerPage(
-                            CustomerBloc(Get.context!.read<BaseBloc>()))),
+                        onPressed: () => Get.to(() => AddCustomerPage()),
                       ),
                     ),
                   ],
