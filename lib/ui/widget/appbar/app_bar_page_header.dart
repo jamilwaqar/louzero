@@ -1,0 +1,148 @@
+import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:louzero/common/app_button.dart';
+import 'package:louzero/controller/constant/colors.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+class AppBarPageHeader extends StatelessWidget with PreferredSizeWidget {
+  final Widget? title;
+  final List<Widget>? actions;
+  final Widget? leading;
+  final String leadingTxt;
+  final bool hasActions;
+  final BuildContext context;
+  final Function()? onPressed;
+  final List<Widget>? footerStart;
+  final List<Widget>? footerEnd;
+
+  const AppBarPageHeader(
+      {required this.title,
+      required this.context,
+      this.actions,
+      this.leading,
+      this.leadingTxt = '',
+      this.hasActions = true,
+      this.onPressed,
+      this.footerStart,
+      this.footerEnd,
+      Key? key})
+      : super(key: key);
+
+  @override
+  Size get preferredSize => const Size.fromHeight(192);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.appBar,
+      padding: EdgeInsets.only(
+        top: 16,
+      ),
+      child: AppBar(
+        shadowColor: Colors.transparent,
+        backgroundColor: AppColors.appBar,
+        title: title,
+        centerTitle: true,
+        actions: actions,
+        leadingWidth: 150,
+        leading: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          AppActionButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: Icons.arrow_back),
+          AppActionButton(onPressed: () {}, icon: MdiIcons.text),
+        ]),
+        bottom: AppBarFooter(
+          footerEnd: footerEnd ?? [],
+          footerStart: footerStart ?? [],
+        ),
+      ),
+    );
+  }
+}
+
+class AppActionButton extends StatelessWidget {
+  const AppActionButton({Key? key, required this.onPressed, required this.icon})
+      : super(key: key);
+
+  final VoidCallback onPressed;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: onPressed,
+      elevation: 0,
+      child: Icon(icon),
+      mini: true,
+      backgroundColor: Colors.white.withAlpha(30),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      clipBehavior: Clip.antiAlias,
+    );
+  }
+}
+
+class AppBarFooter extends StatefulWidget implements PreferredSizeWidget {
+  final List<Widget>? footerStart;
+  final List<Widget>? footerEnd;
+
+  AppBarFooter({Key? key, this.footerStart, this.footerEnd}) : super(key: key);
+
+  @override
+  _AppBarFooterState createState() => _AppBarFooterState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(80.0);
+}
+
+class _AppBarFooterState extends State<AppBarFooter> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16, left: 32, right: 32),
+          child: Row(children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    children: widget.footerStart ?? [],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: widget.footerEnd ?? [],
+                  )
+                ],
+              ),
+            )
+          ]),
+        ),
+        Row(
+          children: [
+            Expanded(
+                child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.secondary_99,
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(40),
+                  topRight: const Radius.circular(40),
+                ),
+              ),
+            ))
+          ],
+        )
+      ],
+    );
+  }
+}

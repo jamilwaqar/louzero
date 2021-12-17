@@ -18,6 +18,8 @@ abstract class AppColors {
   static const Color light_4 = Color(0xFFE2E2E3);
 
   static const Color orange = Color(0xFFEC6A3A);
+  static const Color appBar = Color(0xFF263842);
+  static const Color accent_1 = Color(0xFF65D19D);
   static const Color primary_1 = Color(0xFFE77C33);
   static const Color primary_50 = Color(0xFFCE6620);
   static const Color primary_60 = Color(0xFFE77C33);

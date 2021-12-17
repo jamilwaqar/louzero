@@ -18,6 +18,7 @@ class AppButton extends StatelessWidget {
     this.alignLeft = false,
     this.color = AppColors.dark_3,
     this.colorText = AppColors.lightest,
+    this.colorIcon,
     this.height = 40,
     this.margin = EdgeInsets.zero,
   }) : super(key: key);
@@ -33,6 +34,7 @@ class AppButton extends StatelessWidget {
   final bool alignLeft;
   final Color color;
   final Color colorText;
+  final Color? colorIcon;
   final double radius;
   final double height;
 
@@ -62,7 +64,13 @@ class AppButton extends StatelessWidget {
         heroTag: null,
         foregroundColor: fg,
         backgroundColor: bg,
-        icon: icon != null ? Icon(icon, size: iconSize) : null,
+        icon: icon != null
+            ? Icon(
+                icon,
+                size: iconSize,
+                color: colorIcon ?? null,
+              )
+            : null,
         elevation: 0,
         extendedPadding: const EdgeInsetsDirectional.only(
           start: 24,

@@ -104,11 +104,13 @@ class _DashboardPageState extends State<DashboardPage> {
                             Get.to(() => AddJobPage(), binding: JobBinding()),
                       ),
                       AppButton(
-                        fontSize: btnSize,
-                        height: btnHeight,
-                        color: AppColors.dark_1,
-                        label: 'Search Jobs',
-                      )
+                          fontSize: btnSize,
+                          height: btnHeight,
+                          color: AppColors.dark_1,
+                          label: 'Search Jobs',
+                          onPressed: () {
+                            Get.to(() => JobsHome());
+                          })
                     ],
                   ),
                   Image.asset('assets/mocks/reports-card.png'),
@@ -143,8 +145,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           height: btnHeight,
                           color: AppColors.dark_1,
                           label: 'View All',
-                          onPressed: () =>
-                              Get.to(() => CustomerListPage()),
+                          onPressed: () => Get.to(() => CustomerListPage()),
                         )
                       ]),
                   SizedBox(height: spacing),

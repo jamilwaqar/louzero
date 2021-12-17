@@ -53,6 +53,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                     backgroundColor: AppColors.secondary_99,
                     drawerEnableOpenDragGesture: false,
                     appBar: AppBar(
+                        elevation: 0,
                         backgroundColor: const Color(0xFF263842),
                         title: SizedBox(
                           height: 64,
