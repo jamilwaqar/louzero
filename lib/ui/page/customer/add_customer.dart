@@ -20,9 +20,7 @@ import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
 
 class AddCustomerPage extends StatefulWidget {
-  const AddCustomerPage(this.customerBloc, {Key? key}) : super(key: key);
-
-  final CustomerBloc customerBloc;
+  const AddCustomerPage({Key? key}) : super(key: key);
 
   @override
   _AddCustomerPageState createState() => _AddCustomerPageState();
@@ -81,31 +79,20 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CustomerBloc, CustomerState>(
-      bloc: widget.customerBloc,
-      listener: (context, state) {
-
-      },
-      child: BlocBuilder<CustomerBloc, CustomerState>(
-        bloc: widget.customerBloc,
-        builder: (context, state) {
-          return BaseScaffold(
-            child: Scaffold(
-              appBar: SubAppBar(
-                title: "Add New Customer",
-                context: context,
-                leadingTxt: "Customer",
-              ),
-              backgroundColor: Colors.transparent,
-              body: _body(state),
-            ),
-          );
-        }
+    return BaseScaffold(
+      child: Scaffold(
+        appBar: SubAppBar(
+          title: "Add New Customer",
+          context: context,
+          leadingTxt: "Customer",
+        ),
+        backgroundColor: Colors.transparent,
+        body: _body(),
       ),
     );
   }
 
-  Widget _body(CustomerState state) {
+  Widget _body() {
     List<Widget> list = [
       _customerDetails(),
       const SizedBox(height: 24),

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
@@ -70,7 +69,6 @@ class _SettingsPageState extends State<SettingsPage> {
             buttonTitleRight: "",
             onPressed: () => NavigationController().pushTo(context,
                 child: CustomerSiteProfilePage(
-                    CustomerBloc(_baseController.customers.value),
                     _baseController.siteProfileTemplates.value,
                     isTemplate: true)),
             onPressedLeft: () {},

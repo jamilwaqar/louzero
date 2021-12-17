@@ -21,9 +21,8 @@ class CustomerSiteProfilePage extends StatefulWidget {
 
   final bool isTemplate;
   final String? customerId;
-  final CustomerBloc customerBloc;
   final List<CTSiteProfile> siteProfiles;
-  const CustomerSiteProfilePage(this.customerBloc, this.siteProfiles,
+  const CustomerSiteProfilePage(this.siteProfiles,
       {this.customerId, this.isTemplate = false, Key? key}) : super(key: key);
 
   @override
@@ -81,9 +80,6 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     _profileItemValueControllers = List.generate(4, (index) => TextEditingController());
   }
 
-  bool listenWhen(CustomerState preState, CustomerState state) {
-    return true;
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -13,8 +13,7 @@ import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerProfilePage extends StatefulWidget {
   final CustomerModel customerModel;
-  final CustomerBloc customerBloc;
-  const CustomerProfilePage(this.customerModel, this.customerBloc, {Key? key})
+  const CustomerProfilePage(this.customerModel, {Key? key})
       : super(key: key);
 
   @override

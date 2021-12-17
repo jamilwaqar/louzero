@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_row_flex.dart';
@@ -15,7 +14,6 @@ import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer.dart';
 import 'package:louzero/ui/widget/widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerListPage extends StatefulWidget {
   const CustomerListPage({Key? key}) : super(key: key);
@@ -28,16 +26,10 @@ class _CustomerListPageState extends State<CustomerListPage> {
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController =
       TextEditingController();
-  late CustomerBloc _customerBloc;
 
   int mockId = 8520;
   final BaseController _baseController = Get.find();
-  @override
-  void initState() {
-    _customerBloc = CustomerBloc(_baseController.customers.value)
-      ..add(InitCustomerEvent());
-    super.initState();
-  }
+
 
   @override
   void dispose() {
@@ -48,59 +40,50 @@ class _CustomerListPageState extends State<CustomerListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => _customerBloc,
-      child: BlocListener<CustomerBloc, CustomerState>(
-        listener: (BuildContext context, CustomerState state) {},
-        child: BlocBuilder<CustomerBloc, CustomerState>(
-            builder: (context, CustomerState state) {
-          return BaseScaffold(
-            child: Scaffold(
-              appBar: SubAppBar(
-                title: "Customers",
-                context: context,
-                leadingTxt: "Home",
-                actions: [
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 24),
-                      child: AppButton(
-                          label: 'Add New',
-                          color: AppColors.medium_3,
-                          height: 32,
-                          icon: Icons.add_circle,
-                          onPressed: () => NavigationController().pushTo(
-                              context,
-                              child: AddCustomerPage(_customerBloc))),
-                    ),
-                  )
-                ],
+    return BaseScaffold(
+      child: Scaffold(
+        appBar: SubAppBar(
+          title: "Customers",
+          context: context,
+          leadingTxt: "Home",
+          actions: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 24),
+                child: AppButton(
+                    label: 'Add New',
+                    color: AppColors.medium_3,
+                    height: 32,
+                    icon: Icons.add_circle,
+                    onPressed: () => NavigationController().pushTo(
+                        context,
+                        child: AddCustomerPage())),
               ),
-              backgroundColor: Colors.transparent,
-              body: Column(children: [
-                Expanded(child: _body(state)),
-              ]),
-            ),
-          );
-        }),
+            )
+          ],
+        ),
+        backgroundColor: Colors.transparent,
+        body: Column(children: [
+          Expanded(child: _body()),
+        ]),
       ),
     );
   }
 
-  Widget _body(CustomerState state) {
+  Widget _body() {
     return ListView.builder(
         padding: const EdgeInsets.only(top: 32),
         shrinkWrap: true,
-        itemCount: state.customers.length,
+        itemCount: _baseController.customers.value.length,
         itemBuilder: (context, index) {
-          CustomerModel model = state.customers[index];
+          CustomerModel model = _baseController.customers.value[index];
           return AppCard(
             mb: 8,
             children: [
               GestureDetector(
                 onTap: () {
                   NavigationController().pushTo(context,
-                      child: CustomerProfilePage(model, _customerBloc));
+                      child: CustomerProfilePage(model));
                 },
                 child: AppRowFlex(
                     flex: const [1, 5, 2, 0],

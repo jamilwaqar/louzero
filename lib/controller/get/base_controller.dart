@@ -21,7 +21,6 @@ class BaseController extends GetxController {
     /// Company
     var companyList = await _fetchCompanies();
     CompanyModel? companyModel;
-
     if (companyList is List) {
       try {
         companyModel = (companyList as List<CompanyModel>)
@@ -37,6 +36,11 @@ class BaseController extends GetxController {
     var templates = await _fetchSiteProfileTemplate();
     if (templates is List) {
       siteProfileTemplates.value = templates as List<CTSiteProfile>;
+    }
+    /// Customers
+    var customerList = await _fetchCustomers();
+    if (customerList is List) {
+      customers.value = customerList as List<CustomerModel>;
     }
   }
 
@@ -71,6 +75,21 @@ class BaseController extends GetxController {
       return list;
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future _fetchCustomers() async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+    try {
+      var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
+      List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
+      if (list.isNotEmpty) {
+        tempCustomerModel = list[0];
+      }
+      return list;
+    } catch (e) {
+      return e.toString();
     }
   }
 
