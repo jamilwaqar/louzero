@@ -40,78 +40,85 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         return ValueListenableBuilder<bool>(
           valueListenable: AuthManager().loggedIn,
           builder: (ctx, isLoggedIn, child) {
-            return Scaffold(
-              drawerScrimColor: Colors.black.withOpacity(0),
-              key: _key,
-              resizeToAvoidBottomInset: widget.hasKeyboard,
-              backgroundColor: AppColors.secondary_99,
-              drawerEnableOpenDragGesture: false,
-              appBar: AppBar(
-                  backgroundColor: const Color(0xFF263842),
-                  title: SizedBox(
-                    height: 64,
-                    child: Image.asset("assets/icons/general/logo_icon.png"),
+            return Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                  child: Scaffold(
+                    drawerScrimColor: Colors.black.withOpacity(0),
+                    key: _key,
+                    resizeToAvoidBottomInset: widget.hasKeyboard,
+                    backgroundColor: AppColors.secondary_99,
+                    drawerEnableOpenDragGesture: false,
+                    appBar: AppBar(
+                        backgroundColor: const Color(0xFF263842),
+                        title: SizedBox(
+                          height: 64,
+                          child:
+                              Image.asset("assets/icons/general/logo_icon.png"),
+                        ),
+                        leading: isLoggedIn
+                            ? IconButton(
+                                onPressed: () {
+                                  _key.currentState?.openDrawer();
+                                },
+                                icon: const Icon(Icons.menu),
+                              )
+                            : null, // Set menu icon at leading of AppBar
+                        actions: [
+                          if (isLoggedIn)
+                            AppPopMenu(
+                              items: [
+                                PopMenuItem(
+                                  label: 'My Account',
+                                  icon: Icons.person_rounded,
+                                  onTap: () {},
+                                ),
+                                PopMenuItem(
+                                  label: 'Settings',
+                                  icon: Icons.settings,
+                                  onTap: () {},
+                                ),
+                                PopMenuItem(
+                                  label: 'Account Setup',
+                                  icon: MdiIcons.briefcase,
+                                  onTap: () {},
+                                ),
+                                PopMenuItem(
+                                  label: 'Log Out',
+                                  icon: Icons.exit_to_app,
+                                  onTap: _logout,
+                                )
+                              ],
+                              button: const [
+                                AppAvatar(
+                                  path: 'assets/mocks/profile_corey_2.png',
+                                  size: 40,
+                                  borderColor: AppColors.lightest,
+                                ),
+                                Icon(Icons.arrow_drop_down,
+                                    color: AppColors.lightest)
+                              ],
+                            )
+                        ]),
+                    drawer: isLoggedIn ? const SideMenuView() : null,
+                    body: widget.child,
                   ),
-                  leading: isLoggedIn
-                      ? IconButton(
-                          onPressed: () {
-                            _key.currentState?.openDrawer();
-                          },
-                          icon: const Icon(Icons.menu),
-                        )
-                      : null, // Set menu icon at leading of AppBar
-                  actions: [
-                    if (isLoggedIn)
-                      AppPopMenu(
-                        items: [
-                          PopMenuItem(
-                            label: 'My Account',
-                            icon: Icons.person_rounded,
-                            onTap: () {},
-                          ),
-                          PopMenuItem(
-                            label: 'Settings',
-                            icon: Icons.settings,
-                            onTap: () {},
-                          ),
-                          PopMenuItem(
-                            label: 'Account Setup',
-                            icon: MdiIcons.briefcase,
-                            onTap: () {},
-                          ),
-                          PopMenuItem(
-                            label: 'Log Out',
-                            icon: Icons.exit_to_app,
-                            onTap: _logout,
-                          )
-                        ],
-                        button: const [
-                          AppAvatar(
-                            path: 'assets/mocks/profile_corey_2.png',
-                            size: 40,
-                            borderColor: AppColors.lightest,
-                          ),
-                          Icon(Icons.arrow_drop_down, color: AppColors.lightest)
-                        ],
-                      )
-                  ]),
-              drawer: isLoggedIn ? const SideMenuView() : null,
-              body: AnimatedCrossFade(
-                crossFadeState: isLoading
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                duration: const Duration(milliseconds: 700),
-                firstChild: Column(
-                  children: [
-                    Expanded(
-                        child: Container(
-                      child: const AppSpinner(size: 200),
-                      color: AppColors.secondary_99,
-                    ))
-                  ],
                 ),
-                secondChild: widget.child!,
-              ),
+                if (isLoading)
+                  Positioned.fill(
+                    child: Container(
+                      alignment: Alignment.center,
+                      color: AppColors.secondary_95.withOpacity(0.6),
+                      child: AppSpinner(
+                        size: 160,
+                        width: 8,
+                      ),
+                    ),
+                  ),
+              ],
             );
           },
         );
