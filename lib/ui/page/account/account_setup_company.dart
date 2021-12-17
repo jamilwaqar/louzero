@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -90,6 +89,11 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _baseController.searchedAddressList = [];
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

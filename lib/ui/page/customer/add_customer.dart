@@ -75,6 +75,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     _companyNameController.dispose();
     _parentAccountNameController.dispose();
     _serviceCountryController.dispose();
+    _baseController.searchedAddressList = [];
     super.dispose();
   }
 
@@ -189,7 +190,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   Widget _addressWidget(bool isService) {
-    return Stack(
+    return Obx(()=> Stack(
       clipBehavior: Clip.none,
       children: [
         Column(
@@ -213,7 +214,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             const SizedBox(height: 24),
             AppInputText(
               controller:
-                  isService ? _serviceStreetController : _billStreetController,
+              isService ? _serviceStreetController : _billStreetController,
               label: "Street Address",
               onChanged: (val) {
                 _baseController.searchAddress(val, _country?.countryCode ?? 'US');
@@ -247,7 +248,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         Positioned(
             left: 0, right: 0, top: 180, child: _searchedAddressListView()),
       ],
-    );
+    ));
   }
 
   Widget _billingAddress() {
