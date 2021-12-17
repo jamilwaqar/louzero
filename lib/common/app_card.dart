@@ -6,6 +6,7 @@ class AppCard extends StatelessWidget {
   const AppCard({
     Key? key,
     required this.children,
+    this.radius = 8,
     this.pt = 24,
     this.pb = 24,
     this.pl = 24,
@@ -16,6 +17,7 @@ class AppCard extends StatelessWidget {
     this.mr = 24,
   }) : super(key: key);
   final List<Widget> children;
+  final double radius;
   final double pt;
   final double pb;
   final double pl;
@@ -61,8 +63,9 @@ class AppCard extends StatelessWidget {
           color: AppColors.lightest,
           shape: RoundedRectangleBorder(
             side: const BorderSide(color: AppColors.light_2),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(radius),
           ),
+          clipBehavior: Clip.antiAlias,
           elevation: elevation,
           shadowColor: AppColors.darkest.withOpacity(0.5),
           child: Container(

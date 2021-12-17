@@ -8,6 +8,7 @@ class AppInputText extends StatelessWidget {
   const AppInputText(
       {Key? key,
       required this.label,
+      this.initial,
       this.controller,
       this.onSaved,
       this.validator,
@@ -28,6 +29,7 @@ class AppInputText extends StatelessWidget {
       : super(key: key);
 
   final String label;
+  final String? initial;
   final TextEditingController? controller;
   final void Function(String?)? onSaved;
   final String? Function(String?)? validator;
@@ -59,7 +61,7 @@ class AppInputText extends StatelessWidget {
       fontSize: 16,
       color: colorTx,
     );
-    
+
     InputDecoration inputStyle = InputDecoration(
       filled: true,
       fillColor: AppColors.lightest,
@@ -92,12 +94,9 @@ class AppInputText extends StatelessWidget {
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppTextBody(label + reqText,
-            size: 14,
-            color: AppColors.dark_2,
-            bold: true,
-            mb: 8,
-            mt: mt),
+            size: 14, color: AppColors.dark_2, bold: true, mb: 8, mt: mt),
         TextFormField(
+          initialValue: initial,
           autofocus: autofocus,
           controller: controller,
           keyboardAppearance: Brightness.light,
@@ -108,8 +107,7 @@ class AppInputText extends StatelessWidget {
           validator: validator,
           style: inputText,
           enabled: enabled,
-          textCapitalization:
-              textCapitalization ?? TextCapitalization.none,
+          textCapitalization: textCapitalization ?? TextCapitalization.none,
           decoration: inputStyle,
         ),
         SizedBox(

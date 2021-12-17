@@ -10,6 +10,7 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
+import 'package:louzero/ui/page/demo/demo.dart';
 import 'package:louzero/ui/page/settings/settings.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -135,6 +136,14 @@ class _SideMenuViewState extends State<SideMenuView> {
                   _pop();
                   NavigationController()
                       .pushTo(context, child: const SettingsPage());
+                },
+              ),
+              AppNavButton(
+                title: "Demo",
+                icon: Icons.star_border_outlined,
+                onPressed: () {
+                  _pop();
+                  NavigationController().pushTo(context, child: demo());
                 },
               ),
             ],

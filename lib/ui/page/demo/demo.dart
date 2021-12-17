@@ -1,0 +1,230 @@
+import 'package:flutter/material.dart';
+import 'package:louzero/common/app_button.dart';
+import 'package:louzero/common/app_card.dart';
+import 'package:louzero/common/app_card_tabs.dart';
+import 'package:louzero/common/app_flex_row.dart';
+import 'package:louzero/common/app_input_text.dart';
+import 'package:louzero/common/app_multiselect.dart';
+import 'package:louzero/common/app_pop_menu.dart';
+import 'package:louzero/common/app_spinner.dart';
+import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/ui/page/base_scaffold.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+class demo extends StatelessWidget {
+  demo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseScaffold(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _tabs(),
+            _loadingSpinner(),
+            _multiSelect(),
+            _formInputs(),
+            _buttonsAndMenus(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // MOCK DATA (MULTISELECT)
+  List<SelectItem> selectItems = [
+    SelectItem(id: '1', value: '', label: 'Cheese'),
+    SelectItem(id: '2', value: '', label: 'Mushrooms'),
+    SelectItem(id: '3', value: '', label: 'Jalepenos'),
+    SelectItem(id: '4', value: '', label: 'Tomatos'),
+    SelectItem(id: '4', value: '', label: 'Peperoni'),
+    SelectItem(id: '4', value: '', label: 'Cookie Dough'),
+    SelectItem(id: '4', value: '', label: 'Sausage'),
+    SelectItem(id: '5', value: '', label: 'Onions'),
+    SelectItem(id: '5', value: '', label: 'Garlic'),
+    SelectItem(id: '5', value: '', label: 'Gravel'),
+  ];
+
+  // MOCK DATA (TABS)
+  final List<Widget> tabItems = [
+    Container(
+      color: AppColors.lightest,
+      child: Container(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              AppTextHeader('Basic Info',
+                  alignLeft: true, icon: Icons.airplane_ticket, size: 24),
+              AppFlexRow(
+                flex: [2, 2],
+                children: [
+                  AppInputText(
+                    label: 'First',
+                    initial: 'Brad',
+                  ),
+                  AppInputText(
+                    label: 'Last',
+                    initial: 'Smith',
+                  ),
+                  AppInputText(
+                    label: 'Alias',
+                    initial: 'The Closer',
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              AppFlexRow(
+                flex: [2],
+                children: [
+                  Column(
+                    children: [
+                      AppTextBody(
+                        'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                        bold: true,
+                        mb: 16,
+                      ),
+                      AppTextBody(
+                        'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                      )
+                    ],
+                  ),
+                  AppTextBody(
+                    'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                    pl: 8,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    ),
+    Container(
+      color: AppColors.lightest,
+      child: Icon(Icons.location_pin, size: 150, color: AppColors.orange),
+    ),
+    Container(
+      color: AppColors.lightest,
+      child: Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange),
+    ),
+  ];
+
+  // RENDER FUNCTIONS
+  Widget _heading(String text,
+      [icon = Icons.chevron_right, double px = 0, double py = 0]) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: px, vertical: py),
+      child: AppTextHeader(
+        text,
+        alignLeft: true,
+        icon: icon,
+        size: 24,
+      ),
+    );
+  }
+
+  Widget _tabs() => AppCardTabs(
+        height: 500,
+        length: 3,
+        tabNames: ['Overview', 'Schedule', 'Billing'],
+        children: tabItems,
+      );
+
+  Widget _loadingSpinner() => AppCard(pb: 48, children: [
+        _heading('Loading Spinner', MdiIcons.pirate),
+        const AppSpinner(),
+      ]);
+
+  Widget _multiSelect() => AppCard(children: [
+        _heading('MultiSelect Widget', Icons.list),
+        AppMultiSelect(
+          items: selectItems,
+        ),
+      ]);
+
+  Widget _formInputs() => AppCard(children: [
+        _heading('Form Inputs', Icons.forum_rounded),
+        AppFlexRow(
+          children: [
+            AppInputText(label: 'First'),
+            AppInputText(label: 'Last'),
+            AppInputText(label: 'Nickname'),
+          ],
+        ),
+        AppFlexRow(
+          flex: [4, 1],
+          children: [
+            AppInputText(label: 'Address'),
+            AppInputText(label: 'Suite'),
+          ],
+        ),
+        AppFlexRow(
+          children: [
+            AppInputText(label: 'Country'),
+            AppMultiSelect(
+              label: 'Toppings',
+              items: selectItems,
+            )
+          ],
+        ),
+        AppFlexRow(
+          flex: [2, 3],
+          children: [
+            AppInputText(label: 'Alias'),
+            AppInputText(label: 'Planet of Origin'),
+          ],
+        ),
+        AppFlexRow(
+          flex: [3],
+          children: [
+            Container(),
+            AppButton(
+                label: 'Cancel', primary: false, color: AppColors.secondary_60),
+            AppButton(label: 'Submit', color: AppColors.orange),
+          ],
+        )
+      ]);
+
+  Widget _buttonsAndMenus() => AppCard(children: [
+        _heading('Buttons and Menus', Icons.control_point_rounded),
+        Row(
+          children: const [
+            Expanded(
+              child: AppButton(
+                label: 'Primary',
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              flex: 0,
+              child: AppPopMenu(
+                button: [
+                  Icon(Icons.control_point_rounded,
+                      size: 40, color: AppColors.orange)
+                ],
+                items: [
+                  PopMenuItem(label: 'Action One', icon: Icons.settings),
+                  PopMenuItem(
+                      label: 'Action Two', icon: Icons.location_city_outlined),
+                  PopMenuItem(
+                      label: 'Action Three', icon: Icons.mail_outline_rounded),
+                ],
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: AppButton(
+                label: 'Secondary',
+                primary: false,
+              ),
+            ),
+          ],
+        )
+      ]);
+}
