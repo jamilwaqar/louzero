@@ -8,6 +8,7 @@ import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
+import 'package:louzero/ui/page/job/jobs_home.dart';
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
 
