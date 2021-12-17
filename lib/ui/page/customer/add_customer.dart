@@ -12,8 +12,8 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
-import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
@@ -55,19 +55,18 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   bool _subAccount = false;
   bool _sameAsService = true;
   final List<Widget> _customerContactList = [];
-  final List<String> _mockCustomerType = ["Residential", "Commercial"];
+
   String? _customerType;
   final List<List<CTContactType>> _contactTypes = [[]];
   Country? _country;
   SearchAddressModel? _serviceSearchAddressModel;
   SearchAddressModel? _billSearchAddressModel;
   final BaseController _baseController = Get.find();
-  final CustomerController _controller = Get.find();
 
   @override
   void initState() {
     _customerContactList.add(_customerContact(0));
-    _customerType = _mockCustomerType[0];
+    _customerType = AuthManager.userModel!.customerTypes[0];
     super.initState();
   }
 
@@ -132,7 +131,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             children: [
               Flexible(child: LZTextField(controller: _companyNameController, label: "Company or Account Name")),
               const SizedBox(width: 32),
-              Flexible(child: AppDropDown(label: "Customer Type*",itemList: _mockCustomerType, initValue: _customerType, onChanged: (value){
+              Flexible(child: AppDropDown(label: "Customer Type*",itemList: AuthManager.userModel!.customerTypes, initValue: _customerType, onChanged: (value){
                 setState(() {
                   _customerType = value;
                 });

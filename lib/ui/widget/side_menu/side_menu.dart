@@ -97,7 +97,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 onPressed: () {
                   _pop();
                   NavigationController()
-                      .pushTo(context, child: const CustomerListPage());
+                      .pushTo(context, child: CustomerListPage());
                 },
               ),
               AppNavButton(

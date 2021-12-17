@@ -144,7 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: AppColors.dark_1,
                           label: 'View All',
                           onPressed: () =>
-                              Get.to(() => const CustomerListPage()),
+                              Get.to(() => CustomerListPage()),
                         )
                       ]),
                   SizedBox(height: spacing),

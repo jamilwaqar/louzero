@@ -16,27 +16,11 @@ import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
-class CustomerListPage extends StatefulWidget {
-  const CustomerListPage({Key? key}) : super(key: key);
+class CustomerListPage extends StatelessWidget {
+  CustomerListPage({Key? key}) : super(key: key);
 
-  @override
-  _CustomerListPageState createState() => _CustomerListPageState();
-}
-
-class _CustomerListPageState extends State<CustomerListPage> {
-  final TextEditingController _companyNameController = TextEditingController();
-  final TextEditingController _parentAccountNameController =
-      TextEditingController();
-
-  int mockId = 8520;
+  final int mockId = 8520;
   final BaseController _baseController = Get.find();
-
-  @override
-  void dispose() {
-    _companyNameController.dispose();
-    _parentAccountNameController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +55,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
   }
 
   Widget _body() {
-    return ListView.builder(
+    return Obx(() => ListView.builder(
         padding: const EdgeInsets.only(top: 32),
         shrinkWrap: true,
         itemCount: _baseController.customers.value.length,
@@ -82,7 +66,8 @@ class _CustomerListPageState extends State<CustomerListPage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.to(()=> const CustomerProfilePage(), arguments: model, binding: CustomerBinding());
+                  Get.to(() => const CustomerProfilePage(),
+                      arguments: model, binding: CustomerBinding());
                 },
                 child: AppRowFlex(
                     flex: const [1, 5, 2, 0],
@@ -108,48 +93,46 @@ class _CustomerListPageState extends State<CustomerListPage> {
                       PopupMenuButton(
                           offset: const Offset(0, 40),
                           onSelected: (value) {
-                              if (value == 1) {
-                                Get.to(()=> InviteCustomerPage(email: model.customerContacts.first.email));
-                              }
+                            if (value == 1) {
+                              Get.to(() => InviteCustomerPage(
+                                  email: model.customerContacts.first.email));
+                            }
                           },
                           elevation: 2,
                           shape: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(8),
                               borderSide: const BorderSide(
-                                  color: AppColors.medium_2,
-                                  width: 0)),
+                                  color: AppColors.medium_2, width: 0)),
                           child: const Icon(Icons.more_vert),
                           itemBuilder: (context) => [
-                            PopupMenuItem(
-                              child: SizedBox(
-                                width: 100,
-                                height: 60,
-                                child: Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.supervised_user_circle,
-                                      color: AppColors.icon,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text("Invite",
-                                        style: TextStyle(
+                                PopupMenuItem(
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 60,
+                                    child: Row(
+                                      children: const [
+                                        Icon(
+                                          Icons.supervised_user_circle,
                                           color: AppColors.icon,
-                                          fontWeight:
-                                          FontWeight.w400,
-                                          fontSize: 16,
-                                        )),
-                                  ],
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text("Invite",
+                                            style: TextStyle(
+                                              color: AppColors.icon,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  value: 1,
                                 ),
-                              ),
-                              value: 1,
-                            ),
-                          ]),
+                              ]),
                       // Icon(Icons.more_vert)
                     ]),
               )
             ],
           );
-        });
+        }));
   }
 }

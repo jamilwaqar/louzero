@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/customer_controller.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
