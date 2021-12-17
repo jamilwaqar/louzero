@@ -98,8 +98,7 @@ class AddJobPage extends GetWidget<JobController> {
                     Flexible(
                       child: AppAddButton(
                         "Add New Customer",
-                        onPressed: () => Get.to(() => AddCustomerPage(
-                            CustomerBloc(_baseController.customers.value))),
+                        onPressed: () => Get.to(() => AddCustomerPage()),
                       ),
                     ),
                   ],

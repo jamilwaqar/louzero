@@ -2,10 +2,16 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/models/models.dart';
+import 'base_controller.dart';
 
 class CustomerController extends GetxController {
 
-  _fetchSiteProfile(String customerId) async {
+  final customerModel = Rx<CustomerModel?>(null);
+
+  List<CustomerModel> get customers =>
+      Get.find<BaseController>().customers.value;
+
+  fetchSiteProfile(String customerId) async {
     CustomerModel? model = customerModelById(customerId);
     if (model != null && model.siteProfiles.isNotEmpty) return;
 
@@ -25,23 +31,32 @@ class CustomerController extends GetxController {
 
     if (model != null) {
       model.siteProfiles = list;
-      add(UpdateCustomerModelEvent(model));
+      updateCustomerModel(model);
     }
   }
 
-  _updateCustomerModel(CustomerModel model) async {
-    List<CustomerModel> models = [... state.customers];
+  updateCustomerModel(CustomerModel model) async {
+    List<CustomerModel> models = [...customers];
     int index = models.indexWhere((e) => e.objectId == model.objectId);
     models.removeWhere((e) => e.objectId == model.objectId);
     models.insert(index, model);
-    yield state.copyWith(customers: models, stateFlag: !state.stateFlag);
+    Get.find<BaseController>().customers.value = models;
   }
 
   CustomerModel? customerModelById(String customerId) {
     try {
-      return state.customers.firstWhere((e) => e.objectId == customerId);
-    } catch(e) {
+      return customers.firstWhere((e) => e.objectId == customerId);
+    } catch (e) {
       return null;
     }
+  }
+
+  @override
+  void onInit() {
+    customerModel.value = Get.arguments;
+    if (customerModel.value != null) {
+      fetchSiteProfile(customerModel.value!.objectId!);
+    }
+    super.onInit();
   }
 }

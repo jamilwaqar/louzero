@@ -20,11 +20,8 @@ dependencies:
   another_flushbar:
   image_picker:
 
-  flutter_bloc:
-  bloc:
   dropdown_search:
   equatable:
-  provider:
 
   flutter_switch:
   google_maps_flutter:

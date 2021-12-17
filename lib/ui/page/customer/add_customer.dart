@@ -2,9 +2,8 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/app_input_text.dart';
@@ -12,6 +11,8 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/enum/enums.dart';
+import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
@@ -60,6 +61,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Country? _country;
   SearchAddressModel? _serviceSearchAddressModel;
   SearchAddressModel? _billSearchAddressModel;
+  final BaseController _baseController = Get.find();
+  final CustomerController _controller = Get.find();
 
   @override
   void initState() {
@@ -73,7 +76,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     _companyNameController.dispose();
     _parentAccountNameController.dispose();
     _serviceCountryController.dispose();
-    widget.customerBloc.add(const SearchAddressEvent(''));
     super.dispose();
   }
 
@@ -214,8 +216,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               controller:
                   isService ? _serviceStreetController : _billStreetController,
               label: "Street Address",
-              onChanged: (value) {
-                widget.customerBloc.add(SearchAddressEvent(value, countryCode: _country?.countryCode));
+              onChanged: (val) {
+                _baseController.searchAddress(val, _country?.countryCode ?? 'US');
               },
             ),
             AppInputText(controller: isService ? _serviceAtController : _billAtController, label: "Apt / Suite / Other"),
@@ -489,8 +491,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       dynamic response = await Backendless.data.of(BLPath.customer).save(data);
       WarningMessageDialog.showDialog(context, "Saved Customer!");
       CustomerModel newModel = CustomerModel.fromMap(response);
-      List<CustomerModel> newList = [... widget.customerBloc.state.customers, newModel];
-      widget.customerBloc.add(UpdateCustomerModelListEvent(newList));
+      List<CustomerModel> newList = [... _baseController.customers.value, newModel];
+      _baseController.customers.value = newList;
       NavigationController().pop(context, delay: 2);
     } catch(e) {
       print('save data error: ${e.toString()}');
@@ -499,7 +501,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   Widget _searchedAddressListView() {
-    if (widget.customerBloc.state.searchedAddressList.isEmpty) return Container();
+    if (_baseController.searchedAddresses.value.isEmpty) return Container();
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -511,12 +513,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           shrinkWrap: true,
           itemBuilder: (_, int index) => _searchAddressItem(index),
           separatorBuilder: (_, __) => const Divider(),
-          itemCount: widget.customerBloc.state.searchedAddressList.length),
+          itemCount: _baseController.searchedAddresses.value.length),
     );
   }
 
   Widget _searchAddressItem(int index) {
-    SearchAddressModel model = widget.customerBloc.state.searchedAddressList[index];
+    SearchAddressModel model = _baseController.searchedAddresses.value[index];
     return InkWell(
       onTap: () => _onSelectAddress(model),
       child: Container(
@@ -558,7 +560,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   void _onSelectAddress(SearchAddressModel model, {bool isService = true}) async {
     NavigationController().loading();
-    List? res = await widget.customerBloc.getLatLng(model.placeId);
+    List? res = await _baseController.getLatLng(model.placeId);
     if (res != null) {
       LatLng latLng = res[0];
       String formattedAddress = res[1];
@@ -584,7 +586,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         setState(() {});
       }
     }
-    widget.customerBloc.add(const SearchAddressEvent(''));
+    _baseController.searchedAddressList = [];
     NavigationController().loading(isLoading: false);
   }
 }

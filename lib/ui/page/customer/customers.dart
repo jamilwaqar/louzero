@@ -7,6 +7,7 @@ import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/bindings/customer_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/auth/invite.dart';
@@ -29,7 +30,6 @@ class _CustomerListPageState extends State<CustomerListPage> {
 
   int mockId = 8520;
   final BaseController _baseController = Get.find();
-
 
   @override
   void dispose() {
@@ -57,7 +57,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
                     icon: Icons.add_circle,
                     onPressed: () => NavigationController().pushTo(
                         context,
-                        child: AddCustomerPage())),
+                        child: const AddCustomerPage())),
               ),
             )
           ],
@@ -82,8 +82,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  NavigationController().pushTo(context,
-                      child: CustomerProfilePage(model));
+                  Get.to(()=> const CustomerProfilePage(), arguments: model, binding: CustomerBinding());
                 },
                 child: AppRowFlex(
                     flex: const [1, 5, 2, 0],

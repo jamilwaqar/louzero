@@ -4,18 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:louzero/ui/widget/widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerSiteProfilePage extends StatefulWidget {
 
@@ -51,6 +50,8 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   final List<ExpandState> _expandedList = [];
   List<CTSiteProfile> _siteProfiles = [];
   final BaseController _baseController = Get.find();
+  final CustomerController _controller = Get.find();
+
   @override
   void initState() {
     _initTextControllers();
@@ -83,32 +84,20 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CustomerBloc, CustomerState>(
-      bloc: widget.customerBloc,
-      listenWhen: listenWhen,
-      listener: (BuildContext context, CustomerState state) {
-
-      },
-      child: BlocBuilder<CustomerBloc, CustomerState>(
-        bloc: widget.customerBloc,
-        builder: (context, state) {
-          return BaseScaffold(
-            child: Scaffold(
-              appBar: SubAppBar(
-                title: _isTemplate ? "Site Profile Templates" : "Site Profile",
-                context: context,
-                leadingTxt: _isTemplate ? "Settings" : "Customer Profile",
-                hasActions: _isAdding,
-                actions: [
-                  if (!_isAdding)
-                  _addNew()
-                ],
-              ),
-              backgroundColor: Colors.transparent,
-              body: _body(),
-            ),
-          );
-        }
+    return BaseScaffold(
+      child: Scaffold(
+        appBar: SubAppBar(
+          title: _isTemplate ? "Site Profile Templates" : "Site Profile",
+          context: context,
+          leadingTxt: _isTemplate ? "Settings" : "Customer Profile",
+          hasActions: _isAdding,
+          actions: [
+            if (!_isAdding)
+              _addNew()
+          ],
+        ),
+        backgroundColor: Colors.transparent,
+        body: _body(),
       ),
     );
   }
@@ -754,9 +743,9 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         WarningMessageDialog.showDialog(context, "Saved site Template!");
       } else {
         List<CTSiteProfile>list = [..._siteProfiles, ctProfile];
-        CustomerModel model = widget.customerBloc.customerModelById(widget.customerId!)!;
+        CustomerModel model = _controller.customerModelById(widget.customerId!)!;
         model.siteProfiles = list;
-        widget.customerBloc.add(UpdateCustomerModelEvent(model));
+        _controller.updateCustomerModel(model);
         WarningMessageDialog.showDialog(context, "Saved site profiles!");
       }
       NavigationController().pop(context, delay: 2);
