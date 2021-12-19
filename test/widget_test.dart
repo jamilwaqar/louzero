@@ -8,7 +8,7 @@ void main() {
   testWidgets('MultisSelect', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: AppMultiSelect(),
       ),
     );
@@ -17,7 +17,7 @@ void main() {
     expect(find.text('Select Options'), findsOneWidget);
 
     // Tap the Input Element
-    await tester.tap(find.byKey(Key('select')));
+    await tester.tap(find.byKey(const Key('select')));
     await tester.pump();
   });
 }

@@ -4,7 +4,7 @@ class RouteFadeTransition extends PageRouteBuilder {
   final Widget child;
   RouteFadeTransition({required this.child})
       : super(
-          transitionDuration: Duration(milliseconds: 500),
+          transitionDuration: const Duration(milliseconds: 500),
           pageBuilder: (context, animation, secondaryAnimation) => child,
         );
 

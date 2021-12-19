@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:louzero/common/app_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -12,7 +10,7 @@ class AppBarPageHeader extends StatelessWidget with PreferredSizeWidget {
   final String leadingTxt;
   final bool hasActions;
   final BuildContext context;
-  final Function()? onPressed;
+  final VoidCallback? onMenuPress;
   final List<Widget>? footerStart;
   final List<Widget>? footerEnd;
 
@@ -23,42 +21,49 @@ class AppBarPageHeader extends StatelessWidget with PreferredSizeWidget {
       this.leading,
       this.leadingTxt = '',
       this.hasActions = true,
-      this.onPressed,
+      this.onMenuPress,
       this.footerStart,
       this.footerEnd,
       Key? key})
       : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(192);
+  Size get preferredSize => footerEnd != null || footerStart != null
+      ? const Size.fromHeight(192)
+      : const Size.fromHeight(150);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.appBar,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 16,
       ),
       child: AppBar(
-        shadowColor: Colors.transparent,
-        backgroundColor: AppColors.appBar,
-        title: title,
-        centerTitle: true,
-        actions: actions,
-        leadingWidth: 150,
-        leading: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          AppActionButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: Icons.arrow_back),
-          AppActionButton(onPressed: () {}, icon: MdiIcons.text),
-        ]),
-        bottom: AppBarFooter(
-          footerEnd: footerEnd ?? [],
-          footerStart: footerStart ?? [],
-        ),
-      ),
+          shadowColor: Colors.transparent,
+          backgroundColor: AppColors.appBar,
+          title: title,
+          centerTitle: true,
+          actions: actions,
+          leadingWidth: 150,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child:
+                Wrap(runAlignment: WrapAlignment.center, spacing: 8, children: [
+              if (Navigator.canPop(context))
+                AppActionButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Icons.arrow_back),
+              AppActionButton(
+                  onPressed: onMenuPress ?? () {}, icon: MdiIcons.text),
+            ]),
+          ),
+          bottom: AppBarFooter(
+            footerEnd: footerEnd ?? [],
+            footerStart: footerStart ?? [],
+          )),
     );
   }
 }
@@ -72,15 +77,22 @@ class AppActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: onPressed,
-      elevation: 0,
-      child: Icon(icon),
-      mini: true,
-      backgroundColor: Colors.white.withAlpha(30),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8))),
-      clipBehavior: Clip.antiAlias,
+    // ignore: sized_box_for_whitespace
+    return Container(
+      width: 45,
+      height: 45,
+      child: MaterialButton(
+        padding: const EdgeInsets.all(0),
+        onPressed: onPressed,
+        elevation: 0,
+        child: Icon(icon, color: Colors.white),
+        color: Colors.white.withAlpha(30),
+        // mini: true,
+        // backgroundColor: Colors.white.withAlpha(30),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
+        clipBehavior: Clip.antiAlias,
+      ),
     );
   }
 }
@@ -89,13 +101,14 @@ class AppBarFooter extends StatefulWidget implements PreferredSizeWidget {
   final List<Widget>? footerStart;
   final List<Widget>? footerEnd;
 
-  AppBarFooter({Key? key, this.footerStart, this.footerEnd}) : super(key: key);
+  const AppBarFooter({Key? key, this.footerStart, this.footerEnd})
+      : super(key: key);
 
   @override
   _AppBarFooterState createState() => _AppBarFooterState();
 
   @override
-  Size get preferredSize => Size.fromHeight(80.0);
+  Size get preferredSize => const Size.fromHeight(80.0);
 }
 
 class _AppBarFooterState extends State<AppBarFooter> {
@@ -132,11 +145,11 @@ class _AppBarFooterState extends State<AppBarFooter> {
             Expanded(
                 child: Container(
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.secondary_99,
                 borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(40),
-                  topRight: const Radius.circular(40),
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
                 ),
               ),
             ))

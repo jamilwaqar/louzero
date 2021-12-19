@@ -21,6 +21,7 @@ class AppSpinner extends StatelessWidget {
     return Center(
       child: Padding(
         padding: EdgeInsets.all(pad),
+        // ignore: sized_box_for_whitespace
         child: Container(
           width: size,
           height: size,

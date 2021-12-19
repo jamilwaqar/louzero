@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 import 'app_card.dart';
 
 class AppCardTabs extends StatelessWidget {
-  AppCardTabs({
+  const AppCardTabs({
     Key? key,
     required this.children,
     required this.length,
@@ -22,19 +21,18 @@ class AppCardTabs extends StatelessWidget {
   final List<Widget> children;
   final List<String> tabNames;
 
-  Color _labelColor = AppColors.secondary_30;
-  Color _borderFocus = AppColors.orange;
-  Color _borderBlur = AppColors.secondary_90;
-  Color _backgroundTabs = AppColors.secondary_99;
-  double _borderWidth = 2;
+  final Color _labelColor = AppColors.secondary_30;
+  final Color _borderFocus = AppColors.orange;
+  final Color _borderBlur = AppColors.secondary_90;
+  final Color _backgroundTabs = AppColors.secondary_99;
+  final double _borderWidth = 2;
 
   Tab _tab(String text) {
     String _label = uppercase ? text.toUpperCase() : text;
     return Tab(
       child: Text(
         _label,
-        style: GoogleFonts.barlowCondensed(
-            fontSize: 16, fontWeight: FontWeight.bold),
+        style: appStyles.header_small,
       ),
     );
   }
@@ -51,6 +49,7 @@ class AppCardTabs extends StatelessWidget {
         children: [
           DefaultTabController(
             length: 3,
+            // ignore: sized_box_for_whitespace
             child: Container(
               height: height,
               child: Column(
@@ -66,7 +65,7 @@ class AppCardTabs extends StatelessWidget {
                       indicator: UnderlineTabIndicator(
                           borderSide: BorderSide(
                               width: _borderWidth, color: _borderFocus),
-                          insets: EdgeInsets.symmetric(horizontal: 0)),
+                          insets: const EdgeInsets.symmetric(horizontal: 0)),
                       labelColor: _labelColor,
                       indicatorColor: _borderFocus,
                       padding: const EdgeInsets.symmetric(horizontal: 0),

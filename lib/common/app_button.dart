@@ -68,7 +68,7 @@ class AppButton extends StatelessWidget {
             ? Icon(
                 icon,
                 size: iconSize,
-                color: colorIcon ?? null,
+                color: colorIcon,
               )
             : null,
         elevation: 0,

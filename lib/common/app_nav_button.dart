@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppNavButton extends StatelessWidget {
-  AppNavButton({
+  const AppNavButton({
     Key? key,
     required this.title,
     this.icon,
@@ -50,7 +49,7 @@ class AppNavButton extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              margin: EdgeInsets.only(right: 12),
+              margin: const EdgeInsets.only(right: 12),
               child: Icon(
                 icon,
                 color: selected ? colorIco : AppColors.secondary_60,
@@ -60,8 +59,7 @@ class AppNavButton extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: GoogleFonts.lato(
-                    fontWeight: FontWeight.w700, fontSize: 16, color: color),
+                style: appStyles.label_bold.copyWith(color: color),
               ),
             )
           ],
