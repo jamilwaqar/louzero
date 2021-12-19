@@ -36,6 +36,43 @@ abstract class AppColors {
   static const Color black = Colors.black;
 }
 
+abstract class appStyles {
+  static const header_small = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+  );
+  static const header_default = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: AppColors.darkest,
+  );
+  static const header_appbar = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    color: AppColors.lightest,
+  );
+  static const header_dialog = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: AppColors.secondary_30,
+  );
+  static const label_default = TextStyle(
+    fontFamily: 'Lato',
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.secondary_20,
+  );
+  static const label_bold = TextStyle(
+    fontFamily: 'Lato',
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+  );
+}
+
 abstract class TextStyles {
   static const TextStyle displayL =
       TextStyle(color: AppColors.dark_1, fontSize: 57);
