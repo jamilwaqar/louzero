@@ -34,37 +34,38 @@ class AppBarPageHeader extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.appBar,
-      padding: const EdgeInsets.only(
-        top: 16,
-      ),
-      child: AppBar(
-          shadowColor: Colors.transparent,
-          backgroundColor: AppColors.appBar,
-          title: title,
-          centerTitle: true,
-          actions: actions,
-          leadingWidth: 150,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child:
-                Wrap(runAlignment: WrapAlignment.center, spacing: 8, children: [
-              if (Navigator.canPop(context))
-                AppActionButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: Icons.arrow_back),
+    return AppBar(
+        shadowColor: Colors.transparent,
+        // backgroundColor: AppColors.appBar,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Color(0xFF465D66), Color(0xFF182933)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight)),
+        ),
+        title: title,
+        centerTitle: true,
+        actions: actions,
+        leadingWidth: 150,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child:
+              Wrap(runAlignment: WrapAlignment.center, spacing: 8, children: [
+            if (Navigator.canPop(context))
               AppActionButton(
-                  onPressed: onMenuPress ?? () {}, icon: MdiIcons.text),
-            ]),
-          ),
-          bottom: AppBarFooter(
-            footerEnd: footerEnd ?? [],
-            footerStart: footerStart ?? [],
-          )),
-    );
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: Icons.arrow_back),
+            AppActionButton(
+                onPressed: onMenuPress ?? () {}, icon: MdiIcons.text),
+          ]),
+        ),
+        bottom: AppBarFooter(
+          footerEnd: footerEnd ?? [],
+          footerStart: footerStart ?? [],
+        ));
   }
 }
 
