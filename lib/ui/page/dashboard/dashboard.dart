@@ -5,6 +5,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/job_binding.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
@@ -74,89 +75,95 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    var spacing = 24.0;
     var margin = 32.0;
-    return BaseScaffold(
+    return AppBaseScaffold(
+        subheader: 'Dashboard',
         child: SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.only(left: margin, right: margin, top: margin * 2),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // COLUMN ONE
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  AppCardChartPie(
-                    items: widget.chartDataJobs,
-                    title: 'Jobs',
-                    footer: [
-                      AppButton(
-                        fontSize: btnSize,
-                        height: btnHeight,
-                        margin: const EdgeInsets.only(right: 8),
-                        label: 'Add Job',
-                        color: AppColors.dark_1,
-                        colorText: AppColors.darkest,
-                        primary: false,
-                        onPressed: () =>
-                            Get.to(() => AddJobPage(), binding: JobBinding()),
-                      ),
-                      AppButton(
-                          fontSize: btnSize,
-                          height: btnHeight,
-                          color: AppColors.dark_1,
-                          label: 'Search Jobs',
-                          onPressed: () {
-                            Get.to(() => JobsHome());
-                          })
-                    ],
+          child: Padding(
+            padding:
+                EdgeInsets.only(left: margin, right: margin, top: margin * 2),
+            child: _body(),
+          ),
+        ));
+  }
+
+  Widget _body() {
+    var spacing = 24.0;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // COLUMN ONE
+        Flexible(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              AppCardChartPie(
+                items: widget.chartDataJobs,
+                title: 'Jobs',
+                footer: [
+                  AppButton(
+                    fontSize: btnSize,
+                    height: btnHeight,
+                    margin: const EdgeInsets.only(right: 8),
+                    label: 'Add Job',
+                    color: AppColors.dark_1,
+                    colorText: AppColors.darkest,
+                    primary: false,
+                    onPressed: () =>
+                        Get.to(() => AddJobPage(), binding: JobBinding()),
                   ),
-                  Image.asset('assets/mocks/reports-card.png'),
-                  SizedBox(height: spacing),
-                  Image.asset('assets/mocks/payments-card.png')
+                  AppButton(
+                      fontSize: btnSize,
+                      height: btnHeight,
+                      color: AppColors.dark_1,
+                      label: 'Search Jobs',
+                      onPressed: () {
+                        Get.to(() => JobsHome());
+                      })
                 ],
               ),
-            ),
-            SizedBox(width: spacing),
-            // COLUMN TWO
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset('assets/mocks/schedule-card.png'),
-                  SizedBox(height: spacing),
-                  AppCardChartPie(
-                      items: widget.chartDataCustomer,
-                      title: 'Customers',
-                      footer: [
-                        AppButton(
-                          fontSize: btnSize,
-                          height: btnHeight,
-                          margin: const EdgeInsets.only(right: 8),
-                          label: 'Add Customer',
-                          color: AppColors.dark_1,
-                          colorText: AppColors.darkest,
-                          primary: false,
-                        ),
-                        AppButton(
-                          fontSize: btnSize,
-                          height: btnHeight,
-                          color: AppColors.dark_1,
-                          label: 'View All',
-                          onPressed: () => Get.to(() => CustomerListPage()),
-                        )
-                      ]),
-                  SizedBox(height: spacing),
-                  Image.asset('assets/mocks/inventory-card.png')
-                ],
-              ),
-            ),
-          ],
+              Image.asset('assets/mocks/reports-card.png'),
+              SizedBox(height: spacing),
+              Image.asset('assets/mocks/payments-card.png')
+            ],
+          ),
         ),
-      ),
-    ));
+        SizedBox(width: spacing),
+        // COLUMN TWO
+        Flexible(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset('assets/mocks/schedule-card.png'),
+              SizedBox(height: spacing),
+              AppCardChartPie(
+                  items: widget.chartDataCustomer,
+                  title: 'Customers',
+                  footer: [
+                    AppButton(
+                      fontSize: btnSize,
+                      height: btnHeight,
+                      margin: const EdgeInsets.only(right: 8),
+                      label: 'Add Customer',
+                      color: AppColors.dark_1,
+                      colorText: AppColors.darkest,
+                      primary: false,
+                    ),
+                    AppButton(
+                      fontSize: btnSize,
+                      height: btnHeight,
+                      color: AppColors.dark_1,
+                      label: 'View All',
+                      onPressed: () => Get.to(() => CustomerListPage()),
+                    )
+                  ]),
+              SizedBox(height: spacing),
+              Image.asset('assets/mocks/inventory-card.png')
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

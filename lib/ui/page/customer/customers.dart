@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,13 +10,10 @@ import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/invite.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
-import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer.dart';
-import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerListPage extends StatelessWidget {
   CustomerListPage({Key? key}) : super(key: key);
@@ -24,33 +23,20 @@ class CustomerListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: "Customers",
-          context: context,
-          leadingTxt: "Home",
-          actions: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 24),
-                child: AppButton(
-                    label: 'Add New',
-                    color: AppColors.medium_3,
-                    height: 32,
-                    icon: Icons.add_circle,
-                    onPressed: () => NavigationController().pushTo(
-                        context,
-                        child: const AddCustomerPage())),
-              ),
-            )
-          ],
-        ),
-        backgroundColor: Colors.transparent,
-        body: Column(children: [
-          Expanded(child: _body()),
-        ]),
-      ),
+    return AppBaseScaffold(
+      child: Column(children: [
+        Expanded(child: _body()),
+      ]),
+      subheader: 'Customers',
+      footerEnd: [
+        AppButton(
+          fontSize: 16,
+          label: 'New Customer',
+          icon: Icons.add_circle,
+          color: AppColors.secondary_20,
+          colorIcon: AppColors.accent_1,
+        )
+      ],
     );
   }
 
