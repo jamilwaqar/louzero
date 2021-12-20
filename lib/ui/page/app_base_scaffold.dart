@@ -57,45 +57,70 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
                   },
-                  child: Scaffold(
-                    drawerScrimColor: Colors.black.withOpacity(0),
-                    key: _key,
-                    resizeToAvoidBottomInset: widget.hasKeyboard,
-                    backgroundColor: AppColors.secondary_99,
-                    drawerEnableOpenDragGesture: false,
-                    appBar: AppBarPageHeader(
-                      context: context,
-                      footerStart: [
-                        if (widget.subheader != null)
-                          Text(widget.subheader!,
-                              style: appStyles.header_appbar),
-                        if (widget.footerStart != null) ...widget.footerStart!,
-                      ],
-                      footerEnd: widget.footerEnd,
-                      title: SizedBox(
-                        height: 64,
-                        child:
-                            Image.asset("assets/icons/general/logo_icon.png"),
-                      ),
-                      actions: [
-                        if (isLoggedIn)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: AppUserDropdownMenu(
-                              onChange: (val) {
-                                if (val == 'logout') {
-                                  _logout(context);
-                                }
-                              },
-                            ),
-                          )
-                      ],
-                      onMenuPress: () {
-                        _key.currentState?.openDrawer();
-                      },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0xFF465D66), Color(0xFF182933)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.topRight),
                     ),
-                    drawer: isLoggedIn ? const SideMenuView() : null,
-                    body: widget.child,
+                    child: Scaffold(
+                      drawer: isLoggedIn ? const SideMenuView() : null,
+                      drawerScrimColor: Colors.black.withOpacity(0),
+                      key: _key,
+                      resizeToAvoidBottomInset: widget.hasKeyboard,
+                      // backgroundColor: AppColors.secondary_99,
+                      backgroundColor: Colors.transparent,
+                      drawerEnableOpenDragGesture: false,
+                      body: NestedScrollView(
+                        floatHeaderSlivers: true,
+                        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                          AppBarPageHeader(
+                            context: context,
+                            title: SizedBox(
+                              height: 64,
+                              child: Image.asset(
+                                  "assets/icons/general/logo_icon.png"),
+                            ),
+                            footerStart: [
+                              if (widget.subheader != null)
+                                Text(widget.subheader!,
+                                    style: appStyles.header_appbar),
+                              if (widget.footerStart != null)
+                                ...widget.footerStart!,
+                            ],
+                            footerEnd: widget.footerEnd,
+                            actions: [
+                              if (isLoggedIn)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: AppUserDropdownMenu(
+                                    onChange: (val) {
+                                      if (val == 'logout') {
+                                        _logout(context);
+                                      }
+                                    },
+                                  ),
+                                )
+                            ],
+                            onMenuPress: () {
+                              print('menu!');
+                              _key.currentState?.openDrawer();
+                            },
+                          )
+                        ],
+                        body: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),
+                          ),
+                          child: Container(
+                            color: AppColors.secondary_99,
+                            child: widget.child!,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 if (isLoading)
