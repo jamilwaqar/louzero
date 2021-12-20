@@ -3,7 +3,7 @@ import 'package:get/route_manager.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class AppBarPageHeader extends StatelessWidget with PreferredSizeWidget {
+class AppBarPageHeader extends StatelessWidget {
   final Widget? title;
   final List<Widget>? actions;
   final Widget? leading;
@@ -28,21 +28,14 @@ class AppBarPageHeader extends StatelessWidget with PreferredSizeWidget {
       : super(key: key);
 
   @override
-  Size get preferredSize => footerEnd != null || footerStart != null
-      ? const Size.fromHeight(192)
-      : const Size.fromHeight(150);
-
-  @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return SliverAppBar(
+        toolbarHeight: 80,
+        floating: true,
+        snap: false,
+        pinned: false,
         shadowColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Color(0xFF465D66), Color(0xFF182933)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight)),
-        ),
+        backgroundColor: Colors.transparent,
         title: title,
         centerTitle: true,
         actions: actions,
@@ -108,7 +101,7 @@ class AppBarFooter extends StatefulWidget implements PreferredSizeWidget {
   _AppBarFooterState createState() => _AppBarFooterState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(80.0);
+  Size get preferredSize => const Size.fromHeight(70.0);
 }
 
 class _AppBarFooterState extends State<AppBarFooter> {
@@ -140,21 +133,6 @@ class _AppBarFooterState extends State<AppBarFooter> {
             )
           ]),
         ),
-        Row(
-          children: [
-            Expanded(
-                child: Container(
-              height: 40,
-              decoration: const BoxDecoration(
-                color: AppColors.secondary_99,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
-                ),
-              ),
-            ))
-          ],
-        )
       ],
     );
   }
