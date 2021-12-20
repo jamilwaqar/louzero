@@ -62,7 +62,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _stateController = TextEditingController();
   final _suiteController = TextEditingController();
   final _zipController = TextEditingController();
-  Country? _selectCountry;
+  late Country _selectCountry ;
 
   SearchAddressModel? _searchAddressModel;
   final BaseController _baseController = Get.find();
@@ -85,6 +85,19 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       _stateController.text = _addressModel.state;
       _suiteController.text = _addressModel.suite;
       _zipController.text = _addressModel.zip;
+    } else {
+      _selectCountry = Country(
+          phoneCode: "1",
+          countryCode: 'US',
+          e164Sc: 1,
+          geographic: true,
+          level: 1,
+          name: 'United States',
+          example: '',
+          displayName: "United States (US) [+1]",
+          displayNameNoCountryCode: "United States (US)",
+          e164Key: "1-US-0");
+      _countryController.text = _selectCountry.name;
     }
     super.initState();
   }
@@ -194,7 +207,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     _addressModel.latitude = _searchAddressModel?.latitude ?? 0;
     _addressModel.longitude = _searchAddressModel?.longitude ?? 0;
     data['address'] = _addressModel.toJson();
-
+    data.remove('objectId');
     var res = await APIManager.save(BLPath.company, data);
     if (res is Map) {
       AuthManager.userModel!.activeCompanyId = res['objectId'];
@@ -298,7 +311,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           _addressModel.street = val ?? '';
         },
         onChanged: (val) {
-          _baseController.searchAddress(val, _selectCountry?.countryCode ?? 'US');
+          _baseController.searchAddress(val, _selectCountry.countryCode);
         },
       );
   _suite() => AppInputText(

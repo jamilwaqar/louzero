@@ -7,8 +7,12 @@ class APIManager {
   static const IOS_API_KEY = "1B0D4E55-CBBE-48F2-9983-D177CC415326";
 
   static Future save(String path, dynamic data) async {
-    dynamic response = await Backendless.data.of(path).save(data);
-    return response;
+    try {
+      dynamic response = await Backendless.data.of(path).save(data);
+      return response;
+    } catch (e) {
+      return e.toString();
+    }
   }
 
   static Future update(String path, dynamic data) async {
