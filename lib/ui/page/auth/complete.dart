@@ -26,7 +26,7 @@ class _CompletePageState extends State<CompletePage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _emailSelected = true;
+  bool _emailSelected = false;
   bool _termsSelected = false;
 
   @override
