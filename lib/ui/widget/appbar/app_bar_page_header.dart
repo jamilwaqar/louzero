@@ -36,9 +36,8 @@ class AppBarPageHeader extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
         shadowColor: Colors.transparent,
-        // backgroundColor: AppColors.appBar,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [Color(0xFF465D66), Color(0xFF182933)],
                   begin: Alignment.topLeft,
