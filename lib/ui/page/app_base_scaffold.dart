@@ -1,3 +1,4 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -40,7 +41,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
 
   void _logout(BuildContext context) async {
     GetStorage().write(GSKey.isAuthUser, false);
-    await AuthAPI().logout();
+    await AuthAPI(auth: Backendless.userService).logout();
     NavigationController().popToFirst(context);
     AuthManager().loggedIn.value = false;
   }
