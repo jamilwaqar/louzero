@@ -40,6 +40,7 @@ dependencies:
   flutter_tagging: ^3.0.0
 
 dev_dependencies:
+  backendless_sdk:
   flutter_driver:
     sdk: flutter
   flutter_test:

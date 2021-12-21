@@ -13,7 +13,9 @@ class AuthAPI {
   Future login(String email, String password) async {
     try {
       var authUser = await auth.login(email, password, true);
-      AuthManager.initUser(authUser);
+      try {
+        AuthManager.initUser(authUser);
+      } catch (e){}
       if (authUser != null) {
         return authUser;
       } else {
@@ -21,13 +23,17 @@ class AuthAPI {
       }
     } on PlatformException catch (e) {
       return e.message;
+    } catch (e) {
+      return e.toString();
     }
   }
 
-  Future loginGuest(String email, String password) async {
+  Future loginGuest() async {
     try {
       var authUser = await auth.loginAsGuest();
-      AuthManager.guestUserId = authUser?.getObjectId();
+      try {
+        AuthManager.guestUserId = authUser?.getObjectId();
+      } catch (e) {}
       // AuthStateManager.initUser(authUser);
       if (authUser != null) {
         return authUser;
@@ -108,7 +114,7 @@ class AuthAPI {
   Future logout() async {
     try {
       await auth.logout();
-      return;
+      return 'Success';
     } on PlatformException catch (e) {
       return e.message;
     }

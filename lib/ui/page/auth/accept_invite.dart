@@ -149,7 +149,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
 
   Future<void> _fetchInviteModel(String email) async {
     NavigationController().loading();
-    var rest = await AuthAPI(auth: Backendless.userService).loginGuest(email, _code!);
+    var rest = await AuthAPI(auth: Backendless.userService).loginGuest();
     if (rest is String) {
       WarningMessageDialog.showDialog(context, rest);
       _noInviteModel = true;
