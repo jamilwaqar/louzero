@@ -93,7 +93,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                       body: widget.logoOnly
                           ? Container(
                               color: AppColors.secondary_99,
-                              child: widget.child!,
+                              child: widget.child ?? null,
                             )
                           : NestedScrollView(
                               floatHeaderSlivers: true,
@@ -141,7 +141,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                 ),
                                 child: Container(
                                   color: AppColors.secondary_99,
-                                  child: widget.child!,
+                                  child: widget.child ?? null,
                                 ),
                               ),
                             ),
