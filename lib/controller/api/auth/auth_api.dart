@@ -5,11 +5,17 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 
 class AuthAPI {
+  final BackendlessUserService auth;
+  
+  AuthAPI({required this.auth});
+  Future<BackendlessUser?> get user => auth.getCurrentUser();
 
   Future login(String email, String password) async {
     try {
-      var authUser = await Backendless.userService.login(email, password, true);
-      AuthManager.initUser(authUser);
+      var authUser = await auth.login(email, password, true);
+      try {
+        AuthManager.initUser(authUser);
+      } catch (e){}
       if (authUser != null) {
         return authUser;
       } else {
@@ -17,13 +23,17 @@ class AuthAPI {
       }
     } on PlatformException catch (e) {
       return e.message;
+    } catch (e) {
+      return e.toString();
     }
   }
 
-  Future loginGuest(String email, String password) async {
+  Future loginGuest() async {
     try {
-      var authUser = await Backendless.userService.loginAsGuest();
-      AuthManager.guestUserId = authUser?.getObjectId();
+      var authUser = await auth.loginAsGuest();
+      try {
+        AuthManager.guestUserId = authUser?.getObjectId();
+      } catch (e) {}
       // AuthStateManager.initUser(authUser);
       if (authUser != null) {
         return authUser;
@@ -42,7 +52,7 @@ class AuthAPI {
         "password" : password,
         "nickname" : email,
       });
-      var authUser = await Backendless.userService.register(user);
+      var authUser = await auth.register(user);
       // AuthStateManager.initUser(authUser);
       if (authUser != null) {
         return authUser;
@@ -87,7 +97,7 @@ class AuthAPI {
 
   Future resetPassword(String email) async {
     try {
-      await Backendless.userService.restorePassword(email);
+      await auth.restorePassword(email);
     } on PlatformException catch (e) {
       return e.message;
     }
@@ -95,7 +105,7 @@ class AuthAPI {
 
   Future sendForgot(String email) async {
     try {
-      await Backendless.userService.restorePassword(email);
+      await auth.restorePassword(email);
     } on PlatformException catch (e) {
       return e.message;
     }
@@ -103,8 +113,8 @@ class AuthAPI {
 
   Future logout() async {
     try {
-      await Backendless.userService.logout();
-      return;
+      await auth.logout();
+      return 'Success';
     } on PlatformException catch (e) {
       return e.message;
     }
