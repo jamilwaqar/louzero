@@ -2,22 +2,45 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/enum/enums.dart';
+import 'package:louzero/controller/get/company_controller.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/utils.dart';
-import 'package:louzero/models/customer_models.dart';
-import 'package:louzero/ui/page/customer/customer_location.dart';
-import 'buttons/top_left_button.dart';
+import 'package:louzero/models/company_models.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/page/customer/customer_site.dart';
+import 'package:louzero/ui/widget/buttons/top_left_button.dart';
+import 'package:louzero/ui/widget/customer_info.dart';
 
-class CustomerInfo extends StatelessWidget {
-  final CustomerModel customerModel;
-  final bool fromJob;
-  const CustomerInfo(this.customerModel, {this.fromJob = false, Key? key}) : super(key: key);
+class CompanyPage extends GetWidget<CompanyController> {
+  const CompanyPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double mapH = fromJob ? 286 : 240;
+    return AppBaseScaffold(
+      child: _body(),
+      subheader: controller.companyModel.value!.name,
+    );
+  }
+
+  Widget _body() {
+    return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        itemCount: 1,
+        itemBuilder: (context, index) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _info(),
+            ],
+          );
+        });
+  }
+
+  Widget _info() {
+    CompanyModel model = controller.companyModel.value!;
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.light_2, width: 1),
@@ -41,7 +64,7 @@ class CustomerInfo extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(customerModel.name,
+                              Text(model.name,
                                   style: TextStyles.headLineS
                                       .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),
@@ -54,7 +77,7 @@ class CustomerInfo extends StatelessWidget {
                             children: [
                               Flexible(
                                 flex:4,
-                                child: Text(customerModel.serviceAddress.fullAddress,
+                                child: Text(model.address!.fullAddress,
                                     style: TextStyles.bodyL, overflow: TextOverflow.ellipsis),
                               ),
                               const SizedBox(width: 50),
@@ -89,42 +112,24 @@ class CustomerInfo extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: mapH,
+            height: 472,
             child: Row(
               children: [
                 Stack(
                   children: [
                     Container(
                       width: 246,
-                      height: mapH,
+                      height: 472,
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(8))),
-                      child: GoogleMap(
-                        mapType: MapType.normal,
-                        myLocationEnabled: false,
-                        myLocationButtonEnabled: false,
-                        zoomControlsEnabled: false,
-                        initialCameraPosition: CameraPosition(
-                          target: customerModel.serviceAddress.latLng!,
-                          zoom: 18,
-                        ),
-                        onMapCreated: (GoogleMapController controller) {
-                          Future.delayed(const Duration(milliseconds: 500))
-                              .then((value) {
-                            // setState(() {
-                            //   // mapController.complete(controller);
-                            // });
-                          });
-                        },
-                      ),
                     ),
                     Positioned(
                         top: 8,
                         right: 8,
                         child: InkWell(
                           onTap: () {
-                            Get.to(()=> CustomerLocationPage(customerModel));
+                            // Get.to(()=> CustomerLocationPage(customerModel));
                           },
                           child: Container(
                             width: 40,
@@ -176,13 +181,13 @@ class CustomerInfo extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(customerModel.customerContacts[0].fullName,
+                            Text(model.name,
                                 style: TextStyles.bodyL
                                     .copyWith(color: AppColors.dark_3)),
-                            Text(customerModel.customerContacts[0].email,
+                            Text(model.email,
                                 style: TextStyles.bodyL
                                     .copyWith(color: AppColors.dark_3)),
-                            Text(customerModel.customerContacts[0].phone,
+                            Text(model.phone,
                                 style: TextStyles.bodyL
                                     .copyWith(color: AppColors.dark_3)),
                           ],
@@ -209,24 +214,24 @@ class CustomerInfo extends StatelessWidget {
                                   style: TextStyles.bodyL
                                       .copyWith(color: AppColors.dark_3)),
                             ),
-                            if (fromJob)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                const SizedBox(height: 16),
-                                const Divider(
-                                    thickness: 2, color: AppColors.light_1, height: 0),
-                                const SizedBox(height: 16,),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    _bottomButton("Site Profile", Icons.home_work, () {}),
-                                    const SizedBox(width: 8,),
-                                    _bottomButton("Notes", Icons.note_sharp, () {}),
-                                  ],
-                                ),
-                              ],
-                            ),
+                            // if (fromJob)
+                            //   Column(
+                            //     crossAxisAlignment: CrossAxisAlignment.end,
+                            //     children: [
+                            //       const SizedBox(height: 16),
+                            //       const Divider(
+                            //           thickness: 2, color: AppColors.light_1, height: 0),
+                            //       const SizedBox(height: 16,),
+                            //       Row(
+                            //         mainAxisSize: MainAxisSize.min,
+                            //         children: [
+                            //           _bottomButton("Site Profile", Icons.home_work, () {}),
+                            //           const SizedBox(width: 8,),
+                            //           _bottomButton("Notes", Icons.note_sharp, () {}),
+                            //         ],
+                            //       ),
+                            //     ],
+                            //   ),
                           ],
                         ),
                       ),
@@ -238,29 +243,6 @@ class CustomerInfo extends StatelessWidget {
             ),
           )
         ],
-      ),
-    );
-  }
-
-  Widget _bottomButton(String label, IconData icon, Function() onPressed) {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      onPressed: onPressed,
-      child: Container(
-        height: 32,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: AppColors.light_1
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            appIcon(icon),
-            const SizedBox(width: 8),
-            Text(label, style: TextStyles.titleS.copyWith(color: AppColors.dark_2),)
-          ],
-        ),
       ),
     );
   }

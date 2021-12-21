@@ -26,8 +26,6 @@ class CustomerModel {
 
   @JsonKey(defaultValue: [])
   List<CTSiteProfile> siteProfiles = [];
-  
-  String get fullServiceAddress => "${serviceAddress.street}, ${serviceAddress.city}, ${serviceAddress.state}";
 
   factory CustomerModel.fromMap(Map map) {
     Map serviceAddress = map.remove('serviceAddress');
@@ -99,6 +97,7 @@ class AddressModel {
       return null;
     }
   }
+  String get fullAddress =>  "$street, $city, $state";
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);

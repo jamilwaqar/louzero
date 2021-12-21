@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_input_inline_form.dart';
@@ -11,11 +12,11 @@ import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'models/company_model.dart';
@@ -38,6 +39,7 @@ class _AccountSetupState extends State<AccountSetup> {
 
   var jobTypes = ["Installation", "Consulting", "Estimate"];
 
+  final BaseController _baseController = Get.find();
   final jobTypeController = TextEditingController();
 
   @override
@@ -74,6 +76,7 @@ class _AccountSetupState extends State<AccountSetup> {
                 _scrollView(
                   AccountSetupCompany(
                     onChange: _saveFormInput,
+                    companyModel: _baseController.activeCompany.value,
                   ),
                 ),
                 _scrollView(customerCard()),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_avatar.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_icon_button.dart';
@@ -8,6 +9,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
+import 'package:louzero/ui/page/company/companies.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:louzero/ui/page/demo/demo.dart';
@@ -88,8 +90,15 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.dashboard,
                 onPressed: () {
                   _pop();
-                  NavigationController()
-                      .pushTo(context, child: DashboardPage());
+                  Get.to(()=> DashboardPage());
+                },
+              ),
+              AppNavButton(
+                title: "Companies",
+                icon: Icons.home_work,
+                onPressed: () {
+                  _pop();
+                  Get.to(()=> CompanyListPage());
                 },
               ),
               AppNavButton(
@@ -97,8 +106,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.person,
                 onPressed: () {
                   _pop();
-                  NavigationController()
-                      .pushTo(context, child: CustomerListPage());
+                  Get.to(()=> CustomerListPage());
                 },
               ),
               AppNavButton(

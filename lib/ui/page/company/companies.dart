@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,16 +8,15 @@ import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
-import 'package:louzero/controller/get/bindings/customer_binding.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/models/models.dart';
+import 'package:louzero/controller/get/bindings/company_binding.dart';
+import 'package:louzero/models/company_models.dart';
+import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/auth/invite.dart';
-import 'package:louzero/ui/page/customer/add_customer.dart';
-import 'package:louzero/ui/page/customer/customer.dart';
+import 'package:louzero/ui/page/company/company.dart';
 
-class CustomerListPage extends StatelessWidget {
-  CustomerListPage({Key? key}) : super(key: key);
+class CompanyListPage extends StatelessWidget {
+
+  CompanyListPage({Key? key}) : super(key: key);
 
   final int mockId = 8520;
   final BaseController _baseController = Get.find();
@@ -29,13 +27,13 @@ class CustomerListPage extends StatelessWidget {
       child: Column(children: [
         Expanded(child: _body()),
       ]),
-      subheader: 'Customers',
+      subheader: 'Companies',
       footerEnd: [
         AppBarButtonAdd(
-          label: 'New Customer',
+          label: 'New Company',
           onPressed: () {
-            NavigationController()
-                .pushTo(context, child: const AddCustomerPage());
+            // NavigationController()
+            //     .pushTo(context, child: const AddCustomerPage());
           },
         )
       ],
@@ -46,16 +44,16 @@ class CustomerListPage extends StatelessWidget {
     return Obx(() => ListView.builder(
         padding: const EdgeInsets.only(top: 32),
         shrinkWrap: true,
-        itemCount: _baseController.customers.value.length,
+        itemCount: _baseController.companies.value.length,
         itemBuilder: (context, index) {
-          CustomerModel model = _baseController.customers.value[index];
+          CompanyModel model = _baseController.companies.value[index];
           return AppCard(
             mb: 8,
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.to(() => const CustomerProfilePage(),
-                      arguments: model, binding: CustomerBinding());
+                  Get.to(() => const CompanyPage(),
+                      arguments: model, binding: CompanyBinding());
                 },
                 child: AppRowFlex(
                     flex: const [1, 5, 2, 0],
@@ -71,19 +69,19 @@ class CustomerListPage extends StatelessWidget {
                             bold: true,
                           ),
                           AppTextBody(
-                            model.serviceAddress.fullAddress,
+                            model.address!.fullAddress,
                           )
                         ],
                       ),
                       AppTextBody(
-                        model.type,
+                        model.name,
                       ),
                       PopupMenuButton(
                           offset: const Offset(0, 40),
                           onSelected: (value) {
                             if (value == 1) {
-                              Get.to(() => InviteCustomerPage(
-                                  email: model.customerContacts.first.email));
+                              // Get.to(() => InviteCustomerPage(
+                              //     email: model.customerContacts.first.email));
                             }
                           },
                           elevation: 2,

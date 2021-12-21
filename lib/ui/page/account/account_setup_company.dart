@@ -34,12 +34,13 @@ List<SelectItem> industries = const [
 
 class AccountSetupCompany extends StatefulWidget {
   const AccountSetupCompany({
-    Key? key,
+    this.companyModel,
     this.onChange,
+    Key? key,
   }) : super(key: key);
 
   final void Function()? onChange;
-
+  final CompanyModel? companyModel;
 
   @override
   State<AccountSetupCompany> createState() => _AccountSetupCompanyState();
@@ -70,10 +71,9 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
   @override
   void initState() {
-
-    if (_baseController.activeCompany.value != null) {
-      _companyModel = _baseController.activeCompany.value!;
-      _addressModel = _baseController.activeCompany.value!.address!;
+    if (widget.companyModel != null) {
+      _companyModel = widget.companyModel!;
+      _addressModel = widget.companyModel!.address!;
       _companyNameController.text = _companyModel.name;
       _phoneController.text = _companyModel.phone;
       _emailController.text = _companyModel.email;

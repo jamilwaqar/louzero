@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-
 import 'customer_models.dart';
-
 part 'company_models.g.dart';
 
 @JsonSerializable()
@@ -14,8 +12,8 @@ class CompanyModel {
   @JsonKey(defaultValue: '')   String phone = '';
   @JsonKey(defaultValue: '')   String email = '';
   @JsonKey(defaultValue: [])   List<String> industries = [];
-  AddressModel? address;
 
+  AddressModel? address;
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
       _$CompanyModelFromJson(json);
