@@ -16,6 +16,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class AppBaseScaffold extends StatefulWidget {
   final Widget? child;
   final bool hasKeyboard;
+  final bool logoOnly;
   final List<Widget>? footerStart;
   final List<Widget>? footerEnd;
   final String? subheader;
@@ -26,6 +27,7 @@ class AppBaseScaffold extends StatefulWidget {
     this.footerEnd,
     this.subheader,
     this.hasKeyboard = false,
+    this.logoOnly = false,
   }) : super(key: key);
 
   @override
@@ -72,54 +74,76 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                       // backgroundColor: AppColors.secondary_99,
                       backgroundColor: Colors.transparent,
                       drawerEnableOpenDragGesture: false,
-                      body: NestedScrollView(
-                        floatHeaderSlivers: true,
-                        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                          AppBarPageHeader(
-                            context: context,
-                            title: SizedBox(
-                              height: 64,
-                              child: Image.asset(
-                                  "assets/icons/general/logo_icon.png"),
-                            ),
-                            footerStart: [
-                              if (widget.subheader != null)
-                                Text(widget.subheader!,
-                                    style: appStyles.header_appbar),
-                              if (widget.footerStart != null)
-                                ...widget.footerStart!,
-                            ],
-                            footerEnd: widget.footerEnd,
-                            actions: [
-                              if (isLoggedIn)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: AppUserDropdownMenu(
-                                    onChange: (val) {
-                                      if (val == 'logout') {
-                                        _logout(context);
-                                      }
-                                    },
+
+                      appBar: widget.logoOnly
+                          ? PreferredSize(
+                              preferredSize: const Size.fromHeight(100.0),
+                              child: AppBar(
+                                elevation: 0,
+                                backgroundColor: Colors.transparent,
+                                flexibleSpace: Center(
+                                  child: Image.asset(
+                                      "assets/icons/general/logo_icon.png"),
+                                ),
+                              ),
+                            )
+                          : null,
+
+                      body: widget.logoOnly
+                          ? Container(
+                              color: AppColors.secondary_99,
+                              child: widget.child!,
+                            )
+                          : NestedScrollView(
+                              floatHeaderSlivers: true,
+                              headerSliverBuilder:
+                                  (context, innerBoxIsScrolled) => [
+                                AppBarPageHeader(
+                                  context: context,
+                                  title: SizedBox(
+                                    height: 80,
+                                    child: Image.asset(
+                                        "assets/icons/general/logo_icon.png"),
                                   ),
+                                  footerStart: [
+                                    if (widget.subheader != null)
+                                      Text(widget.subheader!,
+                                          style: appStyles.header_appbar),
+                                    if (widget.footerStart != null)
+                                      ...widget.footerStart!,
+                                  ],
+                                  footerEnd: widget.footerEnd,
+                                  actions: [
+                                    if (isLoggedIn)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8),
+                                        child: AppUserDropdownMenu(
+                                          onChange: (val) {
+                                            if (val == 'logout') {
+                                              _logout(context);
+                                            }
+                                          },
+                                        ),
+                                      )
+                                  ],
+                                  onMenuPress: () {
+                                    print('menu!');
+                                    _key.currentState?.openDrawer();
+                                  },
                                 )
-                            ],
-                            onMenuPress: () {
-                              print('menu!');
-                              _key.currentState?.openDrawer();
-                            },
-                          )
-                        ],
-                        body: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            topRight: Radius.circular(40),
-                          ),
-                          child: Container(
-                            color: AppColors.secondary_99,
-                            child: widget.child!,
-                          ),
-                        ),
-                      ),
+                              ],
+                              body: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(40),
+                                  topRight: Radius.circular(40),
+                                ),
+                                child: Container(
+                                  color: AppColors.secondary_99,
+                                  child: widget.child!,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                 ),

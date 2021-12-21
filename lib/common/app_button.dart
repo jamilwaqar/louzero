@@ -92,3 +92,23 @@ class AppButton extends StatelessWidget {
     );
   }
 }
+
+class AppBarButtonAdd extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final String? label;
+
+  const AppBarButtonAdd({Key? key, this.onPressed, this.label = 'New'})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppButton(
+      fontSize: 16,
+      label: label!,
+      icon: Icons.add_circle,
+      color: AppColors.secondary_20,
+      colorIcon: AppColors.accent_1,
+      onPressed: onPressed,
+    );
+  }
+}
