@@ -1,3 +1,4 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   void _onResetPassword() async {
     NavigationController().loading();
-    await AuthAPI().resetPassword(_emailController.text);
+    await AuthAPI(auth: Backendless.userService).resetPassword(_emailController.text);
     NavigationController().loading(isLoading: false);
     NavigationController().pop(context);
   }

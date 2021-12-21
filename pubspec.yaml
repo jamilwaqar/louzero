@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
   cupertino_icons:
 
-  backendless_sdk:
+  backendless_sdk: ^7.1.8
 
   page_transition:
 
@@ -40,10 +40,13 @@ dependencies:
   flutter_tagging: ^3.0.0
 
 dev_dependencies:
+  flutter_driver:
+    sdk: flutter
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^1.0.0
+  mockito: ^5.0.16
+  test:
+  flutter_lints:
   json_serializable:
   build_runner:
 

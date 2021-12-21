@@ -1,3 +1,4 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
   void _onSignIn() async {
     NavigationController().loading();
     var res =
-        await AuthAPI().login(_emailController.text, _passwordController.text);
+        await AuthAPI(auth: Backendless.userService).login(_emailController.text, _passwordController.text);
     NavigationController().loading(isLoading: false);
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);

@@ -11,6 +11,7 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/widget/side_menu/side_menu.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:backendless_sdk/backendless_sdk.dart';
 
 class BaseScaffold extends StatefulWidget {
   const BaseScaffold({Key? key, this.child, this.hasKeyboard = false})
@@ -27,7 +28,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
   void _logout() async {
     GetStorage().write(GSKey.isAuthUser, false);
-    await AuthAPI().logout();
+    await AuthAPI(auth: Backendless.userService).logout();
     NavigationController().popToFirst(context);
     AuthManager().loggedIn.value = false;
   }

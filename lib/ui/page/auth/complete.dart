@@ -1,3 +1,4 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -110,14 +111,14 @@ class _CompletePageState extends State<CompletePage> {
 
   void _completeSignup() async {
     NavigationController().loading();
-    var res = await AuthAPI().signup(widget.email, _passwordController.text);
+    var res = await AuthAPI(auth: Backendless.userService).signup(widget.email, _passwordController.text);
     if (res is String) {
       NavigationController().loading(isLoading: false);
       WarningMessageDialog.showDialog(context, res);
     } else {
-      var res = await AuthAPI().login(widget.email, _passwordController.text);
+      var res = await AuthAPI(auth: Backendless.userService).login(widget.email, _passwordController.text);
       if (AuthManager.guestUserId != null) {
-        await AuthAPI().cleanupGuestUser();
+        await AuthAPI(auth: Backendless.userService).cleanupGuestUser();
       }
       NavigationController().loading(isLoading: false);
       AuthManager().loggedIn.value = true;
