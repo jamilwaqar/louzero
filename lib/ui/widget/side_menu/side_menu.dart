@@ -178,11 +178,11 @@ class _SideMenuViewState extends State<SideMenuView> {
       children: [
         AppAvatar(path: _profileImagePath, size: 96),
         const SizedBox(height: 8),
-        const Text('Corey Holton', style: appStyles.header_default),
+        const Text('Corey Holton', style: AppStyles.headerRegular),
         const SizedBox(height: 8),
         const Text(
           'Patio Pools and Spas',
-          style: appStyles.label_default,
+          style: AppStyles.labelRegular,
         ),
         const AppDivider(
           mt: 32,

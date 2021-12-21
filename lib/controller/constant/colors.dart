@@ -36,37 +36,37 @@ abstract class AppColors {
   static const Color black = Colors.black;
 }
 
-abstract class appStyles {
-  static const header_small = TextStyle(
+abstract class AppStyles {
+  static const headerSmall = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 16,
     fontWeight: FontWeight.w700,
   );
-  static const header_default = TextStyle(
+  static const headerRegular = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.darkest,
   );
-  static const header_appbar = TextStyle(
+  static const headerAppBar = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 32,
     fontWeight: FontWeight.w700,
     color: AppColors.lightest,
   );
-  static const header_dialog = TextStyle(
+  static const headerDialog = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.secondary_30,
   );
-  static const label_default = TextStyle(
+  static const labelRegular = TextStyle(
     fontFamily: 'Lato',
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.secondary_20,
   );
-  static const label_bold = TextStyle(
+  static const labelBold = TextStyle(
     fontFamily: 'Lato',
     fontSize: 16,
     fontWeight: FontWeight.w700,

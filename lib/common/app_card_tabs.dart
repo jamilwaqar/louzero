@@ -32,7 +32,7 @@ class AppCardTabs extends StatelessWidget {
     return Tab(
       child: Text(
         _label,
-        style: appStyles.header_small,
+        style: AppStyles.headerSmall,
       ),
     );
   }
