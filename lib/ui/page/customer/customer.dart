@@ -4,34 +4,24 @@ import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/customer_controller.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
-import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerProfilePage extends GetWidget<CustomerController> {
-
   const CustomerProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: controller.customerModel.value!.name,
-          context: context,
-          leadingTxt: "Customers",
-          hasActions: false,
-        ),
-        backgroundColor: Colors.transparent,
-        body: _body(),
-      ),
+    return AppBaseScaffold(
+      child: _body(),
+      subheader: controller.customerModel.value!.name,
     );
   }
 
   Widget _body() {
     return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         itemCount: 1,
         itemBuilder: (context, index) {
           return Column(
@@ -83,7 +73,8 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
             break;
           case CustomerCategory.siteProfiles:
             count = controller.customerModel.value!.siteProfiles.length;
-            Get.to(()=> CustomerSiteProfilePage(controller.customerModel.value!.siteProfiles,
+            Get.to(() => CustomerSiteProfilePage(
+                controller.customerModel.value!.siteProfiles,
                 customerId: controller.customerModel.value!.objectId));
             break;
           case CustomerCategory.contacts:

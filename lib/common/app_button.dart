@@ -18,6 +18,7 @@ class AppButton extends StatelessWidget {
     this.alignLeft = false,
     this.color = AppColors.dark_3,
     this.colorText = AppColors.lightest,
+    this.colorIcon,
     this.height = 40,
     this.margin = EdgeInsets.zero,
   }) : super(key: key);
@@ -33,6 +34,7 @@ class AppButton extends StatelessWidget {
   final bool alignLeft;
   final Color color;
   final Color colorText;
+  final Color? colorIcon;
   final double radius;
   final double height;
 
@@ -62,7 +64,13 @@ class AppButton extends StatelessWidget {
         heroTag: null,
         foregroundColor: fg,
         backgroundColor: bg,
-        icon: icon != null ? Icon(icon, size: iconSize) : null,
+        icon: icon != null
+            ? Icon(
+                icon,
+                size: iconSize,
+                color: colorIcon,
+              )
+            : null,
         elevation: 0,
         extendedPadding: const EdgeInsetsDirectional.only(
           start: 24,
@@ -81,6 +89,26 @@ class AppButton extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class AppBarButtonAdd extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final String? label;
+
+  const AppBarButtonAdd({Key? key, this.onPressed, this.label = 'New'})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppButton(
+      fontSize: 16,
+      label: label!,
+      icon: Icons.add_circle,
+      color: AppColors.secondary_20,
+      colorIcon: AppColors.accent_1,
+      onPressed: onPressed,
     );
   }
 }

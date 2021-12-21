@@ -18,6 +18,8 @@ abstract class AppColors {
   static const Color light_4 = Color(0xFFE2E2E3);
 
   static const Color orange = Color(0xFFEC6A3A);
+  static const Color appBar = Color(0xFF263842);
+  static const Color accent_1 = Color(0xFF65D19D);
   static const Color primary_1 = Color(0xFFE77C33);
   static const Color primary_50 = Color(0xFFCE6620);
   static const Color primary_60 = Color(0xFFE77C33);
@@ -32,6 +34,43 @@ abstract class AppColors {
 
   static const Color icon = Color(0xFF323232);
   static const Color black = Colors.black;
+}
+
+abstract class appStyles {
+  static const header_small = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+  );
+  static const header_default = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: AppColors.darkest,
+  );
+  static const header_appbar = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    color: AppColors.lightest,
+  );
+  static const header_dialog = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: AppColors.secondary_30,
+  );
+  static const label_default = TextStyle(
+    fontFamily: 'Lato',
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.secondary_20,
+  );
+  static const label_bold = TextStyle(
+    fontFamily: 'Lato',
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+  );
 }
 
 abstract class TextStyles {

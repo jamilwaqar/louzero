@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/common/app_add_button.dart';
+import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
@@ -16,6 +17,7 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
@@ -28,12 +30,14 @@ class AddCustomerPage extends StatefulWidget {
 }
 
 class _AddCustomerPageState extends State<AddCustomerPage> {
-
   final TextEditingController _companyNameController = TextEditingController();
-  final TextEditingController _parentAccountNameController = TextEditingController();
+  final TextEditingController _parentAccountNameController =
+      TextEditingController();
 
-  final TextEditingController _serviceCountryController = TextEditingController();
-  final TextEditingController _serviceStreetController = TextEditingController();
+  final TextEditingController _serviceCountryController =
+      TextEditingController();
+  final TextEditingController _serviceStreetController =
+      TextEditingController();
   final TextEditingController _serviceCityController = TextEditingController();
   final TextEditingController _serviceAtController = TextEditingController();
   final TextEditingController _serviceStateController = TextEditingController();
@@ -46,11 +50,21 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   final TextEditingController _billStateController = TextEditingController();
   final TextEditingController _billZipController = TextEditingController();
 
-  final List<TextEditingController> _contactFNameControllers = [TextEditingController()];
-  final List<TextEditingController> _contactLNameControllers = [TextEditingController()];
-  final List<TextEditingController> _contactEmailControllers = [TextEditingController()];
-  final List<TextEditingController> _contactPhoneControllers = [TextEditingController()];
-  final List<TextEditingController> _contactRoleControllers = [TextEditingController()];
+  final List<TextEditingController> _contactFNameControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _contactLNameControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _contactEmailControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _contactPhoneControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _contactRoleControllers = [
+    TextEditingController()
+  ];
 
   bool _subAccount = false;
   bool _sameAsService = true;
@@ -81,27 +95,30 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: "Add New Customer",
-          context: context,
-          leadingTxt: "Customer",
-        ),
-        backgroundColor: Colors.transparent,
-        body: _body(),
-      ),
+    return AppBaseScaffold(
+      subheader: 'Add New Customer',
+      child: _body(),
+      footerEnd: [
+        AppButton(
+            label: 'Cancel',
+            color: AppColors.secondary_70.withAlpha(40),
+            colorText: AppColors.secondary_70,
+            onPressed: () {
+              NavigationController().pop(context);
+            })
+      ],
     );
   }
 
   Widget _body() {
     List<Widget> list = [
+      const SizedBox(height: 32),
       _customerDetails(),
       const SizedBox(height: 24),
       _serviceAddress(),
       const SizedBox(height: 24),
       _billingAddress(),
-      ... _customerContactList,
+      ..._customerContactList,
       const SizedBox(height: 24),
       _addContactWidget(),
       const SizedBox(height: 32),
@@ -130,23 +147,34 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           const SizedBox(height: 32),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _companyNameController, label: "Company or Account Name")),
+              Flexible(
+                  child: LZTextField(
+                      controller: _companyNameController,
+                      label: "Company or Account Name")),
               const SizedBox(width: 32),
-              Flexible(child: AppDropDown(label: "Customer Type*",itemList: AuthManager.userModel!.customerTypes, initValue: _customerType, onChanged: (value){
-                setState(() {
-                  _customerType = value;
-                });
-              },)),
+              Flexible(
+                  child: AppDropDown(
+                label: "Customer Type*",
+                itemList: AuthManager.userModel!.customerTypes,
+                initValue: _customerType,
+                onChanged: (value) {
+                  setState(() {
+                    _customerType = value;
+                  });
+                },
+              )),
             ],
           ),
           const SizedBox(height: 24),
-          NZSwitch(isOn: _subAccount, label: "Sub-Account of another customer", onChanged: (val) {
-            setState(() {
-              _subAccount = val;
-            });
-          }),
-          if (_subAccount)
-          _parentAccount(),
+          NZSwitch(
+              isOn: _subAccount,
+              label: "Sub-Account of another customer",
+              onChanged: (val) {
+                setState(() {
+                  _subAccount = val;
+                });
+              }),
+          if (_subAccount) _parentAccount(),
         ],
       ),
     );
@@ -161,7 +189,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         const SizedBox(height: 24),
         Row(
           children: [
-            Flexible(child: LZTextField(controller: _parentAccountNameController, label: "Parent Account Name")),
+            Flexible(
+                child: LZTextField(
+                    controller: _parentAccountNameController,
+                    label: "Parent Account Name")),
             const SizedBox(width: 32),
             const Flexible(child: SizedBox()),
           ],
@@ -190,65 +221,93 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   Widget _addressWidget(bool isService) {
-    return Obx(()=> Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+    return Obx(() => Stack(
+          clipBehavior: Clip.none,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(child: InkWell(
-                    onTap:()=> countryPicker(context, (country) {
-                      _country = country;
-                      setState(() {
-                        _serviceCountryController.text = country.name;
-                      });
-                    }),
-                    child: LZTextField(controller: isService ? _serviceCountryController : _billCountryController, label: "Country", enabled: false,))),
-                const SizedBox(width: 32),
-                const Flexible(child: SizedBox()),
-              ],
-            ),
-            const SizedBox(height: 24),
-            AppInputText(
-              controller:
-              isService ? _serviceStreetController : _billStreetController,
-              label: "Street Address",
-              onChanged: (val) {
-                _baseController.searchAddress(val, _country?.countryCode ?? 'US');
-              },
-            ),
-            AppInputText(controller: isService ? _serviceAtController : _billAtController, label: "Apt / Suite / Other"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(child: LZTextField(controller: isService ? _serviceCityController : _billCityController, label: "City")),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: Row(
-                    children: [
-                      Flexible(child: LZTextField(controller: isService ? _serviceStateController : _billStateController, label: "State")),
-                      const SizedBox(width: 16),
-                      Flexible(child: LZTextField(controller: isService ? _serviceZipController : _billZipController, label: "Zip")),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    Flexible(
+                        child: InkWell(
+                            onTap: () => countryPicker(context, (country) {
+                                  _country = country;
+                                  setState(() {
+                                    _serviceCountryController.text =
+                                        country.name;
+                                  });
+                                }),
+                            child: LZTextField(
+                              controller: isService
+                                  ? _serviceCountryController
+                                  : _billCountryController,
+                              label: "Country",
+                              enabled: false,
+                            ))),
+                    const SizedBox(width: 32),
+                    const Flexible(child: SizedBox()),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                AppInputText(
+                  controller: isService
+                      ? _serviceStreetController
+                      : _billStreetController,
+                  label: "Street Address",
+                  onChanged: (val) {
+                    _baseController.searchAddress(
+                        val, _country?.countryCode ?? 'US');
+                  },
+                ),
+                AppInputText(
+                    controller:
+                        isService ? _serviceAtController : _billAtController,
+                    label: "Apt / Suite / Other"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                        child: LZTextField(
+                            controller: isService
+                                ? _serviceCityController
+                                : _billCityController,
+                            label: "City")),
+                    const SizedBox(width: 16),
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Flexible(
+                              child: LZTextField(
+                                  controller: isService
+                                      ? _serviceStateController
+                                      : _billStateController,
+                                  label: "State")),
+                          const SizedBox(width: 16),
+                          Flexible(
+                              child: LZTextField(
+                                  controller: isService
+                                      ? _serviceZipController
+                                      : _billZipController,
+                                  label: "Zip")),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                LZTextButton(
+                  "Enter Address Fields Manually",
+                  textDecoration: TextDecoration.underline,
+                  onPressed: () {},
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            LZTextButton(
-              "Enter Address Fields Manually",
-              textDecoration: TextDecoration.underline,
-              onPressed: () {},
-            ),
+            Positioned(
+                left: 0, right: 0, top: 180, child: _searchedAddressListView()),
           ],
-        ),
-        Positioned(
-            left: 0, right: 0, top: 180, child: _searchedAddressListView()),
-      ],
-    ));
+        ));
   }
 
   Widget _billingAddress() {
@@ -264,13 +323,15 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         children: [
           const Text("Billing Address", style: TextStyles.titleM),
           const SizedBox(height: 16),
-          NZSwitch(isOn: _sameAsService, label: "Same as Service Address", onChanged: (val) {
-            setState(() {
-              _sameAsService = val;
-            });
-          }),
-          if (!_sameAsService)
-          _addressWidget(false),
+          NZSwitch(
+              isOn: _sameAsService,
+              label: "Same as Service Address",
+              onChanged: (val) {
+                setState(() {
+                  _sameAsService = val;
+                });
+              }),
+          if (!_sameAsService) _addressWidget(false),
         ],
       ),
     );
@@ -292,23 +353,38 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           const SizedBox(height: 24),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _contactFNameControllers[index], label: "First Name")),
+              Flexible(
+                  child: LZTextField(
+                      controller: _contactFNameControllers[index],
+                      label: "First Name")),
               const SizedBox(width: 32),
-              Flexible(child: LZTextField(controller: _contactLNameControllers[index], label: "Last Name")),
+              Flexible(
+                  child: LZTextField(
+                      controller: _contactLNameControllers[index],
+                      label: "Last Name")),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _contactEmailControllers[index], label: "Email Address")),
+              Flexible(
+                  child: LZTextField(
+                      controller: _contactEmailControllers[index],
+                      label: "Email Address")),
               const SizedBox(width: 32),
-              Flexible(child: LZTextField(controller: _contactPhoneControllers[index], label: "Phone Number")),
+              Flexible(
+                  child: LZTextField(
+                      controller: _contactPhoneControllers[index],
+                      label: "Phone Number")),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              Flexible(child: LZTextField(controller: _contactRoleControllers[index], label: "Role")),
+              Flexible(
+                  child: LZTextField(
+                      controller: _contactRoleControllers[index],
+                      label: "Role")),
               const SizedBox(width: 32),
               const Flexible(child: SizedBox()),
             ],
@@ -337,7 +413,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       height: 35,
       alignment: Alignment.centerLeft,
       child: CupertinoButton(
-        onPressed: ()=> _onChangedContactType(index, type),
+        onPressed: () => _onChangedContactType(index, type),
         padding: EdgeInsets.zero,
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -346,7 +422,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 checkColor: Colors.white,
                 value: types.contains(type),
                 activeColor: AppColors.dark_1,
-                onChanged: (val)=> _onChangedContactType(index, type)),
+                onChanged: (val) => _onChangedContactType(index, type)),
             Text(type.name, style: TextStyles.bodyL),
             if (type != CTContactType.schedule) const SizedBox(width: 16),
           ],
@@ -405,7 +481,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CupertinoButton(
-            padding: EdgeInsets.zero,
+              padding: EdgeInsets.zero,
               child: Container(
                 width: 192,
                 height: 56,
@@ -414,7 +490,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   color: AppColors.dark_1,
                   borderRadius: BorderRadius.circular(28),
                 ),
-                child: Text("SAVE CUSTOMER", style: TextStyles.bodyL.copyWith(color: Colors.white),),
+                child: Text(
+                  "SAVE CUSTOMER",
+                  style: TextStyles.bodyL.copyWith(color: Colors.white),
+                ),
               ),
               onPressed: _save),
           const SizedBox(width: 8),
@@ -483,7 +562,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     Map<String, dynamic> data = model.toJson();
     data['serviceAddress'] = serviceAddress.toJson();
     data['billingAddress'] = billingAddress.toJson();
-    data['customerContacts'] =  contacts.map((e) => e.toJson()).toList();
+    data['customerContacts'] = contacts.map((e) => e.toJson()).toList();
 
     print('Data: $data');
     NavigationController().loading();
@@ -491,10 +570,13 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       dynamic response = await Backendless.data.of(BLPath.customer).save(data);
       WarningMessageDialog.showDialog(context, "Saved Customer!");
       CustomerModel newModel = CustomerModel.fromMap(response);
-      List<CustomerModel> newList = [... _baseController.customers.value, newModel];
+      List<CustomerModel> newList = [
+        ..._baseController.customers.value,
+        newModel
+      ];
       _baseController.customers.value = newList;
       NavigationController().pop(context, delay: 2);
-    } catch(e) {
+    } catch (e) {
       print('save data error: ${e.toString()}');
     }
     NavigationController().loading(isLoading: false);
@@ -530,25 +612,25 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             const SizedBox(width: 14),
             Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(model.name,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis),
-                    Text(model.description,
-                        style: const TextStyle(
-                            color: Color(0xFF9B9B9B),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis),
-                  ],
-                )),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(model.name,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+                Text(model.description,
+                    style: const TextStyle(
+                        color: Color(0xFF9B9B9B),
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+              ],
+            )),
             IconButton(
                 icon: const Icon(Icons.save_outlined, color: AppColors.dark_1),
                 onPressed: () {})
@@ -558,7 +640,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     );
   }
 
-  void _onSelectAddress(SearchAddressModel model, {bool isService = true}) async {
+  void _onSelectAddress(SearchAddressModel model,
+      {bool isService = true}) async {
     NavigationController().loading();
     List? res = await _baseController.getLatLng(model.placeId);
     if (res != null) {

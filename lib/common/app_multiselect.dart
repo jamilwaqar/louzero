@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_text_body.dart';
@@ -42,10 +41,16 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
 
   @override
   void initState() {
+    super.initState();
     items = widget.items.isNotEmpty ? widget.items : [];
     if (widget.initialItems.isNotEmpty) {
       selectedItems = widget.initialItems;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> openDialog() async {
@@ -59,13 +64,8 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.label,
-                  style: GoogleFonts.barlowCondensed(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.secondary_30,
-                  )),
-              AppDivider(color: AppColors.secondary_90, mt: 16, mb: 0)
+              Text(widget.label, style: appStyles.header_dialog),
+              const AppDivider(color: AppColors.secondary_90, mt: 16, mb: 0)
             ],
           ),
           content: StatefulBuilder(
@@ -100,7 +100,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
   }
 
   Widget _doneButton() => AppButton(
-        key: Key('done'),
+        key: const Key('done'),
         margin: const EdgeInsets.all(16),
         wide: true,
         label: "Done",
@@ -119,8 +119,8 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
   }
 
   Widget _selectButton() => MaterialButton(
-      key: Key('select'),
-      padding: EdgeInsets.all(0),
+      key: const Key('select'),
+      padding: const EdgeInsets.all(0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -195,7 +195,8 @@ class SelectChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       backgroundColor: AppColors.secondary_99,
-      shape: StadiumBorder(side: BorderSide(color: AppColors.secondary_70)),
+      shape:
+          const StadiumBorder(side: BorderSide(color: AppColors.secondary_70)),
       labelPadding: const EdgeInsets.only(left: 14, right: 14),
       label: Text(label,
           style: const TextStyle(
@@ -229,7 +230,6 @@ class SelectTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _style = TextStyle(color: AppColors.darkest, fontSize: 16);
     return Column(
       children: [
         ListTile(
@@ -242,9 +242,7 @@ class SelectTile extends StatelessWidget {
           ),
           title: Transform.translate(
             offset: const Offset(-16, 0),
-            child: Text(item.label,
-                style: GoogleFonts.lato(
-                    fontSize: 16, color: AppColors.secondary_20)),
+            child: Text(item.label, style: appStyles.label_default),
           ),
           onTap: () => onSelectItem(item),
         ),

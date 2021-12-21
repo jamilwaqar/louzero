@@ -13,7 +13,6 @@ import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:louzero/ui/page/demo/demo.dart';
 import 'package:louzero/ui/page/settings/settings.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SideMenuView extends StatefulWidget {
   const SideMenuView({Key? key, this.sideMenuKey}) : super(key: key);
@@ -24,7 +23,7 @@ class SideMenuView extends StatefulWidget {
 }
 
 class _SideMenuViewState extends State<SideMenuView> {
-  String? _profileImagePath = 'assets/mocks/profile_corey_2.png';
+  final String? _profileImagePath = 'assets/mocks/profile_corey_2.png';
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +32,7 @@ class _SideMenuViewState extends State<SideMenuView> {
       data: Theme.of(context).copyWith(
         canvasColor: Colors.transparent,
       ),
+      // ignore: sized_box_for_whitespace
       child: Container(
         width: 360,
         child: Drawer(
@@ -178,19 +178,11 @@ class _SideMenuViewState extends State<SideMenuView> {
       children: [
         AppAvatar(path: _profileImagePath, size: 96),
         const SizedBox(height: 8),
-        Text('Corey Holton',
-            style: GoogleFonts.barlowCondensed(
-              color: Colors.black,
-              fontWeight: FontWeight.w700,
-              fontSize: 24,
-            )),
+        const Text('Corey Holton', style: appStyles.header_default),
         const SizedBox(height: 8),
-        Text(
+        const Text(
           'Patio Pools and Spas',
-          style: GoogleFonts.lato(
-              color: AppColors.secondary_20,
-              fontSize: 16,
-              fontWeight: FontWeight.w400),
+          style: appStyles.label_default,
         ),
         const AppDivider(
           mt: 32,

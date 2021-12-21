@@ -9,6 +9,7 @@ import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 
 import '../base_scaffold.dart';
 
@@ -41,7 +42,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     const title = "Can't Login?";
     const body =
         "Not to worry. Enter the email address you use to sign in to LOUzero below and we'll send you instructions on how to set a new password. ";
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Center(
         child: AppCardCenter(
           child: Column(

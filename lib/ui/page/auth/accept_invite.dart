@@ -14,6 +14,7 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/user_models.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/complete.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
@@ -47,7 +48,8 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -158,14 +160,16 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
       ..whereClause = "email = '$email'";
     List<InviteModel> list = [];
     try {
-      var response = await Backendless.data.of(BLPath.invites).find(queryBuilder);
+      var response =
+          await Backendless.data.of(BLPath.invites).find(queryBuilder);
       if (response == null || response.isEmpty) {
         _noInviteModel = true;
         WarningMessageDialog.showDialog(context, "Something wrong!");
         NavigationController().loading(isLoading: false);
         return;
       }
-      list = List<Map>.from(response).map((e) => InviteModel.fromMap(e)).toList();
+      list =
+          List<Map>.from(response).map((e) => InviteModel.fromMap(e)).toList();
     } catch (e) {
       print(e.toString());
     }

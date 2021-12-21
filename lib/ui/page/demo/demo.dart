@@ -10,7 +10,7 @@ import 'package:louzero/common/app_spinner.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class demo extends StatelessWidget {
@@ -18,7 +18,8 @@ class demo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
+      subheader: 'Demo Components',
       child: SingleChildScrollView(
         child: Column(
           children: [

@@ -22,7 +22,9 @@ class AppAvatar extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
-      padding: borderColor == null ? EdgeInsets.all(0) : EdgeInsets.all(2),
+      padding: borderColor == null
+          ? const EdgeInsets.all(0)
+          : const EdgeInsets.all(2),
       decoration: BoxDecoration(
           border: Border.all(color: borderColor ?? Colors.transparent),
           borderRadius: BorderRadius.circular(999),

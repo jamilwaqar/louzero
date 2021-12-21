@@ -8,6 +8,7 @@ import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/complete.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
@@ -58,7 +59,8 @@ class _VerifyPageState extends State<VerifyPage> {
 
   @override
   build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -67,7 +69,8 @@ class _VerifyPageState extends State<VerifyPage> {
               children: [
                 const AppTextHeader('Verification Code'),
                 const AppTextBody('We sent a verification code to'),
-                AppTextBody(widget.email,
+                AppTextBody(
+                  widget.email,
                   color: AppColors.dark_3,
                   bold: true,
                 ),
@@ -126,11 +129,12 @@ class _VerifyPageState extends State<VerifyPage> {
 
   void _completeSignup() async {
     if (_code == null || _code != widget.code.toString()) {
-      var msg = 'Sorry, the verification code you entered does not match. Please try again.';
+      var msg =
+          'Sorry, the verification code you entered does not match. Please try again.';
       WarningMessageDialog.showDialog(context, msg);
       return;
     }
-    Get.to(()=> CompletePage(widget.email));
+    Get.to(() => CompletePage(widget.email));
   }
 
   void _methodTBD() {}

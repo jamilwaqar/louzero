@@ -13,6 +13,7 @@ import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 import '../base_scaffold.dart';
@@ -47,7 +48,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -94,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
             fontWeight: FontWeight.w700,
             textDecoration: TextDecoration.underline,
             onPressed: () {
-              Get.to(()=> const AcceptInvitePage());
+              Get.to(() => const AcceptInvitePage());
             },
           ),
         ],
@@ -116,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);
     } else {
-      Get.to(()=> VerifyPage(email: email, code: code));
+      Get.to(() => VerifyPage(email: email, code: code));
     }
   }
 
