@@ -5,6 +5,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/login.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
@@ -59,7 +60,9 @@ class _HomePageState extends State<HomePage> {
       builder: (ctx, value, child) {
         if (!value && AuthManager().isAuthUser) {
           NavigationController().loading();
-          return const BaseScaffold();
+          return const AppBaseScaffold(
+            logoOnly: true,
+          );
         }
         NavigationController().loading(isLoading: false);
         if (value) {

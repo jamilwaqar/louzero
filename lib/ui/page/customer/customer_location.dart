@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/models/models.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
@@ -32,17 +33,9 @@ class _CustomerLocationPageState extends State<CustomerLocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: widget.customerModel.name,
-          context: context,
-          leadingTxt: widget.customerModel.name,
-          hasActions: false,
-        ),
-        backgroundColor: Colors.transparent,
-        body: _body(),
-      ),
+    return AppBaseScaffold(
+      subheader: widget.customerModel.name,
+      child: _body(),
     );
   }
 
@@ -65,5 +58,4 @@ class _CustomerLocationPageState extends State<CustomerLocationPage> {
       },
     );
   }
-
 }

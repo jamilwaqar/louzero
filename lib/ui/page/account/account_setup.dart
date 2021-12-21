@@ -14,6 +14,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -54,7 +55,7 @@ class _AccountSetupState extends State<AccountSetup> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
       hasKeyboard: true,
       child: Column(
         children: [

@@ -5,10 +5,8 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
-import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerProfilePage extends GetWidget<CustomerController> {
   const CustomerProfilePage({Key? key}) : super(key: key);
@@ -23,7 +21,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
 
   Widget _body() {
     return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         itemCount: 1,
         itemBuilder: (context, index) {
           return Column(

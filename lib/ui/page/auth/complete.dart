@@ -11,6 +11,7 @@ import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 import '../base_scaffold.dart';
 
@@ -46,7 +47,8 @@ class _CompletePageState extends State<CompletePage> {
     var optInEmail =
         'Yes, I would like to receive email updates about products & services, upcoming webinars, news and events from LOUzero.';
     var termsLabel = 'I have read and agreed to the Terms of Service';
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

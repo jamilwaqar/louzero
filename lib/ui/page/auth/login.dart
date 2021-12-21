@@ -12,6 +12,7 @@ import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/accept_invite.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
@@ -47,7 +48,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Column(
         children: [
           const SizedBox(

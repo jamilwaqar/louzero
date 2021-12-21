@@ -8,6 +8,7 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/utils.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
@@ -30,21 +31,17 @@ class AddJobPage extends GetWidget<JobController> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: Scaffold(
-        appBar: SubAppBar(
-          title: "Add New Job",
-          context: context,
-          leadingTxt: "Jobs",
-        ),
-        backgroundColor: Colors.transparent,
-        body: _body(),
-      ),
+    return AppBaseScaffold(
+      subheader: 'Add New Job',
+      child: _body(),
     );
   }
 
   Widget _body() {
     List<Widget> list = [
+      const SizedBox(
+        height: 32,
+      ),
       _addCustomer(),
       const SizedBox(height: 24),
       _jobDetailsWidget(),

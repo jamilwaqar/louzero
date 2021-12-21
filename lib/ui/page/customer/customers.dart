@@ -10,9 +10,11 @@ import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/invite.dart';
+import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer.dart';
 
 class CustomerListPage extends StatelessWidget {
@@ -29,12 +31,12 @@ class CustomerListPage extends StatelessWidget {
       ]),
       subheader: 'Customers',
       footerEnd: [
-        AppButton(
-          fontSize: 16,
+        AppBarButtonAdd(
           label: 'New Customer',
-          icon: Icons.add_circle,
-          color: AppColors.secondary_20,
-          colorIcon: AppColors.accent_1,
+          onPressed: () {
+            NavigationController()
+                .pushTo(context, child: const AddCustomerPage());
+          },
         )
       ],
     );

@@ -10,6 +10,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
@@ -17,15 +18,13 @@ import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 class InviteCustomerPage extends StatefulWidget {
   final String email;
 
-  const InviteCustomerPage({required this.email, Key? key})
-      : super(key: key);
+  const InviteCustomerPage({required this.email, Key? key}) : super(key: key);
 
   @override
   _InviteCustomerPageState createState() => _InviteCustomerPageState();
 }
 
 class _InviteCustomerPageState extends State<InviteCustomerPage> {
-
   final styleText = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w400,
@@ -57,7 +56,8 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
   @override
   build(BuildContext context) {
     _code = verificationCode();
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Stack(
         children: [
           Center(
@@ -67,7 +67,8 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
                   const AppTextHeader('Invite Customer'),
                   const SizedBox(height: 10),
                   const AppTextBody('We will sent a verification code to'),
-                  AppTextBody(widget.email,
+                  AppTextBody(
+                    widget.email,
                     color: AppColors.dark_3,
                     bold: true,
                   ),
@@ -87,9 +88,7 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
                       const SizedBox(width: 10),
                       CupertinoButton(
                         onPressed: () {
-                          setState(() {
-
-                          });
+                          setState(() {});
                         },
                         padding: EdgeInsets.zero,
                         child: Container(
@@ -109,16 +108,12 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
                   AppButton(
                     label: 'Invite',
                     onPressed: _inviteCustomer,
-
                   ),
                 ],
               ),
             ),
           ),
-          Positioned(
-            top: 20,
-              left: 30,
-              child: _leading)
+          Positioned(top: 20, left: 30, child: _leading)
         ],
       ),
     );
@@ -126,7 +121,7 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
 
   Widget get _leading {
     return CupertinoButton(
-      onPressed: ()=> Get.back(),
+      onPressed: () => Get.back(),
       child: const Icon(Icons.arrow_back, color: AppColors.icon, size: 30),
     );
   }
