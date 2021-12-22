@@ -8,6 +8,9 @@ class APIManager {
 
   static Future save(String path, dynamic data) async {
     try {
+      if (data['objectId'] == null) {
+        data.remove('objectId');
+      }
       dynamic response = await Backendless.data.of(path).save(data);
       return response;
     } catch (e) {

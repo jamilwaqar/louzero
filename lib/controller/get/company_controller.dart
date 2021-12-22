@@ -4,7 +4,16 @@ import 'base_controller.dart';
 
 class CompanyController extends GetxController {
 
-  final companyModel = Rx<CompanyModel?>(null);
+  final _companyModel = CompanyModel().obs;
+
+  CompanyModel get company => _companyModel.value;
+
+  set company(CompanyModel model) {
+    _companyModel.value = model;
+    // var com = companies.firstWhere((e) => e.objectId == model.objectId);
+    // var index = companies.indexOf(com);
+    // companies.replaceRange(index, index + 1, [model]);
+  }
 
   List<CompanyModel> get companies =>
       Get.find<BaseController>().companies.value;
@@ -12,10 +21,7 @@ class CompanyController extends GetxController {
 
   @override
   void onInit() {
-    companyModel.value = Get.arguments;
-    if (companyModel.value != null) {
-      // fetchSiteProfile(companyModel.value!.objectId!);
-    }
+    company = Get.arguments ?? CompanyModel();
     super.onInit();
   }
 }

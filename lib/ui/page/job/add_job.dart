@@ -9,10 +9,8 @@ import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
-import 'package:louzero/ui/widget/widget.dart';
 
 enum SelectCustomerType { none, search, select }
 

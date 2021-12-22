@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
+import 'package:louzero/common/app_checkbox.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
@@ -15,6 +16,7 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/company_models.dart';
@@ -36,11 +38,13 @@ class AccountSetupCompany extends StatefulWidget {
   const AccountSetupCompany({
     this.companyModel,
     this.onChange,
+    this.isFromAccountSetup = false,
     Key? key,
   }) : super(key: key);
 
   final void Function()? onChange;
   final CompanyModel? companyModel;
+  final bool isFromAccountSetup;
 
   @override
   State<AccountSetupCompany> createState() => _AccountSetupCompanyState();
@@ -64,14 +68,17 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _suiteController = TextEditingController();
   final _zipController = TextEditingController();
   late Country _selectCountry ;
-
+  late bool _isEdit;
+  bool _isActiveCompany = false;
   SearchAddressModel? _searchAddressModel;
   final BaseController _baseController = Get.find();
   List<SelectItem> _initialIndustries = [industries[0], industries[1], industries[4]];
 
   @override
   void initState() {
-    if (widget.companyModel != null) {
+    _isEdit = widget.companyModel != null && widget.companyModel!.objectId != null;
+    _isActiveCompany = widget.isFromAccountSetup;
+    if (_isEdit) {
       _companyModel = widget.companyModel!;
       _addressModel = widget.companyModel!.address!;
       _companyNameController.text = _companyModel.name;
@@ -85,6 +92,10 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       _stateController.text = _addressModel.state;
       _suiteController.text = _addressModel.suite;
       _zipController.text = _addressModel.zip;
+      _initialIndustries = industries
+          .where((element) => _companyModel.industries.contains(element.label))
+          .toList();
+      _isActiveCompany = _companyModel.objectId == _baseController.activeCompany.value!.objectId;
     } else {
       _selectCountry = Country(
           phoneCode: "1",
@@ -98,6 +109,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           displayNameNoCountryCode: "United States (US)",
           e164Key: "1-US-0");
       _countryController.text = _selectCountry.name;
+      _companyModel.industries = _initialIndustries.map((e) => e.value).toList();
     }
     super.initState();
   }
@@ -178,7 +190,17 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                         top: 225,
                         child: _searchedAddressListView()),
                   ],
-                )
+                ),
+                const SizedBox(height: 24),
+                AppCheckbox(
+                  label: 'Active Company',
+                  checked: _isActiveCompany,
+                  onChanged: (val) {
+                    setState(() {
+                      _isActiveCompany = val ?? true;
+                    });
+                  },
+                ),
               ],
             ),
             Row(
@@ -190,6 +212,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                 ),
               ],
             ),
+
           ],
         ));
   }
@@ -207,15 +230,26 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     _addressModel.latitude = _searchAddressModel?.latitude ?? 0;
     _addressModel.longitude = _searchAddressModel?.longitude ?? 0;
     data['address'] = _addressModel.toJson();
-    data.remove('objectId');
     var res = await APIManager.save(BLPath.company, data);
     if (res is Map) {
-      AuthManager.userModel!.activeCompanyId = res['objectId'];
-      await AuthManager().updateUser();
+      final newModel = CompanyModel.fromMap(res);
+      if (_isEdit) {
+        Get.find<CompanyController>().company = newModel;
+      } else {
+        if (!widget.isFromAccountSetup) {
+          _baseController.companies.value.add(newModel);
+        }
+      }
+      if (_isActiveCompany) {
+        AuthManager.userModel!.activeCompanyId = res['objectId'];
+        await AuthManager().updateUser();
+      }
     }
     if (widget.onChange != null) widget.onChange!();
     NavigationController().loading(isLoading: false);
-
+    if (_isEdit || !widget.isFromAccountSetup) {
+      Get.back();
+    }
   }
 
   // Validation:
@@ -283,7 +317,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         onChange: (items) {
           inspect(items);
           _initialIndustries = items;
-          _companyModel.industries = items.map((e) => e.value).toList();
+          _companyModel.industries = items.map((e) => e.label).toList();
         },
         label: 'What Industries do you Serve?',
       );
@@ -432,13 +466,6 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       }
     }
     _baseController.searchedAddressList = [];
-
-    // AddressModel address = AddressModel(
-    //     country: _selectCountry!.name,
-    //     street: _streetController.text,
-    //     city: _cityController.text,
-    //     state: _stateController.text,
-    //     zip: _addressModel.zip);
     NavigationController().loading(isLoading: false);
   }
 

@@ -77,6 +77,7 @@ class _AccountSetupState extends State<AccountSetup> {
                   AccountSetupCompany(
                     onChange: _saveFormInput,
                     companyModel: _baseController.activeCompany.value,
+                    isFromAccountSetup: true,
                   ),
                 ),
                 _scrollView(customerCard()),
