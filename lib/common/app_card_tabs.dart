@@ -42,7 +42,10 @@ class AppCardTabs extends StatelessWidget {
     return DefaultTabController(
       length: length,
       child: AppCard(
-          mt: 24,
+          mt: 0,
+          ml: 0,
+          mr: 0,
+          mb: 0,
           pl: 0,
           pr: 0,
           pt: 0,

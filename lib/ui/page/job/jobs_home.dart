@@ -9,13 +9,30 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 enum SelectCustomerType { none, search, select }
 
+class ExpansionItem {
+  ExpansionItem({
+    required this.children,
+    required this.header,
+    this.isExpanded = false,
+  });
+  List<Widget> children;
+  Widget header;
+  bool isExpanded;
+}
+
 class JobsHome extends StatelessWidget {
   JobsHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      child: _tabs(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [_expando(), _dataTable(), _tabs()],
+        ),
+      ),
       subheader: 'Repair',
       footerEnd: const [
         AppButton(
@@ -30,19 +47,22 @@ class JobsHome extends StatelessWidget {
   }
 
   Widget _tabs() {
-    return AppCardTabs(
-        radius: 24,
-        children: [
-          _tabBilling(),
-          const AppTabPanel(children: [
-            Text('Job Schedule', style: AppStyles.headerRegular),
-          ]),
-          const AppTabPanel(children: [
-            Text('Billing Line Items', style: AppStyles.headerRegular),
-          ]),
-        ],
-        length: 3,
-        tabNames: ['Job Details', 'Schedule', 'Billing']);
+    return Container(
+      height: 800,
+      child: AppCardTabs(
+          radius: 24,
+          children: [
+            _tabBilling(),
+            const AppTabPanel(children: [
+              Text('Job Schedule', style: AppStyles.headerRegular),
+            ]),
+            const AppTabPanel(children: [
+              Text('Billing Line Items', style: AppStyles.headerRegular),
+            ]),
+          ],
+          length: 3,
+          tabNames: ['Job Details', 'Schedule', 'Billing']),
+    );
   }
 
   Widget _tabBilling() => AppTabPanel(
@@ -84,9 +104,43 @@ class JobsHome extends StatelessWidget {
           ),
           const AppDivider(),
           const AppButtons.iconFlat('Add Note', icon: MdiIcons.note),
-          _dataTable()
         ],
       );
+
+  Widget _expando() {
+    List<ExpansionItem> items = [
+      ExpansionItem(
+          header: Text(
+            'Hello Groovy',
+            style: AppStyles.headerRegular,
+          ),
+          children: [
+            Icon(MdiIcons.brightness6, color: Colors.blue, size: 90),
+            Icon(MdiIcons.beer, color: Colors.purple, size: 90),
+          ])
+    ];
+
+    Widget _expander() {
+      return ExpansionPanelList(
+        expansionCallback: (int index, bool isExpanded) {
+          print('Index: $index');
+          print('Expanded: $isExpanded');
+        },
+        children: items.map<ExpansionPanel>((ExpansionItem item) {
+          return ExpansionPanel(
+              headerBuilder: (BuildContext context, bool isExpanded) {
+                return item.header;
+              },
+              body: Column(
+                children: item.children,
+              ),
+              isExpanded: true);
+        }).toList(),
+      );
+    }
+
+    return _expander();
+  }
 
   Widget _dataTable() => Container(
       decoration: BoxDecoration(

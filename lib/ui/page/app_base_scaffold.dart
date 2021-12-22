@@ -139,9 +139,11 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                   topLeft: Radius.circular(40),
                                   topRight: Radius.circular(40),
                                 ),
-                                child: Container(
-                                  color: AppColors.secondary_99,
-                                  child: widget.child ?? null,
+                                child: SingleChildScrollView(
+                                  child: Container(
+                                    color: AppColors.secondary_99,
+                                    child: widget.child ?? null,
+                                  ),
                                 ),
                               ),
                             ),
