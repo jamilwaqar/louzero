@@ -28,6 +28,7 @@ abstract class AppColors {
   static const Color secondary_40 = Color(0xFF546E7A);
   static const Color secondary_60 = Color(0xFF78909C);
   static const Color secondary_70 = Color(0xFF90A4AE);
+  static const Color secondary_80 = Color(0xFFB0BEC5);
   static const Color secondary_90 = Color(0xFFCFD8DC);
   static const Color secondary_95 = Color(0xFFECEFF1);
   static const Color secondary_99 = Color(0xFFF1F3F5);
@@ -46,7 +47,7 @@ abstract class AppStyles {
     fontFamily: 'Barlow',
     fontSize: 24,
     fontWeight: FontWeight.w700,
-    color: AppColors.darkest,
+    color: AppColors.secondary_20,
   );
   static const headerAppBar = TextStyle(
     fontFamily: 'Barlow',

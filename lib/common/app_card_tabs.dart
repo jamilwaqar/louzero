@@ -39,49 +39,41 @@ class AppCardTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-        mt: 24,
-        pl: 0,
-        pr: 0,
-        pt: 0,
-        pb: 0,
-        radius: radius,
-        children: [
-          DefaultTabController(
-            length: 3,
-            // ignore: sized_box_for_whitespace
-            child: Container(
-              height: height,
-              child: Column(
-                children: [
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: _backgroundTabs.withOpacity(0.5),
-                      border: Border(
-                          bottom: BorderSide(
-                              color: _borderBlur, width: _borderWidth)),
-                    ),
-                    child: TabBar(
-                      indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                              width: _borderWidth, color: _borderFocus),
-                          insets: const EdgeInsets.symmetric(horizontal: 0)),
-                      labelColor: _labelColor,
-                      indicatorColor: _borderFocus,
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      tabs: tabNames.map((name) {
-                        return _tab(name);
-                      }).toList(),
-                    ),
-                  ),
-                  Expanded(
-                      child: TabBarView(
-                    children: children,
-                  ))
-                ],
+    return DefaultTabController(
+      length: length,
+      child: AppCard(
+          mt: 24,
+          pl: 0,
+          pr: 0,
+          pt: 0,
+          pb: 0,
+          radius: radius,
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: _backgroundTabs.withOpacity(0.5),
+                border: Border(
+                    bottom:
+                        BorderSide(color: _borderBlur, width: _borderWidth)),
+              ),
+              child: TabBar(
+                indicator: UnderlineTabIndicator(
+                    borderSide:
+                        BorderSide(width: _borderWidth, color: _borderFocus),
+                    insets: const EdgeInsets.symmetric(horizontal: 0)),
+                labelColor: _labelColor,
+                indicatorColor: _borderFocus,
+                padding: const EdgeInsets.symmetric(horizontal: 0),
+                tabs: tabNames.map((name) {
+                  return _tab(name);
+                }).toList(),
               ),
             ),
-          )
-        ]);
+            Expanded(
+                child: TabBarView(
+              children: children,
+            )),
+          ]),
+    );
   }
 }

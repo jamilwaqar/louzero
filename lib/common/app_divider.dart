@@ -5,11 +5,11 @@ import 'package:louzero/controller/constant/colors.dart';
 class AppDivider extends StatelessWidget {
   const AppDivider({
     Key? key,
-    this.mt = 0,
-    this.mb = 24,
+    this.mt = 16,
+    this.mb = 16,
     this.ml = 0,
     this.mr = 0,
-    this.color = AppColors.light_3,
+    this.color = AppColors.secondary_90,
     this.size = 1,
   }) : super(key: key);
 
