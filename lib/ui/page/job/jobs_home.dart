@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card.dart';
+import 'package:louzero/common/app_card_expandable.dart';
 import 'package:louzero/common/app_card_tabs.dart';
 import 'package:louzero/common/app_divider.dart';
+import 'package:louzero/common/app_icon_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 enum SelectCustomerType { none, search, select }
-
-class ExpansionItem {
-  ExpansionItem({
-    required this.children,
-    required this.header,
-    this.isExpanded = false,
-  });
-  List<Widget> children;
-  Widget header;
-  bool isExpanded;
-}
 
 class JobsHome extends StatelessWidget {
   JobsHome({Key? key}) : super(key: key);
@@ -30,7 +20,15 @@ class JobsHome extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [_expando(), _dataTable(), _tabs()],
+          children: [
+            AppCardExpandable(
+              title: const AppHeaderIcon('Somewhere or Other'),
+              subtitle: _expandSubTitle(),
+              children: [_dataTable()],
+            ),
+            _tabs(),
+            // _dataTable(),
+          ],
         ),
       ),
       subheader: 'Repair',
@@ -46,6 +44,28 @@ class JobsHome extends StatelessWidget {
     );
   }
 
+  Widget _expandSubTitle() {
+    return AppSplitRow(
+      pt: 8,
+      start: [
+        Icon(
+          MdiIcons.mapMarker,
+          color: Colors.red,
+        ),
+        Text("3486 Archwood house st. vancover, WA 98522",
+            style: AppStyles.labelBold.copyWith(fontSize: 14))
+      ],
+      end: [
+        Text("Acct. Balance:",
+            style: AppStyles.labelRegular.copyWith(fontSize: 14)),
+        SizedBox(
+          width: 8,
+        ),
+        Text("\$768.00", style: AppStyles.labelBold.copyWith(fontSize: 14)),
+      ],
+    );
+  }
+
   Widget _tabs() {
     return Container(
       height: 800,
@@ -53,16 +73,24 @@ class JobsHome extends StatelessWidget {
           radius: 24,
           children: [
             _tabBilling(),
-            const AppTabPanel(children: [
-              Text('Job Schedule', style: AppStyles.headerRegular),
-            ]),
-            const AppTabPanel(children: [
-              Text('Billing Line Items', style: AppStyles.headerRegular),
-            ]),
+            _tabDetails(),
+            _tabSchedule(),
           ],
           length: 3,
           tabNames: ['Job Details', 'Schedule', 'Billing']),
     );
+  }
+
+  Widget _tabSchedule() {
+    return AppTabPanel(children: [
+      Text('Job Schedule', style: AppStyles.headerRegular),
+    ]);
+  }
+
+  Widget _tabDetails() {
+    return AppTabPanel(children: [
+      Text('Job Details', style: AppStyles.headerRegular),
+    ]);
   }
 
   Widget _tabBilling() => AppTabPanel(
@@ -106,41 +134,6 @@ class JobsHome extends StatelessWidget {
           const AppButtons.iconFlat('Add Note', icon: MdiIcons.note),
         ],
       );
-
-  Widget _expando() {
-    List<ExpansionItem> items = [
-      ExpansionItem(
-          header: Text(
-            'Hello Groovy',
-            style: AppStyles.headerRegular,
-          ),
-          children: [
-            Icon(MdiIcons.brightness6, color: Colors.blue, size: 90),
-            Icon(MdiIcons.beer, color: Colors.purple, size: 90),
-          ])
-    ];
-
-    Widget _expander() {
-      return ExpansionPanelList(
-        expansionCallback: (int index, bool isExpanded) {
-          print('Index: $index');
-          print('Expanded: $isExpanded');
-        },
-        children: items.map<ExpansionPanel>((ExpansionItem item) {
-          return ExpansionPanel(
-              headerBuilder: (BuildContext context, bool isExpanded) {
-                return item.header;
-              },
-              body: Column(
-                children: item.children,
-              ),
-              isExpanded: true);
-        }).toList(),
-      );
-    }
-
-    return _expander();
-  }
 
   Widget _dataTable() => Container(
       decoration: BoxDecoration(
@@ -237,25 +230,69 @@ class LineItem {
       subtotal.hashCode;
 }
 
-class AppTabPanel extends StatelessWidget {
-  final List<Widget> children;
-  final Color color;
+class AppSplitRow extends StatelessWidget {
+  final List<Widget> start;
+  final List<Widget> end;
+  final double pt;
+  final double pb;
+  final double pr;
+  final double pl;
 
-  const AppTabPanel(
-      {Key? key, this.children = const [], this.color = Colors.white})
-      : super(key: key);
+  const AppSplitRow({
+    Key? key,
+    this.start = const [],
+    this.end = const [],
+    this.pt = 0,
+    this.pb = 0,
+    this.pr = 0,
+    this.pl = 0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: color,
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
-        ),
+    return Padding(
+      padding: EdgeInsets.only(top: pt, left: pl, right: pr, bottom: pb),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Row(
+              children: start,
+            ),
+          ),
+          Row(
+            children: end,
+          )
+        ],
       ),
+    );
+  }
+}
+
+class AppHeaderIcon extends StatelessWidget {
+  final IconData icon;
+  final String title;
+
+  const AppHeaderIcon(
+    this.title, {
+    Key? key,
+    this.icon = MdiIcons.arrowTopRight,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          title,
+          style: AppStyles.headerRegular,
+        ),
+        AppIconButton(
+          pl: 8,
+          icon: icon,
+          onTap: () {},
+        ),
+      ],
     );
   }
 }
