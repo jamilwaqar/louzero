@@ -50,9 +50,12 @@ class AddJobPage extends GetWidget<JobController> {
       const SizedBox(height: 24),
       _saveOrCancel(),
     ];
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(32, 0, 32, 30),
-      children: list,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        // padding: const EdgeInsets.fromLTRB(32, 0, 32, 30),
+        children: list,
+      ),
     );
   }
 

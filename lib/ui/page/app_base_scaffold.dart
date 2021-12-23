@@ -54,6 +54,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
         return ValueListenableBuilder<bool>(
           valueListenable: AuthManager().loggedIn,
           builder: (ctx, isLoggedIn, child) {
+            double min_height = MediaQuery.of(context).size.height;
             return Stack(
               children: [
                 GestureDetector(
@@ -140,7 +141,12 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                   topRight: Radius.circular(40),
                                 ),
                                 child: SingleChildScrollView(
+                                  physics: ClampingScrollPhysics(),
                                   child: Container(
+                                    constraints: BoxConstraints(
+                                      minHeight: min_height,
+                                      minWidth: double.infinity,
+                                    ),
                                     color: AppColors.secondary_99,
                                     child: widget.child ?? null,
                                   ),

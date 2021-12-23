@@ -20,19 +20,13 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
   }
 
   Widget _body() {
-    return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomerInfo(controller.customerModel.value!),
-              const SizedBox(height: 24),
-              _category()
-            ],
-          );
-        });
+    return Column(
+      children: [
+        CustomerInfo(controller.customerModel.value!),
+        const SizedBox(height: 24),
+        _category()
+      ],
+    );
   }
 
   Widget _category() {

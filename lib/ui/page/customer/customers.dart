@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,9 +24,10 @@ class CustomerListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      child: Column(children: [
-        Expanded(child: _body()),
-      ]),
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        child: _body(),
+      ),
       subheader: 'Customers',
       footerEnd: [
         AppBarButtonAdd(
@@ -45,7 +44,7 @@ class CustomerListPage extends StatelessWidget {
   Widget _body() {
     return Obx(() => ListView.builder(
         padding: const EdgeInsets.only(top: 32),
-        shrinkWrap: true,
+        shrinkWrap: false,
         itemCount: _baseController.customers.value.length,
         itemBuilder: (context, index) {
           CustomerModel model = _baseController.customers.value[index];
