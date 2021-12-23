@@ -70,7 +70,7 @@ class AppButton extends StatelessWidget {
         elevation: 0,
         extendedPadding: EdgeInsetsDirectional.only(
           start: fontSize,
-          end: isMenu ? fontSize : fontSize + 8,
+          end: icon != null && !isMenu ? fontSize + 8 : fontSize,
         ),
         extendedTextStyle: textStyle,
         shape: RoundedRectangleBorder(
