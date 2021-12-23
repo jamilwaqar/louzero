@@ -67,6 +67,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _stateController = TextEditingController();
   final _suiteController = TextEditingController();
   final _zipController = TextEditingController();
+
   late Country _selectCountry ;
   late bool _isEdit;
   bool _isActiveCompany = false;
@@ -95,7 +96,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       _initialIndustries = industries
           .where((element) => _companyModel.industries.contains(element.label))
           .toList();
-      _isActiveCompany = _companyModel.objectId == _baseController.activeCompany.value!.objectId;
+      _isActiveCompany = _companyModel.objectId == _baseController.activeCompany!.objectId;
     } else {
       _selectCountry = Country(
           phoneCode: "1",
@@ -237,11 +238,12 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         Get.find<CompanyController>().company = newModel;
       } else {
         if (!widget.isFromAccountSetup) {
-          _baseController.companies.value.add(newModel);
+          _baseController.companies.add(newModel);
         }
       }
       if (_isActiveCompany) {
         AuthManager.userModel!.activeCompanyId = res['objectId'];
+        _baseController.activeCompany = newModel;
         await AuthManager().updateUser();
       }
     }

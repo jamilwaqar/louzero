@@ -16,8 +16,7 @@ class CompanyController extends GetxController {
   }
 
   List<CompanyModel> get companies =>
-      Get.find<BaseController>().companies.value;
-
+      Get.find<BaseController>().companies;
 
   @override
   void onInit() {

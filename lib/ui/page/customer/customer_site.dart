@@ -428,7 +428,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
   Widget _templates() {
     List<CTSiteProfile> profiles = [
-      ..._baseController.siteProfileTemplates.value
+      ..._baseController.siteProfileTemplates
     ];
     profiles.add(_customTemplate);
     List<Widget> itemList = List.generate(
@@ -753,7 +753,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
       if (widget.isTemplate) {
         List<CTSiteProfile> list = [..._siteProfiles, ctProfile];
-        _baseController.siteProfileTemplates.value = list;
+        _baseController.siteProfileTemplates = list;
         WarningMessageDialog.showDialog(context, "Saved site Template!");
       } else {
         List<CTSiteProfile> list = [..._siteProfiles, ctProfile];

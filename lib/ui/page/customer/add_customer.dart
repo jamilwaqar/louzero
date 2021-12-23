@@ -570,10 +570,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       WarningMessageDialog.showDialog(context, "Saved Customer!");
       CustomerModel newModel = CustomerModel.fromMap(response);
       List<CustomerModel> newList = [
-        ..._baseController.customers.value,
+        ..._baseController.customers,
         newModel
       ];
-      _baseController.customers.value = newList;
+      _baseController.customers = newList;
       NavigationController().pop(context, delay: 2);
     } catch (e) {
       print('save data error: ${e.toString()}');

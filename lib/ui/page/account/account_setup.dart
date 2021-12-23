@@ -76,7 +76,7 @@ class _AccountSetupState extends State<AccountSetup> {
                 _scrollView(
                   AccountSetupCompany(
                     onChange: _saveFormInput,
-                    companyModel: _baseController.activeCompany.value,
+                    companyModel: _baseController.activeCompany,
                     isFromAccountSetup: true,
                   ),
                 ),

@@ -46,9 +46,9 @@ class CustomerListPage extends StatelessWidget {
     return Obx(() => ListView.builder(
         padding: const EdgeInsets.only(top: 32),
         shrinkWrap: true,
-        itemCount: _baseController.customers.value.length,
+        itemCount: _baseController.customers.length,
         itemBuilder: (context, index) {
-          CustomerModel model = _baseController.customers.value[index];
+          CustomerModel model = _baseController.customers[index];
           return AppCard(
             mb: 8,
             children: [

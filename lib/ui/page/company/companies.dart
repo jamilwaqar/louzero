@@ -14,10 +14,14 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';
 import 'package:louzero/ui/page/company/company.dart';
 
-class CompanyListPage extends StatelessWidget {
+class CompanyListPage extends StatefulWidget {
+  const CompanyListPage({Key? key}) : super(key: key);
 
-  CompanyListPage({Key? key}) : super(key: key);
+  @override
+  _CompanyListPageState createState() => _CompanyListPageState();
+}
 
+class _CompanyListPageState extends State<CompanyListPage> {
   final int mockId = 8520;
   final BaseController _baseController = Get.find();
 
@@ -33,7 +37,7 @@ class CompanyListPage extends StatelessWidget {
         AppBarButtonAdd(
           label: 'New Company',
           onPressed: () {
-            Get.to(()=> const AddCompanyPage(), binding: CompanyBinding());
+            Get.to(()=> const AddCompanyPage(), binding: CompanyBinding())?.then((_) => setState(() {}));
           },
         )
       ],
@@ -46,16 +50,16 @@ class CompanyListPage extends StatelessWidget {
       return ListView.builder(
           padding: const EdgeInsets.only(top: 32),
           shrinkWrap: true,
-          itemCount: _baseController.companies.value.length,
+          itemCount: _baseController.companies.length,
           itemBuilder: (context, index) {
-            CompanyModel model = _baseController.companies.value[index];
+            CompanyModel model = _baseController.companies[index];
             return AppCard(
               mb: 8,
               children: [
                 GestureDetector(
                   onTap: () {
                     Get.to(() => CompanyPage(),
-                        arguments: model, binding: CompanyBinding());
+                        arguments: model, binding: CompanyBinding())?.then((_) => setState(() {}));
                   },
                   child: AppRowFlex(
                       flex: const [1, 5, 2, 0],
@@ -76,7 +80,11 @@ class CompanyListPage extends StatelessWidget {
                           ],
                         ),
                         AppTextBody(
-                          model.name,
+                          _baseController.activeCompany!.objectId ==
+                                  model.objectId
+                              ? 'Active'
+                              : '',
+                          color: AppColors.accent_1,
                         ),
                         PopupMenuButton(
                             offset: const Offset(0, 40),

@@ -64,11 +64,11 @@ class _SettingsPageState extends State<SettingsPage> {
           DashboardCell(
             title: "Site Profile Templates",
             description: "Description...",
-            count: _baseController.siteProfileTemplates.value.length,
+            count: _baseController.siteProfileTemplates.length,
             buttonTitleLeft: "",
             buttonTitleRight: "",
             onPressed: () => Get.to(()=> CustomerSiteProfilePage(
-                _baseController.siteProfileTemplates.value,
+                _baseController.siteProfileTemplates,
                 isTemplate: true), binding: CustomerBinding()),
             onPressedLeft: () {},
             onPressedRight: () {},

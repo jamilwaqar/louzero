@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart' hide ItemTags;
 import 'package:get/get.dart';
 import 'package:louzero/common/app_image.dart';
+import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/company_models.dart';
@@ -68,8 +70,23 @@ class CompanyPage extends GetWidget<CompanyController> {
                               const SizedBox(width: 8),
                               TopLeftButton(
                                   onPressed: () {
-                                    Get.to(()=> AddCompanyPage());
+                                    Get.to(()=> const AddCompanyPage());
                                   }, iconData: Icons.edit),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: SizedBox(
+                                    width: 60,
+                                    child: AppTextBody(
+                                      Get.find<BaseController>().activeCompany!.objectId ==
+                                          model.objectId
+                                          ? 'Active'
+                                          : '',
+                                      color: AppColors.accent_1,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -87,17 +104,15 @@ class CompanyPage extends GetWidget<CompanyController> {
               color: AppColors.light_1,
               height: 0),
           Container(
-            height: 472,
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Align(
-                    alignment: Alignment.topLeft,
-                    child: AppImage(
-                      'icon-company-logo',
-                      width: 198,
-                      height: 136,
-                    )),
+                const AppImage(
+                  'icon-company-logo',
+                  width: 198,
+                  height: 136,
+                ),
                 const SizedBox(width: 32),
                 Expanded(
                   child: Column(
@@ -140,14 +155,14 @@ class CompanyPage extends GetWidget<CompanyController> {
                           ],
                         ),
                       ),
-                      Row(
-                        children: [
-                          appIcon(Icons.person, color: AppColors.dark_1),
-                          const SizedBox(width: 8),
-                          const Text('Account Owner', style: TextStyles.labelL),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
+                      // Row(
+                      //   children: [
+                      //     appIcon(Icons.person, color: AppColors.dark_1),
+                      //     const SizedBox(width: 8),
+                      //     const Text('Account Owner', style: TextStyles.labelL),
+                      //   ],
+                      // ),
+                      // const SizedBox(height: 24),
                       Row(
                         children: [
                           appIcon(Icons.home_work, color: AppColors.dark_1),
@@ -201,10 +216,9 @@ class CompanyPage extends GetWidget<CompanyController> {
             customData: item,
             index: index,
             title: items[index],
-            // border: Border.all(color: Colors.black, width: 2.0),
+            pressEnabled: false,
+            textStyle: TextStyles.titleS,
             activeColor: AppColors.dark_1,
-            textActiveColor: Colors.white,
-            textColor: Colors.white,
             elevation: 0,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6));
       },
