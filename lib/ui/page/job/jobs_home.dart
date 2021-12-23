@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_button.dart';
+import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_card_expandable.dart';
 import 'package:louzero/common/app_card_tabs.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_icon_button.dart';
 import 'package:louzero/common/app_placeholder.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/ui/page/account/models/company_model.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -22,6 +24,11 @@ class JobsHome extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            AppCard(
+              children: [_dragableRows()],
+              mx: 0,
+              radius: 24,
+            ),
             AppCardExpandable(
               title: const AppHeaderIcon('Somewhere or Other'),
               subtitle: _expandSubTitle(),
@@ -94,19 +101,19 @@ class JobsHome extends StatelessWidget {
     ]);
   }
 
-  Widget _tabBilling() => AppTabPanel(
+  Widget _tabBilling() => const AppTabPanel(
         children: [
           Text('Billing Line Items', style: AppStyles.headerRegular),
           AppPlaceholder(
             title: 'Empty State Illustration',
             subtitle: 'Add some billing line items to start.',
           ),
-          const AppButtons.iconOutline(
+          AppButtons.iconOutline(
             'Add New Line',
             isMenu: true,
           ),
-          const AppDivider(),
-          const AppButtons.iconFlat('Add Note', icon: MdiIcons.note),
+          AppDivider(),
+          AppButtons.iconFlat('Add Note', icon: MdiIcons.note),
         ],
       );
 
@@ -125,8 +132,16 @@ class JobsHome extends StatelessWidget {
       child: _totalTable());
 
   Widget _totalTable() {
-    final columns = ['Description', 'Qty.', 'Price', 'Subtotal'];
-    return DataTable(columns: getColumns(columns), rows: getRows(rowData));
+    final columns = ['', 'Qty.', 'Price', 'Subtotal'];
+    return DataTable(
+        dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected))
+            return AppColors.secondary_99;
+          return Colors.white; // Use the default value.
+        }),
+        columns: getColumns(columns),
+        rows: getRows(rowData));
   }
 
   final rowData = <LineItem>[
@@ -145,9 +160,15 @@ class JobsHome extends StatelessWidget {
   ];
 
   List<DataRow> getRows(List<LineItem> items) {
-    return items.map((LineItem item) {
+    return items.asMap().entries.map((entry) {
+      LineItem item = entry.value;
+      int index = entry.key;
+
       final cells = [item.description, item.count, item.price, item.subtotal];
-      return DataRow(cells: getCells(cells));
+      return DataRow(
+        selected: index % 2 == 0 ? true : false,
+        cells: getCells(cells),
+      );
     }).toList();
   }
 
@@ -161,6 +182,56 @@ class JobsHome extends StatelessWidget {
     return columns.map((String column) {
       return DataColumn(label: Text(column));
     }).toList();
+  }
+
+  Widget _dragableRows() {
+    TextStyle style = AppStyles.labelBold;
+    return ReorderableListView(
+      shrinkWrap: true,
+      children: [
+        ...rowData.asMap().entries.map((entry) {
+          LineItem item = entry.value;
+          int index = entry.key;
+          return ListTile(
+            tileColor: index % 2 == 0 ? AppColors.secondary_99 : Colors.white,
+            leading: Icon(MdiIcons.menu),
+            contentPadding: EdgeInsets.all(0),
+            key: ValueKey(item),
+            title: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    item.description,
+                    style: style,
+                  ),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Text(
+                      item.count.toString(),
+                      style: style,
+                    )),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    item.price.toString(),
+                    style: style,
+                  ),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Text(
+                      item.subtotal.toString(),
+                      style: style,
+                    )),
+              ],
+            ),
+          );
+        }).toList(),
+      ],
+      onReorder: (a, b) {},
+    );
   }
 }
 

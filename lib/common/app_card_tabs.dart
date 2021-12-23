@@ -41,42 +41,31 @@ class AppCardTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: length,
-      child: AppCard(
-          mt: 0,
-          ml: 0,
-          mr: 0,
-          mb: 0,
-          pl: 0,
-          pr: 0,
-          pt: 0,
-          pb: 0,
-          radius: radius,
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: _backgroundTabs.withOpacity(0.5),
-                border: Border(
-                    bottom:
-                        BorderSide(color: _borderBlur, width: _borderWidth)),
-              ),
-              child: TabBar(
-                indicator: UnderlineTabIndicator(
-                    borderSide:
-                        BorderSide(width: _borderWidth, color: _borderFocus),
-                    insets: const EdgeInsets.symmetric(horizontal: 0)),
-                labelColor: _labelColor,
-                indicatorColor: _borderFocus,
-                padding: const EdgeInsets.symmetric(horizontal: 0),
-                tabs: tabNames.map((name) {
-                  return _tab(name);
-                }).toList(),
-              ),
-            ),
-            Expanded(
-                child: TabBarView(
-              children: children,
-            )),
-          ]),
+      child: AppCard(mx: 0, my: 0, px: 0, py: 0, radius: radius, children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: _backgroundTabs.withOpacity(0.5),
+            border: Border(
+                bottom: BorderSide(color: _borderBlur, width: _borderWidth)),
+          ),
+          child: TabBar(
+            indicator: UnderlineTabIndicator(
+                borderSide:
+                    BorderSide(width: _borderWidth, color: _borderFocus),
+                insets: const EdgeInsets.symmetric(horizontal: 0)),
+            labelColor: _labelColor,
+            indicatorColor: _borderFocus,
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            tabs: tabNames.map((name) {
+              return _tab(name);
+            }).toList(),
+          ),
+        ),
+        Expanded(
+            child: TabBarView(
+          children: children,
+        )),
+      ]),
     );
   }
 }
