@@ -80,3 +80,26 @@ class AppCardTabs extends StatelessWidget {
     );
   }
 }
+
+class AppTabPanel extends StatelessWidget {
+  final List<Widget> children;
+  final Color color;
+
+  const AppTabPanel(
+      {Key? key, this.children = const [], this.color = Colors.white})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: color,
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: children,
+        ),
+      ),
+    );
+  }
+}
