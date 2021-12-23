@@ -25,9 +25,12 @@ class JobsHome extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppCard(
-              children: [_dragableRows()],
               mx: 0,
               radius: 24,
+              children: [
+                _dragableRows(),
+                _totalRows(),
+              ],
             ),
             AppCardExpandable(
               title: const AppHeaderIcon('Somewhere or Other'),
@@ -182,6 +185,68 @@ class JobsHome extends StatelessWidget {
     return columns.map((String column) {
       return DataColumn(label: Text(column));
     }).toList();
+  }
+
+  Widget _totalRows() {
+    // line item func
+    Widget _lineItem(
+      String label,
+      double amount, {
+      TextStyle style = AppStyles.labelBold,
+      double borderWidth = 1,
+    }) {
+      return Row(children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            height: 20,
+            color: Colors.amber,
+          ),
+        ),
+        Spacer(),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [Text('$label', style: style)],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [Text('$amount', style: style)],
+                    ),
+                  )
+                ],
+              ),
+              if (borderWidth != 0)
+                AppDivider(
+                  mt: 16,
+                  mb: 16,
+                  size: borderWidth,
+                )
+            ],
+          ),
+        )
+      ]);
+    }
+
+    return Column(
+      children: [
+        SizedBox(
+          height: 16,
+        ),
+        _lineItem('Subtotal', 0.00),
+        _lineItem('Tax', 0.00, borderWidth: 2),
+        _lineItem('Total', 0.00,
+            borderWidth: 0, style: AppStyles.headerRegular),
+      ],
+    );
   }
 
   Widget _dragableRows() {
