@@ -4,6 +4,7 @@ import 'package:louzero/common/app_card_expandable.dart';
 import 'package:louzero/common/app_card_tabs.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_icon_button.dart';
+import 'package:louzero/common/app_placeholder.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -96,35 +97,9 @@ class JobsHome extends StatelessWidget {
   Widget _tabBilling() => AppTabPanel(
         children: [
           Text('Billing Line Items', style: AppStyles.headerRegular),
-          Container(
-            constraints: BoxConstraints(minHeight: 224, maxHeight: 224),
-            width: double.infinity,
-            margin: EdgeInsets.only(top: 16, bottom: 16),
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      'Empty State Illustration',
-                      style: AppStyles.headerRegular
-                          .copyWith(color: AppColors.secondary_80),
-                    ),
-                  ),
-                ),
-                const Text(
-                  'You haven\'t added any Billing Lines yet.',
-                  style: AppStyles.labelRegular,
-                ),
-              ],
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              gradient: const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFFF6F8FA), Colors.white]),
-            ),
+          AppPlaceholder(
+            title: 'Empty State Illustration',
+            subtitle: 'Add some billing line items to start.',
           ),
           const AppButtons.iconOutline(
             'Add New Line',
