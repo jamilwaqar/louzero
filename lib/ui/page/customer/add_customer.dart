@@ -18,7 +18,6 @@ import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
 

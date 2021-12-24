@@ -17,7 +17,6 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
-import '../base_scaffold.dart';
 import 'accept_invite.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -113,7 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
     NavigationController().loading();
     var code = verificationCode();
     var email = _emailController.text;
-    var res = await AuthAPI(auth: Backendless.userService).sendVerificationCode(email, code);
+    var res = await AuthAPI(auth: Backendless.userService)
+        .sendVerificationCode(email, code);
     await Future.delayed(const Duration(seconds: 1));
     NavigationController().loading(isLoading: false);
     if (res is String) {

@@ -6,11 +6,9 @@ import 'package:louzero/common/app_card_expandable.dart';
 import 'package:louzero/common/app_card_tabs.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_icon_button.dart';
-import 'package:louzero/common/app_placeholder.dart';
 import 'package:louzero/common/app_pop_menu.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/customer/customer_data_table.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class JobsHome extends StatelessWidget {

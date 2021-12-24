@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
-import 'package:louzero/ui/widget/widget.dart';
 
 class CustomerLocationPage extends StatefulWidget {
   final CustomerModel customerModel;

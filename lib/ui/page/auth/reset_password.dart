@@ -12,8 +12,6 @@ import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 
-import '../base_scaffold.dart';
-
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({Key? key}) : super(key: key);
 
@@ -83,7 +81,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   void _onResetPassword() async {
     NavigationController().loading();
-    await AuthAPI(auth: Backendless.userService).resetPassword(_emailController.text);
+    await AuthAPI(auth: Backendless.userService)
+        .resetPassword(_emailController.text);
     NavigationController().loading(isLoading: false);
     NavigationController().pop(context);
   }

@@ -14,7 +14,6 @@ import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
-import '../base_scaffold.dart';
 
 class CompletePage extends StatefulWidget {
   final String email;
@@ -111,12 +110,14 @@ class _CompletePageState extends State<CompletePage> {
 
   void _completeSignup() async {
     NavigationController().loading();
-    var res = await AuthAPI(auth: Backendless.userService).signup(widget.email, _passwordController.text);
+    var res = await AuthAPI(auth: Backendless.userService)
+        .signup(widget.email, _passwordController.text);
     if (res is String) {
       NavigationController().loading(isLoading: false);
       WarningMessageDialog.showDialog(context, res);
     } else {
-      var res = await AuthAPI(auth: Backendless.userService).login(widget.email, _passwordController.text);
+      var res = await AuthAPI(auth: Backendless.userService)
+          .login(widget.email, _passwordController.text);
       if (AuthManager.guestUserId != null) {
         await AuthAPI(auth: Backendless.userService).cleanupGuestUser();
       }

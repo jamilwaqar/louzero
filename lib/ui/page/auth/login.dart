@@ -17,7 +17,6 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/accept_invite.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 
 class LoginPage extends StatefulWidget {
@@ -140,8 +139,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onSignIn() async {
     NavigationController().loading();
-    var res =
-        await AuthAPI(auth: Backendless.userService).login(_emailController.text, _passwordController.text);
+    var res = await AuthAPI(auth: Backendless.userService)
+        .login(_emailController.text, _passwordController.text);
     NavigationController().loading(isLoading: false);
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);

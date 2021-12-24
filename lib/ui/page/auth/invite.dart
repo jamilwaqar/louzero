@@ -12,7 +12,6 @@ import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 
@@ -129,7 +128,8 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
 
   void _inviteCustomer() async {
     NavigationController().loading();
-    var res = await AuthAPI(auth: Backendless.userService).sendInvitationCode(widget.email, _code!);
+    var res = await AuthAPI(auth: Backendless.userService)
+        .sendInvitationCode(widget.email, _code!);
     await Future.delayed(const Duration(milliseconds: 500));
     NavigationController().loading(isLoading: false);
     var msg = res is String ? res : 'Sent an invitation with the code!';
