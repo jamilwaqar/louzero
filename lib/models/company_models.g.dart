@@ -8,6 +8,7 @@ part of 'company_models.dart';
 
 CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel()
   ..objectId = json['objectId'] as String?
+  ..avatar = json['avatar'] == null ? null : Uri.parse(json['avatar'] as String)
   ..website = json['website'] as String? ?? ''
   ..name = json['name'] as String? ?? ''
   ..phone = json['phone'] as String? ?? ''
@@ -23,6 +24,7 @@ CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel()
 Map<String, dynamic> _$CompanyModelToJson(CompanyModel instance) =>
     <String, dynamic>{
       'objectId': instance.objectId,
+      'avatar': instance.avatar?.toString(),
       'website': instance.website,
       'name': instance.name,
       'phone': instance.phone,

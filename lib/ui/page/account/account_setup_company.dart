@@ -10,15 +10,12 @@ import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_multiselect.dart';
-import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
 
@@ -226,32 +223,14 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     bool valid = _formKey.currentState!.validate();
     if (!valid) return;
     _formKey.currentState!.save();
-    NavigationController().loading();
-    Map<String, dynamic> data = _companyModel.toJson();
     _addressModel.latitude = _searchAddressModel?.latitude ?? 0;
     _addressModel.longitude = _searchAddressModel?.longitude ?? 0;
-    data['address'] = _addressModel.toJson();
-    var res = await APIManager.save(BLPath.company, data);
-    if (res is Map) {
-      final newModel = CompanyModel.fromMap(res);
-      if (_isEdit) {
-        Get.find<CompanyController>().company = newModel;
-      } else {
-        if (!widget.isFromAccountSetup) {
-          _baseController.companies.add(newModel);
-        }
-      }
-      if (_isActiveCompany) {
-        AuthManager.userModel!.activeCompanyId = res['objectId'];
-        _baseController.activeCompany = newModel;
-        await AuthManager().updateUser();
-      }
-    }
+    await Get.find<CompanyController>().createCompany(_companyModel,
+        addressModel: _addressModel,
+        isEdit: _isEdit,
+        isActiveCompany: _isActiveCompany);
     if (widget.onChange != null) widget.onChange!();
-    NavigationController().loading(isLoading: false);
-    if (_isEdit || !widget.isFromAccountSetup) {
-      Get.back();
-    }
+    if (_isEdit || !widget.isFromAccountSetup) Get.back();
   }
 
   // Validation:

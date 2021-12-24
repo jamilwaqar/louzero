@@ -19,10 +19,10 @@ class CompanyPage extends GetWidget<CompanyController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=>AppBaseScaffold(
-      child: _body(),
-      subheader: controller.company.name,
-    ));
+    return Obx(() => AppBaseScaffold(
+          child: _body(),
+          subheader: controller.company.name,
+        ));
   }
 
   Widget _body() {

@@ -7,6 +7,7 @@ class CompanyModel {
   CompanyModel();
 
   String? objectId;
+  Uri? avatar;
   @JsonKey(defaultValue: '')   String website = '';
   @JsonKey(defaultValue: '')   String name = '';
   @JsonKey(defaultValue: '')   String phone = '';
