@@ -170,6 +170,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
       list =
           List<Map>.from(response).map((e) => InviteModel.fromMap(e)).toList();
     } catch (e) {
+      // ignore: avoid_print
       print(e.toString());
     }
     NavigationController().loading(isLoading: false);

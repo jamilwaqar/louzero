@@ -54,7 +54,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
         return ValueListenableBuilder<bool>(
           valueListenable: AuthManager().loggedIn,
           builder: (ctx, isLoggedIn, child) {
-            double min_height = MediaQuery.of(context).size.height;
+            double minHeight = MediaQuery.of(context).size.height;
             return Stack(
               children: [
                 GestureDetector(
@@ -94,6 +94,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                       body: widget.logoOnly
                           ? Container(
                               color: AppColors.secondary_99,
+                              // ignore: unnecessary_null_in_if_null_operators
                               child: widget.child ?? null,
                             )
                           : NestedScrollView(
@@ -130,24 +131,24 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                       )
                                   ],
                                   onMenuPress: () {
-                                    print('menu!');
                                     _key.currentState?.openDrawer();
                                   },
                                 )
                               ],
                               body: ClipRRect(
-                                borderRadius: BorderRadius.only(
+                                borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(40),
                                   topRight: Radius.circular(40),
                                 ),
                                 child: SingleChildScrollView(
-                                  physics: ClampingScrollPhysics(),
+                                  physics: const ClampingScrollPhysics(),
                                   child: Container(
                                     constraints: BoxConstraints(
-                                      minHeight: min_height,
+                                      minHeight: minHeight,
                                       minWidth: double.infinity,
                                     ),
                                     color: AppColors.secondary_99,
+                                    // ignore: unnecessary_null_in_if_null_operators
                                     child: widget.child ?? null,
                                   ),
                                 ),
@@ -161,7 +162,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                     child: Container(
                       alignment: Alignment.center,
                       color: AppColors.secondary_95.withOpacity(0.6),
-                      child: AppSpinner(
+                      child: const AppSpinner(
                         size: 160,
                         width: 8,
                       ),

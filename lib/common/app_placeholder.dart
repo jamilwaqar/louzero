@@ -14,9 +14,9 @@ class AppPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minHeight: 224, maxHeight: 224),
+      constraints: const BoxConstraints(minHeight: 224, maxHeight: 224),
       width: double.infinity,
-      margin: EdgeInsets.only(top: 16, bottom: 16),
+      margin: const EdgeInsets.only(top: 16, bottom: 16),
       child: Column(
         children: [
           Expanded(

@@ -143,7 +143,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.star_border_outlined,
                 onPressed: () {
                   _pop();
-                  NavigationController().pushTo(context, child: demo());
+                  NavigationController().pushTo(context, child: Demo());
                 },
               ),
             ],

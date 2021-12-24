@@ -24,7 +24,7 @@ class CustomerListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      child: Container(
+      child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: _body(),
       ),

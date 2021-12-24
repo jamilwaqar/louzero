@@ -102,7 +102,7 @@ class JobsHome extends StatelessWidget {
   }
 
   Widget _tabs() {
-    return Container(
+    return SizedBox(
       height: 800,
       child: AppCardTabs(
           radius: 24,
@@ -270,8 +270,13 @@ class TextIcon extends StatelessWidget {
   final IconData icon;
   final bool trail;
   final double size;
-  const TextIcon(this.text, this.icon, {this.trail = false, this.size = 14})
-      : super();
+  const TextIcon(
+    this.text,
+    this.icon, {
+    this.trail = false,
+    this.size = 14,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

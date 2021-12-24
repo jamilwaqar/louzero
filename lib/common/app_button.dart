@@ -84,7 +84,7 @@ class AppButton extends StatelessWidget {
             Text(
               label,
             ),
-            if (isMenu) SizedBox(width: 8),
+            if (isMenu) const SizedBox(width: 8),
             if (isMenu)
               Icon(
                 Icons.arrow_drop_down,
