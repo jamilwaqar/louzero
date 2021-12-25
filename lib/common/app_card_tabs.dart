@@ -41,31 +41,34 @@ class AppCardTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: length,
-      child: AppCard(mx: 0, my: 0, px: 0, py: 0, radius: radius, children: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: _backgroundTabs.withOpacity(0.5),
-            border: Border(
-                bottom: BorderSide(color: _borderBlur, width: _borderWidth)),
+      child: SizedBox(
+        height: height,
+        child: AppCard(mx: 0, my: 0, px: 0, py: 0, radius: radius, children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: _backgroundTabs.withOpacity(0.5),
+              border: Border(
+                  bottom: BorderSide(color: _borderBlur, width: _borderWidth)),
+            ),
+            child: TabBar(
+              indicator: UnderlineTabIndicator(
+                  borderSide:
+                      BorderSide(width: _borderWidth, color: _borderFocus),
+                  insets: const EdgeInsets.symmetric(horizontal: 0)),
+              labelColor: _labelColor,
+              indicatorColor: _borderFocus,
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              tabs: tabNames.map((name) {
+                return _tab(name);
+              }).toList(),
+            ),
           ),
-          child: TabBar(
-            indicator: UnderlineTabIndicator(
-                borderSide:
-                    BorderSide(width: _borderWidth, color: _borderFocus),
-                insets: const EdgeInsets.symmetric(horizontal: 0)),
-            labelColor: _labelColor,
-            indicatorColor: _borderFocus,
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            tabs: tabNames.map((name) {
-              return _tab(name);
-            }).toList(),
-          ),
-        ),
-        Expanded(
-            child: TabBarView(
-          children: children,
-        )),
-      ]),
+          Expanded(
+              child: TabBarView(
+            children: children,
+          )),
+        ]),
+      ),
     );
   }
 }
@@ -80,15 +83,10 @@ class AppTabPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: color,
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
-        ),
-      ),
+    return ListView(
+      padding: const EdgeInsets.only(top: 24, bottom: 3, left: 24, right: 24),
+      physics: const ClampingScrollPhysics(),
+      children: children,
     );
   }
 }
