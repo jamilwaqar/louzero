@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_billing_lines.dart';
-import 'package:louzero/common/app_billing_total.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card_expandable.dart';
-import 'package:louzero/common/app_card_tabs.dart';
-import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_icon_button.dart';
-import 'package:louzero/common/app_pop_menu.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class JobsHome extends StatelessWidget {
@@ -46,6 +40,7 @@ class JobsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
+      hasKeyboard: true,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         child: Column(
@@ -102,18 +97,16 @@ class JobsHome extends StatelessWidget {
   }
 
   Widget _tabs() {
-    return SizedBox(
-      height: 800,
-      child: AppCardTabs(
-          radius: 24,
-          children: [
-            _tabBilling(),
-            _tabDetails(),
-            _tabSchedule(),
-          ],
-          length: 3,
-          tabNames: const ['Job Details', 'Schedule', 'Billing']),
-    );
+    return AppCardTabs(
+        height: 600,
+        radius: 24,
+        children: [
+          _tabBilling(),
+          _tabDetails(),
+          _tabSchedule(),
+        ],
+        length: 3,
+        tabNames: const ['Job Details', 'Schedule', 'Billing']);
   }
 
   Widget _tabSchedule() {
@@ -133,6 +126,7 @@ class JobsHome extends StatelessWidget {
       children: [
         const Text('Billing Line Items', style: AppStyles.headerRegular),
         AppBillingLines(data: rowData),
+        JobAddNewLine(),
         const AppPopMenu(
           button: [
             AppButtons.iconOutline(
