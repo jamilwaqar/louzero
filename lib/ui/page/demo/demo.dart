@@ -1,14 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card.dart';
-import 'package:louzero/common/app_card_tabs.dart';
-import 'package:louzero/common/app_flex_row.dart';
-import 'package:louzero/common/app_input_text.dart';
-import 'package:louzero/common/app_multiselect.dart';
-import 'package:louzero/common/app_pop_menu.dart';
-import 'package:louzero/common/app_spinner.dart';
-import 'package:louzero/common/app_text_body.dart';
-import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -20,16 +11,23 @@ class Demo extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       subheader: 'Demo Components',
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _tabs(),
-            _loadingSpinner(),
-            _multiSelect(),
-            _formInputs(),
-            _buttonsAndMenus(),
-          ],
-        ),
+      child: Column(
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 32, left: 16, right: 16, bottom: 16),
+            child: AppCardTabs(
+              height: 500,
+              length: 3,
+              tabNames: const ['Overview', 'Schedule', 'Billing'],
+              children: tabItems,
+            ),
+          ),
+          _loadingSpinner(),
+          _multiSelect(),
+          _formInputs(),
+          _buttonsAndMenus(),
+        ],
       ),
     );
   }
@@ -50,69 +48,60 @@ class Demo extends StatelessWidget {
 
   // MOCK DATA (TABS)
   final List<Widget> tabItems = [
-    Container(
-      color: AppColors.lightest,
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const AppTextHeader('Basic Info',
-                  alignLeft: true, icon: Icons.airplane_ticket, size: 24),
-              AppFlexRow(
-                flex: const [2, 2],
-                children: const [
-                  AppInputText(
-                    label: 'First',
-                    initial: 'Brad',
-                  ),
-                  AppInputText(
-                    label: 'Last',
-                    initial: 'Smith',
-                  ),
-                  AppInputText(
-                    label: 'Alias',
-                    initial: 'The Closer',
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              AppFlexRow(
-                flex: const [2],
-                children: [
-                  Column(
-                    children: const [
-                      AppTextBody(
-                        'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                        bold: true,
-                        mb: 16,
-                      ),
-                      AppTextBody(
-                        'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                      )
-                    ],
-                  ),
-                  const AppTextBody(
-                    'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                    pl: 8,
-                  ),
-                ],
-              )
-            ],
-          ),
+    AppTabPanel(
+      children: [
+        const AppTextHeader('Basic Info',
+            alignLeft: true, icon: Icons.airplane_ticket, size: 24),
+        AppFlexRow(
+          flex: const [2, 2],
+          children: const [
+            AppInputText(
+              label: 'First',
+              initial: 'Brad',
+            ),
+            AppInputText(
+              label: 'Last',
+              initial: 'Smith',
+            ),
+            AppInputText(
+              label: 'Alias',
+              initial: 'The Closer',
+            ),
+          ],
         ),
-      ),
+        const SizedBox(
+          height: 16,
+        ),
+        AppFlexRow(
+          flex: const [2],
+          children: [
+            Column(
+              children: const [
+                AppTextBody(
+                  'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                  bold: true,
+                  mb: 16,
+                ),
+                AppTextBody(
+                  'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                )
+              ],
+            ),
+            const AppTextBody(
+              'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+              pl: 8,
+            ),
+          ],
+        )
+      ],
     ),
-    Container(
-      color: AppColors.lightest,
-      child: const Icon(Icons.location_pin, size: 150, color: AppColors.orange),
+    AppTabPanel(
+      children: [Icon(Icons.location_pin, size: 150, color: AppColors.orange)],
     ),
-    Container(
-      color: AppColors.lightest,
-      child: const Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange),
+    AppTabPanel(
+      children: [
+        const Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)
+      ],
     ),
   ];
 
@@ -129,13 +118,6 @@ class Demo extends StatelessWidget {
       ),
     );
   }
-
-  Widget _tabs() => AppCardTabs(
-        height: 500,
-        length: 3,
-        tabNames: const ['Overview', 'Schedule', 'Billing'],
-        children: tabItems,
-      );
 
   Widget _loadingSpinner() => AppCard(pb: 48, children: [
         _heading('Loading Spinner', MdiIcons.pirate),
