@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_avatar.dart';
@@ -27,7 +26,6 @@ class SideMenuView extends StatefulWidget {
 }
 
 class _SideMenuViewState extends State<SideMenuView> {
-  final String? _profileImagePath = 'assets/mocks/profile_corey_2.png';
 
   @override
   Widget build(BuildContext context) {

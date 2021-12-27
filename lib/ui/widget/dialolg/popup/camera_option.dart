@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_pickers/image_pickers.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class CameraOption {
   Future<File?> showCameraOptions(BuildContext context) async {
@@ -33,7 +32,6 @@ class CameraOption {
                 CupertinoActionSheetAction(
                   child: Text("Photo Library", style: style),
                   onPressed: () async {
-                    // Get.back();
                     File? file = await _getImage(context);
                     Navigator.pop(context, file);
                   },
@@ -56,13 +54,7 @@ class CameraOption {
       File file = File(medias.first.path!);
       return file;
     } catch (e) {
-      if (!(await Permission.camera.isGranted)) {
-        // openDialogPermission(
-        //   title:
-        //   PermissionDes.Camera,
-        //   context: context,
-        // );
-      }
+      Get.snackbar('Upload image Error!', e.toString());
     }
     return null;
   }

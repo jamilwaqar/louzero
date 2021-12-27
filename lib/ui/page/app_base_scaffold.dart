@@ -1,5 +1,4 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/app_avatar.dart';
