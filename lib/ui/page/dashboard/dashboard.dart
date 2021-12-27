@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
 import 'package:louzero/ui/page/job/jobs_home.dart';
@@ -63,7 +62,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  BaseController _baseController = Get.find();
+  final BaseController _baseController = Get.find();
   @override
   void initState() {
     _baseController.fetchInitialData();

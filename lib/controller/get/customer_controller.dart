@@ -9,7 +9,7 @@ class CustomerController extends GetxController {
   final customerModel = Rx<CustomerModel?>(null);
 
   List<CustomerModel> get customers =>
-      Get.find<BaseController>().customers.value;
+      Get.find<BaseController>().customers;
 
   fetchSiteProfile(String customerId) async {
     CustomerModel? model = customerModelById(customerId);
@@ -40,7 +40,7 @@ class CustomerController extends GetxController {
     int index = models.indexWhere((e) => e.objectId == model.objectId);
     models.removeWhere((e) => e.objectId == model.objectId);
     models.insert(index, model);
-    Get.find<BaseController>().customers.value = models;
+    Get.find<BaseController>().customers = models;
   }
 
   CustomerModel? customerModelById(String customerId) {

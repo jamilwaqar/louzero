@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class AppDivider extends StatelessWidget {

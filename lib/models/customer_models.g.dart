@@ -9,7 +9,6 @@ part of 'customer_models.dart';
 CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
     CustomerModel(
       companyId: json['companyId'] as String,
-      name: json['name'] as String,
       type: json['type'] as String,
       serviceAddress:
           AddressModel.fromJson(json['serviceAddress'] as Map<String, dynamic>),
@@ -39,7 +38,6 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) {
 
   writeNotNull('objectId', instance.objectId);
   writeNotNull('ownerId', instance.ownerId);
-  val['name'] = instance.name;
   val['type'] = instance.type;
   val['parentId'] = instance.parentId;
   val['companyId'] = instance.companyId;

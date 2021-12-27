@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
@@ -46,9 +43,9 @@ class CustomerListPage extends StatelessWidget {
     return Obx(() => ListView.builder(
         padding: const EdgeInsets.only(top: 32),
         shrinkWrap: true,
-        itemCount: _baseController.customers.value.length,
+        itemCount: _baseController.customers.length,
         itemBuilder: (context, index) {
-          CustomerModel model = _baseController.customers.value[index];
+          CustomerModel model = _baseController.customers[index];
           return AppCard(
             mb: 8,
             children: [
@@ -66,12 +63,12 @@ class CustomerListPage extends StatelessWidget {
                       Column(
                         children: [
                           AppTextBody(
-                            model.name,
+                            model.customerContacts.first.fullName,
                             color: AppColors.darkest,
                             bold: true,
                           ),
                           AppTextBody(
-                            model.fullServiceAddress,
+                            model.serviceAddress.fullAddress,
                           )
                         ],
                       ),

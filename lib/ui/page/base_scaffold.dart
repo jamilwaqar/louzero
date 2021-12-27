@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/app_avatar.dart';
@@ -96,7 +95,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                               ],
                               button: const [
                                 AppAvatar(
-                                  path: 'assets/mocks/profile_corey_2.png',
+                                  // path: 'assets/mocks/profile_corey_2.png',
                                   size: 40,
                                   borderColor: AppColors.lightest,
                                 ),

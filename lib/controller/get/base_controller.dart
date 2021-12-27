@@ -9,12 +9,32 @@ import 'package:louzero/models/customer_models.dart';
 
 class BaseController extends GetxController {
 
-  final isUpdating = false.obs;
+  final _isUpdating = false.obs;
+  final _companies = Rx<List<CompanyModel>>([]);
+  final _customers = Rx<List<CustomerModel>>([]);
+  List<CustomerModel> totalCustomers = [];
+  final _siteProfileTemplates = Rx<List<CTSiteProfile>>([]);
+  final _activeCompany = Rx<CompanyModel?>(null);
 
-  final companies = Rx<List<CompanyModel>>([]);
-  final customers = Rx<List<CustomerModel>>([]);
-  final siteProfileTemplates = Rx<List<CTSiteProfile>>([]);
-  final activeCompany = Rx<CompanyModel?>(null);
+  List<CompanyModel> get companies => _companies.value;
+  set companies(List<CompanyModel> value) => _companies.value = value;
+
+  List<CustomerModel> get customers => _customers.value;
+  set customers(List<CustomerModel> value) => _customers.value = value;
+
+  List<CTSiteProfile> get siteProfileTemplates => _siteProfileTemplates.value;
+  set siteProfileTemplates(List<CTSiteProfile> value) => _siteProfileTemplates.value = value;
+
+  CompanyModel? get activeCompany => _activeCompany.value;
+
+  set activeCompany(CompanyModel? value) {
+    _activeCompany.value = value;
+    customers =
+        totalCustomers.where((c) => c.companyId == value!.objectId).toList();
+  }
+
+  bool get isUpdating => _isUpdating.value;
+  set isUpdating(bool value) => _isUpdating.value = value;
 
   fetchInitialData() async {
     if (AuthManager.userModel == null) return;
@@ -29,18 +49,19 @@ class BaseController extends GetxController {
       } catch (e) {
         print(e.toString());
       }
-      companies.value = companyList as List<CompanyModel>;
-      activeCompany.value = companyModel;
+      companies = companyList as List<CompanyModel>;
+      activeCompany = companyModel;
     }
     /// Site Profile Template
     var templates = await _fetchSiteProfileTemplate();
     if (templates is List) {
-      siteProfileTemplates.value = templates as List<CTSiteProfile>;
+      siteProfileTemplates = templates as List<CTSiteProfile>;
     }
     /// Customers
     var customerList = await _fetchCustomers();
     if (customerList is List) {
-      customers.value = customerList as List<CustomerModel>;
+      totalCustomers = customerList as List<CustomerModel>;
+      customers = totalCustomers.where((c) => c.companyId == activeCompany!.objectId).toList();
     }
   }
 

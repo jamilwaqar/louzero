@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class TopLeftButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final Function() onPressed;
   final IconData iconData;
   final double size;
   final Color bgColor;
@@ -12,7 +11,8 @@ class TopLeftButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-        onPressed: () {  },
+        onPressed: onPressed,
+    padding: EdgeInsets.zero,
     child: Container(
       width: size,
       height: size,

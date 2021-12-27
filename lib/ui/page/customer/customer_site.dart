@@ -14,7 +14,6 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
@@ -429,7 +428,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
   Widget _templates() {
     List<CTSiteProfile> profiles = [
-      ..._baseController.siteProfileTemplates.value
+      ..._baseController.siteProfileTemplates
     ];
     profiles.add(_customTemplate);
     List<Widget> itemList = List.generate(
@@ -754,7 +753,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
       if (widget.isTemplate) {
         List<CTSiteProfile> list = [..._siteProfiles, ctProfile];
-        _baseController.siteProfileTemplates.value = list;
+        _baseController.siteProfileTemplates = list;
         WarningMessageDialog.showDialog(context, "Saved site Template!");
       } else {
         List<CTSiteProfile> list = [..._siteProfiles, ctProfile];

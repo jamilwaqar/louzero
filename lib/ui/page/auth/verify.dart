@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_card_center.dart';
@@ -10,7 +9,6 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/complete.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';

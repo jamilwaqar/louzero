@@ -1,5 +1,4 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/app_avatar.dart';
@@ -202,13 +201,14 @@ class AppUserDropdownMenu extends StatelessWidget {
           },
         )
       ],
-      button: const [
+      button: [
         AppAvatar(
-          path: 'assets/mocks/profile_corey_2.png',
+          url: AuthManager.userModel!.avatar,
           size: 40,
+          text: AuthManager.userModel!.initials,
           borderColor: AppColors.lightest,
         ),
-        Icon(Icons.arrow_drop_down, color: AppColors.lightest)
+        const Icon(Icons.arrow_drop_down, color: AppColors.lightest)
       ],
     );
   }

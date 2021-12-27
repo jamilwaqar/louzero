@@ -8,7 +8,6 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/customer/customer_location.dart';
-
 import 'buttons/top_left_button.dart';
 
 class CustomerInfo extends StatelessWidget {
@@ -42,7 +41,7 @@ class CustomerInfo extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(customerModel.name,
+                              Text(customerModel.customerContacts.first.fullName,
                                   style: TextStyles.headLineS
                                       .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),
@@ -55,7 +54,7 @@ class CustomerInfo extends StatelessWidget {
                             children: [
                               Flexible(
                                 flex:4,
-                                child: Text(customerModel.fullServiceAddress,
+                                child: Text(customerModel.serviceAddress.fullAddress,
                                     style: TextStyles.bodyL, overflow: TextOverflow.ellipsis),
                               ),
                               const SizedBox(width: 50),
