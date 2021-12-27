@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:get/get.dart';
-import 'package:image_pickers/image_pickers.dart';
 import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -8,6 +7,7 @@ import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/widget/dialolg/popup/camera_option.dart';
+import 'package:uuid/uuid.dart';
 import 'base_controller.dart';
 
 class CompanyController extends GetxController {
@@ -59,16 +59,18 @@ class CompanyController extends GetxController {
     File? file = await CameraOption().showCameraOptions(Get.context!);
     if (file != null) {
       NavigationController().loading();
-      String? response = await APIManager.uploadFile(file, BLPath.company, company.objectId!);
+      String? response = await APIManager.uploadFile(file, BLPath.company, const Uuid().v4());
       if (response != null) {
         Uri uri = Uri.parse(response);
         company.avatar = uri;
         createOrEditCompany(company, addressModel: company.address!, isEdit: true);
       } else {
-
+        Get.snackbar('Upload image Error', "Something wrong!");
+        NavigationController().loading(isLoading: false);
       }
     } else {
-
+      Get.snackbar('Upload image Error', "Something wrong!");
+      NavigationController().loading(isLoading: false);
     }
   }
 

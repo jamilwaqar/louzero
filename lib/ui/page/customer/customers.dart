@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -66,7 +65,7 @@ class CustomerListPage extends StatelessWidget {
                       Column(
                         children: [
                           AppTextBody(
-                            model.name,
+                            model.customerContacts.first.fullName,
                             color: AppColors.darkest,
                             bold: true,
                           ),

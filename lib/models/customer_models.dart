@@ -7,14 +7,12 @@ part 'customer_models.g.dart';
 class CustomerModel {
   CustomerModel(
       {required this.companyId,
-      required this.name,
       required this.type,
       required this.serviceAddress,
       required this.billingAddress});
 
   @JsonKey(includeIfNull: false) String? objectId;
   @JsonKey(includeIfNull: false) String? ownerId;
-  String name;
   String type;
   String? parentId;
   String companyId;

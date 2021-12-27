@@ -62,7 +62,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  BaseController _baseController = Get.find();
+  final BaseController _baseController = Get.find();
   @override
   void initState() {
     _baseController.fetchInitialData();

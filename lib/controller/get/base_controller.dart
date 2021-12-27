@@ -12,6 +12,7 @@ class BaseController extends GetxController {
   final _isUpdating = false.obs;
   final _companies = Rx<List<CompanyModel>>([]);
   final _customers = Rx<List<CustomerModel>>([]);
+  List<CustomerModel> totalCustomers = [];
   final _siteProfileTemplates = Rx<List<CTSiteProfile>>([]);
   final _activeCompany = Rx<CompanyModel?>(null);
 
@@ -25,7 +26,12 @@ class BaseController extends GetxController {
   set siteProfileTemplates(List<CTSiteProfile> value) => _siteProfileTemplates.value = value;
 
   CompanyModel? get activeCompany => _activeCompany.value;
-  set activeCompany(CompanyModel? value) => _activeCompany.value = value;
+
+  set activeCompany(CompanyModel? value) {
+    _activeCompany.value = value;
+    customers =
+        totalCustomers.where((c) => c.companyId == value!.objectId).toList();
+  }
 
   bool get isUpdating => _isUpdating.value;
   set isUpdating(bool value) => _isUpdating.value = value;
@@ -54,7 +60,8 @@ class BaseController extends GetxController {
     /// Customers
     var customerList = await _fetchCustomers();
     if (customerList is List) {
-      customers = customerList as List<CustomerModel>;
+      totalCustomers = customerList as List<CustomerModel>;
+      customers = totalCustomers.where((c) => c.companyId == activeCompany!.objectId).toList();
     }
   }
 

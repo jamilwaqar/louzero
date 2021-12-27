@@ -8,6 +8,7 @@ import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/models/company_models.dart';
@@ -60,7 +61,7 @@ class CompanyListPage extends GetWidget<CompanyController> {
                     align: CrossAxisAlignment.center,
                     mb: 0,
                     children: [
-                      AppAvatar(url: model.avatar, size: 60),
+                      AppAvatar(url: model.avatar, size: 60, placeHolder: AppPlaceHolder.company,),
                       Column(
                         children: [
                           AppTextBody(
@@ -83,7 +84,10 @@ class CompanyListPage extends GetWidget<CompanyController> {
                       PopupMenuButton(
                           offset: const Offset(0, 40),
                           onSelected: (value) async {
-                            if (value == 1)  {
+                            if (value == 0) {
+                              controller.company = model;
+                              Get.to(()=> const AddCompanyPage());
+                            } else if (value == 1)  {
                               controller.deleteCompany(model.objectId!);
                             }
                           },
@@ -94,6 +98,28 @@ class CompanyListPage extends GetWidget<CompanyController> {
                                   color: AppColors.medium_2, width: 0)),
                           child: const Icon(Icons.more_vert),
                           itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: SizedBox(
+                                width: 100,
+                                height: 60,
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.edit,
+                                      color: AppColors.icon,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text("Edit",
+                                        style: TextStyle(
+                                          color: AppColors.icon,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              value: 0,
+                            ),
                             PopupMenuItem(
                               child: SizedBox(
                                 width: 100,

@@ -11,6 +11,7 @@ import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_multiselect.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'package:louzero/controller/get/base_controller.dart';
@@ -65,7 +66,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _suiteController = TextEditingController();
   final _zipController = TextEditingController();
 
-  late Country _selectCountry ;
+  Country _selectCountry = AppDefaultValue.country;
   late bool _isEdit;
   bool _isActiveCompany = false;
   SearchAddressModel? _searchAddressModel;
@@ -95,17 +96,6 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           .toList();
       _isActiveCompany = _companyModel.objectId == _baseController.activeCompany!.objectId;
     } else {
-      _selectCountry = Country(
-          phoneCode: "1",
-          countryCode: 'US',
-          e164Sc: 1,
-          geographic: true,
-          level: 1,
-          name: 'United States',
-          example: '',
-          displayName: "United States (US) [+1]",
-          displayNameNoCountryCode: "United States (US)",
-          e164Key: "1-US-0");
       _countryController.text = _selectCountry.name;
       _companyModel.industries = _initialIndustries.map((e) => e.value).toList();
     }

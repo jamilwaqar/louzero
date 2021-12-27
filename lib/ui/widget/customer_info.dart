@@ -41,7 +41,7 @@ class CustomerInfo extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(customerModel.name,
+                              Text(customerModel.customerContacts.first.fullName,
                                   style: TextStyles.headLineS
                                       .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),

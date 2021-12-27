@@ -32,7 +32,7 @@ class _CustomerLocationPageState extends State<CustomerLocationPage> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      subheader: widget.customerModel.name,
+      subheader: widget.customerModel.customerContacts.first.fullName,
       child: _body(),
     );
   }

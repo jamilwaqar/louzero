@@ -19,7 +19,7 @@ class CameraOption {
       fontSize: 14,
       color: AppColors.black,
     );
-    await showCupertinoModalPopup(
+    File? file = await showCupertinoModalPopup<File?>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
               actions: <Widget>[
@@ -33,7 +33,7 @@ class CameraOption {
                 CupertinoActionSheetAction(
                   child: Text("Photo Library", style: style),
                   onPressed: () async {
-                    Get.back();
+                    // Get.back();
                     File? file = await _getImage(context);
                     Navigator.pop(context, file);
                   },
@@ -43,11 +43,11 @@ class CameraOption {
                 child: Text("Cancel", style: styleCancel),
                 isDestructiveAction: true,
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
               ),
             ));
-
+    return file;
   }
 
   Future<File?> _getImage(context, {bool isPhoto = true}) async {

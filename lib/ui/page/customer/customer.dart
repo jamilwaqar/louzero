@@ -15,7 +15,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       child: _body(),
-      subheader: controller.customerModel.value!.name,
+      subheader: controller.customerModel.value!.customerContacts.first.fullName,
     );
   }
 
