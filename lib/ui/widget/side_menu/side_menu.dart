@@ -9,6 +9,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/company/companies.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
@@ -185,7 +186,7 @@ class _SideMenuViewState extends State<SideMenuView> {
   Widget _profile() {
     return Column(
       children: [
-        AppAvatar(path: _profileImagePath, size: 96),
+        AppAvatar(url: AuthManager.userModel!.avatar, text: AuthManager.userModel!.initials, size: 96),
         const SizedBox(height: 8),
         const Text('Corey Holton', style: appStyles.header_default),
         const SizedBox(height: 8),

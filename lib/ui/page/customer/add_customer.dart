@@ -69,7 +69,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   bool _sameAsService = true;
   final List<Widget> _customerContactList = [];
 
-  String? _customerType;
+  String? _customerType = AuthManager.userModel!.customerTypes[0];
   final List<List<CTContactType>> _contactTypes = [[]];
   Country? _country;
   SearchAddressModel? _serviceSearchAddressModel;
@@ -79,7 +79,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   @override
   void initState() {
     _customerContactList.add(_customerContact(0));
-    _customerType = AuthManager.userModel!.customerTypes[0];
     super.initState();
   }
 

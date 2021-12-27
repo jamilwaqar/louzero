@@ -1,15 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class AppAvatar extends StatelessWidget {
-  final String? path;
+  final Uri? url;
   final String? text;
   final Color? borderColor;
   final Color? backgroundColor;
   final double size;
+
   const AppAvatar(
       {Key? key,
-      this.path,
+      this.url,
       this.borderColor,
       this.backgroundColor,
       this.text = '',
@@ -29,7 +31,7 @@ class AppAvatar extends StatelessWidget {
           border: Border.all(color: borderColor ?? Colors.transparent),
           borderRadius: BorderRadius.circular(999),
           color: backgroundColor ?? Colors.transparent),
-      child: path == null
+      child: url == null
           ? Text(
               text!,
               style: TextStyle(
@@ -38,12 +40,25 @@ class AppAvatar extends StatelessWidget {
                 fontSize: size / 2.2,
               ),
             )
-          : ClipRRect(
-              borderRadius: BorderRadius.circular(999),
-              child: Image.asset(
-                path!,
+          : CachedNetworkImage(
+          imageUrl: url.toString(),
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
               ),
             ),
+          ),
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          ),
+          errorWidget: (context, url, error) {
+            return Container();
+          }),
     );
   }
 }

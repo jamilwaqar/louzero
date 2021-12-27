@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
+import 'package:image_pickers/image_pickers.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CameraOption {
-  static Future showCameraOptions(BuildContext context) {
+  Future<File?> showCameraOptions(BuildContext context) async {
     var style = const TextStyle(
       fontFamily: "Mulish",
       fontWeight: FontWeight.w500,
@@ -16,20 +19,23 @@ class CameraOption {
       fontSize: 14,
       color: AppColors.black,
     );
-    return showCupertinoModalPopup(
+    await showCupertinoModalPopup(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
               actions: <Widget>[
                 CupertinoActionSheetAction(
                   child: Text("Camera", style: style),
-                  onPressed: () {
-                    Navigator.pop(context, ImageSource.camera);
+                  onPressed: () async {
+                    File? file = await _getImage(context, isPhoto: false);
+                    Navigator.pop(context, file);
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text("Photo Library", style: style),
-                  onPressed: () {
-                    Navigator.pop(context, ImageSource.gallery);
+                  onPressed: () async {
+                    Get.back();
+                    File? file = await _getImage(context);
+                    Navigator.pop(context, file);
                   },
                 ),
               ],
@@ -41,5 +47,23 @@ class CameraOption {
                 },
               ),
             ));
+
+  }
+
+  Future<File?> _getImage(context, {bool isPhoto = true}) async {
+    try {
+      List<Media> medias = await ImagePickers.pickerPaths();
+      File file = File(medias.first.path!);
+      return file;
+    } catch (e) {
+      if (!(await Permission.camera.isGranted)) {
+        // openDialogPermission(
+        //   title:
+        //   PermissionDes.Camera,
+        //   context: context,
+        // );
+      }
+    }
+    return null;
   }
 }

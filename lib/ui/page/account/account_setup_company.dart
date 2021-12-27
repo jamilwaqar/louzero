@@ -225,7 +225,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     _formKey.currentState!.save();
     _addressModel.latitude = _searchAddressModel?.latitude ?? 0;
     _addressModel.longitude = _searchAddressModel?.longitude ?? 0;
-    await Get.find<CompanyController>().createCompany(_companyModel,
+    await Get.find<CompanyController>().createOrEditCompany(_companyModel,
         addressModel: _addressModel,
         isEdit: _isEdit,
         isActiveCompany: _isActiveCompany);

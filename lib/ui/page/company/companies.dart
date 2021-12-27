@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:louzero/common/app_avatar.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_row_flex.dart';
@@ -59,7 +60,7 @@ class CompanyListPage extends GetWidget<CompanyController> {
                     align: CrossAxisAlignment.center,
                     mb: 0,
                     children: [
-                      AppTextBody('#$mockId'),
+                      AppAvatar(url: model.avatar, size: 60),
                       Column(
                         children: [
                           AppTextBody(

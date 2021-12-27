@@ -202,13 +202,14 @@ class AppUserDropdownMenu extends StatelessWidget {
           },
         )
       ],
-      button: const [
+      button: [
         AppAvatar(
-          path: 'assets/mocks/profile_corey_2.png',
+          url: AuthManager.userModel!.avatar,
           size: 40,
+          text: AuthManager.userModel!.initials,
           borderColor: AppColors.lightest,
         ),
-        Icon(Icons.arrow_drop_down, color: AppColors.lightest)
+        const Icon(Icons.arrow_drop_down, color: AppColors.lightest)
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart' hide ItemTags;
@@ -108,10 +109,30 @@ class CompanyPage extends GetWidget<CompanyController> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const AppImage(
-                  'icon-company-logo',
-                  width: 198,
-                  height: 136,
+                Column(
+                  children: [
+                    _logo(),
+                    const SizedBox(height: 6),
+                    CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        child: Container(
+                          width: 200,
+                          height: 32,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.light_3)
+                          ),
+                          child: Text(
+                            'Update Logo',
+                            style: TextStyles.labelM
+                                .copyWith(color: AppColors.dark_3),
+                          ),
+                        ),
+                        onPressed: () {
+                          controller.uploadAvatar();
+                        })
+                  ],
                 ),
                 const SizedBox(width: 32),
                 Expanded(
@@ -196,6 +217,44 @@ class CompanyPage extends GetWidget<CompanyController> {
           )
         ],
       ),
+    );
+  }
+
+  Widget _logo() {
+    Uri? uri = controller.company.avatar;
+    if (uri == null) {
+      return const AppImage(
+        'icon-company-logo',
+        width: 198,
+        height: 136,
+      );
+    }
+    return SizedBox(
+      width: 198,
+      height: 136,
+      child: CachedNetworkImage(
+          imageUrl: uri.toString(),
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          ),
+          errorWidget: (context, url, error) {
+            return const AppImage(
+              'icon-company-logo',
+              width: 198,
+              height: 136,
+            );
+          }),
     );
   }
 
