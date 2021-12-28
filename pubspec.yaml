@@ -13,18 +13,14 @@ dependencies:
     sdk: flutter
   cupertino_icons:
 
-  backendless_sdk:
+  backendless_sdk: ^7.1.8
 
   page_transition:
 
   another_flushbar:
-  image_picker:
-
-  flutter_bloc:
-  bloc:
+  permission_handler:
   dropdown_search:
   equatable:
-  provider:
 
   flutter_switch:
   google_maps_flutter:
@@ -32,6 +28,7 @@ dependencies:
   flutter_svg:
   flutter_verification_code: ^1.1.0
   material_design_icons_flutter: 5.0.5955-rc.1
+  cached_network_image:
   uuid:
   country_picker:
   dio:
@@ -41,17 +38,22 @@ dependencies:
   fl_chart: ^0.40.2
   multi_select_flutter: ^4.0.0
   expandable:
+  flutter_tagging: ^3.0.0
+  flutter_tags: 1.0.0-nullsafety.1
+  image_pickers: ^2.0.0+2
 
 dev_dependencies:
+  flutter_driver:
+    sdk: flutter
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^1.0.0
+  mockito: ^5.0.16
+  test:
+  flutter_lints:
   json_serializable:
   build_runner:
 
 flutter:
-
   uses-material-design: true
 
   assets:
@@ -66,6 +68,18 @@ flutter:
     - assets/icons/menu/3.0x/
 
   fonts:
+    - family: Barlow
+      fonts:
+        - asset: assets/fonts/BarlowCondensed-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/BarlowCondensed-Bold.ttf
+          weight: 700
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700
     - family: Roboto
       fonts:
         - asset: assets/fonts/ROBOTO-BLACK.TTF

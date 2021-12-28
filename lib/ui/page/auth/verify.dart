@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_card_center.dart';
@@ -8,13 +7,18 @@ import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/complete.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
+import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 
 class VerifyPage extends StatefulWidget {
-  const VerifyPage({Key? key}) : super(key: key);
+  final String email;
+  final int code;
+
+  const VerifyPage({required this.email, required this.code, Key? key})
+      : super(key: key);
 
   @override
   _VerifyPageState createState() => _VerifyPageState();
@@ -22,8 +26,6 @@ class VerifyPage extends StatefulWidget {
 
 class _VerifyPageState extends State<VerifyPage> {
   bool _onEditing = true;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
   final styleText = const TextStyle(
     fontSize: 16,
@@ -41,25 +43,22 @@ class _VerifyPageState extends State<VerifyPage> {
     color: AppColors.darkest,
   );
 
+  String? _code;
+
   @override
   void initState() {
-    if (kDebugMode) {
-      _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "73SWhjN3";
-    }
     super.initState();
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
   @override
   build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -68,8 +67,8 @@ class _VerifyPageState extends State<VerifyPage> {
               children: [
                 const AppTextHeader('Verification Code'),
                 const AppTextBody('We sent a verification code to'),
-                const AppTextBody(
-                  'josh.coolman@singlemindconsulting.com',
+                AppTextBody(
+                  widget.email,
                   color: AppColors.dark_3,
                   bold: true,
                 ),
@@ -88,7 +87,7 @@ class _VerifyPageState extends State<VerifyPage> {
                   length: 6,
                   onCompleted: (String value) {
                     setState(() {
-                      // _code = value;
+                      _code = value;
                     });
                   },
                   onEditing: (bool value) {
@@ -126,8 +125,14 @@ class _VerifyPageState extends State<VerifyPage> {
     NavigationController().pop(context);
   }
 
-  void _completeSignup() {
-    Get.to(()=> const CompletePage());
+  void _completeSignup() async {
+    if (_code == null || _code != widget.code.toString()) {
+      var msg =
+          'Sorry, the verification code you entered does not match. Please try again.';
+      WarningMessageDialog.showDialog(context, msg);
+      return;
+    }
+    Get.to(() => CompletePage(widget.email));
   }
 
   void _methodTBD() {}

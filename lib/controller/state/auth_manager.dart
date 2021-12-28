@@ -4,14 +4,17 @@ import 'package:get_storage/get_storage.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/models/user_models.dart';
 
-class AuthStateManager {
-  static final AuthStateManager _singleton = AuthStateManager._internal();
+class AuthManager {
+  static final AuthManager _singleton = AuthManager._internal();
   bool get isAuthUser => GetStorage().read(GSKey.isAuthUser) ?? false;
-  static late UserModel userModel;
-  factory AuthStateManager() {
+
+  static UserModel? userModel;
+  static String? guestUserId;
+  static String? inviteModelId;
+  factory AuthManager() {
     return _singleton;
   }
-  AuthStateManager._internal() {
+  AuthManager._internal() {
     // Initialize
   }
 
@@ -26,8 +29,18 @@ class AuthStateManager {
   static void initUser(BackendlessUser? user) {
     if (user != null) {
       userModel = UserModel.fromJson(Map<String, dynamic>.from(user.properties));
-      userModel.objectId = user.getObjectId();
+      userModel!.objectId = user.getObjectId();
       GetStorage().write(GSKey.isAuthUser, true);
     }
+  }
+
+  Future updateUser() async {
+    BackendlessUser? user = await Backendless.userService.getCurrentUser();
+    if (user == null) return;
+    user.setProperties(
+      {... user.properties, ... userModel!.toJson()}
+    );
+    var res = await Backendless.userService.update(user);
+    return res;
   }
 }

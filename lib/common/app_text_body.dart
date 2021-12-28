@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,12 +45,7 @@ class AppTextBody extends StatelessWidget {
                 Text(
                   text,
                   textAlign: center ? TextAlign.center : TextAlign.left,
-                  style: TextStyle(
-                    fontSize: size,
-                    fontWeight: bold ? FontWeight.bold : FontWeight.w400,
-                    color: color,
-                    fontFamily: 'Roboto',
-                  ),
+                  style: appTextBodyStyle(size: size, bold: bold, color: color),
                 ),
               ],
             ),
@@ -61,4 +54,17 @@ class AppTextBody extends StatelessWidget {
       ),
     );
   }
+}
+
+TextStyle appTextBodyStyle({
+  size = 16.0,
+  bold = false,
+  color = AppColors.darkest,
+}) {
+  return TextStyle(
+    fontSize: size,
+    fontWeight: bold ? FontWeight.bold : FontWeight.w400,
+    color: color,
+    fontFamily: 'Roboto',
+  );
 }

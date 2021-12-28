@@ -1,3 +1,4 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +10,13 @@ import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/common/app_text_link.dart';
-import 'package:louzero/controller/api/auth/auth.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/accept_invite.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
-import 'package:louzero/ui/page/auth/verify.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     if (kDebugMode) {
-      _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "DEmNbdTm";
+      _emailController.text = "josh.webdev@gmail.com";
+      _passwordController.text = "!1QAwsEDrf";
     }
     super.initState();
   }
@@ -48,7 +48,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Column(
         children: [
           const SizedBox(
@@ -105,56 +106,52 @@ class _LoginPageState extends State<LoginPage> {
           AppTextLink(
             "HAVE AN INVITATION CODE?",
             fontWeight: FontWeight.w700,
-            onPressed: _verificationCode,
+            onPressed: () => Get.to(() => const AcceptInvitePage()),
           ),
           Expanded(
               child: Flex(
-            mainAxisAlignment: MainAxisAlignment.end,
-            direction: Axis.vertical,
-            children: [
-              Row(
                 mainAxisAlignment: MainAxisAlignment.end,
+                direction: Axis.vertical,
                 children: [
-                  AppTextLink(
-                    'Accept Invite',
-                    onPressed: _onAcceptInvite,
-                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      AppTextLink(
+                        'Accept Invite',
+                        onPressed: _onAcceptInvite,
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
-          ))
+              ))
         ],
       ),
     );
   }
 
   void _onCreateAccount() {
-    Get.to(()=> const SignUpPage());
+    NavigationController().pushTo(context, child: const SignUpPage());
   }
 
   void _onAcceptInvite() {
-    Get.to(()=>  const AcceptInvitePage());
+    NavigationController().pushTo(context, child: const AcceptInvitePage());
   }
 
   void _onSignIn() async {
     NavigationController().loading();
     var res =
-        await AuthAPI().login(_emailController.text, _passwordController.text);
+    await AuthAPI(auth: Backendless.userService).login(_emailController.text, _passwordController.text);
     NavigationController().loading(isLoading: false);
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);
     } else {
-      AuthStateManager().loggedIn.value = true;
+      AuthManager().loggedIn.value = true;
     }
   }
 
   void _onRememberDevice() {}
   void _onResetPassword() {
-    Get.to(()=> const ResetPasswordPage());
-  }
-
-  void _verificationCode() {
-    Get.to(()=> const VerifyPage());
+    NavigationController().pushTo(context, child: const ResetPasswordPage());
   }
 
   void _onGoogleSignIn() {}

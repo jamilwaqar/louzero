@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
@@ -15,13 +13,12 @@ class AppButton extends StatelessWidget {
     this.primary = true,
     this.wide = false,
     this.textOnly = false,
+    this.alignLeft = false,
     this.color = AppColors.dark_3,
     this.colorText = AppColors.lightest,
+    this.colorIcon,
     this.height = 40,
-    this.mb = 0, // margin bottom
-    this.mt = 0, // margin top
-    this.ml = 0, // margin left
-    this.mr = 0, // margin right
+    this.margin = EdgeInsets.zero,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
@@ -32,14 +29,14 @@ class AppButton extends StatelessWidget {
   final bool wide;
   final bool primary;
   final bool textOnly;
+  final bool alignLeft;
   final Color color;
   final Color colorText;
+  final Color? colorIcon;
   final double radius;
   final double height;
-  final double mt;
-  final double mb;
-  final double ml;
-  final double mr;
+
+  final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
@@ -59,18 +56,19 @@ class AppButton extends StatelessWidget {
 
     return Container(
       height: height,
-      width: wide ? double.infinity : width ?? null,
-      margin: EdgeInsets.only(
-        top: mt,
-        bottom: mb,
-        left: ml,
-        right: mr,
-      ),
+      width: wide ? double.infinity : width,
+      margin: margin,
       child: FloatingActionButton.extended(
+        heroTag: null,
         foregroundColor: fg,
         backgroundColor: bg,
-        heroTag: null,
-        icon: icon != null ? Icon(icon, size: iconSize) : null,
+        icon: icon != null
+            ? Icon(
+          icon,
+          size: iconSize,
+          color: colorIcon,
+        )
+            : null,
         elevation: 0,
         extendedPadding: const EdgeInsetsDirectional.only(
           start: 24,
@@ -81,10 +79,34 @@ class AppButton extends StatelessWidget {
             side: BorderSide(color: bd, width: 1.0),
             borderRadius: BorderRadius.all(Radius.circular(radius))),
         onPressed: onPressed,
-        label: Text(
-          label,
+        label: Row(
+          children: [
+            Text(
+              label,
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class AppBarButtonAdd extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final String? label;
+
+  const AppBarButtonAdd({Key? key, this.onPressed, this.label = 'New'})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppButton(
+      fontSize: 16,
+      label: label!,
+      icon: Icons.add_circle,
+      color: AppColors.secondary_20,
+      colorIcon: AppColors.accent_1,
+      onPressed: onPressed,
     );
   }
 }

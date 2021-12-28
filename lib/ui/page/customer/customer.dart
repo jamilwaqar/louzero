@@ -1,84 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:louzero/bloc/bloc.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
-import 'package:louzero/models/models.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
-import 'package:louzero/ui/widget/widget.dart';
 
-class CustomerProfilePage extends StatefulWidget {
-  final CustomerModel customerModel;
-  final CustomerBloc customerBloc;
-  const CustomerProfilePage(this.customerModel, this.customerBloc, {Key? key})
-      : super(key: key);
-
-  @override
-  _CustomerProfilePageState createState() => _CustomerProfilePageState();
-}
-
-class _CustomerProfilePageState extends State<CustomerProfilePage> {
-  late CustomerModel customerModel;
-  final TextEditingController _companyNameController = TextEditingController();
-  final TextEditingController _parentAccountNameController =
-      TextEditingController();
-
-  @override
-  void initState() {
-    customerModel = widget.customerModel;
-    widget.customerBloc.add(FetchCustomerDetailsEvent(customerModel.objectId!));
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _companyNameController.dispose();
-    _parentAccountNameController.dispose();
-    super.dispose();
-  }
+class CustomerProfilePage extends GetWidget<CustomerController> {
+  const CustomerProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CustomerBloc, CustomerState>(
-      bloc: widget.customerBloc,
-      listener: (context, CustomerState state) {
-        customerModel =
-            widget.customerBloc.customerModelById(customerModel.objectId!) ??
-                customerModel;
-        setState(() {});
-      },
-      child: BlocBuilder<CustomerBloc, CustomerState>(
-          bloc: widget.customerBloc,
-          builder: (context, state) {
-            return BaseScaffold(
-              child: Scaffold(
-                appBar: SubAppBar(
-                  title: customerModel.name,
-                  context: context,
-                  leadingTxt: "Customers",
-                  hasActions: false,
-                ),
-                backgroundColor: Colors.transparent,
-                body: _body(),
-              ),
-            );
-          }),
+    return AppBaseScaffold(
+      child: _body(),
+      subheader: controller.customerModel.value!.customerContacts.first.fullName,
     );
   }
 
   Widget _body() {
     return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         itemCount: 1,
         itemBuilder: (context, index) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CustomerInfo(customerModel),
+              CustomerInfo(controller.customerModel.value!),
               const SizedBox(height: 24),
               _category()
             ],
@@ -88,7 +36,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
 
   Widget _category() {
     List<Widget> itemList = List.generate(CustomerCategory.values.length,
-        (index) => _categoryItem(CustomerCategory.values[index])).toList();
+            (index) => _categoryItem(CustomerCategory.values[index])).toList();
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
@@ -106,7 +54,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
       case CustomerCategory.jobs:
         break;
       case CustomerCategory.siteProfiles:
-        count = customerModel.siteProfiles.length;
+        count = controller.customerModel.value!.siteProfiles.length;
         break;
       case CustomerCategory.contacts:
         break;
@@ -123,8 +71,10 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           case CustomerCategory.jobs:
             break;
           case CustomerCategory.siteProfiles:
-            count = customerModel.siteProfiles.length;
-            Get.to(()=> CustomerSiteProfilePage(widget.customerBloc, customerModel.siteProfiles, customerId: customerModel.objectId));
+            count = controller.customerModel.value!.siteProfiles.length;
+            Get.to(() => CustomerSiteProfilePage(
+                controller.customerModel.value!.siteProfiles,
+                customerId: controller.customerModel.value!.objectId));
             break;
           case CustomerCategory.contacts:
             break;

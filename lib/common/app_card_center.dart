@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_card.dart';
 
@@ -26,8 +25,6 @@ class AppCardCenter extends StatelessWidget {
             padding: EdgeInsets.only(left: _width, right: _width),
             child: AppCard(
               children: [child],
-              px: 24,
-              py: 32,
             ),
           )
         ],

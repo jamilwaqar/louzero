@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class AppDivider extends StatelessWidget {
@@ -10,7 +9,7 @@ class AppDivider extends StatelessWidget {
     this.ml = 0,
     this.mr = 0,
     this.color = AppColors.light_3,
-    this.size = 2,
+    this.size = 1,
   }) : super(key: key);
 
   final double mt;

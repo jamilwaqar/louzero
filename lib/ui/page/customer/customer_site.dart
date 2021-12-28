@@ -4,29 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:louzero/bloc/bloc.dart';
+import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
-import 'package:louzero/ui/page/base_scaffold.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:louzero/ui/widget/widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerSiteProfilePage extends StatefulWidget {
-
   final bool isTemplate;
   final String? customerId;
-  final CustomerBloc customerBloc;
   final List<CTSiteProfile> siteProfiles;
-  const CustomerSiteProfilePage(this.customerBloc, this.siteProfiles,
-      {this.customerId, this.isTemplate = false, Key? key}) : super(key: key);
+  const CustomerSiteProfilePage(this.siteProfiles,
+      {this.customerId, this.isTemplate = false, Key? key})
+      : super(key: key);
 
   @override
-  _CustomerSiteProfilePageState createState() => _CustomerSiteProfilePageState();
+  _CustomerSiteProfilePageState createState() =>
+      _CustomerSiteProfilePageState();
 }
 
 enum ExpandState { expanded, collapsed }
@@ -50,6 +51,8 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   late CTSiteProfile _customTemplate;
   final List<ExpandState> _expandedList = [];
   List<CTSiteProfile> _siteProfiles = [];
+  final BaseController _baseController = Get.find();
+  final CustomerController _controller = Get.find();
 
   @override
   void initState() {
@@ -57,8 +60,10 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     _isTemplate = widget.isTemplate;
     _siteProfiles = widget.siteProfiles;
     _setExpanded(_siteProfiles);
-    _customTemplate = CTSiteProfile(name: 'Custom', customerId: widget.customerId);
-    _showGetStarted = GetStorage().read(GSKey.showGetStartedSiteProfile) ?? true;
+    _customTemplate =
+        CTSiteProfile(name: 'Custom', customerId: widget.customerId);
+    _showGetStarted =
+        GetStorage().read(GSKey.showGetStartedSiteProfile) ?? true;
     super.initState();
   }
 
@@ -76,56 +81,24 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   void _initTextControllers() {
-    _profileItemLabelControllers = List.generate(4, (index) => TextEditingController());
-    _profileItemValueControllers = List.generate(4, (index) => TextEditingController());
-  }
-
-  bool listenWhen(CustomerState preState, CustomerState state) {
-    return true;
+    _profileItemLabelControllers =
+        List.generate(4, (index) => TextEditingController());
+    _profileItemValueControllers =
+        List.generate(4, (index) => TextEditingController());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CustomerBloc, CustomerState>(
-      bloc: widget.customerBloc,
-      listenWhen: listenWhen,
-      listener: (BuildContext context, CustomerState state) {
-
-      },
-      child: BlocBuilder<CustomerBloc, CustomerState>(
-        bloc: widget.customerBloc,
-        builder: (context, state) {
-          return BaseScaffold(
-            child: Scaffold(
-              appBar: SubAppBar(
-                title: _isTemplate ? "Site Profile Templates" : "Site Profile",
-                context: context,
-                leadingTxt: _isTemplate ? "Settings" : "Customer Profile",
-                hasActions: _isAdding,
-                actions: [
-                  if (!_isAdding)
-                  _addNew()
-                ],
-              ),
-              backgroundColor: Colors.transparent,
-              body: _body(),
-            ),
-          );
-        }
-      ),
+    return AppBaseScaffold(
+      subheader: _isTemplate ? 'Settings' : 'Customer Profile',
+      footerEnd: [if (!_isAdding) _addNew()],
+      child: _body(),
     );
   }
 
   Widget _body() {
     if (_isAdding) {
-      return ListView.builder(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return _addProfile();
-        },
-        itemCount: 1,
-      );
+      return _addProfile();
     } else {
       return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
@@ -143,10 +116,8 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
   Widget _addNew() {
     String label = _isTemplate ? "Add Template" : "Add Site Profile";
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: const EdgeInsets.only(right: 32.0),
-      child: CupertinoButton(
+    return AppBarButtonAdd(
+        label: label,
         onPressed: () {
           _initTextControllers();
           setState(() {
@@ -155,29 +126,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
               _isEditing = true;
             }
           });
-        },
-        padding: EdgeInsets.zero,
-        child: Container(
-          height: 40,
-          width: 165,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: AppColors.lightest,
-              border: Border.all(color: AppColors.dark_3),
-              borderRadius: BorderRadius.circular(20)
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              appIcon(Icons.add_circle),
-              const SizedBox(width: 8),
-              Text(label, style: TextStyles.labelL),
-              const SizedBox(width: 16),
-            ],
-          ),
-        ),
-      ),
-    );
+        });
   }
 
   Widget _profileItem(int index) {
@@ -212,9 +161,12 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                             children: [
                               appIcon(Icons.home_work),
                               const SizedBox(width: 8),
-                              Text(profile.name, style: TextStyles.headLineS.copyWith(color: AppColors.dark_2)),
+                              Text(profile.name,
+                                  style: TextStyles.headLineS
+                                      .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),
-                              TopLeftButton(onPressed: () {}, iconData: Icons.edit),
+                              TopLeftButton(
+                                  onPressed: () {}, iconData: Icons.edit),
                             ],
                           ),
                         ],
@@ -224,61 +176,62 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                 ),
               ),
               CupertinoButton(
-                  onPressed: () {
-                    ExpandState newState = isExpanded ? ExpandState.collapsed : ExpandState.expanded;
-                    setState(() {
-                      _expandedList[index] = newState;
-                    });
-                  },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: AppColors.light_4.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(30)
-                    ),
-                    child: SvgPicture.asset(expandCollapse),
-                  ),)
+                onPressed: () {
+                  ExpandState newState =
+                      isExpanded ? ExpandState.collapsed : ExpandState.expanded;
+                  setState(() {
+                    _expandedList[index] = newState;
+                  });
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: AppColors.light_4.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(30)),
+                  child: SvgPicture.asset(expandCollapse),
+                ),
+              )
             ],
           ),
           if (isExpanded)
             ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: profile.profiles.length,
-            itemBuilder: (context, index) {
-              String label = profile.profiles.keys.toList()[index];
-              String? value = profile.profiles[label];
-              return Container(
-                key: Key('$index'),
-                width: double.infinity,
-                height: 48,
-                color: index.isOdd ? _oddItemColor : _evenItemColor,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 56),
-                    Expanded(
-                      child: Text(
-                        label,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: profile.profiles.length,
+              itemBuilder: (context, index) {
+                String label = profile.profiles.keys.toList()[index];
+                String? value = profile.profiles[label];
+                return Container(
+                  key: Key('$index'),
+                  width: double.infinity,
+                  height: 48,
+                  color: index.isOdd ? _oddItemColor : _evenItemColor,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 56),
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: TextStyles.bodyL
+                              .copyWith(color: AppColors.dark_3),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                          child: Text(
+                        value ?? '-- --',
                         style:
                             TextStyles.bodyL.copyWith(color: AppColors.dark_3),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(child: Text(
-                      value ?? '-- --',
-                      style:
-                      TextStyles.bodyL.copyWith(color: AppColors.dark_3),
-                    )),
-
-                    const SizedBox(width: 32),
-                  ],
-                ),
-              );
-            },),
-          if (isExpanded)
-          const SizedBox(height: 24),
+                      )),
+                      const SizedBox(width: 32),
+                    ],
+                  ),
+                );
+              },
+            ),
+          if (isExpanded) const SizedBox(height: 24),
         ],
       ),
     );
@@ -286,7 +239,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
   Widget _addProfile() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24.0),
+      margin: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.light_2, width: 1),
         color: AppColors.lightest,
@@ -307,7 +260,11 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                   children: [
                     appIcon(Icons.home_work),
                     const SizedBox(width: 8),
-                    Expanded(child: Text(_isTemplate ? "Add Template" : "Site Profile", style: TextStyles.titleL.copyWith(color: AppColors.dark_2))),
+                    Expanded(
+                        child: Text(
+                            _isTemplate ? "Add Template" : "Site Profile",
+                            style: TextStyles.titleL
+                                .copyWith(color: AppColors.dark_2))),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
@@ -344,32 +301,39 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (_showGetStarted)
-          _getStarted(),
+          if (_showGetStarted) _getStarted(),
           if (!_isTemplate)
-          Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Select a template below to get started.",
-                  style: TextStyles.bodyL.copyWith(
-                      color: AppColors.darkest,
-                      fontWeight: FontWeight.bold),
-                ),
-                Row(
-                  children: [
-                    Text("Not seeing what you need? Create Site Profile Templates in", style: TextStyles.bodyL.copyWith(color: const Color(0xFF3A3E45)),),
-                    Text(" Settings → Site Profiles.", style: TextStyles.bodyL.copyWith(color: const Color(0xFF3A3E45), fontWeight: FontWeight.bold),),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                _templates(),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Select a template below to get started.",
+                    style: TextStyles.bodyL.copyWith(
+                        color: AppColors.darkest, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Not seeing what you need? Create Site Profile Templates in",
+                        style: TextStyles.bodyL
+                            .copyWith(color: const Color(0xFF3A3E45)),
+                      ),
+                      Text(
+                        " Settings → Site Profiles.",
+                        style: TextStyles.bodyL.copyWith(
+                            color: const Color(0xFF3A3E45),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  _templates(),
+                ],
+              ),
             ),
-          ),
         ],
       );
     }
@@ -377,7 +341,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
 
   Widget _getStarted() {
     return Container(
-          width: double.infinity,
+      width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.light_2, width: 1),
         color: AppColors.light_1,
@@ -392,11 +356,14 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
             children: [
               appIcon(Icons.lightbulb_outline),
               const SizedBox(width: 8),
-              Text('Getting Started', style: TextStyles.headLineS.copyWith(color: AppColors.dark_3)),
+              Text('Getting Started',
+                  style:
+                      TextStyles.headLineS.copyWith(color: AppColors.dark_3)),
             ],
           ),
           const SizedBox(height: 24),
-          Text(_getStartDes, style: TextStyles.bodyM.copyWith(color: AppColors.dark_3)),
+          Text(_getStartDes,
+              style: TextStyles.bodyM.copyWith(color: AppColors.dark_3)),
           const SizedBox(height: 24),
           _notShowMsgWidget(),
           const SizedBox(height: 24),
@@ -407,37 +374,41 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   Widget _notShowMsgWidget() => Container(
-    height: 35,
-    alignment: Alignment.centerLeft,
-    child: CupertinoButton(
-      onPressed: () {
-        _showMsg.value = !_showMsg.value;
-        _showGetStarted = !_showMsg.value;
-        GetStorage().write(GSKey.showGetStartedSiteProfile, _showGetStarted);
-      },
-      padding: EdgeInsets.zero,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Obx(()=> Checkbox(
-              checkColor: Colors.white,
-              value: _showMsg.value,
-              activeColor: AppColors.dark_1,
-              onChanged: (val) {
-                  _showMsg.value = val!;
-              }),),
-          const SizedBox(width: 8),
-          const Text("Don't show this message again.", style: TextStyles.bodyL),
-        ],
-      ),
-    ),
-  );
+        height: 35,
+        alignment: Alignment.centerLeft,
+        child: CupertinoButton(
+          onPressed: () {
+            _showMsg.value = !_showMsg.value;
+            _showGetStarted = !_showMsg.value;
+            GetStorage()
+                .write(GSKey.showGetStartedSiteProfile, _showGetStarted);
+          },
+          padding: EdgeInsets.zero,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Obx(
+                () => Checkbox(
+                    checkColor: Colors.white,
+                    value: _showMsg.value,
+                    activeColor: AppColors.dark_1,
+                    onChanged: (val) {
+                      _showMsg.value = val!;
+                    }),
+              ),
+              const SizedBox(width: 8),
+              const Text("Don't show this message again.",
+                  style: TextStyles.bodyL),
+            ],
+          ),
+        ),
+      );
 
   Widget _gotItButton() {
     return Align(
       alignment: Alignment.centerRight,
       child: CupertinoButton(
-        padding: EdgeInsets.zero,
+          padding: EdgeInsets.zero,
           child: Container(
             width: 83,
             height: 40,
@@ -446,17 +417,22 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
               color: AppColors.dark_1,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text("Got it", style: TextStyles.labelL.copyWith(color: Colors.white),),
+            child: Text(
+              "Got it",
+              style: TextStyles.labelL.copyWith(color: Colors.white),
+            ),
           ),
           onPressed: _gotIt),
     );
   }
 
   Widget _templates() {
-    List<CTSiteProfile>profiles = [... context.read<BaseBloc>().state.siteProfileTemplates];
+    List<CTSiteProfile> profiles = [
+      ..._baseController.siteProfileTemplates
+    ];
     profiles.add(_customTemplate);
-    List<Widget> itemList = List.generate(profiles.length,
-        (index) => _templateItem(profiles[index])).toList();
+    List<Widget> itemList = List.generate(
+        profiles.length, (index) => _templateItem(profiles[index])).toList();
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 3,
@@ -464,7 +440,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       mainAxisSpacing: 17,
       shrinkWrap: true,
       children: itemList,
-      childAspectRatio: 4/3,
+      childAspectRatio: 4 / 3,
     );
   }
 
@@ -480,8 +456,10 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
             String key = template.profiles.keys.toList()[i];
             String? value = template.profiles[key];
             _profileItemLabelControllers.add(TextEditingController(text: key));
-            _profileItemValueControllers.add(TextEditingController(text: value));
+            _profileItemValueControllers
+                .add(TextEditingController(text: value));
           }
+
           /// Add empty one
           _profileItemLabelControllers.add(TextEditingController());
           _profileItemValueControllers.add(TextEditingController());
@@ -499,7 +477,9 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
           color: AppColors.lightest,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Text(template.name, style: TextStyles.titleM.copyWith(color: AppColors.dark_1), textAlign: TextAlign.center),
+        child: Text(template.name,
+            style: TextStyles.titleM.copyWith(color: AppColors.dark_1),
+            textAlign: TextAlign.center),
       ),
     );
   }
@@ -518,7 +498,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   mb: 32,
-                  label: _isTemplate ? "Template Name*" :"Site Profile Name*",
+                  label: _isTemplate ? "Template Name*" : "Site Profile Name*",
                 ),
               ),
               const Flexible(child: SizedBox()),
@@ -549,14 +529,13 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
               Expanded(
                 child: Text(
                   "Label",
-                  style:
-                  TextStyles.bodyL.copyWith(color: AppColors.dark_3),
+                  style: TextStyles.bodyL.copyWith(color: AppColors.dark_3),
                 ),
               ),
-              Expanded(child: Text(
+              Expanded(
+                  child: Text(
                 "Default Value",
-                style:
-                TextStyles.bodyL.copyWith(color: AppColors.dark_3),
+                style: TextStyles.bodyL.copyWith(color: AppColors.dark_3),
               )),
               const SizedBox(width: 56),
             ],
@@ -568,9 +547,15 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             const SizedBox(width: 56),
-            Flexible(child: AppInputText(controller: _addNewLabelController, label: "Add New Label")),
+            Flexible(
+                child: AppInputText(
+                    controller: _addNewLabelController,
+                    label: "Add New Label")),
             const SizedBox(width: 16),
-            Flexible(child: AppInputText(controller: _addNewValueController, label: "Add New Value")),
+            Flexible(
+                child: AppInputText(
+                    controller: _addNewValueController,
+                    label: "Add New Value")),
             const SizedBox(width: 16),
             Padding(
               padding: const EdgeInsets.only(top: 24.0),
@@ -613,7 +598,9 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       child: ReorderableListView(
         shrinkWrap: true,
         children: <Widget>[
-          for (int index = 0; index < _profileItemLabelControllers.length; index++)
+          for (int index = 0;
+              index < _profileItemLabelControllers.length;
+              index++)
             Container(
               key: Key('$index'),
               width: double.infinity,
@@ -622,8 +609,14 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(index == 0 ? 8 : 0),
                     topRight: Radius.circular(index == 0 ? 8 : 0),
-                    bottomLeft: Radius.circular(index == _profileItemLabelControllers.length - 1 ? 8 : 0),
-                    bottomRight: Radius.circular(index == _profileItemLabelControllers.length - 1 ? 8 : 0)),
+                    bottomLeft: Radius.circular(
+                        index == _profileItemLabelControllers.length - 1
+                            ? 8
+                            : 0),
+                    bottomRight: Radius.circular(
+                        index == _profileItemLabelControllers.length - 1
+                            ? 8
+                            : 0)),
                 color: index.isOdd ? _oddItemColor : _evenItemColor,
               ),
               child: Row(
@@ -631,17 +624,19 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                   const SizedBox(width: 16),
                   appIcon(Icons.menu, color: AppColors.medium_2),
                   const SizedBox(width: 16),
-                  Expanded(child: _textField(_profileItemLabelControllers[index])),
+                  Expanded(
+                      child: _textField(_profileItemLabelControllers[index])),
                   const SizedBox(width: 16),
-                  Expanded(child: _textField(_profileItemValueControllers[index])),
+                  Expanded(
+                      child: _textField(_profileItemValueControllers[index])),
                   const SizedBox(width: 32),
                   InkWell(
-                      onTap: () {
-                        _profileItemLabelControllers.removeAt(index);
-                        _profileItemValueControllers.removeAt(index);
-                        setState(() {});
-                      },
-                      child: appIcon(Icons.delete, color: AppColors.medium_2),
+                    onTap: () {
+                      _profileItemLabelControllers.removeAt(index);
+                      _profileItemValueControllers.removeAt(index);
+                      setState(() {});
+                    },
+                    child: appIcon(Icons.delete, color: AppColors.medium_2),
                   ),
                   const SizedBox(width: 32),
                 ],
@@ -653,9 +648,11 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
             if (oldIndex < newIndex) {
               newIndex -= 1;
             }
-            final TextEditingController itemLabel = _profileItemLabelControllers.removeAt(oldIndex);
+            final TextEditingController itemLabel =
+                _profileItemLabelControllers.removeAt(oldIndex);
             _profileItemLabelControllers.insert(newIndex, itemLabel);
-            final TextEditingController itemValue = _profileItemValueControllers.removeAt(oldIndex);
+            final TextEditingController itemValue =
+                _profileItemValueControllers.removeAt(oldIndex);
             _profileItemValueControllers.insert(newIndex, itemValue);
           });
         },
@@ -671,8 +668,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: AppColors.light_3, width: 1),
-        color: Colors.white
-      ),
+          color: Colors.white),
       child: TextFormField(
         controller: controller,
         keyboardAppearance: Brightness.light,
@@ -681,9 +677,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
           border: InputBorder.none,
         ),
         style: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-            color: AppColors.dark_3),
+            fontWeight: FontWeight.w500, fontSize: 16, color: AppColors.dark_3),
       ),
     );
   }
@@ -695,7 +689,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CupertinoButton(
-            padding: EdgeInsets.zero,
+              padding: EdgeInsets.zero,
               child: Container(
                 width: 192,
                 height: 56,
@@ -704,7 +698,10 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                   color: AppColors.dark_1,
                   borderRadius: BorderRadius.circular(28),
                 ),
-                child: Text( _isTemplate ? "Save Template" : "Save Site Profile", style: TextStyles.bodyL.copyWith(color: Colors.white),),
+                child: Text(
+                  _isTemplate ? "Save Template" : "Save Site Profile",
+                  style: TextStyles.bodyL.copyWith(color: Colors.white),
+                ),
               ),
               onPressed: _save),
           const SizedBox(width: 8),
@@ -725,12 +722,15 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   }
 
   void _save() async {
-    CTSiteProfile profile = CTSiteProfile(name: _profileNameController.text, customerId: widget.customerId);
+    CTSiteProfile profile = CTSiteProfile(
+        name: _profileNameController.text, customerId: widget.customerId);
     Map<String, dynamic> profiles = {};
     for (int i = 0; i < _profileItemLabelControllers.length; i++) {
       String label = _profileItemLabelControllers[i].text;
       if (label.isEmpty) continue;
-      profiles[label] = _profileItemValueControllers[i].text.isEmpty ? null : _profileItemValueControllers[i].text;
+      profiles[label] = _profileItemValueControllers[i].text.isEmpty
+          ? null
+          : _profileItemValueControllers[i].text;
     }
     profile.profiles = profiles;
     setState(() {
@@ -752,22 +752,21 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
       CTSiteProfile ctProfile = CTSiteProfile.fromMap(response as Map);
 
       if (widget.isTemplate) {
-        BaseBloc baseBloc = context.read<BaseBloc>();
-        List<CTSiteProfile>list = [..._siteProfiles, ctProfile];
-        baseBloc.add(UpdateSiteTemplateListEvent(list));
+        List<CTSiteProfile> list = [..._siteProfiles, ctProfile];
+        _baseController.siteProfileTemplates = list;
         WarningMessageDialog.showDialog(context, "Saved site Template!");
       } else {
-        List<CTSiteProfile>list = [..._siteProfiles, ctProfile];
-        CustomerModel model = widget.customerBloc.customerModelById(widget.customerId!)!;
+        List<CTSiteProfile> list = [..._siteProfiles, ctProfile];
+        CustomerModel model =
+            _controller.customerModelById(widget.customerId!)!;
         model.siteProfiles = list;
-        widget.customerBloc.add(UpdateCustomerModelEvent(model));
+        _controller.updateCustomerModel(model);
         WarningMessageDialog.showDialog(context, "Saved site profiles!");
       }
       NavigationController().pop(context, delay: 2);
-    } catch(e) {
+    } catch (e) {
       print('save data error: ${e.toString()}');
     }
-
   }
 
   void _gotIt() {

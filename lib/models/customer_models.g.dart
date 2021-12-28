@@ -9,7 +9,6 @@ part of 'customer_models.dart';
 CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
     CustomerModel(
       companyId: json['companyId'] as String,
-      name: json['name'] as String,
       type: json['type'] as String,
       serviceAddress:
           AddressModel.fromJson(json['serviceAddress'] as Map<String, dynamic>),
@@ -39,7 +38,6 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) {
 
   writeNotNull('objectId', instance.objectId);
   writeNotNull('ownerId', instance.ownerId);
-  val['name'] = instance.name;
   val['type'] = instance.type;
   val['parentId'] = instance.parentId;
   val['companyId'] = instance.companyId;
@@ -80,6 +78,7 @@ AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
       state: json['state'] as String,
       zip: json['zip'] as String,
     )
+      ..suite = json['suite'] as String? ?? ''
       ..latitude = (json['latitude'] as num?)?.toDouble() ?? 0.0
       ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0;
 
@@ -88,6 +87,7 @@ Map<String, dynamic> _$AddressModelToJson(AddressModel instance) =>
       'country': instance.country,
       'street': instance.street,
       'city': instance.city,
+      'suite': instance.suite,
       'state': instance.state,
       'zip': instance.zip,
       'latitude': instance.latitude,

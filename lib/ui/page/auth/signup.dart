@@ -1,3 +1,4 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,13 @@ import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/common/app_text_link.dart';
-import 'package:louzero/controller/api/auth/auth.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
+import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_state.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
-import '../base_scaffold.dart';
+import 'accept_invite.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -46,7 +48,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return AppBaseScaffold(
+      logoOnly: true,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -74,16 +77,16 @@ class _SignUpPageState extends State<SignUpPage> {
                   label: 'Your Email',
                   keyboardType: TextInputType.emailAddress,
                 ),
-                AppInputText(
-                  mb: 32,
-                  controller: _passwordController,
-                  label: 'Your Password',
-                  password: true,
-                ),
+                // AppInputText(
+                //   mb: 32,
+                //   controller: _passwordController,
+                //   label: 'Your Password',
+                //   password: true,
+                // ),
                 AppButton(
-                  label: 'Create Account',
+                  label: 'Continue',
                   // icon: Icons.lock,
-                  onPressed: _onCreateAccount,
+                  onPressed: _onSendVerificationCode,
                 ),
               ],
             ),
@@ -93,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
             fontWeight: FontWeight.w700,
             textDecoration: TextDecoration.underline,
             onPressed: () {
-              Get.to(()=> const VerifyPage());
+              Get.to(() => const AcceptInvitePage());
             },
           ),
         ],
@@ -105,16 +108,17 @@ class _SignUpPageState extends State<SignUpPage> {
     NavigationController().pop(context);
   }
 
-  void _onCreateAccount() async {
+  void _onSendVerificationCode() async {
     NavigationController().loading();
-    var res =
-        await AuthAPI().signup(_emailController.text, _passwordController.text);
+    var code = verificationCode();
+    var email = _emailController.text;
+    var res = await AuthAPI(auth: Backendless.userService).sendVerificationCode(email, code);
+    await Future.delayed(const Duration(seconds: 1));
     NavigationController().loading(isLoading: false);
-
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);
     } else {
-      AuthStateManager().loggedIn.value = true;
+      Get.to(() => VerifyPage(email: email, code: code));
     }
   }
 

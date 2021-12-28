@@ -7,14 +7,12 @@ part 'customer_models.g.dart';
 class CustomerModel {
   CustomerModel(
       {required this.companyId,
-      required this.name,
       required this.type,
       required this.serviceAddress,
       required this.billingAddress});
 
   @JsonKey(includeIfNull: false) String? objectId;
   @JsonKey(includeIfNull: false) String? ownerId;
-  String name;
   String type;
   String? parentId;
   String companyId;
@@ -26,8 +24,6 @@ class CustomerModel {
 
   @JsonKey(defaultValue: [])
   List<CTSiteProfile> siteProfiles = [];
-  
-  String get fullServiceAddress => "${serviceAddress.street}, ${serviceAddress.city}, ${serviceAddress.state}";
 
   factory CustomerModel.fromMap(Map map) {
     Map serviceAddress = map.remove('serviceAddress');
@@ -81,6 +77,7 @@ class AddressModel {
   String country;
   String street;
   String city;
+  @JsonKey(defaultValue: '') String suite = '';
   String state;
   String zip;
 
@@ -98,6 +95,7 @@ class AddressModel {
       return null;
     }
   }
+  String get fullAddress =>  "$street, $city, $state";
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);
