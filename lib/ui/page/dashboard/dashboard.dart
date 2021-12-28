@@ -8,7 +8,7 @@ import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
-import 'package:louzero/ui/page/job/jobs_home.dart';
+import 'package:louzero/ui/page/job/jobs.dart';
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
 
@@ -118,7 +118,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       color: AppColors.dark_1,
                       label: 'Search Jobs',
                       onPressed: () {
-                        Get.to(() => const JobsHome());
+                        Get.to(() => const JobListPage(), binding: JobBinding());
                       })
                 ],
               ),

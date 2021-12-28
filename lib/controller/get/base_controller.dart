@@ -6,6 +6,7 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/job_models.dart';
 
 class BaseController extends GetxController {
 
@@ -13,6 +14,7 @@ class BaseController extends GetxController {
   final _companies = Rx<List<CompanyModel>>([]);
   final _customers = Rx<List<CustomerModel>>([]);
   List<CustomerModel> totalCustomers = [];
+  List<JobModel> totalJobs = [];
   final _siteProfileTemplates = Rx<List<CTSiteProfile>>([]);
   final _activeCompany = Rx<CompanyModel?>(null);
 
