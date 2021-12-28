@@ -98,7 +98,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.home_work,
                 onPressed: () {
                   _pop();
-                  Get.to(()=> CompanyListPage(), binding: CompanyBinding());
+                  Get.to(()=> const CompanyListPage(), binding: CompanyBinding());
                 },
               ),
               AppNavButton(
@@ -151,7 +151,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.star_border_outlined,
                 onPressed: () {
                   _pop();
-                  NavigationController().pushTo(context, child: demo());
+                  NavigationController().pushTo(context, child: Demo());
                 },
               ),
             ],
@@ -186,11 +186,11 @@ class _SideMenuViewState extends State<SideMenuView> {
       children: [
         AppAvatar(url: AuthManager.userModel!.avatar, text: AuthManager.userModel!.initials, size: 96),
         const SizedBox(height: 8),
-        const Text('Corey Holton', style: appStyles.header_default),
+        const Text('Corey Holton', style: AppStyles.header_default),
         const SizedBox(height: 8),
         const Text(
           'Patio Pools and Spas',
-          style: appStyles.label_default,
+          style: AppStyles.label_default,
         ),
         const AppDivider(
           mt: 32,

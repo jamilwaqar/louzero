@@ -64,7 +64,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.label, style: appStyles.header_dialog),
+              Text(widget.label, style: AppStyles.header_dialog),
               const AppDivider(color: AppColors.secondary_90, mt: 16, mb: 0)
             ],
           ),
@@ -242,7 +242,7 @@ class SelectTile extends StatelessWidget {
           ),
           title: Transform.translate(
             offset: const Offset(-16, 0),
-            child: Text(item.label, style: appStyles.label_default),
+            child: Text(item.label, style: AppStyles.label_default),
           ),
           onTap: () => onSelectItem(item),
         ),
