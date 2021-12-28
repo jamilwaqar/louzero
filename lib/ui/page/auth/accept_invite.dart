@@ -159,7 +159,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
     List<InviteModel> list = [];
     try {
       var response =
-          await Backendless.data.of(BLPath.invites).find(queryBuilder);
+      await Backendless.data.of(BLPath.invites).find(queryBuilder);
       if (response == null || response.isEmpty) {
         _noInviteModel = true;
         WarningMessageDialog.showDialog(context, "Something wrong!");

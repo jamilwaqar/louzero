@@ -210,23 +210,23 @@ class CustomerInfo extends StatelessWidget {
                                       .copyWith(color: AppColors.dark_3)),
                             ),
                             if (fromJob)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                const SizedBox(height: 16),
-                                const Divider(
-                                    thickness: 2, color: AppColors.light_1, height: 0),
-                                const SizedBox(height: 16,),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    _bottomButton("Site Profile", Icons.home_work, () {}),
-                                    const SizedBox(width: 8,),
-                                    _bottomButton("Notes", Icons.note_sharp, () {}),
-                                  ],
-                                ),
-                              ],
-                            ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  const SizedBox(height: 16),
+                                  const Divider(
+                                      thickness: 2, color: AppColors.light_1, height: 0),
+                                  const SizedBox(height: 16,),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _bottomButton("Site Profile", Icons.home_work, () {}),
+                                      const SizedBox(width: 8,),
+                                      _bottomButton("Notes", Icons.note_sharp, () {}),
+                                    ],
+                                  ),
+                                ],
+                              ),
                           ],
                         ),
                       ),

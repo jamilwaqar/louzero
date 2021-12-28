@@ -502,6 +502,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               onPressed: _save),
           const SizedBox(width: 8),
           CupertinoButton(
+              padding: EdgeInsets.zero,
               child: Container(
                 width: 125,
                 height: 56,

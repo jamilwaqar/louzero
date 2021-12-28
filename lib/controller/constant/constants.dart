@@ -1,5 +1,6 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/job_models.dart';
 
 abstract class Constant {
   static const String imgPrefixPath = 'assets/icons';
@@ -20,6 +21,7 @@ abstract class AppDefaultValue {
 }
 
 CustomerModel? tempCustomerModel;
+List<JobModel>? tempJobModels;
 /// Backendless Data Paths
 abstract class BLPath {
   static const String user = "Users";

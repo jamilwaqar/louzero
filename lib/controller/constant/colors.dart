@@ -35,7 +35,7 @@ abstract class AppColors {
   static const Color black = Colors.black;
 }
 
-abstract class appStyles {
+abstract class AppStyles {
   static const header_small = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 16,

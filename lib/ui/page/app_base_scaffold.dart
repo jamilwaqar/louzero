@@ -108,7 +108,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                   footerStart: [
                                     if (widget.subheader != null)
                                       Text(widget.subheader!,
-                                          style: appStyles.header_appbar),
+                                          style: AppStyles.header_appbar),
                                     if (widget.footerStart != null)
                                       ...widget.footerStart!,
                                   ],
@@ -134,13 +134,13 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                 )
                               ],
                               body: ClipRRect(
-                                borderRadius: BorderRadius.only(
+                                borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(40),
                                   topRight: Radius.circular(40),
                                 ),
                                 child: Container(
                                   color: AppColors.secondary_99,
-                                  child: widget.child ?? null,
+                                  child: widget.child,
                                 ),
                               ),
                             ),
@@ -152,7 +152,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                     child: Container(
                       alignment: Alignment.center,
                       color: AppColors.secondary_95.withOpacity(0.6),
-                      child: AppSpinner(
+                      child: const AppSpinner(
                         size: 160,
                         width: 8,
                       ),

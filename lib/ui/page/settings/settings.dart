@@ -17,7 +17,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController =
-      TextEditingController();
+  TextEditingController();
   final BaseController _baseController = Get.find();
 
   @override

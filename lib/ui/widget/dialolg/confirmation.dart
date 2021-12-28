@@ -19,6 +19,7 @@ class ConfirmationDialog {
             ),
             actions: <Widget>[
               CupertinoButton(
+                  padding: EdgeInsets.zero,
                   child: Text(
                     cancelTitle,
                     style: const TextStyle(
@@ -30,6 +31,7 @@ class ConfirmationDialog {
                     Navigator.pop(context, false);
                   }),
               CupertinoButton(
+                  padding: EdgeInsets.zero,
                   child: Text(
                       confirmTitle,
                       style: const TextStyle(

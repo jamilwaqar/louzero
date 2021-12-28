@@ -36,7 +36,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
 
   Widget _category() {
     List<Widget> itemList = List.generate(CustomerCategory.values.length,
-        (index) => _categoryItem(CustomerCategory.values[index])).toList();
+            (index) => _categoryItem(CustomerCategory.values[index])).toList();
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,

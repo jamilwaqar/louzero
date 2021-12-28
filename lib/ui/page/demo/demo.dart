@@ -13,8 +13,8 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class demo extends StatelessWidget {
-  demo({Key? key}) : super(key: key);
+class Demo extends StatelessWidget {
+  Demo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class demo extends StatelessWidget {
   }
 
   // MOCK DATA (MULTISELECT)
-  List<SelectItem> selectItems = [
+  final List<SelectItem> selectItems = const [
     SelectItem(id: '1', value: '', label: 'Cheese'),
     SelectItem(id: '2', value: '', label: 'Mushrooms'),
     SelectItem(id: '3', value: '', label: 'Jalepenos'),
@@ -52,67 +52,65 @@ class demo extends StatelessWidget {
   final List<Widget> tabItems = [
     Container(
       color: AppColors.lightest,
-      child: Container(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              AppTextHeader('Basic Info',
-                  alignLeft: true, icon: Icons.airplane_ticket, size: 24),
-              AppFlexRow(
-                flex: [2, 2],
-                children: [
-                  AppInputText(
-                    label: 'First',
-                    initial: 'Brad',
-                  ),
-                  AppInputText(
-                    label: 'Last',
-                    initial: 'Smith',
-                  ),
-                  AppInputText(
-                    label: 'Alias',
-                    initial: 'The Closer',
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              AppFlexRow(
-                flex: [2],
-                children: [
-                  Column(
-                    children: [
-                      AppTextBody(
-                        'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                        bold: true,
-                        mb: 16,
-                      ),
-                      AppTextBody(
-                        'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                      )
-                    ],
-                  ),
-                  AppTextBody(
-                    'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                    pl: 8,
-                  ),
-                ],
-              )
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const AppTextHeader('Basic Info',
+                alignLeft: true, icon: Icons.airplane_ticket, size: 24),
+            AppFlexRow(
+              flex: const [2, 2],
+              children: const [
+                AppInputText(
+                  label: 'First',
+                  initial: 'Brad',
+                ),
+                AppInputText(
+                  label: 'Last',
+                  initial: 'Smith',
+                ),
+                AppInputText(
+                  label: 'Alias',
+                  initial: 'The Closer',
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            AppFlexRow(
+              flex: const [2],
+              children: [
+                Column(
+                  children: const [
+                    AppTextBody(
+                      'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                      bold: true,
+                      mb: 16,
+                    ),
+                    AppTextBody(
+                      'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                    )
+                  ],
+                ),
+                const AppTextBody(
+                  'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                  pl: 8,
+                ),
+              ],
+            )
+          ],
         ),
       ),
     ),
     Container(
       color: AppColors.lightest,
-      child: Icon(Icons.location_pin, size: 150, color: AppColors.orange),
+      child: const Icon(Icons.location_pin, size: 150, color: AppColors.orange),
     ),
     Container(
       color: AppColors.lightest,
-      child: Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange),
+      child: const Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange),
     ),
   ];
 
@@ -133,7 +131,7 @@ class demo extends StatelessWidget {
   Widget _tabs() => AppCardTabs(
         height: 500,
         length: 3,
-        tabNames: ['Overview', 'Schedule', 'Billing'],
+        tabNames: const ['Overview', 'Schedule', 'Billing'],
         children: tabItems,
       );
 
@@ -152,22 +150,22 @@ class demo extends StatelessWidget {
   Widget _formInputs() => AppCard(children: [
         _heading('Form Inputs', Icons.forum_rounded),
         AppFlexRow(
-          children: [
+          children: const [
             AppInputText(label: 'First'),
             AppInputText(label: 'Last'),
             AppInputText(label: 'Nickname'),
           ],
         ),
         AppFlexRow(
-          flex: [4, 1],
-          children: [
+          flex: const [4, 1],
+          children: const [
             AppInputText(label: 'Address'),
             AppInputText(label: 'Suite'),
           ],
         ),
         AppFlexRow(
           children: [
-            AppInputText(label: 'Country'),
+            const AppInputText(label: 'Country'),
             AppMultiSelect(
               label: 'Toppings',
               items: selectItems,
@@ -175,19 +173,19 @@ class demo extends StatelessWidget {
           ],
         ),
         AppFlexRow(
-          flex: [2, 3],
-          children: [
+          flex: const [2, 3],
+          children: const [
             AppInputText(label: 'Alias'),
             AppInputText(label: 'Planet of Origin'),
           ],
         ),
         AppFlexRow(
-          flex: [3],
+          flex: const [3],
           children: [
             Container(),
-            AppButton(
+            const AppButton(
                 label: 'Cancel', primary: false, color: AppColors.secondary_60),
-            AppButton(label: 'Submit', color: AppColors.orange),
+            const AppButton(label: 'Submit', color: AppColors.orange),
           ],
         )
       ]);

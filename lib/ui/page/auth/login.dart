@@ -110,20 +110,20 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Expanded(
               child: Flex(
-            mainAxisAlignment: MainAxisAlignment.end,
-            direction: Axis.vertical,
-            children: [
-              Row(
                 mainAxisAlignment: MainAxisAlignment.end,
+                direction: Axis.vertical,
                 children: [
-                  AppTextLink(
-                    'Accept Invite',
-                    onPressed: _onAcceptInvite,
-                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      AppTextLink(
+                        'Accept Invite',
+                        onPressed: _onAcceptInvite,
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
-          ))
+              ))
         ],
       ),
     );
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
   void _onSignIn() async {
     NavigationController().loading();
     var res =
-        await AuthAPI(auth: Backendless.userService).login(_emailController.text, _passwordController.text);
+    await AuthAPI(auth: Backendless.userService).login(_emailController.text, _passwordController.text);
     NavigationController().loading(isLoading: false);
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);

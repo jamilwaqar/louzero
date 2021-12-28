@@ -17,7 +17,6 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
-import '../base_scaffold.dart';
 import 'accept_invite.dart';
 
 class SignUpPage extends StatefulWidget {

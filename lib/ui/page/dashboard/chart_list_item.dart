@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class chartListItem {
+class ChartListItem {
   final Color color;
   final String title;
   final double amount;
   final String? subtitle;
-  chartListItem({
+  ChartListItem({
     this.title = '',
     this.amount = 0,
     this.subtitle,

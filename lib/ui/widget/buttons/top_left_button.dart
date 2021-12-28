@@ -12,16 +12,16 @@ class TopLeftButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
         onPressed: onPressed,
-    padding: EdgeInsets.zero,
-    child: Container(
-      width: size,
-      height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(size/2.0)
-      ),
-      child: Icon(iconData, color: AppColors.medium_2, size: 16,),
-    ));
+        padding: EdgeInsets.zero,
+        child: Container(
+          width: size,
+          height: size,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(size/2.0)
+          ),
+          child: Icon(iconData, color: AppColors.medium_2, size: 16,),
+        ));
   }
 }

@@ -12,7 +12,7 @@ class AppCardChartPie extends StatelessWidget {
       : super(key: key);
 
   final String title;
-  final List<chartListItem> items;
+  final List<ChartListItem> items;
   final List<Widget>? footer;
 
   @override
@@ -35,14 +35,14 @@ class AppCardChartPie extends StatelessWidget {
         ),
         AppRowFlex(
           mb: 16,
-          flex: [1, 1],
+          flex: const [1, 1],
           children: [
             Chart(
               items: items,
             ),
             ListView.builder(
               itemCount: items.length,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 var item = items[index];
                 return Row(
@@ -52,7 +52,7 @@ class AppCardChartPie extends StatelessWidget {
                       color: item.color,
                       size: 10,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
                       item.title,
                     )

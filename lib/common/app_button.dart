@@ -64,10 +64,10 @@ class AppButton extends StatelessWidget {
         backgroundColor: bg,
         icon: icon != null
             ? Icon(
-                icon,
-                size: iconSize,
-                color: colorIcon,
-              )
+          icon,
+          size: iconSize,
+          color: colorIcon,
+        )
             : null,
         elevation: 0,
         extendedPadding: const EdgeInsetsDirectional.only(

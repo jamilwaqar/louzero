@@ -90,29 +90,29 @@ class CustomerListPage extends StatelessWidget {
                                   color: AppColors.medium_2, width: 0)),
                           child: const Icon(Icons.more_vert),
                           itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  child: SizedBox(
-                                    width: 100,
-                                    height: 60,
-                                    child: Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.supervised_user_circle,
-                                          color: AppColors.icon,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text("Invite",
-                                            style: TextStyle(
-                                              color: AppColors.icon,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )),
-                                      ],
+                            PopupMenuItem(
+                              child: SizedBox(
+                                width: 100,
+                                height: 60,
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.supervised_user_circle,
+                                      color: AppColors.icon,
                                     ),
-                                  ),
-                                  value: 1,
+                                    SizedBox(width: 10),
+                                    Text("Invite",
+                                        style: TextStyle(
+                                          color: AppColors.icon,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16,
+                                        )),
+                                  ],
                                 ),
-                              ]),
+                              ),
+                              value: 1,
+                            ),
+                          ]),
                       // Icon(Icons.more_vert)
                     ]),
               )
