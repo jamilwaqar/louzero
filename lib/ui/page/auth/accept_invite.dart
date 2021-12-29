@@ -1,6 +1,5 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_card_center.dart';
@@ -160,7 +159,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
     List<InviteModel> list = [];
     try {
       var response =
-          await Backendless.data.of(BLPath.invites).find(queryBuilder);
+      await Backendless.data.of(BLPath.invites).find(queryBuilder);
       if (response == null || response.isEmpty) {
         _noInviteModel = true;
         WarningMessageDialog.showDialog(context, "Something wrong!");

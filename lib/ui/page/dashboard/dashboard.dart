@@ -8,33 +8,33 @@ import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
-import 'package:louzero/ui/page/job/jobs_home.dart';
+import 'package:louzero/ui/page/job/jobs.dart';
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key? key}) : super(key: key);
 
-  final List<chartListItem> chartDataJobs = [
-    chartListItem(
+  final List<ChartListItem> chartDataJobs = [
+    ChartListItem(
       title: 'Booked Solid',
       color: AppColors.dark_2,
       subtitle: '(27)',
       amount: 10,
     ),
-    chartListItem(
+    ChartListItem(
       title: 'Estimate',
       color: AppColors.medium_3,
       subtitle: '(20)',
       amount: 20,
     ),
-    chartListItem(
+    ChartListItem(
       title: 'Invoiced',
       color: AppColors.light_3,
       subtitle: '(7 this month)',
       amount: 10,
     ),
-    chartListItem(
+    ChartListItem(
       title: 'Canceled',
       color: AppColors.light_3.withOpacity(0.5),
       subtitle: '(2 this month)',
@@ -42,14 +42,14 @@ class DashboardPage extends StatefulWidget {
     )
   ];
 
-  final List<chartListItem> chartDataCustomer = [
-    chartListItem(
+  final List<ChartListItem> chartDataCustomer = [
+    ChartListItem(
       title: 'Total Customers',
       color: AppColors.dark_2,
       subtitle: '(172)',
       amount: 30,
     ),
-    chartListItem(
+    ChartListItem(
       title: 'Active this Month',
       color: AppColors.medium_3,
       subtitle: '(34)',
@@ -80,7 +80,7 @@ class _DashboardPageState extends State<DashboardPage> {
         child: SingleChildScrollView(
           child: Padding(
             padding:
-                EdgeInsets.only(left: margin, right: margin, top: margin * 2),
+            EdgeInsets.only(left: margin, right: margin, top: margin * 2),
             child: _body(),
           ),
         ));
@@ -118,7 +118,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       color: AppColors.dark_1,
                       label: 'Search Jobs',
                       onPressed: () {
-                        Get.to(() => JobsHome());
+                        Get.to(() => const JobListPage(), binding: JobBinding());
                       })
                 ],
               ),

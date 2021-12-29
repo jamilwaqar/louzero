@@ -1,19 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card.dart';
-import 'package:louzero/common/app_row_flex.dart';
-import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/models/models.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/invite.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
-import 'package:louzero/ui/page/customer/customer.dart';
+import 'package:louzero/common/common.dart';
+
+import 'customer.dart';
 
 class CustomerListPage extends StatelessWidget {
   CustomerListPage({Key? key}) : super(key: key);
@@ -44,10 +42,10 @@ class CustomerListPage extends StatelessWidget {
   Widget _body() {
     return Obx(() => ListView.builder(
         padding: const EdgeInsets.only(top: 32),
-        shrinkWrap: false,
-        itemCount: _baseController.customers.value.length,
+        shrinkWrap: true,
+        itemCount: _baseController.customers.length,
         itemBuilder: (context, index) {
-          CustomerModel model = _baseController.customers.value[index];
+          CustomerModel model = _baseController.customers[index];
           return AppCard(
             mb: 8,
             children: [
@@ -65,12 +63,12 @@ class CustomerListPage extends StatelessWidget {
                       Column(
                         children: [
                           AppTextBody(
-                            model.name,
+                            model.customerContacts.first.fullName,
                             color: AppColors.darkest,
                             bold: true,
                           ),
                           AppTextBody(
-                            model.fullServiceAddress,
+                            model.serviceAddress.fullAddress,
                           )
                         ],
                       ),

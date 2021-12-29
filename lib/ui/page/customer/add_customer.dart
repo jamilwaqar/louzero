@@ -19,7 +19,6 @@ import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
-import 'package:uuid/uuid.dart';
 
 class AddCustomerPage extends StatefulWidget {
   const AddCustomerPage({Key? key}) : super(key: key);
@@ -34,7 +33,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       TextEditingController();
 
   final TextEditingController _serviceCountryController =
-      TextEditingController();
+      TextEditingController(text: AppDefaultValue.country.name);
   final TextEditingController _serviceStreetController =
       TextEditingController();
   final TextEditingController _serviceCityController = TextEditingController();
@@ -42,7 +41,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   final TextEditingController _serviceStateController = TextEditingController();
   final TextEditingController _serviceZipController = TextEditingController();
 
-  final TextEditingController _billCountryController = TextEditingController();
+  final TextEditingController _billCountryController = TextEditingController(text: AppDefaultValue.country.name);
   final TextEditingController _billStreetController = TextEditingController();
   final TextEditingController _billCityController = TextEditingController();
   final TextEditingController _billAtController = TextEditingController();
@@ -68,10 +67,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   bool _subAccount = false;
   bool _sameAsService = true;
   final List<Widget> _customerContactList = [];
-
-  String? _customerType;
+  String _companyName = Get.find<BaseController>().activeCompany!.name;
+  String? _customerType = AuthManager.userModel!.customerTypes[0];
   final List<List<CTContactType>> _contactTypes = [[]];
-  Country? _country;
+  Country _country = AppDefaultValue.country;
   SearchAddressModel? _serviceSearchAddressModel;
   SearchAddressModel? _billSearchAddressModel;
   final BaseController _baseController = Get.find();
@@ -79,7 +78,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   @override
   void initState() {
     _customerContactList.add(_customerContact(0));
-    _customerType = AuthManager.userModel!.customerTypes[0];
     super.initState();
   }
 
@@ -149,9 +147,16 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           Row(
             children: [
               Flexible(
-                  child: LZTextField(
-                      controller: _companyNameController,
-                      label: "Company or Account Name")),
+                  child: AppDropDown(
+                    label: "Company*",
+                    itemList: _baseController.companies.map((e) => e.name).toList(),
+                    initValue: _companyName,
+                    onChanged: (value) {
+                      setState(() {
+                        _companyName = value!;
+                      });
+                    },
+                  )),
               const SizedBox(width: 32),
               Flexible(
                   child: AppDropDown(
@@ -259,7 +264,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   label: "Street Address",
                   onChanged: (val) {
                     _baseController.searchAddress(
-                        val, _country?.countryCode ?? 'US');
+                        val, _country.countryCode);
                   },
                 ),
                 AppInputText(
@@ -500,6 +505,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               onPressed: _save),
           const SizedBox(width: 8),
           CupertinoButton(
+              padding: EdgeInsets.zero,
               child: Container(
                 width: 125,
                 height: 56,
@@ -555,8 +561,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     }
 
     CustomerModel model = CustomerModel(
-        companyId: const Uuid().v4(),
-        name: _companyNameController.text,
+        companyId: _baseController.companies.firstWhere((e) => e.name == _companyName).objectId!,
         type: _customerType!,
         serviceAddress: serviceAddress,
         billingAddress: billingAddress);
@@ -572,11 +577,19 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       dynamic response = await Backendless.data.of(BLPath.customer).save(data);
       WarningMessageDialog.showDialog(context, "Saved Customer!");
       CustomerModel newModel = CustomerModel.fromMap(response);
+      if (newModel.companyId == _baseController.activeCompany!.objectId) {
+        List<CustomerModel> newList = [
+          ..._baseController.customers,
+          newModel
+        ];
+        _baseController.customers = newList;
+      }
       List<CustomerModel> newList = [
-        ..._baseController.customers.value,
+        ..._baseController.totalCustomers,
         newModel
       ];
-      _baseController.customers.value = newList;
+      _baseController.totalCustomers = newList;
+
       NavigationController().pop(context, delay: 2);
     } catch (e) {
       print('save data error: ${e.toString()}');

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/base_controller.dart';
@@ -18,7 +17,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _parentAccountNameController =
-      TextEditingController();
+  TextEditingController();
   final BaseController _baseController = Get.find();
 
   @override
@@ -64,11 +63,11 @@ class _SettingsPageState extends State<SettingsPage> {
           DashboardCell(
             title: "Site Profile Templates",
             description: "Description...",
-            count: _baseController.siteProfileTemplates.value.length,
+            count: _baseController.siteProfileTemplates.length,
             buttonTitleLeft: "",
             buttonTitleRight: "",
             onPressed: () => Get.to(()=> CustomerSiteProfilePage(
-                _baseController.siteProfileTemplates.value,
+                _baseController.siteProfileTemplates,
                 isTemplate: true), binding: CustomerBinding()),
             onPressedLeft: () {},
             onPressedRight: () {},

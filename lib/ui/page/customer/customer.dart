@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
@@ -15,7 +14,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       child: _body(),
-      subheader: controller.customerModel.value!.name,
+      subheader: controller.customerModel.value!.customerContacts.first.fullName,
     );
   }
 
@@ -31,7 +30,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
 
   Widget _category() {
     List<Widget> itemList = List.generate(CustomerCategory.values.length,
-        (index) => _categoryItem(CustomerCategory.values[index])).toList();
+            (index) => _categoryItem(CustomerCategory.values[index])).toList();
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,

@@ -12,7 +12,7 @@ class AppCardChartPie extends StatelessWidget {
       : super(key: key);
 
   final String title;
-  final List<chartListItem> items;
+  final List<ChartListItem> items;
   final List<Widget>? footer;
 
   @override

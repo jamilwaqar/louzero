@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_avatar.dart';
-import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_icon_button.dart';
-import 'package:louzero/common/app_nav_button.dart';
+import 'package:get/get.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
+import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
+import 'package:louzero/ui/page/company/companies.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:louzero/ui/page/demo/demo.dart';
@@ -23,8 +23,6 @@ class SideMenuView extends StatefulWidget {
 }
 
 class _SideMenuViewState extends State<SideMenuView> {
-  final String? _profileImagePath = 'assets/mocks/profile_corey_2.png';
-
   @override
   Widget build(BuildContext context) {
     // _sideMenuKey.currentState?.open();
@@ -88,8 +86,16 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.dashboard,
                 onPressed: () {
                   _pop();
-                  NavigationController()
-                      .pushTo(context, child: DashboardPage());
+                  Get.to(() => DashboardPage());
+                },
+              ),
+              AppNavButton(
+                title: "Companies",
+                icon: Icons.home_work,
+                onPressed: () {
+                  _pop();
+                  Get.to(() => const CompanyListPage(),
+                      binding: CompanyBinding());
                 },
               ),
               AppNavButton(
@@ -97,8 +103,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.person,
                 onPressed: () {
                   _pop();
-                  NavigationController()
-                      .pushTo(context, child: CustomerListPage());
+                  Get.to(() => CustomerListPage());
                 },
               ),
               AppNavButton(
@@ -176,7 +181,10 @@ class _SideMenuViewState extends State<SideMenuView> {
   Widget _profile() {
     return Column(
       children: [
-        AppAvatar(path: _profileImagePath, size: 96),
+        AppAvatar(
+            url: AuthManager.userModel!.avatar,
+            text: AuthManager.userModel!.initials,
+            size: 96),
         const SizedBox(height: 8),
         const Text('Corey Holton', style: AppStyles.headerRegular),
         const SizedBox(height: 8),

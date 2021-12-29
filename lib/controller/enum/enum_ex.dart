@@ -55,4 +55,17 @@ extension JobStatusEx on JobStatus {
   String get name {
     return toString().split('.').last;
   }
+
+  String get icon {
+    switch(this) {
+      case JobStatus.estimate:
+        return "assets/icons/icon-calculator.png";
+      case JobStatus.booked:
+        return "assets/icons/icon-book.png";
+      case JobStatus.invoiced:
+        return "assets/icons/icon-money.png";
+      case JobStatus.canceled:
+        return "assets/icons/icon-cancel.png";
+    }
+  }
 }

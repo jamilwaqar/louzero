@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:backendless_sdk/backendless_sdk.dart';
 
 class APIManager {
@@ -8,6 +10,9 @@ class APIManager {
 
   static Future save(String path, dynamic data) async {
     try {
+      if (data['objectId'] == null) {
+        data.remove('objectId');
+      }
       dynamic response = await Backendless.data.of(path).save(data);
       return response;
     } catch (e) {
@@ -23,6 +28,11 @@ class APIManager {
   static Future delete(String path, String objectId) async {
     dynamic response = await Backendless.data.of(path)
         .remove(entity: {"objectId": objectId});
+    return response;
+  }
+
+  static Future uploadFile(File file, String filePath, String fileName) async {
+    String? response = await Backendless.files.upload(file, "/$filePath/$fileName.png");
     return response;
   }
 }

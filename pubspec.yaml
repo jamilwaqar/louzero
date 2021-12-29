@@ -18,8 +18,7 @@ dependencies:
   page_transition:
 
   another_flushbar:
-  image_picker:
-
+  permission_handler:
   dropdown_search:
   equatable:
 
@@ -29,6 +28,7 @@ dependencies:
   flutter_svg:
   flutter_verification_code: ^1.1.0
   material_design_icons_flutter: 5.0.5955-rc.1
+  cached_network_image:
   uuid:
   country_picker:
   dio:
@@ -37,7 +37,10 @@ dependencies:
   get_storage:
   fl_chart: ^0.40.2
   multi_select_flutter: ^4.0.0
+  expandable:
   flutter_tagging: ^3.0.0
+  flutter_tags: 1.0.0-nullsafety.1
+  image_pickers: ^2.0.0+2
 
 dev_dependencies:
   flutter_driver:

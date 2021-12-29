@@ -1,9 +1,27 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/job_models.dart';
 
 abstract class Constant {
   static const String imgPrefixPath = 'assets/icons';
 }
+
+abstract class AppDefaultValue {
+  static final country = Country(
+      phoneCode: "1",
+      countryCode: 'US',
+      e164Sc: 1,
+      geographic: true,
+      level: 1,
+      name: 'United States',
+      example: '',
+      displayName: "United States (US) [+1]",
+      displayNameNoCountryCode: "United States (US)",
+      e164Key: "1-US-0");
+}
+
 CustomerModel? tempCustomerModel;
+List<JobModel>? tempJobModels;
 /// Backendless Data Paths
 abstract class BLPath {
   static const String user = "Users";
@@ -12,6 +30,12 @@ abstract class BLPath {
   static const String siteProfileTemplate = "SiteProfileTemplate";
   static const String invites = "Invites";
   static const String company = "Company";
+}
+
+abstract class AppPlaceHolder {
+  static const String user = "";
+  static const String customer = "";
+  static const String company = 'icon-company-logo';
 }
 
 /// GetStoreKeys

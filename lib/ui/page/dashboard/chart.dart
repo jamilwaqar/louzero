@@ -7,7 +7,7 @@ double _width = 25;
 class Chart extends StatelessWidget {
   const Chart({Key? key, required this.items}) : super(key: key);
 
-  final List<chartListItem> items;
+  final List<ChartListItem> items;
 
   @override
   Widget build(BuildContext context) {
