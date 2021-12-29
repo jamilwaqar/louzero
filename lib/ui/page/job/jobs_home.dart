@@ -73,11 +73,86 @@ class JobsHome extends StatelessWidget {
     return AppCardExpandable(
       title: const AppHeaderIcon('Archwood House'),
       subtitle: _locationSubtitle(),
-      children: const [
-        Icon(
-          MdiIcons.beer,
-          color: AppColors.primary_60,
-          size: 150,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                height: 316,
+                decoration: BoxDecoration(
+                    color: AppColors.secondary_95,
+                    borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(20.0),
+                      bottomLeft: const Radius.circular(20.0),
+                    )),
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              flex: 4,
+              child: Container(
+                height: 316,
+                margin: EdgeInsets.only(bottom: 16),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppDivider(mt: 0, mb: 24),
+                          Text('PRIMARY CONTACT',
+                              style: AppStyles.headerSmallCaps),
+                          SizedBox(height: 8),
+                          Text('Nicole Swanson - Home Owner',
+                              style: AppStyles.bodyLarge),
+                          Text('nswanson@emailaddress.net',
+                              style: AppStyles.bodyLarge
+                                  .copyWith(color: Color(0xFF86421A))),
+                          Text('1 (360) 936-7594',
+                              style: AppStyles.bodyLarge
+                                  .copyWith(height: 1.7, fontSize: 15)),
+                          SizedBox(height: 32),
+                          Text('PRIMARY CONTACT',
+                              style: AppStyles.headerSmallCaps),
+                          SizedBox(height: 8),
+                          Text('Same as Service Address',
+                              style: AppStyles.bodyLarge),
+                        ],
+                      ),
+                      Container(
+                        child: Column(
+                          children: [
+                            AppDivider(mt: 0, mb: 16),
+                            Row(
+                              children: [
+                                AppButtons.iconFlat(
+                                  'Parent Account',
+                                  icon: MdiIcons.arrowTopRight,
+                                  colorIcon: AppColors.secondary_60,
+                                ),
+                                Spacer(),
+                                AppButtons.iconOutline(
+                                  'Site Profile',
+                                  icon: MdiIcons.homeCity,
+                                ),
+                                SizedBox(width: 8),
+                                AppButtons.iconOutline(
+                                  'Site Profile',
+                                  icon: MdiIcons.homeCity,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ]),
+              ),
+            )
+          ],
         ),
       ],
     );
@@ -98,7 +173,7 @@ class JobsHome extends StatelessWidget {
 
   Widget _tabs() {
     return AppCardTabs(
-        height: 600,
+        height: 1200,
         radius: 24,
         children: [
           _tabBilling(),

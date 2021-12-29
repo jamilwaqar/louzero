@@ -39,6 +39,14 @@ abstract class AppColors {
 }
 
 abstract class AppStyles {
+  static const bodyLarge = TextStyle(
+    fontFamily: 'Lato',
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.4,
+    letterSpacing: 0.1,
+  );
+
   static const headerSmall = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 16,
@@ -49,6 +57,12 @@ abstract class AppStyles {
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.secondary_20,
+  );
+  static const headerSmallCaps = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: AppColors.secondary_30,
   );
   static const headerAppBar = TextStyle(
     fontFamily: 'Barlow',
