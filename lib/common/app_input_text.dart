@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/common.dart';
 import 'app_text_body.dart';
 
 class AppInputText extends StatelessWidget {
@@ -46,7 +47,7 @@ class AppInputText extends StatelessWidget {
   final List<String>? options;
   final bool enabled;
   //Input border props:
-  final double _radius = 4;
+  final BorderRadius _radius = Common.border_4;
   final double _width = 1;
   final Color _color = AppColors.light_3;
   final Color _focus = AppColors.darkest;
@@ -66,23 +67,23 @@ class AppInputText extends StatelessWidget {
       contentPadding:
           const EdgeInsets.only(top: 0, left: 12, right: 12, bottom: 0),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
+        borderRadius: _radius,
         borderSide: BorderSide(color: _color, width: _width),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
+        borderRadius: _radius,
         borderSide: BorderSide(color: _focus, width: _width),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
+        borderRadius: _radius,
         borderSide: BorderSide(color: _color, width: _width),
       ),
       disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
+        borderRadius: _radius,
         borderSide: BorderSide(color: _color, width: _width),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
+        borderRadius: _radius,
         borderSide: BorderSide(color: _focus, width: _width),
       ),
     );

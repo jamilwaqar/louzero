@@ -1,36 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_pop_menu.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/ui/page/job/models/line_item.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-class LineItem {
-  final String description;
-  final double count;
-  final double price;
-  final double subtotal;
-  final String? note;
-
-  const LineItem({
-    required this.description,
-    required this.count,
-    required this.price,
-    required this.subtotal,
-    this.note,
-  });
-
-  LineItem copy({
-    String? description,
-    double? count,
-    double? price,
-    double? subtotal,
-  }) =>
-      LineItem(
-        description: description ?? this.description,
-        count: count ?? this.count,
-        price: price ?? this.price,
-        subtotal: subtotal ?? this.subtotal,
-      );
-}
 
 class AppBillingLines extends StatelessWidget {
   final List<LineItem> data;

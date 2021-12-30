@@ -9,6 +9,7 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
 import 'package:louzero/ui/page/job/jobs.dart';
+import 'package:louzero/ui/page/job/jobs_home.dart';
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
 
@@ -80,7 +81,7 @@ class _DashboardPageState extends State<DashboardPage> {
         child: SingleChildScrollView(
           child: Padding(
             padding:
-            EdgeInsets.only(left: margin, right: margin, top: margin * 2),
+                EdgeInsets.only(left: margin, right: margin, top: margin * 2),
             child: _body(),
           ),
         ));
@@ -105,6 +106,17 @@ class _DashboardPageState extends State<DashboardPage> {
                     fontSize: btnSize,
                     height: btnHeight,
                     margin: const EdgeInsets.only(right: 8),
+                    label: 'Dev Page',
+                    color: Colors.red,
+                    borderColor: Colors.red,
+                    primary: false,
+                    onPressed: () =>
+                        Get.to(() => JobsHome(), binding: JobBinding()),
+                  ),
+                  AppButton(
+                    fontSize: btnSize,
+                    height: btnHeight,
+                    margin: const EdgeInsets.only(right: 8),
                     label: 'Add Job',
                     color: AppColors.dark_1,
                     colorText: AppColors.darkest,
@@ -118,7 +130,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       color: AppColors.dark_1,
                       label: 'Search Jobs',
                       onPressed: () {
-                        Get.to(() => const JobListPage(), binding: JobBinding());
+                        Get.to(() => const JobListPage(),
+                            binding: JobBinding());
                       })
                 ],
               ),

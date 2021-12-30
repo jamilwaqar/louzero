@@ -1,55 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/common.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'models/line_item.dart';
 
 class JobsHome extends StatelessWidget {
   JobsHome({Key? key}) : super(key: key);
-
-  List<LineItem> rowData = <LineItem>[
-    const LineItem(
-      description: 'Clean Pool',
-      count: 1,
-      price: 50.00,
-      subtotal: 50.00,
-    ),
-    const LineItem(
-      description: 'Replace Valve Seals',
-      count: 4,
-      price: 5.00,
-      subtotal: 20.00,
-    ),
-    const LineItem(
-      description: 'Calcium Hardness Increaser',
-      count: 1,
-      price: 16.48,
-      subtotal: 16.48,
-    ),
-    const LineItem(
-      description: 'Item from the inventory',
-      count: 2,
-      price: 100.00,
-      subtotal: 200.00,
-      note:
-          'Adding in an interesting comment about what this is and why it’s here. If I need to add more than one line of text, this input grows vertically as needed!',
-    ),
-  ];
+  final billingController = Get.put(LineItemController());
 
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       hasKeyboard: true,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _locationCard(),
-            _tabs(),
-          ],
-        ),
+      child: GetBuilder<LineItemController>(
+        builder: (controller) {
+          return _body();
+        },
       ),
       subheader: 'Repair',
       footerEnd: const [
@@ -69,10 +41,25 @@ class JobsHome extends StatelessWidget {
     );
   }
 
+  Widget _body() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 32,
+      ),
+      child: Column(
+        children: [
+          _locationCard(),
+          _tabs(),
+        ],
+      ),
+    );
+  }
+
   Widget _locationCard() {
     return AppCardExpandable(
       title: const AppHeaderIcon('Archwood House'),
-      subtitle: _locationSubtitle(),
+      subtitle: _locationSubtitle(billingController.fullAddress),
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,9 +70,9 @@ class JobsHome extends StatelessWidget {
                 height: 316,
                 decoration: BoxDecoration(
                     color: AppColors.secondary_95,
-                    borderRadius: new BorderRadius.only(
-                      topLeft: const Radius.circular(20.0),
-                      bottomLeft: const Radius.circular(20.0),
+                    borderRadius: Common.border_24.copyWith(
+                      topRight: Radius.circular(0),
+                      bottomRight: Radius.circular(0),
                     )),
               ),
             ),
@@ -104,23 +91,18 @@ class JobsHome extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           AppDivider(mt: 0, mb: 24),
-                          Text('PRIMARY CONTACT',
-                              style: AppStyles.headerSmallCaps),
+                          _hdr('Primary Contact'),
                           SizedBox(height: 8),
-                          Text('Nicole Swanson - Home Owner',
-                              style: AppStyles.bodyLarge),
-                          Text('nswanson@emailaddress.net',
-                              style: AppStyles.bodyLarge
-                                  .copyWith(color: Color(0xFF86421A))),
-                          Text('1 (360) 936-7594',
-                              style: AppStyles.bodyLarge
-                                  .copyWith(height: 1.7, fontSize: 15)),
-                          SizedBox(height: 32),
-                          Text('PRIMARY CONTACT',
-                              style: AppStyles.headerSmallCaps),
+                          _txt(billingController.nameAndRole),
+                          _txt(billingController.contact.email,
+                              color: Color(0xFF86421A)),
+                          _txt(billingController.contact.phone),
+                          SizedBox(height: 24),
+                          _hdr('Billing Address'),
                           SizedBox(height: 8),
-                          Text('Same as Service Address',
-                              style: AppStyles.bodyLarge),
+                          _txt(billingController.billingAddress.street),
+                          _txt(billingController.cityStateZip),
+                          _txt(billingController.billingAddress.country),
                         ],
                       ),
                       Container(
@@ -128,7 +110,7 @@ class JobsHome extends StatelessWidget {
                           children: [
                             AppDivider(mt: 0, mb: 16),
                             Row(
-                              children: [
+                              children: const [
                                 AppButtons.iconFlat(
                                   'Parent Account',
                                   icon: MdiIcons.arrowTopRight,
@@ -158,15 +140,24 @@ class JobsHome extends StatelessWidget {
     );
   }
 
-  Widget _locationSubtitle() {
-    return const Split(
+  Widget _txt(String text, {color = AppColors.secondary_20}) {
+    return Text(text, style: AppStyles.bodyLarge.copyWith(color: color));
+  }
+
+  Widget _hdr(String text, {color = AppColors.secondary_20}) {
+    return Text(text.toUpperCase(),
+        style: AppStyles.headerSmallCaps.copyWith(color: color));
+  }
+
+  Widget _locationSubtitle(String address, {balance = '\$768.00'}) {
+    return Split(
       TextIcon(
-        "3486 Archwood house st. vancover, WA 98522",
+        address,
         MdiIcons.mapMarker,
       ),
       TextKeyVal(
         "Acct. Balance:",
-        "\$768.00",
+        balance,
       ),
     );
   }
@@ -200,8 +191,12 @@ class JobsHome extends StatelessWidget {
     return AppTabPanel(
       children: [
         const Text('Billing Line Items', style: AppStyles.headerRegular),
-        AppBillingLines(data: rowData),
-        JobAddNewLine(),
+        AppBillingLines(data: billingController.lineItems),
+        JobAddNewLine(
+          onCreate: (LineItem item) {
+            billingController.addLineItem(item);
+          },
+        ),
         const AppPopMenu(
           button: [
             AppButtons.iconOutline(
