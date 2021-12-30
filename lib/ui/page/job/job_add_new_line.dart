@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:louzero/common/common.dart';
@@ -252,30 +250,13 @@ class AppBylineIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          prefix,
-          style: AppStyles.labelRegular.copyWith(color: color),
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-        Text(
-          label,
-          style: AppStyles.labelBold.copyWith(color: color),
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-        GestureDetector(
-            onTap: onTap,
-            child: Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: colorIcon.withAlpha(30),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, size: 15, color: colorIcon)))
+        TextKeyVal(prefix, label),
+        AppIconButton(
+          icon: MdiIcons.pencil,
+          iconSize: 15,
+          color: colorIcon,
+          pl: 5,
+        )
       ],
     );
   }
