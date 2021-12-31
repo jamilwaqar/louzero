@@ -49,7 +49,7 @@ class AppCustomerInfo extends StatelessWidget {
         _hdr(headerContact),
         const SizedBox(height: 8),
         _txt(nameAndRole),
-        _txt(contact.email, color: Color(0xFF86421A)),
+        _txt(contact.email, color: const Color(0xFF86421A)),
         _txt(contact.phone),
         const SizedBox(height: 24),
         _hdr(headerAddress),

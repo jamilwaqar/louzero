@@ -83,17 +83,17 @@ class JobsHome extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: AppColors.secondary_95,
                     borderRadius: Common.border_24.copyWith(
-                      topRight: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
+                      topRight: const Radius.circular(0),
+                      bottomRight: const Radius.circular(0),
                     )),
               ),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Expanded(
               flex: 4,
               child: Container(
                 height: 316,
-                margin: EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 16),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,31 +107,29 @@ class JobsHome extends StatelessWidget {
                               contact: _controller.contact),
                         ],
                       ),
-                      Container(
-                        child: Column(
-                          children: [
-                            AppDivider(mt: 0, mb: 16),
-                            Row(
-                              children: const [
-                                AppButtons.iconFlat(
-                                  'Parent Account',
-                                  icon: MdiIcons.arrowTopRight,
-                                  colorIcon: AppColors.secondary_60,
-                                ),
-                                Spacer(),
-                                AppButtons.iconOutline(
-                                  'Site Profile',
-                                  icon: MdiIcons.homeCity,
-                                ),
-                                SizedBox(width: 8),
-                                AppButtons.iconOutline(
-                                  'Site Profile',
-                                  icon: MdiIcons.homeCity,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
+                      Column(
+                        children: [
+                          const AppDivider(mt: 0, mb: 16),
+                          Row(
+                            children: const [
+                              AppButtons.iconFlat(
+                                'Parent Account',
+                                icon: MdiIcons.arrowTopRight,
+                                colorIcon: AppColors.secondary_60,
+                              ),
+                              Spacer(),
+                              AppButtons.iconOutline(
+                                'Site Profile',
+                                icon: MdiIcons.homeCity,
+                              ),
+                              SizedBox(width: 8),
+                              AppButtons.iconOutline(
+                                'Site Profile',
+                                icon: MdiIcons.homeCity,
+                              ),
+                            ],
+                          )
+                        ],
                       )
                     ]),
               ),

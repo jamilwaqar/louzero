@@ -33,7 +33,7 @@ class Demo extends StatelessWidget {
   }
 
   // MOCK DATA (MULTISELECT)
-  List<SelectItem> selectItems = const [
+  final List<SelectItem> selectItems = const [
     SelectItem(id: '1', value: '', label: 'Cheese'),
     SelectItem(id: '2', value: '', label: 'Mushrooms'),
     SelectItem(id: '3', value: '', label: 'Jalepenos'),
@@ -52,7 +52,7 @@ class Demo extends StatelessWidget {
       children: [
         const AppTextHeader('Basic Info',
             alignLeft: true, icon: Icons.airplane_ticket, size: 24),
-        AppFlexRow(
+        FlexRow(
           flex: const [2, 2],
           children: const [
             AppInputText(
@@ -72,7 +72,7 @@ class Demo extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        AppFlexRow(
+        FlexRow(
           flex: const [2],
           children: [
             Column(
@@ -95,13 +95,11 @@ class Demo extends StatelessWidget {
         )
       ],
     ),
-    AppTabPanel(
+    const AppTabPanel(
       children: [Icon(Icons.location_pin, size: 150, color: AppColors.orange)],
     ),
-    AppTabPanel(
-      children: [
-        const Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)
-      ],
+    const AppTabPanel(
+      children: [Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)],
     ),
   ];
 
@@ -133,21 +131,21 @@ class Demo extends StatelessWidget {
 
   Widget _formInputs() => AppCard(children: [
         _heading('Form Inputs', Icons.forum_rounded),
-        AppFlexRow(
+        FlexRow(
           children: const [
             AppInputText(label: 'First'),
             AppInputText(label: 'Last'),
             AppInputText(label: 'Nickname'),
           ],
         ),
-        AppFlexRow(
+        FlexRow(
           flex: const [4, 1],
           children: const [
             AppInputText(label: 'Address'),
             AppInputText(label: 'Suite'),
           ],
         ),
-        AppFlexRow(
+        FlexRow(
           children: [
             const AppInputText(label: 'Country'),
             AppMultiSelect(
@@ -156,14 +154,14 @@ class Demo extends StatelessWidget {
             )
           ],
         ),
-        AppFlexRow(
+        FlexRow(
           flex: const [2, 3],
           children: const [
             AppInputText(label: 'Alias'),
             AppInputText(label: 'Planet of Origin'),
           ],
         ),
-        AppFlexRow(
+        FlexRow(
           flex: const [3],
           children: [
             Container(),

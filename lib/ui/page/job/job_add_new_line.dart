@@ -3,7 +3,6 @@ import 'package:get/instance_manager.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'models/line_item.dart';
 
@@ -21,12 +20,12 @@ class JobAddNewLine extends StatefulWidget {
 class _JobAddNewLineState extends State<JobAddNewLine> {
   final c = Get.put(LineItemController());
   Size? size;
-  final TextEditingController _description = TextEditingController();
-  final TextEditingController _count = TextEditingController();
-  final TextEditingController _price = TextEditingController();
-  final TextEditingController _subtotal = TextEditingController();
-  final TextEditingController _note = TextEditingController();
-  final TextEditingController _discountDescription = TextEditingController();
+  final _description = TextEditingController();
+  final _count = TextEditingController();
+  final _price = TextEditingController();
+  final _subtotal = TextEditingController();
+  final _note = TextEditingController();
+  final _discountDescription = TextEditingController();
   // final TextEditingController _discountAmount = TextEditingController();
 
   bool isDiscountOn = false;
@@ -34,11 +33,11 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
   bool isDiscountTypePercent = false;
   @override
   Widget build(BuildContext context) {
-    _onCreate() {
-      String description = '${_description.value.text}';
-      String note = '${_note.value.text}';
-      double count = double.tryParse('${_count.value.text}') ?? 1;
-      double price = double.tryParse('${_price.value.text}') ?? 0;
+    _addLineItem() {
+      String description = _description.value.text;
+      String note = _note.value.text;
+      double count = double.tryParse(_count.value.text) ?? 1;
+      double price = double.tryParse(_price.value.text) ?? 0;
       double subtotal = price * count;
 
       LineItem newItem = LineItem(
@@ -63,19 +62,16 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       mr: 0,
       radius: 24,
       children: [
-        SplitRow(
-          children: [
-            const Text("Add New Line", style: AppStyles.headerRegular),
-            AppIconButton(
+        RowSplit(
+            left: const Text("Add New Line", style: AppStyles.headerRegular),
+            right: AppIconButton(
               colorBg: Colors.transparent,
               onTap: () {
                 // ignore: avoid_print
                 print('Add this line');
               },
-            )
-          ],
-        ),
-        AppFlexRow(
+            )),
+        FlexRow(
           flex: const [5, 1, 2, 2],
           children: [
             AppInputText(
@@ -97,7 +93,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
           ],
         ),
         AppInputText(controller: _note, label: "Comment"),
-        AppFlexRow(
+        FlexRow(
           flex: const [2, 1],
           children: [
             AppSwitch(
@@ -124,7 +120,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
             height: 16,
           ),
         if (isDiscountOn)
-          AppFlexRow(
+          FlexRow(
             flex: const [2, 0, 1],
             children: [
               AppInputText(
@@ -152,50 +148,32 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
             ],
           ),
         const SizedBox(height: 16),
-        SplitRow(
-          children: [
-            Row(
-              children: [
-                AppButton(
-                  color: AppColors.secondary_20,
-                  label: "Save",
-                  onPressed: () {
-                    _onCreate();
-                  },
-                ),
-                AppButton(
-                  label: "Cancel",
-                  color: Colors.transparent,
-                  colorText: AppColors.secondary_60,
-                  textOnly: true,
-                  onPressed: () {},
-                )
-              ],
-            ),
-            const AppBylineIcon(
-              prefix: 'Sold By',
-              label: 'Allen Whitaker',
-            ),
-          ],
+        RowSplit(
+          align: 'center',
+          left: Row(
+            children: [
+              AppButton(
+                color: AppColors.secondary_20,
+                label: "Save",
+                onPressed: () {
+                  _addLineItem();
+                },
+              ),
+              AppButton(
+                label: "Cancel",
+                color: Colors.transparent,
+                colorText: AppColors.secondary_60,
+                textOnly: true,
+                onPressed: () {},
+              )
+            ],
+          ),
+          right: const TextKeyValIcon(
+            kkey: 'Sold By',
+            val: 'Allen Whitaker',
+          ),
         ),
       ],
-    );
-  }
-}
-
-class SplitRow extends StatelessWidget {
-  final List<Widget> children;
-
-  const SplitRow({
-    Key? key,
-    this.children = const [],
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: children,
     );
   }
 }
@@ -223,40 +201,6 @@ class AppSwitch extends StatelessWidget {
           width: 2,
         ),
         Text(label, style: AppStyles.labelBold),
-      ],
-    );
-  }
-}
-
-class AppBylineIcon extends StatelessWidget {
-  final String label;
-  final String prefix;
-  final IconData icon;
-  final Color colorIcon;
-  final Color color;
-  final VoidCallback? onTap;
-
-  const AppBylineIcon({
-    Key? key,
-    required this.label,
-    this.prefix = 'By',
-    this.color = AppColors.secondary_20,
-    this.colorIcon = AppColors.secondary_20,
-    this.icon = MdiIcons.pencil,
-    this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        TextKeyVal(prefix, label),
-        AppIconButton(
-          icon: MdiIcons.pencil,
-          iconSize: 15,
-          color: colorIcon,
-          pl: 5,
-        )
       ],
     );
   }
