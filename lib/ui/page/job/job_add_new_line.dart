@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/common.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 
 import 'models/line_item.dart';
@@ -74,10 +75,12 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
         FlexRow(
           flex: const [5, 1, 2, 2],
           children: [
-            AppInputText(
-              controller: _description,
-              label: "Product Name o service name",
-            ),
+            AppInputDropdown(
+                items: <String>['Hammer', 'Wrench', 'Hotdog', 'Peperoni']),
+            // AppInputText(
+            //   controller: _description,
+            //   label: "Product Name o service name",
+            // ),
             AppInputText(
               controller: _count,
               label: "Qty",
@@ -94,7 +97,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
         ),
         AppInputText(controller: _note, label: "Comment"),
         FlexRow(
-          flex: const [2, 1],
+          flex: const [1, 1, 1],
           children: [
             AppSwitch(
                 value: isDiscountOn,
@@ -104,6 +107,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                     isDiscountOn = v;
                   });
                 }),
+            SizedBox(width: 90),
             AppCheckbox(
               label: 'Taxable',
               checked: isTaxable,
@@ -201,6 +205,58 @@ class AppSwitch extends StatelessWidget {
           width: 2,
         ),
         Text(label, style: AppStyles.labelBold),
+      ],
+    );
+  }
+}
+
+class AppInputDropdown extends StatefulWidget {
+  AppInputDropdown({Key? key, this.items = const ["Fun", "Two", "Three"]})
+      : super(key: key);
+  final List<String> items;
+
+  @override
+  State<AppInputDropdown> createState() => _AppInputDropdownState();
+}
+
+class _AppInputDropdownState extends State<AppInputDropdown> {
+  DropdownMenuItem<String> _menuItems(String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(value),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Dropdown', style: AppStyles.labelBold),
+        SizedBox(
+          height: 8,
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppColors.secondary_80, width: 1)),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              items: widget.items.map(_menuItems).toList(),
+              value: widget.items[0],
+              // itemHeight: 48,
+              isExpanded: true,
+              icon: const Icon(Icons.arrow_drop_down),
+              style: const TextStyle(color: Colors.black),
+              onChanged: (String? newValue) {
+                setState(() {
+                  // selected = newValue!;
+                });
+              },
+            ),
+          ),
+        ),
       ],
     );
   }
