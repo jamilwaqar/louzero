@@ -13,6 +13,7 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
@@ -562,35 +563,15 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         type: _customerType!,
         serviceAddress: serviceAddress,
         billingAddress: billingAddress);
-
-    Map<String, dynamic> data = model.toJson();
-    data['serviceAddress'] = serviceAddress.toJson();
-    data['billingAddress'] = billingAddress.toJson();
-    data['customerContacts'] = contacts.map((e) => e.toJson()).toList();
-
-    print('Data: $data');
+    model.customerContacts = contacts;
     NavigationController().loading();
-    try {
-      dynamic response = await Backendless.data.of(BLPath.customer).save(data);
-      WarningMessageDialog.showDialog(context, "Saved Customer!");
-      CustomerModel newModel = CustomerModel.fromMap(response);
-      if (newModel.companyId == _baseController.activeCompany!.objectId) {
-        List<CustomerModel> newList = [
-          ..._baseController.customers,
-          newModel
-        ];
-        _baseController.customers = newList;
-      }
-      List<CustomerModel> newList = [
-        ..._baseController.totalCustomers,
-        newModel
-      ];
-      _baseController.totalCustomers = newList;
-
-      NavigationController().pop(context, delay: 2);
-    } catch (e) {
-      print('save data error: ${e.toString()}');
+    final response = await Get.find<CustomerController>().save(model, Backendless.data.of(BLPath.customer));
+    String msg = response;
+    if (response !is String) {
+      NavigationController().pop(Get.context!, delay: 2);
+      msg = "Saved Customer!";
     }
+    WarningMessageDialog.showDialog(Get.context!, msg);
     NavigationController().loading(isLoading: false);
   }
 

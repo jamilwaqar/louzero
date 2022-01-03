@@ -5,21 +5,17 @@ import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/get/base_controller.dart';
-import 'package:louzero/controller/get/bindings/customer_binding.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/invite.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer.dart';
 
-class CustomerListPage extends StatelessWidget {
-  CustomerListPage({Key? key}) : super(key: key);
+class CustomerListPage extends GetWidget<CustomerController> {
+  const CustomerListPage({Key? key}) : super(key: key);
 
   final int mockId = 8520;
-  final BaseController _baseController = Get.find();
-
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
@@ -31,8 +27,7 @@ class CustomerListPage extends StatelessWidget {
         AppBarButtonAdd(
           label: 'New Customer',
           onPressed: () {
-            NavigationController()
-                .pushTo(context, child: const AddCustomerPage());
+            Get.to(()=> AddCustomerPage());
           },
         )
       ],
@@ -43,16 +38,16 @@ class CustomerListPage extends StatelessWidget {
     return Obx(() => ListView.builder(
         padding: const EdgeInsets.only(top: 32),
         shrinkWrap: true,
-        itemCount: _baseController.customers.length,
+        itemCount: controller.customers.length,
         itemBuilder: (context, index) {
-          CustomerModel model = _baseController.customers[index];
+          CustomerModel model = controller.customers[index];
           return AppCard(
             mb: 8,
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.to(() => const CustomerProfilePage(),
-                      arguments: model, binding: CustomerBinding());
+                  controller.customerModel.value = model;
+                  Get.to(() => const CustomerProfilePage());
                 },
                 child: AppRowFlex(
                     flex: const [1, 5, 2, 0],
