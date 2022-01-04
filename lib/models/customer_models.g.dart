@@ -8,7 +8,7 @@ part of 'customer_models.dart';
 
 CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
     CustomerModel(
-      companyId: json['companyId'] as String,
+      companyName: json['companyName'] as String,
       type: json['type'] as String,
       serviceAddress:
           AddressModel.fromJson(json['serviceAddress'] as Map<String, dynamic>),
@@ -17,7 +17,8 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
     )
       ..objectId = json['objectId'] as String?
       ..ownerId = json['ownerId'] as String?
-      ..parentId = json['parentId'] as String?
+      ..parentAccountName = json['parentAccountName'] as String?
+      ..billAddressSame = json['billAddressSame'] as bool? ?? true
       ..customerContacts = (json['customerContacts'] as List<dynamic>?)
               ?.map((e) => CustomerContact.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -28,7 +29,9 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
           [];
 
 Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) {
-  final val = <String, dynamic>{};
+  final val = <String, dynamic>{
+    'objectId': instance.objectId,
+  };
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -36,13 +39,13 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) {
     }
   }
 
-  writeNotNull('objectId', instance.objectId);
   writeNotNull('ownerId', instance.ownerId);
+  val['companyName'] = instance.companyName;
   val['type'] = instance.type;
-  val['parentId'] = instance.parentId;
-  val['companyId'] = instance.companyId;
+  val['parentAccountName'] = instance.parentAccountName;
   val['serviceAddress'] = instance.serviceAddress;
   val['billingAddress'] = instance.billingAddress;
+  val['billAddressSame'] = instance.billAddressSame;
   val['customerContacts'] = instance.customerContacts;
   val['siteProfiles'] = instance.siteProfiles;
   return val;

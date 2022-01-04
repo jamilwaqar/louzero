@@ -22,63 +22,73 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
 
 class AddCustomerPage extends StatefulWidget {
-  const AddCustomerPage({Key? key}) : super(key: key);
+  const AddCustomerPage({this.model, Key? key}) : super(key: key);
+  final CustomerModel? model;
 
   @override
   _AddCustomerPageState createState() => _AddCustomerPageState();
 }
 
 class _AddCustomerPageState extends State<AddCustomerPage> {
-  final TextEditingController _companyNameController = TextEditingController();
-  final TextEditingController _parentAccountNameController =
-      TextEditingController();
+  late final TextEditingController _companyNameController = TextEditingController(text: widget.model?.companyName);
+  late final TextEditingController _parentAccountNameController =
+      TextEditingController(text: widget.model?.parentAccountName);
 
-  final TextEditingController _serviceCountryController =
-      TextEditingController(text: AppDefaultValue.country.name);
-  final TextEditingController _serviceStreetController =
-      TextEditingController();
-  final TextEditingController _serviceCityController = TextEditingController();
-  final TextEditingController _serviceAtController = TextEditingController();
-  final TextEditingController _serviceStateController = TextEditingController();
-  final TextEditingController _serviceZipController = TextEditingController();
+  late final TextEditingController _serviceCountryController =
+      TextEditingController(text: widget.model?.billingAddress.country ?? AppDefaultValue.country.name);
+  late final TextEditingController _serviceStreetController =
+      TextEditingController(text: widget.model?.serviceAddress.street);
+  late final TextEditingController _serviceCityController = TextEditingController(text: widget.model?.serviceAddress.city);
+  late final TextEditingController _serviceAptController = TextEditingController(text: widget.model?.serviceAddress.suite);
+  late final TextEditingController _serviceStateController = TextEditingController(text: widget.model?.serviceAddress.state);
+  late final TextEditingController _serviceZipController = TextEditingController(text: widget.model?.serviceAddress.zip);
 
-  final TextEditingController _billCountryController = TextEditingController(text: AppDefaultValue.country.name);
-  final TextEditingController _billStreetController = TextEditingController();
-  final TextEditingController _billCityController = TextEditingController();
-  final TextEditingController _billAtController = TextEditingController();
-  final TextEditingController _billStateController = TextEditingController();
-  final TextEditingController _billZipController = TextEditingController();
+  late final TextEditingController _billCountryController = TextEditingController(text: widget.model?.billingAddress.country ?? AppDefaultValue.country.name);
+  late final TextEditingController _billStreetController = TextEditingController(text: widget.model?.billingAddress.street);
+  late final TextEditingController _billCityController = TextEditingController(text: widget.model?.billingAddress.city);
+  late final TextEditingController _billAptController = TextEditingController(text: widget.model?.billingAddress.suite);
+  late final TextEditingController _billStateController = TextEditingController(text: widget.model?.billingAddress.state);
+  late final TextEditingController _billZipController = TextEditingController(text: widget.model?.billingAddress.zip);
 
-  final List<TextEditingController> _contactFNameControllers = [
-    TextEditingController()
+  late final List<TextEditingController> _contactFNameControllers = [
+    TextEditingController(text: widget.model?.customerContacts.first.firstName)
   ];
-  final List<TextEditingController> _contactLNameControllers = [
-    TextEditingController()
+  late final List<TextEditingController> _contactLNameControllers = [
+    TextEditingController(text: widget.model?.customerContacts.first.lastName)
   ];
-  final List<TextEditingController> _contactEmailControllers = [
-    TextEditingController()
+  late final List<TextEditingController> _contactEmailControllers = [
+    TextEditingController(text: widget.model?.customerContacts.first.email)
   ];
-  final List<TextEditingController> _contactPhoneControllers = [
-    TextEditingController()
+  late final List<TextEditingController> _contactPhoneControllers = [
+    TextEditingController(text: widget.model?.customerContacts.first.phone)
   ];
-  final List<TextEditingController> _contactRoleControllers = [
-    TextEditingController()
+  late final List<TextEditingController> _contactRoleControllers = [
+    TextEditingController(text: widget.model?.customerContacts.first.role)
   ];
 
-  bool _subAccount = false;
-  bool _sameAsService = true;
+  late bool _subAccount = widget.model?.parentAccountName != null;
+
+  late bool _sameAsService = widget.model?.billAddressSame ?? true;
+
   final List<Widget> _customerContactList = [];
-  String _companyName = Get.find<BaseController>().activeCompany!.name;
   String? _customerType = AuthManager.userModel!.customerTypes[0];
-  final List<List<CTContactType>> _contactTypes = [[]];
+  late final List<List<CTContactType>> _contactTypes = [widget.model?.customerContacts.first.types ?? []];
   Country _country = AppDefaultValue.country;
   SearchAddressModel? _serviceSearchAddressModel;
   SearchAddressModel? _billSearchAddressModel;
   final BaseController _baseController = Get.find();
+  final controller = Get.find<CustomerController>();
 
   @override
   void initState() {
     _customerContactList.add(_customerContact(0));
+    if (widget.model != null) {
+      CustomerModel model = widget.model!;
+      _customerType = model.type;
+      _serviceSearchAddressModel = SearchAddressModel()
+        ..latitude = model.serviceAddress.latitude
+        ..longitude = model.serviceAddress.longitude;
+    }
     super.initState();
   }
 
@@ -94,7 +104,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      subheader: 'Add New Customer',
+      subheader: widget.model == null ? "Add New Customer" : "Edit Customer",
       child: _body(),
       footerEnd: [
         AppButton(
@@ -146,16 +156,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           Row(
             children: [
               Flexible(
-                  child: AppDropDown(
-                    label: "Company*",
-                    itemList: _baseController.companies.map((e) => e.name).toList(),
-                    initValue: _companyName,
-                    onChanged: (value) {
-                      setState(() {
-                        _companyName = value!;
-                      });
-                    },
-                  )),
+                  child: LZTextField(
+                      controller: _companyNameController,
+                      label: "Company or Account Name")),
               const SizedBox(width: 32),
               Flexible(
                   child: AppDropDown(
@@ -268,7 +271,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 ),
                 AppInputText(
                     controller:
-                        isService ? _serviceAtController : _billAtController,
+                        isService ? _serviceAptController : _billAptController,
                     label: "Apt / Suite / Other"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -526,6 +529,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         city: _serviceCityController.text,
         state: _serviceStateController.text,
         zip: _serviceZipController.text);
+    serviceAddress.suite = _serviceAptController.text;
     if (_serviceSearchAddressModel != null) {
       serviceAddress.latitude = _serviceSearchAddressModel!.latitude;
       serviceAddress.longitude = _serviceSearchAddressModel!.longitude;
@@ -559,15 +563,18 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     }
 
     CustomerModel model = CustomerModel(
-        companyId: _baseController.companies.firstWhere((e) => e.name == _companyName).objectId!,
+        companyName: _companyNameController.text,
         type: _customerType!,
         serviceAddress: serviceAddress,
         billingAddress: billingAddress);
     model.customerContacts = contacts;
+    model.objectId = widget.model?.objectId;
     NavigationController().loading();
-    final response = await Get.find<CustomerController>().save(model, Backendless.data.of(BLPath.customer));
-    String msg = response;
-    if (response !is String) {
+    final response = await controller.save(model, Backendless.data.of(BLPath.customer));
+    String msg;
+    if (response is String) {
+      msg = response;
+    } else {
       NavigationController().pop(Get.context!, delay: 2);
       msg = "Saved Customer!";
     }

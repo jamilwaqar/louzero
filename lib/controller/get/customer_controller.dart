@@ -1,14 +1,17 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
-import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
 import 'base_controller.dart';
 
 class CustomerController extends GetxController {
 
-  final customerModel = Rx<CustomerModel?>(null);
+  final _customerModel = Rx<CustomerModel?>(null);
+
+  CustomerModel? get customerModel => _customerModel.value;
+
+  set customerModel(CustomerModel? model) => _customerModel.value = model;
+
   final baseController = Get.find<BaseController>();
 
   List<CustomerModel> get customers => baseController.customers;
@@ -57,23 +60,22 @@ class CustomerController extends GetxController {
     Map<String, dynamic> data = model.toJson();
     data['serviceAddress'] = model.serviceAddress.toJson();
     data['billingAddress'] = model.billingAddress.toJson();
-    data['customerContacts'] = model.customerContacts.map((e) => e.toJson()).toList();
-
+    data['customerContacts'] =
+        model.customerContacts.map((e) => e.toJson()).toList();
+    if (data['objectId'] == null) {
+      data.remove('objectId');
+    }
     try {
-      dynamic response = await /*Backendless.data.of(BLPath.customer)*/store.save(data);
+      dynamic response =
+          await /*Backendless.data.of(BLPath.customer)*/ store.save(data);
       CustomerModel newModel = CustomerModel.fromMap(response);
-      if (newModel.companyId == baseController.activeCompany!.objectId) {
-        List<CustomerModel> newList = [
-          ...baseController.customers,
-          newModel
-        ];
+      if (model.objectId == null) {
+        List<CustomerModel> newList = [...baseController.customers, newModel];
         baseController.customers = newList;
+      } else {
+        updateCustomerModel(newModel);
       }
-      List<CustomerModel> newList = [
-        ...baseController.totalCustomers,
-        newModel
-      ];
-      baseController.totalCustomers = newList;
+      update();
       return newModel;
     } catch (e) {
       print('save data error: ${e.toString()}');
@@ -81,11 +83,22 @@ class CustomerController extends GetxController {
     }
   }
 
+  Future deleteCustomer(String objectId, IDataStore store) async {
+    try {
+      dynamic response = await store.remove(entity: {"objectId": objectId});
+      customers.removeWhere((element) => element.objectId == objectId);
+      update();
+      return response;
+    } catch(e) {
+      return e.toString();
+    }
+  }
+
   @override
   void onInit() {
-    customerModel.value = Get.arguments;
-    if (customerModel.value != null) {
-      fetchSiteProfile(customerModel.value!.objectId!);
+    customerModel = Get.arguments;
+    if (customerModel != null) {
+      fetchSiteProfile(customerModel!.objectId!);
     }
     super.onInit();
   }

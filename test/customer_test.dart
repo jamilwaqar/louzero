@@ -8,7 +8,7 @@ import 'package:louzero/models/customer_models.dart';
 import 'package:mockito/mockito.dart';
 
 const _customerId = 'customerId';
-const _companyId = 'companyId';
+const _companyName = 'companyName';
 const _country = 'United State';
 const _city = 'New York';
 const _street = '350 W 40th St';
@@ -20,7 +20,7 @@ final AddressModel _addressModel = AddressModel(
     country: _country, street: _street, city: _city, state: _state, zip: _zip);
 
 final CustomerModel _customerModel = CustomerModel(
-    companyId: _companyId,
+    companyName: _companyName,
     type: _customerType,
     serviceAddress: _addressModel,
     billingAddress: _addressModel)..objectId = _customerId;
@@ -41,7 +41,7 @@ void main() {
   Get.put(BaseController());
 
   CustomerController controller = CustomerController()
-    ..customerModel.value = _customerModel;
+    ..customerModel = _customerModel;
 
   setUp(() {});
   tearDown(() {});
@@ -53,7 +53,7 @@ void main() {
     expect(controller.customers.length, 1);
     expect(controller.customers.first.objectId, _customerId);
     expect(Get.find<BaseController>().customers.length, 1);
-    expect(Get.find<BaseController>().customers.first.companyId, _companyId);
+    expect(Get.find<BaseController>().customers.first.companyName, _companyName);
   });
 
   test('Customer by Id', () {
@@ -66,7 +66,7 @@ void main() {
 
   test('Save', () async {
     controller.baseController.customers.add(_customerModel);
-    controller.baseController.activeCompany = CompanyModel()..objectId = _companyId;
+    controller.baseController.activeCompany = CompanyModel()..objectId = _companyName;
     final dataStore = MockBackendlessData();
 
     final updatedObject = (await controller.save(_customerModel, dataStore)) as CustomerModel;

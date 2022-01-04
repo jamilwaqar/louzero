@@ -5,15 +5,21 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/ui/page/customer/add_customer.dart';
+import 'package:louzero/ui/page/customer/customer.dart';
 import 'package:louzero/ui/page/customer/customer_location.dart';
 import 'buttons/top_left_button.dart';
 
 class CustomerInfo extends StatelessWidget {
   final CustomerModel customerModel;
   final bool fromJob;
-  const CustomerInfo(this.customerModel, {this.fromJob = false, Key? key}) : super(key: key);
+
+  const CustomerInfo(this.customerModel,
+      {this.fromJob = false, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +52,10 @@ class CustomerInfo extends StatelessWidget {
                                       .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),
                               TopLeftButton(
-                                  onPressed: () {}, iconData: Icons.edit),
+                                  onPressed: () {
+                                    // Get.find<CustomerController>().customerModel = customerModel;
+                                    Get.to(() => AddCustomerPage(model: customerModel,));
+                                  }, iconData: Icons.edit),
                             ],
                           ),
                           Row(

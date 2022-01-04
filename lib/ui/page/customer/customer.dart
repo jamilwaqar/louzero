@@ -14,7 +14,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       child: _body(),
-      subheader: controller.customerModel.value!.customerContacts.first.fullName,
+      subheader: controller.customerModel!.customerContacts.first.fullName,
     );
   }
 
@@ -26,7 +26,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CustomerInfo(controller.customerModel.value!),
+              CustomerInfo(controller.customerModel!),
               const SizedBox(height: 24),
               _category()
             ],
@@ -54,7 +54,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
       case CustomerCategory.jobs:
         break;
       case CustomerCategory.siteProfiles:
-        count = controller.customerModel.value!.siteProfiles.length;
+        count = controller.customerModel!.siteProfiles.length;
         break;
       case CustomerCategory.contacts:
         break;
@@ -71,10 +71,10 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
           case CustomerCategory.jobs:
             break;
           case CustomerCategory.siteProfiles:
-            count = controller.customerModel.value!.siteProfiles.length;
+            count = controller.customerModel!.siteProfiles.length;
             Get.to(() => CustomerSiteProfilePage(
-                controller.customerModel.value!.siteProfiles,
-                customerId: controller.customerModel.value!.objectId));
+                controller.customerModel!.siteProfiles,
+                customerId: controller.customerModel!.objectId));
             break;
           case CustomerCategory.contacts:
             break;
