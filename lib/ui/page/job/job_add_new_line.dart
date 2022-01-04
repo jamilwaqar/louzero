@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/constant/common.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
+import 'package:louzero/ui/page/job/models/inventory_item.dart';
 
 import 'models/line_item.dart';
 
 class JobAddNewLine extends StatefulWidget {
   final void Function(LineItem)? onCreate;
+  final VoidCallback? onCancel;
+  final List<InventoryItem> inventory;
+  final int selectedIndex;
   const JobAddNewLine({
     Key? key,
     this.onCreate,
+    this.onCancel,
+    this.inventory = const [],
+    this.selectedIndex = 0,
   }) : super(key: key);
 
   @override
@@ -27,11 +34,45 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
   final _subtotal = TextEditingController();
   final _note = TextEditingController();
   final _discountDescription = TextEditingController();
-  // final TextEditingController _discountAmount = TextEditingController();
+  final _discountAmount = TextEditingController();
 
   bool isDiscountOn = false;
   bool isTaxable = false;
   bool isDiscountTypePercent = false;
+
+  int _selected = 0;
+
+  bool _isNumeric(String str) {
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
+
+  void _clearInputs() {
+    _description.text = '';
+    _count.text = '1';
+    _price.text = '0';
+    _subtotal.text = '0';
+    _note.text = '';
+    _discountDescription.text = '';
+  }
+
+  void _updateSubtotal(String val) {
+    double qty = double.tryParse(_count.text) ?? 1;
+    double price = double.tryParse(_price.text) ?? 0;
+    double total = qty * price;
+    setState(() {
+      _subtotal.text = total.toStringAsFixed(2);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _count.text = '1';
+  }
+
   @override
   Widget build(BuildContext context) {
     _addLineItem() {
@@ -39,22 +80,28 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       String note = _note.value.text;
       double count = double.tryParse(_count.value.text) ?? 1;
       double price = double.tryParse(_price.value.text) ?? 0;
+      double discount = double.tryParse(_discountAmount.value.text) ?? 0;
+      String discountText = _discountDescription.value.text;
       double subtotal = price * count;
 
       LineItem newItem = LineItem(
-        count: count,
-        price: price,
-        description: description,
-        subtotal: subtotal,
-        note: note,
-      );
+          count: count,
+          price: price,
+          description: description,
+          subtotal: subtotal,
+          note: note,
+          discount: discount > 0 ? discount : null,
+          discountText: discountText.length > 1 ? discountText : null);
 
       if (newItem.description == '') {
         print('enter description please');
       } else {
         if (widget.onCreate != null) {
           widget.onCreate!(newItem);
+          _clearInputs();
         }
+        // clear input values
+
       }
     }
 
@@ -75,22 +122,44 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
         FlexRow(
           flex: const [5, 1, 2, 2],
           children: [
-            AppInputDropdown(
-                items: <String>['Hammer', 'Wrench', 'Hotdog', 'Peperoni']),
-            // AppInputText(
-            //   controller: _description,
-            //   label: "Product Name o service name",
-            // ),
+            if (widget.inventory.isNotEmpty)
+              InventoryDropdown(
+                selectedIndex: _selected,
+                items: widget.inventory,
+                onChanged: (InventoryItem item) {
+                  setState(() {
+                    int selectedIndex = widget.inventory.indexWhere(
+                        (element) => element.description == item.description);
+                    _selected = selectedIndex;
+
+                    var _item = widget.inventory[selectedIndex];
+                    _price.text = _item.price.toStringAsFixed(2);
+                    _subtotal.text = _item.price.toStringAsFixed(2);
+                    _count.text = '1';
+                    _description.text = item.description;
+                  });
+                },
+              ),
+            if (widget.inventory.isEmpty)
+              AppInputText(
+                controller: _description,
+                label: "Product Name o service name",
+              ),
             AppInputText(
               controller: _count,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.number,
+              onChanged: _updateSubtotal,
               label: "Qty",
             ),
             AppInputText(
               controller: _price,
               label: "Price",
+              onChanged: _updateSubtotal,
             ),
             AppInputText(
               controller: _subtotal,
+              readOnly: true,
               label: "SubTotal",
             )
           ],
@@ -107,7 +176,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                     isDiscountOn = v;
                   });
                 }),
-            SizedBox(width: 90),
+            const SizedBox(width: 90),
             AppCheckbox(
               label: 'Taxable',
               checked: isTaxable,
@@ -129,7 +198,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
             children: [
               AppInputText(
                   controller: _discountDescription,
-                  label: "Product Name or service name"),
+                  label: "Discount description"),
               Column(
                 children: const [
                   SizedBox(height: 24),
@@ -146,7 +215,8 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                   // ),
                 ],
               ),
-              const AppInputText(
+              AppInputText(
+                controller: _discountAmount,
                 label: 'Amount',
               )
             ],
@@ -168,7 +238,12 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                 color: Colors.transparent,
                 colorText: AppColors.secondary_60,
                 textOnly: true,
-                onPressed: () {},
+                onPressed: () {
+                  _clearInputs();
+                  if (widget.onCancel != null) {
+                    widget.onCancel!();
+                  }
+                },
               )
             ],
           ),
@@ -210,20 +285,32 @@ class AppSwitch extends StatelessWidget {
   }
 }
 
-class AppInputDropdown extends StatefulWidget {
-  AppInputDropdown({Key? key, this.items = const ["Fun", "Two", "Three"]})
-      : super(key: key);
-  final List<String> items;
+class name extends StatelessWidget {
+  const name({Key? key}) : super(key: key);
 
   @override
-  State<AppInputDropdown> createState() => _AppInputDropdownState();
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }
 
-class _AppInputDropdownState extends State<AppInputDropdown> {
-  DropdownMenuItem<String> _menuItems(String value) {
-    return DropdownMenuItem<String>(
-      value: value,
-      child: Text(value),
+class InventoryDropdown extends StatelessWidget {
+  InventoryDropdown(
+      {Key? key,
+      this.items = const [],
+      this.label = 'Select',
+      this.selectedIndex = 0,
+      required this.onChanged})
+      : super(key: key);
+  final List<InventoryItem> items;
+  final String label;
+  final int selectedIndex;
+  final Function(InventoryItem) onChanged;
+
+  DropdownMenuItem<InventoryItem> _menuItems(InventoryItem item) {
+    return DropdownMenuItem<InventoryItem>(
+      value: item,
+      child: Text(item.description),
     );
   }
 
@@ -232,8 +319,8 @@ class _AppInputDropdownState extends State<AppInputDropdown> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Dropdown', style: AppStyles.labelBold),
-        SizedBox(
+        Text(label, style: AppStyles.labelBold),
+        const SizedBox(
           height: 8,
         ),
         Container(
@@ -242,17 +329,14 @@ class _AppInputDropdownState extends State<AppInputDropdown> {
               borderRadius: BorderRadius.circular(4),
               border: Border.all(color: AppColors.secondary_80, width: 1)),
           child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              items: widget.items.map(_menuItems).toList(),
-              value: widget.items[0],
-              // itemHeight: 48,
+            child: DropdownButton<InventoryItem>(
+              items: items.map(_menuItems).toList(),
+              value: items[selectedIndex],
               isExpanded: true,
               icon: const Icon(Icons.arrow_drop_down),
               style: const TextStyle(color: Colors.black),
-              onChanged: (String? newValue) {
-                setState(() {
-                  // selected = newValue!;
-                });
+              onChanged: (val) {
+                onChanged(val!);
               },
             ),
           ),
