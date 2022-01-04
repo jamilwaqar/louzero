@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_pop_menu.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/job/models/line_item.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -8,8 +9,7 @@ class AppBillingLines extends StatelessWidget {
   final List<LineItem> data;
   AppBillingLines({Key? key, this.data = const []}) : super(key: key);
 
-  final TextStyle style =
-      AppStyles.labelRegular.copyWith(fontWeight: FontWeight.w600);
+  final TextStyle style = AppStyles.labelRegular;
 
   String prettify(double d) =>
       d.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0*$'), '');
@@ -27,6 +27,8 @@ class AppBillingLines extends StatelessWidget {
               LineItem item = entry.value;
               int index = entry.key;
               double pad = item.note != null ? 16 : 4;
+              bool hasDiscount =
+                  item.discount != null && item.discountText != null;
               return Container(
                 key: ValueKey(item),
                 color: index % 2 == 0
@@ -36,22 +38,39 @@ class AppBillingLines extends StatelessWidget {
                   contentPadding: EdgeInsets.only(top: pad, bottom: pad),
                   dense: true,
                   key: ValueKey(item),
-                  title: Column(children: [
-                    Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _description(item),
-                          _quantity(item),
-                          _price(item),
-                          _subtotal(item),
-                          _actions(),
-                        ]),
-                  ]),
+                  title: Column(
+                    children: [
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _description(item),
+                            _quantity(item),
+                            _price(item),
+                            _subtotal(item),
+                            _actions(),
+                          ]),
+                      //Discount line
+                      if (hasDiscount) ..._discount(item),
+                    ],
+                  ),
                 ),
               );
             }).toList(),
           ]),
     );
+  }
+
+  List<Widget> _discount(LineItem item) {
+    return [
+      AppDivider(mt: 16, mb: 16, mr: 48, ml: 48),
+      Padding(
+        padding: const EdgeInsets.only(left: 48, right: 48),
+        child: RowSplit(
+          left: Text(item.discountText!, style: style.copyWith(fontSize: 14)),
+          right: Text('- \$${item.discount!.toStringAsFixed(2)}', style: style),
+        ),
+      )
+    ];
   }
 
   Widget _description(LineItem item) {
