@@ -4,17 +4,26 @@ import 'package:get/instance_manager.dart';
 
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/constant/common.dart';
 import 'package:louzero/common/common.dart';
 
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
+import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../models/line_item.dart';
 
-class JobsHome extends StatelessWidget {
+class JobsHome extends StatefulWidget {
   JobsHome({Key? key}) : super(key: key);
+
+  @override
+  State<JobsHome> createState() => _JobsHomeState();
+}
+
+class _JobsHomeState extends State<JobsHome> {
   final _controller = Get.put(LineItemController());
+  bool addLineVisible = false;
+  int inventoryIndex = 0;
+  bool miscLineItem = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +52,11 @@ class JobsHome extends StatelessWidget {
     );
   }
 
+  _addLineItem(LineItem item) {
+    _controller.addLineItem(item);
+    addLineVisible = false;
+  }
+
   Widget _body() {
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -51,92 +65,15 @@ class JobsHome extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _locationCard(),
+          ContactCard(
+            title: 'Archwood House',
+            contact: _controller.contact,
+            address: _controller.address,
+            trailing: const TextKeyVal("Acct. Balance:", "\$978.00"),
+          ),
           _tabs(),
         ],
       ),
-    );
-  }
-
-  Widget _locationCard() {
-    return AppCardExpandable(
-      title: const AppHeaderIcon('Archwood House'),
-      subtitle: RowSplit(
-        space: 'center',
-        left: TextIcon(
-          _controller.fullAddress,
-          MdiIcons.mapMarker,
-        ),
-        right: const TextKeyVal(
-          "Acct. Balance:",
-          "\$978.00",
-        ),
-      ),
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                height: 316,
-                decoration: BoxDecoration(
-                    color: AppColors.secondary_95,
-                    borderRadius: Common.border_24.copyWith(
-                      topRight: const Radius.circular(0),
-                      bottomRight: const Radius.circular(0),
-                    )),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              flex: 4,
-              child: Container(
-                height: 316,
-                margin: const EdgeInsets.only(bottom: 16),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          AppCustomerInfo(
-                              address: _controller.billingAddress,
-                              contact: _controller.contact),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          const AppDivider(mt: 0, mb: 16),
-                          Row(
-                            children: const [
-                              AppButtons.iconFlat(
-                                'Parent Account',
-                                icon: MdiIcons.arrowTopRight,
-                                colorIcon: AppColors.secondary_60,
-                              ),
-                              Spacer(),
-                              AppButtons.iconOutline(
-                                'Site Profile',
-                                icon: MdiIcons.homeCity,
-                              ),
-                              SizedBox(width: 8),
-                              AppButtons.iconOutline(
-                                'Site Profile',
-                                icon: MdiIcons.homeCity,
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ]),
-              ),
-            )
-          ],
-        ),
-      ],
     );
   }
 
@@ -170,32 +107,30 @@ class JobsHome extends StatelessWidget {
       children: [
         const Text('Billing Line Items', style: AppStyles.headerRegular),
         AppBillingLines(data: _controller.lineItems),
-        JobAddNewLine(
-          onCreate: (LineItem item) {
-            _controller.addLineItem(item);
-          },
+        Visibility(
+          visible: addLineVisible,
+          child: JobAddNewLine(
+            selectedIndex: inventoryIndex,
+            inventory: miscLineItem ? [] : _controller.inventory,
+            onCreate: (LineItem item) {
+              _addLineItem(item);
+            },
+            onCancel: () {
+              setState(() {
+                addLineVisible = false;
+              });
+            },
+          ),
         ),
-        const AppPopMenu(
-          button: [
-            AppButtons.iconOutline(
-              'Add New Line',
-              isMenu: true,
-            )
-          ],
-          items: [
-            PopMenuItem(label: 'Inventory Line', icon: MdiIcons.clipboardText),
-            PopMenuItem(
-                label: 'Misc. Billing Line', icon: MdiIcons.currencyUsd),
-          ],
-        ),
+        _addItemButton(),
         const AppDivider(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             AppButtons.iconFlat('Add Note', icon: MdiIcons.note),
             Expanded(
               child: AppBillingTotal(
-                subtotal: 1246.57,
+                subtotal: _controller.subTotal,
                 tax: 7.32,
               ),
             )
@@ -204,77 +139,36 @@ class JobsHome extends StatelessWidget {
       ],
     );
   }
-  // End Class
-}
 
-class TextIcon extends StatelessWidget {
-  final String text;
-  final IconData icon;
-  final bool trail;
-  final double size;
-  const TextIcon(
-    this.text,
-    this.icon, {
-    this.trail = false,
-    this.size = 14,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        if (!trail)
-          Icon(
-            icon,
-            color: AppColors.primary_60,
-            size: size,
-          ),
-        Text(text, style: AppStyles.labelRegular.copyWith(fontSize: size)),
-        if (trail)
-          Icon(
-            icon,
-            color: AppColors.primary_60,
-            size: size,
-          ),
+  Widget _addItemButton() {
+    return AppPopMenu(
+      button: [
+        AppButtons.iconOutline(
+          'Add New Line',
+          isMenu: true,
+        )
       ],
-    );
-  }
-}
-
-class AppHeaderIcon extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final TextStyle style;
-  final double mt;
-  final double mb;
-
-  const AppHeaderIcon(
-    this.title, {
-    this.icon = MdiIcons.arrowTopRight,
-    this.style = AppStyles.headerRegular,
-    this.mb = 8,
-    this.mt = 0,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: mb, top: mt),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: style,
-          ),
-          AppIconButton(
-            pl: 8,
-            icon: icon,
-            onTap: () {},
-          ),
-        ],
-      ),
+      items: [
+        PopMenuItem(
+          label: 'Inventory Line',
+          icon: MdiIcons.clipboardText,
+          onTap: () {
+            setState(() {
+              miscLineItem = false;
+              addLineVisible = true;
+            });
+          },
+        ),
+        PopMenuItem(
+            label: 'Misc. Billing Line',
+            icon: MdiIcons.currencyUsd,
+            onTap: () {
+              setState(() {
+                miscLineItem = true;
+                addLineVisible = true;
+              });
+            }),
+      ],
     );
   }
 }
