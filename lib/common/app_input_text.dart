@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/common.dart';
 import 'app_text_body.dart';
@@ -17,6 +18,8 @@ class AppInputText extends StatelessWidget {
       this.password = false,
       this.autofocus = false,
       this.required = false,
+      this.readOnly = false,
+      this.inputFormatters,
       this.colorTx = AppColors.dark_3,
       this.colorBd = AppColors.light_3,
       this.colorBg = AppColors.lightest,
@@ -30,6 +33,7 @@ class AppInputText extends StatelessWidget {
   final String label;
   final String? initial;
   final TextEditingController? controller;
+  final List<TextInputFormatter>? inputFormatters;
   final void Function(String?)? onSaved;
   final String? Function(String?)? validator;
   final Color colorBg;
@@ -39,6 +43,7 @@ class AppInputText extends StatelessWidget {
   final TextCapitalization? textCapitalization;
   final bool password;
   final bool required;
+  final bool readOnly;
   final double mt;
   final double mb;
   final bool autofocus;
@@ -103,6 +108,8 @@ class AppInputText extends StatelessWidget {
           obscureText: password,
           onChanged: onChanged,
           onSaved: onSaved,
+          readOnly: readOnly,
+          inputFormatters: inputFormatters,
           validator: validator,
           style: inputText,
           enabled: enabled,
