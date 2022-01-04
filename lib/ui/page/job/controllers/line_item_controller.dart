@@ -2,6 +2,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/ui/page/job/models/inventory_item.dart';
 import 'package:louzero/ui/page/job/models/line_item.dart';
 
 class LineItemController extends GetxController {
@@ -13,7 +14,7 @@ class LineItemController extends GetxController {
       role: 'Home Owner',
       types: [CTContactType.primary]);
 
-  final AddressModel billingAddress = AddressModel(
+  final AddressModel address = AddressModel(
       country: 'United States',
       street: '123 Alphabet Blvd.',
       city: 'Portland',
@@ -25,28 +26,75 @@ class LineItemController extends GetxController {
   }
 
   String get fullAddress {
-    return " ${billingAddress.street} ${billingAddress.city},  ${billingAddress.state}  ${billingAddress.zip}";
+    return " ${address.street} ${address.city},  ${address.state}  ${address.zip}";
   }
 
   String get cityStateZip {
-    return "${billingAddress.city},  ${billingAddress.state}  ${billingAddress.zip}";
+    return "${address.city},  ${address.state}  ${address.zip}";
+  }
+
+  double get subTotal {
+    return lineItems.fold(0, (sum, item) {
+      double price = item.price * item.count;
+      if (item.discount != null) {
+        price = price - item.discount!;
+      }
+
+      return sum + price;
+    });
+  }
+
+  List<InventoryItem> get inventory {
+    return const [
+      InventoryItem(
+        id: '001',
+        description: 'Water Filters',
+        price: 20,
+      ),
+      InventoryItem(
+        id: '002',
+        description: 'Pool Cleaning - Annual',
+        price: 250,
+      ),
+      InventoryItem(
+        id: '004',
+        description: 'Pool Water Balancing',
+        price: 175,
+      ),
+      InventoryItem(
+        id: '005',
+        description: 'Pool Alkalinity Increaser',
+        price: 44.99,
+      ),
+      InventoryItem(
+        id: '006',
+        description: 'Pool Skimmer and Brushes',
+        price: 138.95,
+      ),
+      InventoryItem(
+        id: '007',
+        description: 'Algae Brush - Stainless Steel ',
+        price: 33.85,
+      ),
+      InventoryItem(
+        id: '008',
+        description: 'Wireless Floating Pool Thermometer',
+        price: 63.95,
+      ),
+    ];
   }
 
   RxList<LineItem> lineItems = <LineItem>[
     // Sample Data (remove in prod)
     const LineItem(
-      description: 'Clean Pool',
+      description: 'Healthy Pool Cleaning',
       count: 1,
       price: 50.00,
       subtotal: 50.00,
-    ),
-    const LineItem(
-      description: 'Solar Heating System',
-      count: 2,
-      price: 100.00,
-      subtotal: 200.00,
       note:
-          'Adding in an interesting comment about what this is and why it’s here. If I need to add more than one line of text, this input grows vertically as needed!',
+          'This is part of our \'Healthy Families\' campaign which runs through the summer months to keep the whole family happy and healthy!',
+      discount: 10,
+      discountText: 'Summer Special!',
     ),
   ].obs;
 
