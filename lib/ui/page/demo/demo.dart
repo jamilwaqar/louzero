@@ -203,8 +203,10 @@ class Demo extends StatelessWidget {
           children: [
             Container(),
             const AppButton(
-                label: 'Cancel', primary: false, color: AppColors.secondary_60),
-            const AppButton(label: 'Submit', color: AppColors.orange),
+                label: 'Cancel',
+                primary: false,
+                colorBg: AppColors.secondary_60),
+            const AppButton(label: 'Submit', colorBg: AppColors.orange),
           ],
         )
       ]);

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/common/common.dart';
-
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
@@ -127,11 +125,34 @@ class _JobsHomeState extends State<JobsHome> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppButtons.iconFlat('Add Note', icon: MdiIcons.note),
             Expanded(
-              child: AppBillingTotal(
-                subtotal: _controller.subTotal,
-                tax: 7.32,
+              flex: 12,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppButtons.iconFlat('Add Note', icon: MdiIcons.note),
+                  AppInputText(label: 'Add Note'),
+                  Row(
+                    children: [
+                      AppButton(label: 'Save Note'),
+                      AppButton(label: 'Cancel', primary: false)
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 8,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 48),
+                child: Column(
+                  children: [
+                    AppBillingTotal(
+                      subtotal: _controller.subTotal,
+                      tax: 7.32,
+                    ),
+                  ],
+                ),
               ),
             )
           ],
@@ -142,7 +163,7 @@ class _JobsHomeState extends State<JobsHome> {
 
   Widget _addItemButton() {
     return AppPopMenu(
-      button: [
+      button: const [
         AppButtons.iconOutline(
           'Add New Line',
           isMenu: true,

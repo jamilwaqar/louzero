@@ -41,7 +41,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   final TextEditingController _serviceStateController = TextEditingController();
   final TextEditingController _serviceZipController = TextEditingController();
 
-  final TextEditingController _billCountryController = TextEditingController(text: AppDefaultValue.country.name);
+  final TextEditingController _billCountryController =
+      TextEditingController(text: AppDefaultValue.country.name);
   final TextEditingController _billStreetController = TextEditingController();
   final TextEditingController _billCityController = TextEditingController();
   final TextEditingController _billAtController = TextEditingController();
@@ -98,7 +99,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       footerEnd: [
         AppButton(
             label: 'Cancel',
-            color: AppColors.secondary_70.withAlpha(40),
+            colorBg: AppColors.secondary_70.withAlpha(40),
             colorText: AppColors.secondary_70,
             onPressed: () {
               NavigationController().pop(context);
@@ -148,15 +149,15 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             children: [
               Flexible(
                   child: AppDropDown(
-                    label: "Company*",
-                    itemList: _baseController.companies.map((e) => e.name).toList(),
-                    initValue: _companyName,
-                    onChanged: (value) {
-                      setState(() {
-                        _companyName = value!;
-                      });
-                    },
-                  )),
+                label: "Company*",
+                itemList: _baseController.companies.map((e) => e.name).toList(),
+                initValue: _companyName,
+                onChanged: (value) {
+                  setState(() {
+                    _companyName = value!;
+                  });
+                },
+              )),
               const SizedBox(width: 32),
               Flexible(
                   child: AppDropDown(
@@ -263,8 +264,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                       : _billStreetController,
                   label: "Street Address",
                   onChanged: (val) {
-                    _baseController.searchAddress(
-                        val, _country.countryCode);
+                    _baseController.searchAddress(val, _country.countryCode);
                   },
                 ),
                 AppInputText(
@@ -561,7 +561,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     }
 
     CustomerModel model = CustomerModel(
-        companyId: _baseController.companies.firstWhere((e) => e.name == _companyName).objectId!,
+        companyId: _baseController.companies
+            .firstWhere((e) => e.name == _companyName)
+            .objectId!,
         type: _customerType!,
         serviceAddress: serviceAddress,
         billingAddress: billingAddress);
@@ -578,10 +580,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       WarningMessageDialog.showDialog(context, "Saved Customer!");
       CustomerModel newModel = CustomerModel.fromMap(response);
       if (newModel.companyId == _baseController.activeCompany!.objectId) {
-        List<CustomerModel> newList = [
-          ..._baseController.customers,
-          newModel
-        ];
+        List<CustomerModel> newList = [..._baseController.customers, newModel];
         _baseController.customers = newList;
       }
       List<CustomerModel> newList = [

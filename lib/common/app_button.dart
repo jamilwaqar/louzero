@@ -16,7 +16,7 @@ class AppButton extends StatelessWidget {
     this.textOnly = false,
     this.alignLeft = false,
     this.isMenu = false,
-    this.color = AppColors.dark_3,
+    this.colorBg = AppColors.secondary_20,
     this.colorText = AppColors.lightest,
     this.borderColor,
     this.colorIcon,
@@ -34,7 +34,7 @@ class AppButton extends StatelessWidget {
   final bool textOnly;
   final bool isMenu;
   final bool alignLeft;
-  final Color color;
+  final Color colorBg;
   final Color colorText;
   final Color? colorIcon;
   final Color? borderColor;
@@ -45,8 +45,8 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var fg = primary ? colorText : color;
-    var bg = primary ? color : AppColors.lightest;
+    var fg = primary ? colorText : colorBg;
+    var bg = primary ? colorBg : AppColors.lightest;
     var textStyle = TextStyle(
         fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: fontSize);
 
@@ -169,7 +169,7 @@ class AppButtons extends StatelessWidget {
       icon: icon,
       borderColor: colorBorder,
       colorText: colorText,
-      color: colorBackground,
+      colorBg: colorBackground,
       colorIcon: colorIcon,
       onPressed: onPressed,
     );
@@ -189,7 +189,7 @@ class AppBarButtonAdd extends StatelessWidget {
       fontSize: 16,
       label: label!,
       icon: Icons.add_circle,
-      color: AppColors.secondary_20,
+      colorBg: AppColors.secondary_20,
       colorIcon: AppColors.accent_1,
       onPressed: onPressed,
     );

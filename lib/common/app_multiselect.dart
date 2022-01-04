@@ -105,7 +105,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
         wide: true,
         label: "Done",
         primary: true,
-        color: AppColors.orange,
+        colorBg: AppColors.orange,
         onPressed: () {
           Navigator.of(context).pop();
         },

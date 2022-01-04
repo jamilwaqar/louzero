@@ -107,7 +107,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     height: btnHeight,
                     margin: const EdgeInsets.only(right: 8),
                     label: 'Dev Page',
-                    color: Colors.red,
+                    colorBg: Colors.red,
                     borderColor: Colors.red,
                     primary: false,
                     onPressed: () =>
@@ -118,7 +118,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     height: btnHeight,
                     margin: const EdgeInsets.only(right: 8),
                     label: 'Add Job',
-                    color: AppColors.dark_1,
+                    colorBg: AppColors.dark_1,
                     colorText: AppColors.darkest,
                     primary: false,
                     onPressed: () =>
@@ -127,7 +127,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   AppButton(
                       fontSize: btnSize,
                       height: btnHeight,
-                      color: AppColors.dark_1,
+                      colorBg: AppColors.dark_1,
                       label: 'Search Jobs',
                       onPressed: () {
                         Get.to(() => const JobListPage(),
@@ -158,14 +158,14 @@ class _DashboardPageState extends State<DashboardPage> {
                       height: btnHeight,
                       margin: const EdgeInsets.only(right: 8),
                       label: 'Add Customer',
-                      color: AppColors.dark_1,
+                      colorBg: AppColors.dark_1,
                       colorText: AppColors.darkest,
                       primary: false,
                     ),
                     AppButton(
                       fontSize: btnSize,
                       height: btnHeight,
-                      color: AppColors.dark_1,
+                      colorBg: AppColors.dark_1,
                       label: 'View All',
                       onPressed: () => Get.to(() => CustomerListPage()),
                     )

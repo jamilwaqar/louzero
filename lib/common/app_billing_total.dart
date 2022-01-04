@@ -33,44 +33,35 @@ class AppBillingTotal extends StatelessWidget {
     TextStyle style = AppStyles.labelBold,
     double borderWidth = 1,
   }) {
-    return Row(children: [
-      const Spacer(),
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [Text(label, style: style)],
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 48),
-                      child: Text(
-                          '\$' + amount.toStringAsFixed(2).padRight(4, "0"),
-                          style: style),
-                    )
-                  ],
-                ),
-              )
-            ]),
-            if (borderWidth != 0)
-              AppDivider(
-                mt: 16,
-                mb: 16,
-                size: borderWidth,
-              )
-          ],
-        ),
-      ),
-    ]);
+    return Column(
+      children: [
+        Row(children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SizedBox(width: 200),
+                Text(label, style: style),
+              ],
+            ),
+          ),
+          const SizedBox(width: 24),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(width: 100),
+              Text('\$' + amount.toStringAsFixed(2).padRight(4, "0"),
+                  style: style)
+            ],
+          )
+        ]),
+        if (borderWidth != 0)
+          AppDivider(
+            mt: 16,
+            mb: 16,
+            size: borderWidth,
+          )
+      ],
+    );
   }
 }

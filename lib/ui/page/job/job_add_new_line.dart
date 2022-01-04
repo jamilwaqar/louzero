@@ -227,7 +227,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
           left: Row(
             children: [
               AppButton(
-                color: AppColors.secondary_20,
+                colorBg: AppColors.secondary_20,
                 label: "Save",
                 onPressed: () {
                   _addLineItem();
@@ -235,7 +235,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
               ),
               AppButton(
                 label: "Cancel",
-                color: Colors.transparent,
+                colorBg: Colors.transparent,
                 colorText: AppColors.secondary_60,
                 textOnly: true,
                 onPressed: () {
