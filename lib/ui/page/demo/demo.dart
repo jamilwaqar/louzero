@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Demo extends StatelessWidget {
@@ -13,9 +15,12 @@ class Demo extends StatelessWidget {
       subheader: 'Demo Components',
       child: Column(
         children: [
+          SizedBox(height: 32),
+          _numberStepper(),
+          _contactCard(),
           Padding(
             padding:
-                const EdgeInsets.only(top: 32, left: 16, right: 16, bottom: 16),
+                const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
             child: AppCardTabs(
               height: 500,
               length: 3,
@@ -102,6 +107,38 @@ class Demo extends StatelessWidget {
       children: [Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)],
     ),
   ];
+
+  Widget _numberStepper() {
+    return AppCard(children: [
+      Text(
+        'Number Stepper',
+        style: AppStyles.headerRegular,
+      ),
+      SizedBox(height: 24),
+      AppNumberStepper()
+    ]);
+  }
+
+  Widget _contactCard() {
+    return Padding(
+      padding: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 0),
+      child: ContactCard(
+        title: 'Contact Card Demo',
+        contact: CustomerContact(
+            firstName: 'Joe',
+            lastName: 'Somebody',
+            email: 'joe@somesite.com',
+            phone: '(510) 843-4356',
+            role: 'Owner'),
+        address: AddressModel(
+            country: 'US',
+            street: '123 Alphabet Street',
+            city: 'Portland',
+            state: 'OR',
+            zip: '97202'),
+      ),
+    );
+  }
 
   // RENDER FUNCTIONS
   Widget _heading(String text,

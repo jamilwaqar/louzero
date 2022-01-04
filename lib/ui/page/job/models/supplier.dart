@@ -4,11 +4,4 @@ class Supplier {
   const Supplier({
     required this.name,
   });
-
-  Supplier copy({
-    String? name,
-  }) =>
-      Supplier(
-        name: name ?? this.name,
-      );
 }

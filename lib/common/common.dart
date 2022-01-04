@@ -23,6 +23,7 @@ export 'app_list_draggable.dart';
 export 'app_list_tile.dart';
 export 'app_multiselect.dart';
 export 'app_nav_button.dart';
+export 'app_number_stepper.dart';
 export 'app_placeholder.dart';
 export 'app_pop_menu.dart';
 export 'app_row_flex.dart';
