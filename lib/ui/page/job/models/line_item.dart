@@ -4,6 +4,8 @@ class LineItem {
   final double price;
   final double subtotal;
   final String? note;
+  final double? discount;
+  final String? discountText;
 
   const LineItem({
     required this.description,
@@ -11,18 +13,7 @@ class LineItem {
     required this.price,
     required this.subtotal,
     this.note,
+    this.discount,
+    this.discountText,
   });
-
-  LineItem copy({
-    String? description,
-    double? count,
-    double? price,
-    double? subtotal,
-  }) =>
-      LineItem(
-        description: description ?? this.description,
-        count: count ?? this.count,
-        price: price ?? this.price,
-        subtotal: subtotal ?? this.subtotal,
-      );
 }
