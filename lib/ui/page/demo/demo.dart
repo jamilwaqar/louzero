@@ -16,6 +16,7 @@ class Demo extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: 32),
+          _formTextInput(),
           _addNote(),
           _numberStepper(),
           _contactCard(),
@@ -114,6 +115,22 @@ class Demo extends StatelessWidget {
         child: AppAddNote(
           initialText: "Simple quick note widget.",
         ));
+  }
+
+  Widget _formTextInput() {
+    return AppCard(children: [
+      AppHeaderIcon(
+        'Form Inputs',
+        icon: MdiIcons.formTextbox,
+        mb: 24,
+      ),
+      FlexRow(
+        children: [
+          AppTexfield(label: 'Basic'),
+          AppTexfield(label: 'Basic'),
+        ],
+      )
+    ]);
   }
 
   Widget _demoCenterCard(String label, {Widget? child}) {

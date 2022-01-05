@@ -7,9 +7,11 @@ import 'app_button.dart';
 
 class AppAddNote extends StatefulWidget {
   final String initialText;
+  final Function(String)? onChange;
 
   const AppAddNote({
     this.initialText = '',
+    this.onChange,
     Key? key,
   }) : super(key: key);
 
@@ -101,6 +103,9 @@ class _AppAddNoteState extends State<AppAddNote> {
                               setState(() {
                                 currentText = _noteController.text;
                                 visible = false;
+                                if (widget.onChange != null) {
+                                  widget.onChange!(_noteController.text);
+                                }
                               });
                             }),
                         AppButton(
@@ -128,6 +133,9 @@ class _AppAddNoteState extends State<AppAddNote> {
                                 _noteController.text = '';
                                 currentText = '';
                                 visible = false;
+                                if (widget.onChange != null) {
+                                  widget.onChange!(_noteController.text);
+                                }
                               });
                             },
                           )

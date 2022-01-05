@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
-class AppInputMultiLine extends StatefulWidget {
+class AppTexfield extends StatefulWidget {
+  final String? label;
   final TextEditingController? controller;
   final double height;
   final bool autofocus;
-  const AppInputMultiLine({
+  const AppTexfield({
+    this.label,
     this.controller,
     this.height = 139,
     this.autofocus = false,
@@ -13,10 +15,10 @@ class AppInputMultiLine extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AppInputMultiLine> createState() => _AppInputMultiLineState();
+  State<AppTexfield> createState() => _AppTexfieldState();
 }
 
-class _AppInputMultiLineState extends State<AppInputMultiLine> {
+class _AppTexfieldState extends State<AppTexfield> {
   final _textFieldFocus = FocusNode();
   Color _color = AppColors.secondary_99;
 
@@ -39,6 +41,9 @@ class _AppInputMultiLineState extends State<AppInputMultiLine> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      cursorHeight: 16,
+      cursorColor: AppColors.secondary_70,
+      cursorWidth: 2,
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,
       controller: widget.controller,
@@ -52,9 +57,10 @@ class _AppInputMultiLineState extends State<AppInputMultiLine> {
             const TextStyle(fontFamily: 'Lato', color: AppColors.secondary_40),
         fillColor: _color,
         filled: true,
-        labelText: 'Add Note',
+        labelText: widget.label,
+        border: UnderlineInputBorder(),
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
         focusedBorder: const UnderlineInputBorder(
