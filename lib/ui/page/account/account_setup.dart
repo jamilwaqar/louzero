@@ -123,7 +123,7 @@ class _AccountSetupState extends State<AccountSetup> {
 
   _goToDashboard(context) {
     NavigationController().pop(context);
-    NavigationController().pushTo(context, child: DashboardPage());
+    Get.to(()=> DashboardPage());
   }
 
   Widget _scrollView(Widget child) {

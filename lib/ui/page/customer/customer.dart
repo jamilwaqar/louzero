@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
+import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
 
 class CustomerProfilePage extends GetWidget<CustomerController> {
@@ -14,23 +17,42 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       child: _body(),
-      subheader: controller.customerModel.value!.customerContacts.first.fullName,
+      subheader: controller.customerModel!.customerContacts.first.fullName,
     );
   }
 
+  String _customerFullName() {
+    var customer = controller.customerModel!.customerContacts[0];
+    return "${customer.firstName} ${customer.lastName}";
+  }
+
   Widget _body() {
-    return Column(
-      children: [
-        CustomerInfo(controller.customerModel.value!),
-        const SizedBox(height: 24),
-        _category()
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 32, bottom: 32, left: 16, right: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ContactCard(
+            title: _customerFullName() + "(dev in progress)",
+            contact: controller.customerModel!.customerContacts[0],
+            address: controller.customerModel!.billingAddress,
+            trailing: const TextKeyVal('Account Balance', '\$0.00'),
+            onClickIcon: () {
+              Get.to(() => AddCustomerPage(
+                    model: controller.customerModel,
+                  ));
+            },
+          ),
+          CustomerInfo(controller.customerModel!),
+          _category()
+        ],
+      ),
     );
   }
 
   Widget _category() {
     List<Widget> itemList = List.generate(CustomerCategory.values.length,
-            (index) => _categoryItem(CustomerCategory.values[index])).toList();
+        (index) => _categoryItem(CustomerCategory.values[index])).toList();
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
@@ -48,7 +70,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
       case CustomerCategory.jobs:
         break;
       case CustomerCategory.siteProfiles:
-        count = controller.customerModel.value!.siteProfiles.length;
+        count = controller.customerModel!.siteProfiles.length;
         break;
       case CustomerCategory.contacts:
         break;
@@ -65,10 +87,10 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
           case CustomerCategory.jobs:
             break;
           case CustomerCategory.siteProfiles:
-            count = controller.customerModel.value!.siteProfiles.length;
+            count = controller.customerModel!.siteProfiles.length;
             Get.to(() => CustomerSiteProfilePage(
-                controller.customerModel.value!.siteProfiles,
-                customerId: controller.customerModel.value!.objectId));
+                controller.customerModel!.siteProfiles,
+                customerId: controller.customerModel!.objectId));
             break;
           case CustomerCategory.contacts:
             break;

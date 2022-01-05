@@ -6,18 +6,19 @@ part 'customer_models.g.dart';
 @JsonSerializable()
 class CustomerModel {
   CustomerModel(
-      {required this.companyId,
+      {required this.companyName,
       required this.type,
       required this.serviceAddress,
       required this.billingAddress});
 
-  @JsonKey(includeIfNull: false) String? objectId;
+  String? objectId;
   @JsonKey(includeIfNull: false) String? ownerId;
+  String companyName;
   String type;
-  String? parentId;
-  String companyId;
+  String? parentAccountName;
   AddressModel serviceAddress;
   AddressModel billingAddress;
+  @JsonKey(defaultValue: true) bool billAddressSame = true;
 
   @JsonKey(defaultValue: [])
   List<CustomerContact> customerContacts = [];

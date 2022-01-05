@@ -6,10 +6,15 @@ import 'base_controller.dart';
 
 class CustomerController extends GetxController {
 
-  final customerModel = Rx<CustomerModel?>(null);
+  final _customerModel = Rx<CustomerModel?>(null);
 
-  List<CustomerModel> get customers =>
-      Get.find<BaseController>().customers;
+  CustomerModel? get customerModel => _customerModel.value;
+
+  set customerModel(CustomerModel? model) => _customerModel.value = model;
+
+  final baseController = Get.find<BaseController>();
+
+  List<CustomerModel> get customers => baseController.customers;
 
   fetchSiteProfile(String customerId) async {
     CustomerModel? model = customerModelById(customerId);
@@ -35,12 +40,12 @@ class CustomerController extends GetxController {
     }
   }
 
-  updateCustomerModel(CustomerModel model) async {
+  updateCustomerModel(CustomerModel model) {
     List<CustomerModel> models = [...customers];
     int index = models.indexWhere((e) => e.objectId == model.objectId);
     models.removeWhere((e) => e.objectId == model.objectId);
     models.insert(index, model);
-    Get.find<BaseController>().customers = models;
+    baseController.customers = models;
   }
 
   CustomerModel? customerModelById(String customerId) {
@@ -51,12 +56,56 @@ class CustomerController extends GetxController {
     }
   }
 
+  Future save(CustomerModel model, IDataStore store) async {
+    Map<String, dynamic> data = model.toJson();
+    data['serviceAddress'] = model.serviceAddress.toJson();
+    data['billingAddress'] = model.billingAddress.toJson();
+    data['customerContacts'] =
+        model.customerContacts.map((e) => e.toJson()).toList();
+    if (data['objectId'] == null) {
+      data.remove('objectId');
+    }
+    try {
+      dynamic response =
+          await /*Backendless.data.of(BLPath.customer)*/ store.save(data);
+      CustomerModel newModel = CustomerModel.fromMap(response);
+      if (model.objectId == null) {
+        List<CustomerModel> newList = [...baseController.customers, newModel];
+        baseController.customers = newList;
+      } else {
+        updateCustomerModel(newModel);
+      }
+      update();
+      return newModel;
+    } catch (e) {
+      print('save data error: ${e.toString()}');
+      return e.toString();
+    }
+  }
+
+  Future deleteCustomer(String objectId, IDataStore store) async {
+    try {
+      dynamic response = await store.remove(entity: {"objectId": objectId});
+      customers.removeWhere((element) => element.objectId == objectId);
+      update();
+      return response;
+    } catch(e) {
+      return e.toString();
+    }
+  }
+
   @override
   void onInit() {
-    customerModel.value = Get.arguments;
-    if (customerModel.value != null) {
-      fetchSiteProfile(customerModel.value!.objectId!);
+    customerModel = Get.arguments;
+    if (customerModel != null) {
+      fetchSiteProfile(customerModel!.objectId!);
     }
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    baseController.searchedAddressList = [];
+    super.onClose();
   }
 }

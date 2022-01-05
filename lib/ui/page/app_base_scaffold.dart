@@ -1,15 +1,18 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/widget/appbar/app_bar_page_header.dart';
 import 'package:louzero/ui/widget/side_menu/side_menu.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'company/companies.dart';
 
 class AppBaseScaffold extends StatefulWidget {
   final Widget? child;
@@ -186,7 +189,11 @@ class AppUserDropdownMenu extends StatelessWidget {
         PopMenuItem(
           label: 'My Account',
           icon: Icons.person_rounded,
-          onTap: () {},
+          onTap: () {
+            Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+                Get.to(() => const CompanyListPage(),
+                    binding: CompanyBinding()));
+          },
         ),
         PopMenuItem(
           label: 'Settings',

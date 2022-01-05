@@ -7,6 +7,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer_location.dart';
 import 'buttons/top_left_button.dart';
 
@@ -49,7 +50,13 @@ class CustomerInfo extends StatelessWidget {
                                       .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),
                               TopLeftButton(
-                                  onPressed: () {}, iconData: Icons.edit),
+                                  onPressed: () {
+                                    // Get.find<CustomerController>().customerModel = customerModel;
+                                    Get.to(() => AddCustomerPage(
+                                          model: customerModel,
+                                        ));
+                                  },
+                                  iconData: Icons.edit),
                             ],
                           ),
                           Row(

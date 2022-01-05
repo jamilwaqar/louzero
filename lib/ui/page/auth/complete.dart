@@ -1,6 +1,7 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card_center.dart';
 import 'package:louzero/common/app_checkbox.dart';
@@ -125,7 +126,7 @@ class _CompletePageState extends State<CompletePage> {
       AuthManager.userModel!.firstname = _firstNameController.text;
       AuthManager.userModel!.lastname = _lastNameController.text;
       await AuthManager().updateUser();
-      NavigationController().pushTo(context, child: const AccountSetup());
+      Get.to(()=> const AccountSetup());
     }
   }
 }

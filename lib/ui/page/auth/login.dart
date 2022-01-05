@@ -130,11 +130,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onCreateAccount() {
-    NavigationController().pushTo(context, child: const SignUpPage());
+    Get.to(()=> const SignUpPage());
   }
 
   void _onAcceptInvite() {
-    NavigationController().pushTo(context, child: const AcceptInvitePage());
+    Get.to(()=> const AcceptInvitePage());
   }
 
   void _onSignIn() async {
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onRememberDevice() {}
   void _onResetPassword() {
-    NavigationController().pushTo(context, child: const ResetPasswordPage());
+    Get.to(()=> const ResetPasswordPage());
   }
 
   void _onGoogleSignIn() {}

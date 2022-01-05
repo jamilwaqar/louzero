@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/models.dart';
-import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/common.dart';
 
@@ -10,15 +9,17 @@ class ContactCard extends StatelessWidget {
   final String title;
   final CustomerContact contact;
   final AddressModel address;
+  final VoidCallback? onClickIcon;
   final Widget? trailing;
 
-  const ContactCard(
-      {Key? key,
-      required this.title,
-      required this.contact,
-      required this.address,
-      this.trailing})
-      : super(key: key);
+  const ContactCard({
+    Key? key,
+    required this.title,
+    required this.contact,
+    required this.address,
+    this.trailing,
+    this.onClickIcon,
+  }) : super(key: key);
 
   String _fullAddress() {
     var street = address.street;
@@ -32,7 +33,10 @@ class ContactCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCardExpandable(
-      title: AppHeaderIcon(title),
+      title: AppHeaderIcon(
+        title,
+        onTap: onClickIcon,
+      ),
       subtitle: RowSplit(
         space: 'center',
         left: TextIcon(
@@ -64,41 +68,42 @@ class ContactCard extends StatelessWidget {
                 height: 316,
                 margin: const EdgeInsets.only(bottom: 16),
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          AppCustomerInfo(address: address, contact: contact),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          const AppDivider(mt: 0, mb: 16),
-                          Row(
-                            children: const [
-                              AppButtons.iconFlat(
-                                'Parent Account',
-                                icon: MdiIcons.arrowTopRight,
-                                colorIcon: AppColors.secondary_60,
-                              ),
-                              Spacer(),
-                              AppButtons.iconOutline(
-                                'Site Profile',
-                                icon: MdiIcons.homeCity,
-                              ),
-                              SizedBox(width: 8),
-                              AppButtons.iconOutline(
-                                'Site Profile',
-                                icon: MdiIcons.homeCity,
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ]),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        AppCustomerInfo(address: address, contact: contact),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        const AppDivider(mt: 0, mb: 16),
+                        Row(
+                          children: const [
+                            AppButtons.iconFlat(
+                              'Parent Account',
+                              icon: MdiIcons.arrowTopRight,
+                              colorIcon: AppColors.secondary_60,
+                            ),
+                            Spacer(),
+                            AppButtons.iconOutline(
+                              'Site Profile',
+                              icon: MdiIcons.homeCity,
+                            ),
+                            SizedBox(width: 8),
+                            AppButtons.iconOutline(
+                              'Site Profile',
+                              icon: MdiIcons.homeCity,
+                            ),
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             )
           ],

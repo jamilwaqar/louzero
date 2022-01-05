@@ -1,24 +1,23 @@
-import 'package:flutter/cupertino.dart';
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/get/base_controller.dart';
-import 'package:louzero/controller/get/bindings/customer_binding.dart';
+import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/invite.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/common/common.dart';
+import 'package:louzero/ui/page/demo/demo.dart';
 
 import 'customer.dart';
 
-class CustomerListPage extends StatelessWidget {
-  CustomerListPage({Key? key}) : super(key: key);
+class CustomerListPage extends GetWidget<CustomerController> {
+  const CustomerListPage({Key? key}) : super(key: key);
 
   final int mockId = 8520;
-  final BaseController _baseController = Get.find();
-
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
@@ -31,8 +30,7 @@ class CustomerListPage extends StatelessWidget {
         AppBarButtonAdd(
           label: 'New Customer',
           onPressed: () {
-            NavigationController()
-                .pushTo(context, child: const AddCustomerPage());
+            Get.to(() => const AddCustomerPage());
           },
         )
       ],
@@ -40,84 +38,84 @@ class CustomerListPage extends StatelessWidget {
   }
 
   Widget _body() {
-    return Obx(() => ListView.builder(
-        padding: const EdgeInsets.only(top: 32),
-        shrinkWrap: true,
-        itemCount: _baseController.customers.length,
-        itemBuilder: (context, index) {
-          CustomerModel model = _baseController.customers[index];
-          return AppCard(
-            mb: 8,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => const CustomerProfilePage(),
-                      arguments: model, binding: CustomerBinding());
-                },
-                child: AppRowFlex(
-                    flex: const [1, 5, 2, 0],
-                    align: CrossAxisAlignment.center,
-                    mb: 0,
-                    children: [
-                      AppTextBody('#$mockId'),
-                      Column(
+    return GetBuilder<CustomerController>(
+        builder: (_) => ListView.builder(
+            padding: const EdgeInsets.only(top: 32),
+            shrinkWrap: true,
+            itemCount: controller.customers.length,
+            itemBuilder: (context, index) {
+              CustomerModel model = controller.customers[index];
+              return AppCard(
+                mb: 8,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      controller.customerModel = model;
+                      Get.to(() => const CustomerProfilePage());
+                    },
+                    child: AppRowFlex(
+                        flex: const [1, 5, 2, 0],
+                        align: CrossAxisAlignment.center,
+                        mb: 0,
                         children: [
-                          AppTextBody(
-                            model.customerContacts.first.fullName,
-                            color: AppColors.darkest,
-                            bold: true,
+                          AppTextBody('#$mockId'),
+                          Column(
+                            children: [
+                              AppTextBody(
+                                model.customerContacts.first.fullName,
+                                color: AppColors.darkest,
+                                bold: true,
+                              ),
+                              AppTextBody(
+                                model.serviceAddress.fullAddress,
+                              )
+                            ],
                           ),
                           AppTextBody(
-                            model.serviceAddress.fullAddress,
-                          )
-                        ],
-                      ),
-                      AppTextBody(
-                        model.type,
-                      ),
-                      PopupMenuButton(
-                          offset: const Offset(0, 40),
-                          onSelected: (value) {
-                            if (value == 1) {
-                              Get.to(() => InviteCustomerPage(
-                                  email: model.customerContacts.first.email));
-                            }
-                          },
-                          elevation: 2,
-                          shape: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                  color: AppColors.medium_2, width: 0)),
-                          child: const Icon(Icons.more_vert),
-                          itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  child: SizedBox(
-                                    width: 100,
-                                    height: 60,
-                                    child: Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.supervised_user_circle,
-                                          color: AppColors.icon,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text("Invite",
-                                            style: TextStyle(
-                                              color: AppColors.icon,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                  value: 1,
-                                ),
-                              ]),
-                      // Icon(Icons.more_vert)
-                    ]),
-              )
-            ],
-          );
-        }));
+                            model.type,
+                          ),
+                          AppPopMenu(
+                            button: [
+                              Icon(Icons.control_point_rounded,
+                                  size: 40, color: AppColors.orange),
+                            ],
+                            items: [
+                              PopMenuItem(
+                                label: 'Edit',
+                                icon: Icons.edit,
+                                onTap: () {
+                                  Get.to(() => AddCustomerPage(model: model));
+                                },
+                              ),
+                              PopMenuItem(
+                                label: 'Delete',
+                                icon: Icons.delete,
+                                onTap: () async {
+                                  NavigationController().loading();
+                                  await controller.deleteCustomer(
+                                      model.objectId!,
+                                      Backendless.data.of(BLPath.customer));
+                                  NavigationController()
+                                      .loading(isLoading: false);
+                                },
+                              ),
+                              PopMenuItem(
+                                label: 'Invite',
+                                icon: Icons.mail_outline_rounded,
+                                onTap: () {
+                                  Get.to(() => Demo());
+                                  // Get.to(() => InviteCustomerPage(
+                                  //       email:
+                                  //           model.customerContacts.first.email,
+                                  //     ));
+                                },
+                              ),
+                            ],
+                          ),
+                        ]),
+                  )
+                ],
+              );
+            }));
   }
 }
