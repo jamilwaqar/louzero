@@ -16,7 +16,6 @@ import 'package:louzero/ui/page/company/company.dart';
 
 class CompanyListPage extends GetWidget<CompanyController> {
   const CompanyListPage({Key? key}) : super(key: key);
-  final int mockId = 8520;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class CompanyListPage extends GetWidget<CompanyController> {
       child: Column(children: [
         Expanded(child: _body()),
       ]),
-      subheader: 'Companies',
+      subheader: 'My Account',
       footerEnd: [
         AppBarButtonAdd(
           label: 'New Company',
@@ -83,9 +82,14 @@ class CompanyListPage extends GetWidget<CompanyController> {
                           offset: const Offset(0, 40),
                           onSelected: (value) async {
                             if (value == 0) {
+                              await Get.find<CompanyController>().createOrEditCompany(model,
+                                  addressModel: model.address!,
+                                  isEdit: true,
+                                  isActiveCompany: true);
+                            } else if (value == 1) {
                               controller.company = model;
                               Get.to(()=> const AddCompanyPage());
-                            } else if (value == 1)  {
+                            } else if (value == 2)  {
                               controller.deleteCompany(model.objectId!);
                             }
                           },
@@ -96,6 +100,28 @@ class CompanyListPage extends GetWidget<CompanyController> {
                                   color: AppColors.medium_2, width: 0)),
                           child: const Icon(Icons.more_vert),
                           itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: SizedBox(
+                                width: 100,
+                                height: 60,
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.check,
+                                      color: AppColors.icon,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text("Active",
+                                        style: TextStyle(
+                                          color: AppColors.icon,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              value: 0,
+                            ),
                             PopupMenuItem(
                               child: SizedBox(
                                 width: 100,
@@ -116,7 +142,7 @@ class CompanyListPage extends GetWidget<CompanyController> {
                                   ],
                                 ),
                               ),
-                              value: 0,
+                              value: 1,
                             ),
                             PopupMenuItem(
                               child: SizedBox(
@@ -138,7 +164,7 @@ class CompanyListPage extends GetWidget<CompanyController> {
                                   ],
                                 ),
                               ),
-                              value: 1,
+                              value: 2,
                             ),
                           ]),
                       // Icon(Icons.more_vert)

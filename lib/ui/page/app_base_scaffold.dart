@@ -95,7 +95,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                       body: widget.logoOnly
                           ? Container(
                               color: AppColors.secondary_99,
-                              child: widget.child ?? null,
+                              child: widget.child,
                             )
                           : NestedScrollView(
                               floatHeaderSlivers: true,
@@ -125,8 +125,6 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                           onChange: (val) {
                                             if (val == 'logout') {
                                               _logout(context);
-                                            } else if (val == 'My Account') {
-                                              Get.to(()=> const CompanyListPage(), binding: CompanyBinding());
                                             }
                                           },
                                         ),
@@ -185,9 +183,9 @@ class AppUserDropdownMenu extends StatelessWidget {
           label: 'My Account',
           icon: Icons.person_rounded,
           onTap: () {
-            if (onChange != null) {
-              onChange!('My Account');
-            }
+            Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+                Get.to(() => const CompanyListPage(),
+                    binding: CompanyBinding()));
           },
         ),
         PopMenuItem(

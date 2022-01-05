@@ -6,12 +6,10 @@ import 'package:louzero/common/app_icon_button.dart';
 import 'package:louzero/common/app_nav_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
-import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
-import 'package:louzero/ui/page/company/companies.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:louzero/ui/page/demo/demo.dart';
@@ -92,14 +90,6 @@ class _SideMenuViewState extends State<SideMenuView> {
                 onPressed: () {
                   _pop();
                   Get.to(()=> DashboardPage());
-                },
-              ),
-              AppNavButton(
-                title: "Companies",
-                icon: Icons.home_work,
-                onPressed: () {
-                  _pop();
-                  Get.to(()=> const CompanyListPage(), binding: CompanyBinding());
                 },
               ),
               AppNavButton(
