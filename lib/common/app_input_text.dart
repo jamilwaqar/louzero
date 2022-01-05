@@ -9,6 +9,7 @@ class AppInputText extends StatelessWidget {
       {Key? key,
       required this.label,
       this.initial,
+      this.hint,
       this.controller,
       this.onSaved,
       this.validator,
@@ -19,9 +20,12 @@ class AppInputText extends StatelessWidget {
       this.autofocus = false,
       this.required = false,
       this.readOnly = false,
+      this.labelHidden = false,
+      this.labelRemoved = false,
       this.inputFormatters,
       this.colorTx = AppColors.dark_3,
       this.colorBd = AppColors.light_3,
+      this.colorBdFocus = AppColors.dark_3,
       this.colorBg = AppColors.lightest,
       this.enabled = true,
       this.height = 48,
@@ -31,6 +35,7 @@ class AppInputText extends StatelessWidget {
       : super(key: key);
 
   final String label;
+  final String? hint;
   final String? initial;
   final TextEditingController? controller;
   final List<TextInputFormatter>? inputFormatters;
@@ -38,12 +43,15 @@ class AppInputText extends StatelessWidget {
   final String? Function(String?)? validator;
   final Color colorBg;
   final Color colorBd;
+  final Color colorBdFocus;
   final Color colorTx;
   final TextInputType keyboardType;
   final TextCapitalization? textCapitalization;
   final bool password;
   final bool required;
   final bool readOnly;
+  final bool labelHidden;
+  final bool labelRemoved;
   final double mt;
   final double mb;
   final bool autofocus;
@@ -54,8 +62,6 @@ class AppInputText extends StatelessWidget {
   //Input border props:
   final BorderRadius _radius = Common.border_4;
   final double _width = 1;
-  final Color _color = AppColors.light_3;
-  final Color _focus = AppColors.darkest;
 
   @override
   Widget build(BuildContext context) {
@@ -68,28 +74,29 @@ class AppInputText extends StatelessWidget {
 
     InputDecoration inputStyle = InputDecoration(
       filled: true,
-      fillColor: AppColors.lightest,
+      hintText: hint,
+      fillColor: colorBg,
       contentPadding:
           const EdgeInsets.only(top: 0, left: 12, right: 12, bottom: 0),
       errorBorder: OutlineInputBorder(
         borderRadius: _radius,
-        borderSide: BorderSide(color: _color, width: _width),
+        borderSide: BorderSide(color: colorBd, width: _width),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: _radius,
-        borderSide: BorderSide(color: _focus, width: _width),
+        borderSide: BorderSide(color: colorBdFocus, width: _width),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: _radius,
-        borderSide: BorderSide(color: _color, width: _width),
+        borderSide: BorderSide(color: colorBd, width: _width),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: _radius,
-        borderSide: BorderSide(color: _color, width: _width),
+        borderSide: BorderSide(color: colorBd, width: _width),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: _radius,
-        borderSide: BorderSide(color: _focus, width: _width),
+        borderSide: BorderSide(color: colorBdFocus, width: _width),
       ),
     );
 
@@ -97,8 +104,20 @@ class AppInputText extends StatelessWidget {
       // mainAxisSize: MainAxisSize.
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppTextBody(label + reqText,
-            size: 14, color: AppColors.dark_2, bold: true, mb: 8, mt: mt),
+        Visibility(
+          visible: !labelRemoved,
+          child: Opacity(
+            opacity: labelHidden ? 0 : 1,
+            child: AppTextBody(
+              label + reqText,
+              size: 14,
+              color: AppColors.dark_2,
+              bold: true,
+              mb: 8,
+              mt: mt,
+            ),
+          ),
+        ),
         TextFormField(
           initialValue: initial,
           autofocus: autofocus,

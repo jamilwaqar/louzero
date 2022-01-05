@@ -8,6 +8,7 @@ class AppButton extends StatelessWidget {
     this.label = 'button',
     this.onPressed,
     this.fontSize = 14,
+    this.padX = 16,
     this.width,
     this.radius = 999,
     this.icon,
@@ -27,6 +28,7 @@ class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
   final double fontSize;
+  final double padX;
   final IconData? icon;
   final double? width;
   final bool wide;
@@ -67,8 +69,8 @@ class AppButton extends StatelessWidget {
             : null,
         elevation: 0,
         extendedPadding: EdgeInsetsDirectional.only(
-          start: fontSize,
-          end: icon != null && !isMenu ? fontSize + 8 : fontSize,
+          start: isMenu ? 16 : padX,
+          end: isMenu ? 16 : padX,
         ),
         extendedTextStyle: textStyle,
         shape: RoundedRectangleBorder(

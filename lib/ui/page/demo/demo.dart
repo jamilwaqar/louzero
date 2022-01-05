@@ -16,6 +16,7 @@ class Demo extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: 32),
+          _addNote(),
           _numberStepper(),
           _contactCard(),
           Padding(
@@ -107,6 +108,35 @@ class Demo extends StatelessWidget {
       children: [Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)],
     ),
   ];
+
+  Widget _addNote() {
+    return _demoCenterCard('Add Note Widget',
+        child: AppAddNote(
+          initialText: "Simple quick note widget.",
+        ));
+  }
+
+  Widget _demoCenterCard(String label, {Widget? child}) {
+    return AppCard(children: [
+      Text(
+        label,
+        style: AppStyles.headerRegular,
+      ),
+      SizedBox(height: 24),
+      Container(
+        color: Color(0xFFF6F2EC),
+        padding: EdgeInsets.all(40),
+        child: Center(
+          child: Container(
+            color: Color(0xFFFFFFFF),
+            width: 400,
+            child: child,
+            padding: EdgeInsets.all(16),
+          ),
+        ),
+      )
+    ]);
+  }
 
   Widget _numberStepper() {
     return AppCard(children: [

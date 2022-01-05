@@ -40,7 +40,7 @@ class AppBillingTotal extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const SizedBox(width: 200),
+                const SizedBox(width: 120),
                 Text(label, style: style),
               ],
             ),

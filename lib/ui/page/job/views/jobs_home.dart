@@ -122,39 +122,15 @@ class _JobsHomeState extends State<JobsHome> {
         ),
         _addItemButton(),
         const AppDivider(),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        FlexRow(
+          flex: [12, 0, 7],
           children: [
-            Expanded(
-              flex: 12,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppButtons.iconFlat('Add Note', icon: MdiIcons.note),
-                  AppInputText(label: 'Add Note'),
-                  Row(
-                    children: [
-                      AppButton(label: 'Save Note'),
-                      AppButton(label: 'Cancel', primary: false)
-                    ],
-                  )
-                ],
-              ),
+            const AppAddNote(),
+            const SizedBox(width: 1),
+            AppBillingTotal(
+              subtotal: _controller.subTotal,
+              tax: 7.32,
             ),
-            Expanded(
-              flex: 8,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 48),
-                child: Column(
-                  children: [
-                    AppBillingTotal(
-                      subtotal: _controller.subTotal,
-                      tax: 7.32,
-                    ),
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       ],
