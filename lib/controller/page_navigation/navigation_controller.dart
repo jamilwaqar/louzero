@@ -13,15 +13,6 @@ class NavigationController {
 
   final notifierInitLoading = ValueNotifier(false);
 
-  void pushTo(BuildContext context, {required Widget child}) {
-    String name = child.toString();
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.rightToLeft,
-            settings: RouteSettings(name: "/$name"),
-            child: child));
-  }
   void pop(BuildContext context, {int delay = 0}) {
     if (delay == 0) {
       Navigator.pop(context);

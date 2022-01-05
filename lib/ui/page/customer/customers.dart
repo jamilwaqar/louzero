@@ -1,3 +1,4 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_button.dart';
@@ -5,8 +6,8 @@ import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/get/base_controller.dart';
-import 'package:louzero/controller/get/bindings/customer_binding.dart';
+import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
@@ -14,12 +15,10 @@ import 'package:louzero/ui/page/auth/invite.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer.dart';
 
-class CustomerListPage extends StatelessWidget {
-  CustomerListPage({Key? key}) : super(key: key);
+class CustomerListPage extends GetWidget<CustomerController> {
+  const CustomerListPage({Key? key}) : super(key: key);
 
   final int mockId = 8520;
-  final BaseController _baseController = Get.find();
-
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
@@ -31,8 +30,7 @@ class CustomerListPage extends StatelessWidget {
         AppBarButtonAdd(
           label: 'New Customer',
           onPressed: () {
-            NavigationController()
-                .pushTo(context, child: const AddCustomerPage());
+            Get.to(()=> const AddCustomerPage());
           },
         )
       ],
@@ -40,19 +38,19 @@ class CustomerListPage extends StatelessWidget {
   }
 
   Widget _body() {
-    return Obx(() => ListView.builder(
+    return GetBuilder<CustomerController>(builder: (_)=> ListView.builder(
         padding: const EdgeInsets.only(top: 32),
         shrinkWrap: true,
-        itemCount: _baseController.customers.length,
+        itemCount: controller.customers.length,
         itemBuilder: (context, index) {
-          CustomerModel model = _baseController.customers[index];
+          CustomerModel model = controller.customers[index];
           return AppCard(
             mb: 8,
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.to(() => const CustomerProfilePage(),
-                      arguments: model, binding: CustomerBinding());
+                  controller.customerModel = model;
+                  Get.to(() => const CustomerProfilePage());
                 },
                 child: AppRowFlex(
                     flex: const [1, 5, 2, 0],
@@ -77,8 +75,14 @@ class CustomerListPage extends StatelessWidget {
                       ),
                       PopupMenuButton(
                           offset: const Offset(0, 40),
-                          onSelected: (value) {
-                            if (value == 1) {
+                          onSelected: (value) async {
+                            if (value == 0) {
+                              Get.to(() => AddCustomerPage(model: model));
+                            } else if (value == 1) {
+                              NavigationController().loading();
+                              await controller.deleteCustomer(model.objectId!, Backendless.data.of(BLPath.customer));
+                              NavigationController().loading(isLoading: false);
+                            } else if (value == 2) {
                               Get.to(() => InviteCustomerPage(
                                   email: model.customerContacts.first.email));
                             }
@@ -97,11 +101,33 @@ class CustomerListPage extends StatelessWidget {
                                 child: Row(
                                   children: const [
                                     Icon(
-                                      Icons.supervised_user_circle,
+                                      Icons.edit,
                                       color: AppColors.icon,
                                     ),
                                     SizedBox(width: 10),
-                                    Text("Invite",
+                                    Text("Edit",
+                                        style: TextStyle(
+                                          color: AppColors.icon,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              value: 0,
+                            ),
+                            PopupMenuItem(
+                              child: SizedBox(
+                                width: 100,
+                                height: 60,
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.delete,
+                                      color: AppColors.icon,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text("Delete",
                                         style: TextStyle(
                                           color: AppColors.icon,
                                           fontWeight: FontWeight.w400,
@@ -112,6 +138,28 @@ class CustomerListPage extends StatelessWidget {
                               ),
                               value: 1,
                             ),
+                            // PopupMenuItem(
+                            //   child: SizedBox(
+                            //     width: 100,
+                            //     height: 60,
+                            //     child: Row(
+                            //       children: const [
+                            //         Icon(
+                            //           Icons.supervised_user_circle,
+                            //           color: AppColors.icon,
+                            //         ),
+                            //         SizedBox(width: 10),
+                            //         Text("Invite",
+                            //             style: TextStyle(
+                            //               color: AppColors.icon,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 16,
+                            //             )),
+                            //       ],
+                            //     ),
+                            //   ),
+                            //   value: 1,
+                            // ),
                           ]),
                       // Icon(Icons.more_vert)
                     ]),

@@ -89,7 +89,7 @@ class AddJobPage extends GetWidget<JobController> {
                     Flexible(
                       child: AppAddButton(
                         "Add New Customer",
-                        onPressed: () => Get.to(() => const AddCustomerPage()),
+                        onPressed: () => Get.to(() => AddCustomerPage()),
                       ),
                     ),
                   ],

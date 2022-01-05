@@ -4,6 +4,7 @@ import 'package:louzero/common/app_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/bindings/customer_binding.dart';
 import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
@@ -154,7 +155,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       height: btnHeight,
                       color: AppColors.dark_1,
                       label: 'View All',
-                      onPressed: () => Get.to(() => CustomerListPage()),
+                      onPressed: () => Get.to(() => const CustomerListPage(), binding: CustomerBinding()),
                     )
                   ]),
               SizedBox(height: spacing),
