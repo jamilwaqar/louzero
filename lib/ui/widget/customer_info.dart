@@ -5,11 +5,9 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
-import 'package:louzero/ui/page/customer/customer.dart';
 import 'package:louzero/ui/page/customer/customer_location.dart';
 import 'buttons/top_left_button.dart';
 

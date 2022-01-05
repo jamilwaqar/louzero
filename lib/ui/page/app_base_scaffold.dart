@@ -14,7 +14,7 @@ import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/ui/widget/appbar/app_bar_page_header.dart';
 import 'package:louzero/ui/widget/side_menu/side_menu.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'company/companies.dart';
+import 'account/account.dart';
 
 class AppBaseScaffold extends StatefulWidget {
   final Widget? child;
@@ -184,7 +184,7 @@ class AppUserDropdownMenu extends StatelessWidget {
           icon: Icons.person_rounded,
           onTap: () {
             Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-                Get.to(() => const CompanyListPage(),
+                Get.to(() => const MyAccountPage(),
                     binding: CompanyBinding()));
           },
         ),

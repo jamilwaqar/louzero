@@ -90,7 +90,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      subheader: _isTemplate ? 'Settings' : 'Customer Profile',
+      subheader: _isTemplate ? 'Site Profile Templates' : 'Customer Profile',
       footerEnd: [if (!_isAdding) _addNew()],
       child: _body(),
     );
