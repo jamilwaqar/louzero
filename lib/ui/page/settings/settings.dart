@@ -153,7 +153,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             const Align(
               alignment: Alignment.topLeft,
-              child: AppImage('icon-company-logo', width: 80, height: 80),
+              child: AppImage('icon-setting-placeholder', width: 80, height: 80),
             ),
             const SizedBox(width: 16),
             Expanded(

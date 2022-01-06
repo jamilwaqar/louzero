@@ -1,12 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_avatar.dart';
+import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
+import 'package:louzero/common/app_image.dart';
 import 'package:louzero/common/app_row_flex.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
@@ -21,13 +23,12 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
   @override
   Widget build(BuildContext context) {
-
     return AppBaseScaffold(
       child: ListView.builder(
         itemCount: 1,
         shrinkWrap: true,
         padding: const EdgeInsets.only(top: 32),
-        itemBuilder:(_, __) =>  _body(),
+        itemBuilder: (_, __) => _body(),
       ),
       subheader: 'My Account',
     );
@@ -38,145 +39,160 @@ class MyAccountPage extends GetWidget<CompanyController> {
       children: [
         _accountInfo(),
         const SizedBox(height: 24),
-        GetBuilder<CompanyController>(builder:(_)=> ListView.builder(
-            padding: const EdgeInsets.only(top: 32),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.companies.length,
-            itemBuilder: (context, index) {
-              CompanyModel model = controller.companies[index];
-              return AppCard(
-                mb: 8,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      controller.company = model;
-                      Get.to(() => CompanyPage(),
-                          arguments: model);
-                    },
-                    child: AppRowFlex(
-                        flex: const [1, 5, 2, 0],
-                        align: CrossAxisAlignment.center,
-                        mb: 0,
-                        children: [
-                          AppAvatar(url: model.avatar, size: 60, placeHolder: AppPlaceHolder.company,),
-                          Column(
+        AppCard(
+          radius: 16,
+          children: [
+            GetBuilder<CompanyController>(
+                builder: (_) => ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.companies.length,
+                    itemBuilder: (context, index) {
+                      CompanyModel model = controller.companies[index];
+                      return Container(
+                        color: index.isOdd
+                            ? AppColors.oddItemColor
+                            : AppColors.evenItemColor,
+                        height: 65,
+                        child: AppRowFlex(
+                            flex: const [1, 5, 1, 3, 0],
+                            align: CrossAxisAlignment.center,
+                            mb: 0,
                             children: [
+                              _companyAvatar(model),
                               AppTextBody(
                                 model.name,
-                                color: AppColors.darkest,
+                                color: AppColors.dark_2,
                                 bold: true,
                               ),
+                              Container(
+                                width: 10,
+                                height: 10,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.medium_2),
+                              ),
                               AppTextBody(
-                                model.address!.fullAddress,
-                              )
-                            ],
-                          ),
-                          AppTextBody(
-                            Get.find<BaseController>().activeCompany!.objectId ==
-                                model.objectId
-                                ? 'Active'
-                                : '',
-                            color: AppColors.accent_1,
-                          ),
-                          PopupMenuButton(
-                              offset: const Offset(0, 40),
-                              onSelected: (value) async {
-                                if (value == 0) {
-                                  await Get.find<CompanyController>().createOrEditCompany(model,
-                                      addressModel: model.address!,
-                                      isEdit: true,
-                                      isActiveCompany: true);
-                                } else if (value == 1) {
-                                  controller.company = model;
-                                  Get.to(()=> const AddCompanyPage());
-                                } else if (value == 2)  {
-                                  controller.deleteCompany(model.objectId!);
-                                }
-                              },
-                              elevation: 2,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(
-                                      color: AppColors.medium_2, width: 0)),
-                              child: const Icon(Icons.more_vert),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  child: SizedBox(
-                                    width: 100,
-                                    height: 60,
-                                    child: Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.check,
-                                          color: AppColors.icon,
+                                model.status.label,
+                              ),
+                              AppButton(
+                                margin: const EdgeInsets.only(right: 8),
+                                label: 'SWITCH TO',
+                                color: AppColors.dark_1,
+                                colorText: AppColors.darkest,
+                                primary: false,
+                                onPressed: () {},
+                              ),
+                              PopupMenuButton(
+                                  padding: EdgeInsets.zero,
+                                  offset: const Offset(0, 40),
+                                  onSelected: (value) {
+                                    controller.company = model;
+                                    if (value == 0) {
+                                      Get.to(() => CompanyPage(),
+                                          arguments: model);
+                                    } else if (value == 1) {
+                                      Get.to(() => const AddCompanyPage());
+                                    }
+                                  },
+                                  elevation: 2,
+                                  shape: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.medium_2, width: 0)),
+                                  child: const Icon(Icons.more_vert),
+                                  itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          child: SizedBox(
+                                            width: 200,
+                                            height: 50,
+                                            child: Row(
+                                              children: const [
+                                                Icon(
+                                                  Icons.check,
+                                                  color: AppColors.icon,
+                                                ),
+                                                SizedBox(width: 10),
+                                                Text("View Company",
+                                                    style: TextStyle(
+                                                      color: AppColors.icon,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 16,
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                          value: 0,
                                         ),
-                                        SizedBox(width: 10),
-                                        Text("Active",
-                                            style: TextStyle(
-                                              color: AppColors.icon,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                  value: 0,
-                                ),
-                                PopupMenuItem(
-                                  child: SizedBox(
-                                    width: 100,
-                                    height: 60,
-                                    child: Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.edit,
-                                          color: AppColors.icon,
+                                        PopupMenuItem(
+                                          child: SizedBox(
+                                            width: 200,
+                                            height: 60,
+                                            child: Row(
+                                              children: const [
+                                                Icon(
+                                                  Icons.edit,
+                                                  color: AppColors.icon,
+                                                ),
+                                                SizedBox(width: 10),
+                                                Text("Edit Company",
+                                                    style: TextStyle(
+                                                      color: AppColors.icon,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 16,
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                          value: 1,
                                         ),
-                                        SizedBox(width: 10),
-                                        Text("Edit",
-                                            style: TextStyle(
-                                              color: AppColors.icon,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                  value: 1,
-                                ),
-                                PopupMenuItem(
-                                  child: SizedBox(
-                                    width: 100,
-                                    height: 60,
-                                    child: Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.delete,
-                                          color: AppColors.icon,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text("Delete",
-                                            style: TextStyle(
-                                              color: AppColors.icon,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                  value: 2,
-                                ),
-                              ]),
-                          // Icon(Icons.more_vert)
-                        ]),
-                  )
-                ],
-              );
-            })),
+                                      ]),
+                            ]),
+                      );
+                    }))
+          ],
+        ),
       ],
     );
   }
+
+  Widget _companyAvatar(CompanyModel model) {
+    return Container(
+      width: 32,
+      height: 32,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          border: Border.all(color: AppColors.dark_2),
+          borderRadius: BorderRadius.circular(8),
+          color: AppColors.lightest),
+      child: model.avatar == null
+          ? appIcon(Icons.home_work)
+          : _cachedNetworkImage(model.avatar!.toString()),
+    );
+  }
+
+  Widget _cachedNetworkImage(String url) => CachedNetworkImage(
+      imageUrl: url,
+      imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+      placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 1,
+            ),
+          ),
+      errorWidget: (context, url, error) {
+        return Container();
+      });
 
   Widget _accountInfo() {
     return AppCard(
@@ -185,7 +201,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
       pt: 0,
       pb: 0,
       pr: 0,
-      children:[
+      children: [
         SizedBox(
           height: 432,
           child: Column(
@@ -204,7 +220,12 @@ class MyAccountPage extends GetWidget<CompanyController> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            appIcon(Icons.attach_money),
+                            const AppImage('icon-account',
+                                width: 24,
+                                height: 24,
+                                color: AppColors.dark_3,
+                                isSvg: true),
+                            const SizedBox(width: 8),
                             Text('My Account',
                                 style: TextStyles.headLineS
                                     .copyWith(color: AppColors.dark_2)),
@@ -213,7 +234,8 @@ class MyAccountPage extends GetWidget<CompanyController> {
                                 onPressed: () {
                                   // // Get.find<CustomerController>().customerModel = customerModel;
                                   // Get.to(() => AddCustomerPage(model: customerModel,));
-                                }, iconData: Icons.edit),
+                                },
+                                iconData: Icons.edit),
                           ],
                         ),
                       ],
@@ -234,67 +256,29 @@ class MyAccountPage extends GetWidget<CompanyController> {
                               bottomLeft: Radius.circular(8))),
                       child: _profile(),
                     ),
-                    const SizedBox(width: 21),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Divider(
-                              thickness: 2, color: AppColors.light_1, height: 0),
-                          Row(
-                            children: [
-                              appIcon(Icons.person, color: AppColors.dark_1),
-                              const SizedBox(width: 8),
-                              const Text('Name',
-                                  style: TextStyles.labelL),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: const EdgeInsets.only(left: 32.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // Text(customerModel.customerContacts[0].fullName,
-                                //     style: TextStyles.bodyL
-                                //         .copyWith(color: AppColors.dark_3)),
-                                // Text(customerModel.customerContacts[0].email,
-                                //     style: TextStyles.bodyL
-                                //         .copyWith(color: AppColors.dark_3)),
-                                // Text(customerModel.customerContacts[0].phone,
-                                //     style: TextStyles.bodyL
-                                //         .copyWith(color: AppColors.dark_3)),
-                              ],
-                            ),
-                          ),
+                              thickness: 2,
+                              color: AppColors.light_1,
+                              height: 0),
                           const SizedBox(height: 24),
-                          Row(
-                            children: [
-                              appIcon(Icons.location_pin, color: AppColors.dark_1),
-                              const SizedBox(width: 8),
-                              const Text('Billing Address',
-                                  style: TextStyles.labelL),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 32.0),
-                                  child: Text('Same as Service Address',
-                                      style: TextStyles.bodyL
-                                          .copyWith(color: AppColors.dark_3)),
-                                ),
-                              ],
-                            ),
-                          ),
+                          _profileItem('Name', Icons.person,
+                              AuthManager.userModel!.fullName),
+                          _profileItem('Phone', Icons.call,
+                              AuthManager.userModel!.phone),
+                          _profileItem('Email', Icons.email,
+                              AuthManager.userModel!.email),
+                          _profileItem('Service Address', Icons.location_pin,
+                              AuthManager.userModel!.serviceAddress),
+                          const Expanded(child: SizedBox()),
+                          AppAddButton('Change Password',
+                              iconData: Icons.lock_open, onPressed: () {}),
+                          const SizedBox(height: 24),
                         ],
                       ),
                     ),
@@ -305,7 +289,30 @@ class MyAccountPage extends GetWidget<CompanyController> {
             ],
           ),
         )
-      ] ,
+      ],
+    );
+  }
+
+  Widget _profileItem(String title, IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          children: [
+            appIcon(icon, color: AppColors.dark_1),
+            const SizedBox(width: 8),
+            Text(title, style: TextStyles.labelL),
+          ],
+        ),
+        Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.only(left: 32.0),
+          child: Text(label,
+              style: TextStyles.labelL.copyWith(
+                  color: AppColors.dark_3, fontWeight: FontWeight.w500)),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 
@@ -313,11 +320,25 @@ class MyAccountPage extends GetWidget<CompanyController> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppAvatar(url: AuthManager.userModel!.avatar, text: AuthManager.userModel!.initials, size: 96, backgroundColor: AppColors.medium_2),
+        AppAvatar(
+            url: AuthManager.userModel!.avatar,
+            text: AuthManager.userModel!.initials,
+            size: 96,
+            backgroundColor: AppColors.medium_2),
         const SizedBox(height: 8),
-        Text(AuthManager.userModel!.fullName, style: AppStyles.header_default),
+        Text(AuthManager.userModel!.fullName,
+            style: TextStyles.titleM.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-
+        Container(
+          width: 64,
+          height: 28,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: AppColors.medium_2,
+              borderRadius: BorderRadius.circular(14)),
+          child: Text('ADMIN',
+              style: TextStyles.labelM.copyWith(color: AppColors.lightest)),
+        )
       ],
     );
   }
