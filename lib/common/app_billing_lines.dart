@@ -7,7 +7,19 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 class AppBillingLines extends StatelessWidget {
   final List<LineItem> data;
-  AppBillingLines({Key? key, this.data = const []}) : super(key: key);
+  final Function(String)? onEdit;
+  final Function(String)? onDelete;
+  final Function(String)? onDuplicate;
+  final Function(int, int)? onReorder;
+
+  AppBillingLines({
+    Key? key,
+    this.onEdit,
+    this.onDelete,
+    this.onDuplicate,
+    this.onReorder,
+    this.data = const [],
+  }) : super(key: key);
 
   final TextStyle style = AppStyles.labelRegular;
 
@@ -19,7 +31,10 @@ class AppBillingLines extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 16),
       child: ReorderableListView(
-          onReorder: (a, b) {},
+          onReorder: (a, b) {
+            print('reorder');
+            print('$a, $b');
+          },
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           children: [
@@ -47,7 +62,7 @@ class AppBillingLines extends StatelessWidget {
                             _quantity(item),
                             _price(item),
                             _subtotal(item),
-                            _actions(),
+                            _actions(item.id),
                           ]),
                       //Discount line
                       if (hasDiscount) ..._discount(item),
@@ -155,18 +170,41 @@ class AppBillingLines extends StatelessWidget {
     );
   }
 
-  Widget _actions() {
-    return const AppPopMenu(
-      button: [
+  Widget _actions(String id) {
+    return AppPopMenu(
+      button: const [
         SizedBox(
           width: 48,
           child: Icon(Icons.more_vert, size: 21, color: AppColors.secondary_60),
         ),
       ],
       items: [
-        PopMenuItem(label: 'Edit', icon: MdiIcons.pencil),
-        PopMenuItem(label: 'Duplicate', icon: MdiIcons.contentDuplicate),
-        PopMenuItem(label: 'Remove', icon: MdiIcons.trashCan)
+        PopMenuItem(
+            label: 'Edit',
+            icon: MdiIcons.pencil,
+            onTap: () {
+              if (onEdit != null) {
+                onEdit!(id);
+              }
+            }),
+        PopMenuItem(
+          label: 'Duplicate',
+          icon: MdiIcons.contentDuplicate,
+          onTap: () {
+            if (onDuplicate != null) {
+              onDuplicate!(id);
+            }
+          },
+        ),
+        PopMenuItem(
+          label: 'Remove',
+          icon: MdiIcons.trashCan,
+          onTap: () {
+            if (onDelete != null) {
+              onDelete!(id);
+            }
+          },
+        )
       ],
     );
   }

@@ -104,7 +104,17 @@ class _JobsHomeState extends State<JobsHome> {
     return AppTabPanel(
       children: [
         const Text('Billing Line Items', style: AppStyles.headerRegular),
-        AppBillingLines(data: _controller.lineItems),
+        if (_controller.lineItems.isEmpty && !addLineVisible)
+          const AppPlaceholder(
+            title: 'No Line Items',
+            subtitle: "Add new line to get started.",
+          ),
+        AppBillingLines(
+          data: _controller.lineItems,
+          onDelete: (id) {
+            _controller.deleteLineItemById(id);
+          },
+        ),
         Visibility(
           visible: addLineVisible,
           child: JobAddNewLine(
@@ -123,7 +133,7 @@ class _JobsHomeState extends State<JobsHome> {
         _addItemButton(),
         const AppDivider(),
         FlexRow(
-          flex: [12, 0, 7],
+          flex: const [12, 0, 7],
           children: [
             const AppAddNote(),
             const SizedBox(width: 1),

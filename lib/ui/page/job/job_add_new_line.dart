@@ -6,9 +6,12 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
 
+import 'package:uuid/uuid.dart';
+
 import 'models/line_item.dart';
 
 class JobAddNewLine extends StatefulWidget {
+  final Uuid uuid = const Uuid();
   final void Function(LineItem)? onCreate;
   final VoidCallback? onCancel;
   final List<InventoryItem> inventory;
@@ -67,10 +70,20 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
     });
   }
 
+  void _setInitialData() {
+    if (widget.inventory.isNotEmpty) {
+      var _item = widget.inventory[widget.selectedIndex];
+      _price.text = _item.price.toStringAsFixed(2);
+      _subtotal.text = _item.price.toStringAsFixed(2);
+      _count.text = '1';
+      _description.text = _item.description;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    _count.text = '1';
+    _setInitialData();
   }
 
   @override
@@ -85,6 +98,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       double subtotal = price * count;
 
       LineItem newItem = LineItem(
+          id: c.newId,
           count: count,
           price: price,
           description: description,

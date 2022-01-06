@@ -4,8 +4,11 @@ import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
 import 'package:louzero/ui/page/job/models/line_item.dart';
+import 'package:uuid/uuid.dart';
 
 class LineItemController extends GetxController {
+  final Uuid uuid = Uuid();
+
   final CustomerContact contact = CustomerContact(
       email: 'nswanson@emailaddress.net',
       firstName: 'Nicole',
@@ -20,6 +23,22 @@ class LineItemController extends GetxController {
       city: 'Portland',
       state: 'OR',
       zip: '97202');
+
+  RxList<LineItem> lineItems = <LineItem>[].obs;
+
+  addLineItem(LineItem item) {
+    lineItems.add(item);
+    update();
+  }
+
+  deleteLineItemById(String id) {
+    lineItems.removeWhere((element) => element.id == id);
+    update();
+  }
+
+  String get newId {
+    return uuid.v1();
+  }
 
   String get nameAndRole {
     return "${contact.firstName} ${contact.lastName} - ${contact.role}";
@@ -39,7 +58,6 @@ class LineItemController extends GetxController {
       if (item.discount != null) {
         price = price - item.discount!;
       }
-
       return sum + price;
     });
   }
@@ -82,24 +100,5 @@ class LineItemController extends GetxController {
         price: 63.95,
       ),
     ];
-  }
-
-  RxList<LineItem> lineItems = <LineItem>[
-    // Sample Data (remove in prod)
-    const LineItem(
-      description: 'Healthy Pool Cleaning',
-      count: 1,
-      price: 50.00,
-      subtotal: 50.00,
-      note:
-          'This is part of our \'Healthy Families\' campaign which runs through the summer months to keep the whole family happy and healthy!',
-      discount: 10,
-      discountText: 'Summer Special!',
-    ),
-  ].obs;
-
-  addLineItem(LineItem item) {
-    lineItems.add(item);
-    update();
   }
 }

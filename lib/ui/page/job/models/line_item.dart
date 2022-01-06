@@ -1,4 +1,5 @@
 class LineItem {
+  final String id;
   final String description;
   final double count;
   final double price;
@@ -8,6 +9,7 @@ class LineItem {
   final String? discountText;
 
   const LineItem({
+    required this.id,
     required this.description,
     required this.count,
     required this.price,
