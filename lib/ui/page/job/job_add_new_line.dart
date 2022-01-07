@@ -5,23 +5,25 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
-
 import 'package:uuid/uuid.dart';
-
 import 'models/line_item.dart';
 
 class JobAddNewLine extends StatefulWidget {
   final Uuid uuid = const Uuid();
-  final void Function(LineItem)? onCreate;
+  final void Function()? onCreate;
   final VoidCallback? onCancel;
-  final List<InventoryItem> inventory;
+  final LineItem? initialData;
+  final List<InventoryItem>? inventory;
   final int selectedIndex;
+  final bool isTextInput;
   const JobAddNewLine({
     Key? key,
     this.onCreate,
     this.onCancel,
+    this.isTextInput = false,
     this.inventory = const [],
     this.selectedIndex = 0,
+    this.initialData,
   }) : super(key: key);
 
   @override
@@ -29,8 +31,8 @@ class JobAddNewLine extends StatefulWidget {
 }
 
 class _JobAddNewLineState extends State<JobAddNewLine> {
-  final c = Get.put(LineItemController());
-  Size? size;
+  final _controller = Get.put(LineItemController());
+
   final _description = TextEditingController();
   final _count = TextEditingController();
   final _price = TextEditingController();
@@ -39,17 +41,65 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
   final _discountDescription = TextEditingController();
   final _discountAmount = TextEditingController();
 
-  bool isDiscountOn = false;
+  String inventoryId = '';
+  bool hasDiscount = false;
   bool isTaxable = false;
-  bool isDiscountTypePercent = false;
 
   int _selected = 0;
 
-  bool _isNumeric(String str) {
-    if (str == null) {
-      return false;
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _description.dispose();
+    _count.dispose();
+    _price.dispose();
+    _subtotal.dispose();
+    _note.dispose();
+    _discountDescription.dispose();
+    _discountAmount.dispose();
+  }
+
+  String prettify(double d) {
+    // removes trailing zeros
+    return d.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0*$'), '');
+  }
+
+  void setCount(double d) {
+    _count.text = prettify(d);
+  }
+
+  void setPrice(double d) {
+    _price.text = d.toStringAsFixed(2);
+  }
+
+  void setSubtotal(double d) {
+    _subtotal.text = d.toStringAsFixed(2);
+  }
+
+  void setDescription(String text) {
+    _description.text = text;
+  }
+
+  void _initializeData() {
+    if (!widget.isTextInput) {
+      var _item = _controller.inventory[widget.selectedIndex];
+      setPrice(_item.price);
+      setSubtotal(_item.price);
+      setCount(1);
+      setDescription(_item.description);
     }
-    return double.tryParse(str) != null;
+  }
+
+  int getInventoryIndex(LineItem item) {
+    var idx =
+        _controller.inventory.indexWhere((el) => el.id == item.inventoryId);
+    return idx >= 0 ? idx : 0;
   }
 
   void _clearInputs() {
@@ -61,7 +111,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
     _discountDescription.text = '';
   }
 
-  void _updateSubtotal(String val) {
+  void _updateSubtotal([String? val]) {
     double qty = double.tryParse(_count.text) ?? 1;
     double price = double.tryParse(_price.text) ?? 0;
     double total = qty * price;
@@ -70,53 +120,54 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
     });
   }
 
-  void _setInitialData() {
-    if (widget.inventory.isNotEmpty) {
-      var _item = widget.inventory[widget.selectedIndex];
-      _price.text = _item.price.toStringAsFixed(2);
-      _subtotal.text = _item.price.toStringAsFixed(2);
-      _count.text = '1';
-      _description.text = _item.description;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _setInitialData();
-  }
-
   @override
   Widget build(BuildContext context) {
-    _addLineItem() {
-      String description = _description.value.text;
-      String note = _note.value.text;
-      double count = double.tryParse(_count.value.text) ?? 1;
-      double price = double.tryParse(_price.value.text) ?? 0;
-      double discount = double.tryParse(_discountAmount.value.text) ?? 0;
-      String discountText = _discountDescription.value.text;
-      double subtotal = price * count;
+    _onSubmit() {
+      var description = _description.text;
+      var note = _note.text;
+      var count = double.tryParse(_count.text) ?? 1;
+      var price = double.tryParse(_price.text) ?? 0;
+      var discount = double.tryParse(_discountAmount.text) ?? 0;
+      var discountText = _discountDescription.text;
+      var subtotal = double.parse((price * count).toStringAsFixed(2));
 
       LineItem newItem = LineItem(
-          id: c.newId,
-          count: count,
-          price: price,
-          description: description,
-          subtotal: subtotal,
-          note: note,
-          discount: discount > 0 ? discount : null,
-          discountText: discountText.length > 1 ? discountText : null);
+        id: _controller.newId,
+        count: count,
+        price: price,
+        description: description,
+        subtotal: subtotal,
+        note: note,
+        discount: discount > 0 ? discount : null,
+        discountText: discountText.length > 1 ? discountText : null,
+        inventoryId: inventoryId,
+      );
 
-      if (newItem.description == '') {
+      if (newItem.description.isEmpty) {
         print('enter description please');
       } else {
         if (widget.onCreate != null) {
-          widget.onCreate!(newItem);
+          _controller.addLineItem(newItem);
+          widget.onCreate!();
           _clearInputs();
         }
         // clear input values
 
       }
+    }
+
+    void _onInventoryChange(InventoryItem item) {
+      setState(() {
+        int selectedIndex = _controller.inventory
+            .indexWhere((element) => element.description == item.description);
+        _selected = selectedIndex;
+        var _item = _controller.inventory[selectedIndex];
+        _price.text = _item.price.toStringAsFixed(2);
+        _subtotal.text = _item.price.toStringAsFixed(2);
+        _count.text = '1';
+        _description.text = item.description;
+        inventoryId = item.id;
+      });
     }
 
     return AppCard(
@@ -136,25 +187,13 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
         FlexRow(
           flex: const [5, 1, 2, 2],
           children: [
-            if (widget.inventory.isNotEmpty)
+            if (!widget.isTextInput)
               InventoryDropdown(
                 selectedIndex: _selected,
-                items: widget.inventory,
-                onChanged: (InventoryItem item) {
-                  setState(() {
-                    int selectedIndex = widget.inventory.indexWhere(
-                        (element) => element.description == item.description);
-                    _selected = selectedIndex;
-
-                    var _item = widget.inventory[selectedIndex];
-                    _price.text = _item.price.toStringAsFixed(2);
-                    _subtotal.text = _item.price.toStringAsFixed(2);
-                    _count.text = '1';
-                    _description.text = item.description;
-                  });
-                },
+                items: _controller.inventory,
+                onChanged: _onInventoryChange,
               ),
-            if (widget.inventory.isEmpty)
+            if (widget.isTextInput)
               AppInputText(
                 controller: _description,
                 label: "Product Name o service name",
@@ -183,11 +222,11 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
           flex: const [1, 1, 1],
           children: [
             AppSwitch(
-                value: isDiscountOn,
+                value: hasDiscount,
                 label: 'Add Discount',
                 onChanged: (v) {
                   setState(() {
-                    isDiscountOn = v;
+                    hasDiscount = v;
                   });
                 }),
             const SizedBox(width: 90),
@@ -202,11 +241,11 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
             ),
           ],
         ),
-        if (isDiscountOn)
+        if (hasDiscount)
           const SizedBox(
             height: 16,
           ),
-        if (isDiscountOn)
+        if (hasDiscount)
           FlexRow(
             flex: const [2, 0, 1],
             children: [
@@ -217,16 +256,6 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                 children: const [
                   SizedBox(height: 24),
                   Text("Discount Switch Here.")
-                  // DiscountTypeSwitch(
-                  //   firstLabel: '\$',
-                  //   secondLabel: '%',
-                  //   isOn: isDiscountTypePercent,
-                  //   onTap: (value) {
-                  //     setState(() {
-                  //       isDiscountTypePercent = !value;
-                  //     });
-                  //   },
-                  // ),
                 ],
               ),
               AppInputText(
@@ -244,7 +273,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                 colorBg: AppColors.secondary_20,
                 label: "Save",
                 onPressed: () {
-                  _addLineItem();
+                  _onSubmit();
                 },
               ),
               AppButton(

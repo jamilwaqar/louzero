@@ -22,7 +22,7 @@ class AppAddNote extends StatefulWidget {
 class _AppAddNoteState extends State<AppAddNote> {
   bool visible = false;
   String currentText = '';
-  TextEditingController _noteController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
 
   @override
   initState() {

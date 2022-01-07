@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
@@ -9,6 +11,7 @@ import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../models/line_item.dart';
+import 'package:collection/collection.dart';
 
 class JobsHome extends StatefulWidget {
   JobsHome({Key? key}) : super(key: key);
@@ -22,6 +25,7 @@ class _JobsHomeState extends State<JobsHome> {
   bool addLineVisible = false;
   int inventoryIndex = 0;
   bool miscLineItem = false;
+  LineItem? initialData;
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +54,28 @@ class _JobsHomeState extends State<JobsHome> {
     );
   }
 
-  _addLineItem(LineItem item) {
-    _controller.addLineItem(item);
-    addLineVisible = false;
+  _editLineItem(String id) {
+    var item = _controller.lineItems.firstWhereOrNull((el) {
+      return el.id == id;
+    });
+
+    if (item != null) {
+      inspect(item);
+    }
+  }
+
+  _duplicateLineItem(String id) {
+    var item = _controller.lineItems.firstWhereOrNull((el) {
+      return el.id == id;
+    });
+
+    if (item != null) {
+      inspect(item);
+    }
+  }
+
+  _reorderLineItems(int a, int b) {
+    print('$a, $b');
   }
 
   Widget _body() {
@@ -88,18 +111,6 @@ class _JobsHomeState extends State<JobsHome> {
         tabNames: const ['Job Details', 'Schedule', 'Billing']);
   }
 
-  Widget _tabSchedule() {
-    return const AppTabPanel(children: [
-      Text('Job Schedule', style: AppStyles.headerRegular),
-    ]);
-  }
-
-  Widget _tabDetails() {
-    return const AppTabPanel(children: [
-      Text('Job Details', style: AppStyles.headerRegular),
-    ]);
-  }
-
   Widget _tabBilling() {
     return AppTabPanel(
       children: [
@@ -114,14 +125,20 @@ class _JobsHomeState extends State<JobsHome> {
           onDelete: (id) {
             _controller.deleteLineItemById(id);
           },
+          onDuplicate: _duplicateLineItem,
+          onEdit: _editLineItem,
+          onReorder: _reorderLineItems,
         ),
         Visibility(
           visible: addLineVisible,
           child: JobAddNewLine(
+            initialData: initialData,
             selectedIndex: inventoryIndex,
-            inventory: miscLineItem ? [] : _controller.inventory,
-            onCreate: (LineItem item) {
-              _addLineItem(item);
+            isTextInput: miscLineItem,
+            onCreate: () {
+              setState(() {
+                addLineVisible = false;
+              });
             },
             onCancel: () {
               setState(() {
@@ -145,6 +162,18 @@ class _JobsHomeState extends State<JobsHome> {
         ),
       ],
     );
+  }
+
+  Widget _tabSchedule() {
+    return const AppTabPanel(children: [
+      Text('Job Schedule', style: AppStyles.headerRegular),
+    ]);
+  }
+
+  Widget _tabDetails() {
+    return const AppTabPanel(children: [
+      Text('Job Details', style: AppStyles.headerRegular),
+    ]);
   }
 
   Widget _addItemButton() {

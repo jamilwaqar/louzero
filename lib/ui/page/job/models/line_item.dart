@@ -7,6 +7,7 @@ class LineItem {
   final String? note;
   final double? discount;
   final String? discountText;
+  final String? inventoryId;
 
   const LineItem({
     required this.id,
@@ -17,5 +18,6 @@ class LineItem {
     this.note,
     this.discount,
     this.discountText,
+    this.inventoryId,
   });
 }

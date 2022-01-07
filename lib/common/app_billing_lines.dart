@@ -115,10 +115,11 @@ class AppBillingLines extends StatelessWidget {
                     item.description,
                     style: style,
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  if (item.note != null)
+                  if (item.note != null && item.note!.isNotEmpty)
+                    const SizedBox(
+                      height: 4,
+                    ),
+                  if (item.note != null && item.note!.isNotEmpty)
                     Text(item.note!,
                         style: style.copyWith(
                             height: 1.5,

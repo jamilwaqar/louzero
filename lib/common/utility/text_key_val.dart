@@ -6,6 +6,7 @@ class TextKeyVal extends StatelessWidget {
   final String val;
   final double size;
   final double gap;
+  final bool split;
   final TextStyle? keyStyle;
   final TextStyle? valStyle;
 
@@ -16,6 +17,7 @@ class TextKeyVal extends StatelessWidget {
     this.gap = 8,
     this.keyStyle,
     this.valStyle,
+    this.split = false,
     Key? key,
   }) : super(key: key);
 
@@ -24,6 +26,8 @@ class TextKeyVal extends StatelessWidget {
     TextStyle s1 = keyStyle ?? AppStyles.labelRegular.copyWith(fontSize: size);
     TextStyle s2 = keyStyle ?? AppStyles.labelBold.copyWith(fontSize: size);
     return Row(
+      mainAxisAlignment:
+          split ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
       children: [
         Text(_key, style: s1),
         SizedBox(width: gap),
