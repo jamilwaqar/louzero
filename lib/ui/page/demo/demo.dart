@@ -15,7 +15,8 @@ class Demo extends StatelessWidget {
       subheader: 'Demo Components',
       child: Column(
         children: [
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
+          _segmentControls(),
           _formTextInput(),
           _addNote(),
           _numberStepper(),
@@ -112,20 +113,39 @@ class Demo extends StatelessWidget {
 
   Widget _addNote() {
     return _demoCenterCard('Add Note Widget',
-        child: AppAddNote(
+        child: const AppAddNote(
           initialText: "Simple quick note widget.",
         ));
   }
 
+  Widget _segmentControls() {
+    return AppCard(
+      children: [
+        const Text('Segment Controls', style: AppStyles.headerRegular),
+        const SizedBox(
+          height: 24,
+        ),
+        AppSegmentedControl(
+            isStretch: true,
+            backgroundColor: AppColors.secondary_99,
+            thumbColor: Colors.grey.shade50,
+            children: const {
+              1: SegmentItem(icon: Icons.settings, text: 'Settings'),
+              2: SegmentItem(icon: MdiIcons.calendar, text: 'Calendar'),
+              3: SegmentItem(icon: MdiIcons.calculator, text: 'Estimates')
+            })
+      ],
+    );
+  }
+
   Widget _formTextInput() {
     return AppCard(children: [
-      AppHeaderIcon(
-        'Form Inputs',
-        icon: MdiIcons.formTextbox,
-        mb: 24,
+      const Text('Form Inputs', style: AppStyles.headerRegular),
+      const SizedBox(
+        height: 24,
       ),
       FlexRow(
-        children: [
+        children: const [
           AppTexfield(label: 'Basic'),
           AppTexfield(label: 'Basic'),
         ],
@@ -139,16 +159,16 @@ class Demo extends StatelessWidget {
         label,
         style: AppStyles.headerRegular,
       ),
-      SizedBox(height: 24),
+      const SizedBox(height: 24),
       Container(
-        color: Color(0xFFF6F2EC),
-        padding: EdgeInsets.all(40),
+        color: const Color(0xFFF6F2EC),
+        padding: const EdgeInsets.all(40),
         child: Center(
           child: Container(
-            color: Color(0xFFFFFFFF),
+            color: const Color(0xFFFFFFFF),
             width: 400,
             child: child,
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
           ),
         ),
       )
@@ -156,7 +176,7 @@ class Demo extends StatelessWidget {
   }
 
   Widget _numberStepper() {
-    return AppCard(children: [
+    return const AppCard(children: [
       Text(
         'Number Stepper',
         style: AppStyles.headerRegular,
@@ -168,7 +188,7 @@ class Demo extends StatelessWidget {
 
   Widget _contactCard() {
     return Padding(
-      padding: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 0),
+      padding: const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 0),
       child: ContactCard(
         title: 'Contact Card Demo',
         contact: CustomerContact(

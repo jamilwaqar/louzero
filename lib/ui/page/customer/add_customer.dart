@@ -693,5 +693,3 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     NavigationController().loading(isLoading: false);
   }
 }
-
-_searchedAddressListView() {}

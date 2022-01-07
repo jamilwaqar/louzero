@@ -58,7 +58,7 @@ class _AppTexfieldState extends State<AppTexfield> {
         fillColor: _color,
         filled: true,
         labelText: widget.label,
-        border: UnderlineInputBorder(),
+        border: const UnderlineInputBorder(),
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.all(Radius.circular(4)),

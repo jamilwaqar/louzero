@@ -7,7 +7,7 @@ import 'package:louzero/ui/page/job/models/line_item.dart';
 import 'package:uuid/uuid.dart';
 
 class LineItemController extends GetxController {
-  final Uuid uuid = Uuid();
+  final Uuid uuid = const Uuid();
 
   final CustomerContact contact = CustomerContact(
       email: 'nswanson@emailaddress.net',

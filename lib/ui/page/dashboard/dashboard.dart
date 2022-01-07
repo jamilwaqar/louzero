@@ -112,7 +112,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     borderColor: Colors.red,
                     primary: false,
                     onPressed: () =>
-                        Get.to(() => JobsHome(), binding: JobBinding()),
+                        Get.to(() => const JobsHome(), binding: JobBinding()),
                   ),
                   AppButton(
                     fontSize: btnSize,
@@ -168,7 +168,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       height: btnHeight,
                       colorBg: AppColors.dark_1,
                       label: 'View All',
-                      onPressed: () => Get.to(() => const CustomerListPage(), binding: CustomerBinding()),
+                      onPressed: () => Get.to(() => const CustomerListPage(),
+                          binding: CustomerBinding()),
                     )
                   ]),
               SizedBox(height: spacing),

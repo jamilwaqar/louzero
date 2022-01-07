@@ -7,7 +7,6 @@ import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/page/auth/invite.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/ui/page/demo/demo.dart';

@@ -1,5 +1,3 @@
-import 'package:louzero/ui/page/job/models/supplier.dart';
-
 class InventoryItem {
   final String id;
   final String description;

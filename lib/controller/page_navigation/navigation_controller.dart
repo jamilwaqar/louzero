@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 
 class NavigationController {
-  static final NavigationController _singleton = NavigationController._internal();
+  static final NavigationController _singleton =
+      NavigationController._internal();
   factory NavigationController() {
     return _singleton;
   }

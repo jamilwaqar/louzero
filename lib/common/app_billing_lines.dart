@@ -12,7 +12,7 @@ class AppBillingLines extends StatelessWidget {
   final Function(String)? onDuplicate;
   final Function(int, int)? onReorder;
 
-  AppBillingLines({
+  const AppBillingLines({
     Key? key,
     this.onEdit,
     this.onDelete,
@@ -32,8 +32,8 @@ class AppBillingLines extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16, bottom: 16),
       child: ReorderableListView(
           onReorder: (a, b) {
-            print('reorder');
-            print('$a, $b');
+            // print('reorder');
+            // print('$a, $b');
           },
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
@@ -77,7 +77,7 @@ class AppBillingLines extends StatelessWidget {
 
   List<Widget> _discount(LineItem item) {
     return [
-      AppDivider(mt: 16, mb: 16, mr: 48, ml: 48),
+      const AppDivider(mt: 16, mb: 16, mr: 48, ml: 48),
       Padding(
         padding: const EdgeInsets.only(left: 48, right: 48),
         child: RowSplit(

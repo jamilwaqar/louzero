@@ -29,6 +29,7 @@ export 'app_number_stepper.dart';
 export 'app_placeholder.dart';
 export 'app_pop_menu.dart';
 export 'app_row_flex.dart';
+export 'app_segmented_control.dart';
 export 'app_spinner.dart';
 export 'app_step_progress.dart';
 export 'app_text_body.dart';

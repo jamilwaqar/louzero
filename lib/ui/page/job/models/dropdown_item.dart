@@ -1,5 +1,3 @@
-import 'package:louzero/ui/page/job/models/supplier.dart';
-
 class DropdownItem {
   final String name;
   final String? value;

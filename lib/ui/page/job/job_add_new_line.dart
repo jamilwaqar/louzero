@@ -144,7 +144,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       );
 
       if (newItem.description.isEmpty) {
-        print('enter description please');
+        // print('enter description please');
       } else {
         if (widget.onCreate != null) {
           _controller.addLineItem(newItem);
@@ -328,17 +328,8 @@ class AppSwitch extends StatelessWidget {
   }
 }
 
-class name extends StatelessWidget {
-  const name({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
 class InventoryDropdown extends StatelessWidget {
-  InventoryDropdown(
+  const InventoryDropdown(
       {Key? key,
       this.items = const [],
       this.label = 'Select',
@@ -367,7 +358,7 @@ class InventoryDropdown extends StatelessWidget {
           height: 8,
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               border: Border.all(color: AppColors.secondary_80, width: 1)),

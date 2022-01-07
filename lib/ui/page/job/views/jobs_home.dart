@@ -14,7 +14,7 @@ import '../models/line_item.dart';
 import 'package:collection/collection.dart';
 
 class JobsHome extends StatefulWidget {
-  JobsHome({Key? key}) : super(key: key);
+  const JobsHome({Key? key}) : super(key: key);
 
   @override
   State<JobsHome> createState() => _JobsHomeState();
@@ -75,7 +75,7 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   _reorderLineItems(int a, int b) {
-    print('$a, $b');
+    // print('$a, $b');
   }
 
   Widget _body() {
