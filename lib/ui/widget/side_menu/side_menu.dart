@@ -170,12 +170,9 @@ class _SideMenuViewState extends State<SideMenuView> {
   Widget _profile() {
     return Column(
       children: [
-        AppAvatar(
-            url: AuthManager.userModel!.avatar,
-            text: AuthManager.userModel!.initials,
-            size: 96),
+        AppAvatar(url: AuthManager.userModel!.avatar, text: AuthManager.userModel!.initials, size: 96, backgroundColor: AppColors.medium_2),
         const SizedBox(height: 8),
-        const Text('Corey Holton', style: AppStyles.headerRegular),
+        Text(AuthManager.userModel!.fullName, style: AppStyles.headerRegular),
         const SizedBox(height: 8),
         const Text(
           'Patio Pools and Spas',

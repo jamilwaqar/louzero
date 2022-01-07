@@ -10,6 +10,8 @@ class UserModel {
   @JsonKey(ignore: true)       String? objectId;
   @JsonKey(defaultValue: '')   String firstname = '';
   @JsonKey(defaultValue: '')   String lastname = '';
+  @JsonKey(defaultValue: '')   String phone = '';
+  @JsonKey(defaultValue: '')   String serviceAddress = '';
   @JsonKey(defaultValue: '')   String activeCompanyId = '';
   @JsonKey(defaultValue: [])   List<String> customerTypes = [];
   @JsonKey(defaultValue: [])   List<String> jobTypes = [];

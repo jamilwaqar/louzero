@@ -36,6 +36,9 @@ abstract class AppColors {
 
   static const Color icon = Color(0xFF323232);
   static const Color black = Colors.black;
+
+  static const Color oddItemColor = Color(0xFFF1F2F4);
+  static const Color evenItemColor = Color(0xFFF8F9FB);
 }
 
 abstract class AppStyles {

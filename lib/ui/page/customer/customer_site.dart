@@ -90,7 +90,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      subheader: _isTemplate ? 'Settings' : 'Customer Profile',
+      subheader: _isTemplate ? 'Site Profile Templates' : 'Customer Profile',
       footerEnd: [if (!_isAdding) _addNew()],
       child: _body(),
     );
@@ -207,7 +207,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                   key: Key('$index'),
                   width: double.infinity,
                   height: 48,
-                  color: index.isOdd ? _oddItemColor : _evenItemColor,
+                  color: index.isOdd ? AppColors.oddItemColor : AppColors.evenItemColor,
                   child: Row(
                     children: [
                       const SizedBox(width: 56),
@@ -590,8 +590,6 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
     );
   }
 
-  final Color _oddItemColor = const Color(0xFFF1F2F4);
-  final Color _evenItemColor = const Color(0xFFF8F9FB);
   Widget _reorderList() {
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
@@ -617,7 +615,7 @@ class _CustomerSiteProfilePageState extends State<CustomerSiteProfilePage> {
                         index == _profileItemLabelControllers.length - 1
                             ? 8
                             : 0)),
-                color: index.isOdd ? _oddItemColor : _evenItemColor,
+                color: index.isOdd ? AppColors.oddItemColor : AppColors.evenItemColor,
               ),
               child: Row(
                 children: [

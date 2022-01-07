@@ -10,6 +10,8 @@ CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel()
   ..objectId = json['objectId'] as String?
   ..avatar = json['avatar'] == null ? null : Uri.parse(json['avatar'] as String)
   ..website = json['website'] as String? ?? ''
+  ..admins =
+      (json['admins'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []
   ..name = json['name'] as String? ?? ''
   ..phone = json['phone'] as String? ?? ''
   ..email = json['email'] as String? ?? ''
@@ -17,6 +19,8 @@ CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel()
           ?.map((e) => e as String)
           .toList() ??
       []
+  ..status = $enumDecodeNullable(_$CompanyStatusEnumMap, json['status']) ??
+      CompanyStatus.active
   ..address = json['address'] == null
       ? null
       : AddressModel.fromJson(json['address'] as Map<String, dynamic>);
@@ -26,9 +30,16 @@ Map<String, dynamic> _$CompanyModelToJson(CompanyModel instance) =>
       'objectId': instance.objectId,
       'avatar': instance.avatar?.toString(),
       'website': instance.website,
+      'admins': instance.admins,
       'name': instance.name,
       'phone': instance.phone,
       'email': instance.email,
       'industries': instance.industries,
+      'status': _$CompanyStatusEnumMap[instance.status],
       'address': instance.address,
     };
+
+const _$CompanyStatusEnumMap = {
+  CompanyStatus.active: 'active',
+  CompanyStatus.cancel: 'cancel',
+};

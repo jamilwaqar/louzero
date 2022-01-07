@@ -6,7 +6,8 @@ import 'package:louzero/controller/utils.dart';
 class AppAddButton extends StatelessWidget {
   final String label;
   final Function() onPressed;
-  const AppAddButton(this.label, {Key? key, required this.onPressed}) : super(key: key);
+  final IconData? iconData;
+  const AppAddButton(this.label, {Key? key, required this.onPressed, this.iconData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class AppAddButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            appIcon(Icons.add_circle, color: AppColors.dark_2),
+            appIcon(iconData ?? Icons.add_circle, color: AppColors.dark_2),
             const SizedBox(width: 8),
             Text(label, style: TextStyles.labelL.copyWith(color: AppColors.dark_3)),
             const SizedBox(width: 16),
