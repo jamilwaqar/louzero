@@ -6,6 +6,7 @@ import 'package:louzero/common/app_flex_row.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_multiselect.dart';
 import 'package:louzero/common/app_pop_menu.dart';
+import 'package:louzero/common/app_segmented_control.dart';
 import 'package:louzero/common/app_spinner.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
@@ -28,6 +29,7 @@ class Demo extends StatelessWidget {
             _multiSelect(),
             _formInputs(),
             _buttonsAndMenus(),
+            _segmentControls()
           ],
         ),
       ),
@@ -226,4 +228,54 @@ class Demo extends StatelessWidget {
           ],
         )
       ]);
+
+  Widget _segmentControls() => AppCard(children: [
+    _heading('Segmented Control'),
+    AppSegmentedControl(
+      fromMax: true,
+      isStretch: true,
+      children: {
+        1: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Icon(MdiIcons.calculator, size: 20),
+            SizedBox(width: 5),
+            Text('Estimate (103)')
+          ],
+        ),
+        2: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Icon(MdiIcons.calendar),
+            SizedBox(width: 5),
+            Text('Booked (97)')
+          ],
+        ),
+        3: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Icon(MdiIcons.currencyUsd, size: 20),
+            SizedBox(width: 5),
+            Text('Invoiced')
+          ],
+        ),
+        4: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Icon(MdiIcons.cancel),
+            SizedBox(width: 5),
+            Text('Canceled')
+          ],
+        ),
+      },
+      onValueChanged: (int value) {
+        print(value);
+      },
+    )
+  ]);
 }
+
