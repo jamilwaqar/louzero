@@ -259,7 +259,7 @@ class _AccountSetupState extends State<AccountSetup> {
               ),
               AppButton(
                 label: 'Go to Your Dashboard',
-                color: AppColors.dark_2,
+                colorBg: AppColors.dark_2,
                 fontSize: 13,
                 onPressed: () {
                   _goToDashboard(context);

@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card.dart';
-import 'package:louzero/common/app_card_tabs.dart';
-import 'package:louzero/common/app_flex_row.dart';
-import 'package:louzero/common/app_input_text.dart';
-import 'package:louzero/common/app_multiselect.dart';
-import 'package:louzero/common/app_pop_menu.dart';
-import 'package:louzero/common/app_spinner.dart';
-import 'package:louzero/common/app_text_body.dart';
-import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Demo extends StatelessWidget {
@@ -20,16 +13,29 @@ class Demo extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       subheader: 'Demo Components',
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _tabs(),
-            _loadingSpinner(),
-            _multiSelect(),
-            _formInputs(),
-            _buttonsAndMenus(),
-          ],
-        ),
+      child: Column(
+        children: [
+          const SizedBox(height: 32),
+          _segmentControls(),
+          _formTextInput(),
+          _addNote(),
+          _numberStepper(),
+          _contactCard(),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
+            child: AppCardTabs(
+              height: 500,
+              length: 3,
+              tabNames: const ['Overview', 'Schedule', 'Billing'],
+              children: tabItems,
+            ),
+          ),
+          _loadingSpinner(),
+          _multiSelect(),
+          _formInputs(),
+          _buttonsAndMenus(),
+        ],
       ),
     );
   }
@@ -50,69 +56,156 @@ class Demo extends StatelessWidget {
 
   // MOCK DATA (TABS)
   final List<Widget> tabItems = [
-    Container(
-      color: AppColors.lightest,
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const AppTextHeader('Basic Info',
-                alignLeft: true, icon: Icons.airplane_ticket, size: 24),
-            AppFlexRow(
-              flex: const [2, 2],
-              children: const [
-                AppInputText(
-                  label: 'First',
-                  initial: 'Brad',
-                ),
-                AppInputText(
-                  label: 'Last',
-                  initial: 'Smith',
-                ),
-                AppInputText(
-                  label: 'Alias',
-                  initial: 'The Closer',
-                ),
-              ],
+    AppTabPanel(
+      children: [
+        const AppTextHeader('Basic Info',
+            alignLeft: true, icon: Icons.airplane_ticket, size: 24),
+        FlexRow(
+          flex: const [2, 2],
+          children: const [
+            AppInputText(
+              label: 'First',
+              initial: 'Brad',
             ),
-            const SizedBox(
-              height: 16,
+            AppInputText(
+              label: 'Last',
+              initial: 'Smith',
             ),
-            AppFlexRow(
-              flex: const [2],
-              children: [
-                Column(
-                  children: const [
-                    AppTextBody(
-                      'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                      bold: true,
-                      mb: 16,
-                    ),
-                    AppTextBody(
-                      'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                    )
-                  ],
-                ),
-                const AppTextBody(
-                  'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                  pl: 8,
-                ),
-              ],
-            )
+            AppInputText(
+              label: 'Alias',
+              initial: 'The Closer',
+            ),
           ],
         ),
-      ),
+        const SizedBox(
+          height: 16,
+        ),
+        FlexRow(
+          flex: const [2],
+          children: [
+            Column(
+              children: const [
+                AppTextBody(
+                  'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                  bold: true,
+                  mb: 16,
+                ),
+                AppTextBody(
+                  'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+                )
+              ],
+            ),
+            const AppTextBody(
+              'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
+              pl: 8,
+            ),
+          ],
+        )
+      ],
     ),
-    Container(
-      color: AppColors.lightest,
-      child: const Icon(Icons.location_pin, size: 150, color: AppColors.orange),
+    const AppTabPanel(
+      children: [Icon(Icons.location_pin, size: 150, color: AppColors.orange)],
     ),
-    Container(
-      color: AppColors.lightest,
-      child: const Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange),
+    const AppTabPanel(
+      children: [Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)],
     ),
   ];
+
+  Widget _addNote() {
+    return _demoCenterCard('Add Note Widget',
+        child: const AppAddNote(
+          initialText: "Simple quick note widget.",
+        ));
+  }
+
+  Widget _segmentControls() {
+    return AppCard(
+      children: [
+        const Text('Segment Controls', style: AppStyles.headerRegular),
+        const SizedBox(
+          height: 24,
+        ),
+        AppSegmentedControl(
+            isStretch: true,
+            backgroundColor: AppColors.secondary_99,
+            thumbColor: Colors.grey.shade50,
+            children: const {
+              1: SegmentItem(icon: Icons.settings, text: 'Settings'),
+              2: SegmentItem(icon: MdiIcons.calendar, text: 'Calendar'),
+              3: SegmentItem(icon: MdiIcons.calculator, text: 'Estimates')
+            })
+      ],
+    );
+  }
+
+  Widget _formTextInput() {
+    return AppCard(children: [
+      const Text('Form Inputs', style: AppStyles.headerRegular),
+      const SizedBox(
+        height: 24,
+      ),
+      FlexRow(
+        children: const [
+          AppTexfield(label: 'Basic'),
+          AppTexfield(label: 'Basic'),
+        ],
+      )
+    ]);
+  }
+
+  Widget _demoCenterCard(String label, {Widget? child}) {
+    return AppCard(children: [
+      Text(
+        label,
+        style: AppStyles.headerRegular,
+      ),
+      const SizedBox(height: 24),
+      Container(
+        color: const Color(0xFFF6F2EC),
+        padding: const EdgeInsets.all(40),
+        child: Center(
+          child: Container(
+            color: const Color(0xFFFFFFFF),
+            width: 400,
+            child: child,
+            padding: const EdgeInsets.all(16),
+          ),
+        ),
+      )
+    ]);
+  }
+
+  Widget _numberStepper() {
+    return const AppCard(children: [
+      Text(
+        'Number Stepper',
+        style: AppStyles.headerRegular,
+      ),
+      SizedBox(height: 24),
+      AppNumberStepper()
+    ]);
+  }
+
+  Widget _contactCard() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 0),
+      child: ContactCard(
+        title: 'Contact Card Demo',
+        contact: CustomerContact(
+            firstName: 'Joe',
+            lastName: 'Somebody',
+            email: 'joe@somesite.com',
+            phone: '(510) 843-4356',
+            role: 'Owner'),
+        address: AddressModel(
+            country: 'US',
+            street: '123 Alphabet Street',
+            city: 'Portland',
+            state: 'OR',
+            zip: '97202'),
+      ),
+    );
+  }
 
   // RENDER FUNCTIONS
   Widget _heading(String text,
@@ -128,13 +221,6 @@ class Demo extends StatelessWidget {
     );
   }
 
-  Widget _tabs() => AppCardTabs(
-        height: 500,
-        length: 3,
-        tabNames: const ['Overview', 'Schedule', 'Billing'],
-        children: tabItems,
-      );
-
   Widget _loadingSpinner() => AppCard(pb: 48, children: [
         _heading('Loading Spinner', MdiIcons.pirate),
         const AppSpinner(),
@@ -149,21 +235,21 @@ class Demo extends StatelessWidget {
 
   Widget _formInputs() => AppCard(children: [
         _heading('Form Inputs', Icons.forum_rounded),
-        AppFlexRow(
+        FlexRow(
           children: const [
             AppInputText(label: 'First'),
             AppInputText(label: 'Last'),
             AppInputText(label: 'Nickname'),
           ],
         ),
-        AppFlexRow(
+        FlexRow(
           flex: const [4, 1],
           children: const [
             AppInputText(label: 'Address'),
             AppInputText(label: 'Suite'),
           ],
         ),
-        AppFlexRow(
+        FlexRow(
           children: [
             const AppInputText(label: 'Country'),
             AppMultiSelect(
@@ -172,20 +258,22 @@ class Demo extends StatelessWidget {
             )
           ],
         ),
-        AppFlexRow(
+        FlexRow(
           flex: const [2, 3],
           children: const [
             AppInputText(label: 'Alias'),
             AppInputText(label: 'Planet of Origin'),
           ],
         ),
-        AppFlexRow(
+        FlexRow(
           flex: const [3],
           children: [
             Container(),
             const AppButton(
-                label: 'Cancel', primary: false, color: AppColors.secondary_60),
-            const AppButton(label: 'Submit', color: AppColors.orange),
+                label: 'Cancel',
+                primary: false,
+                colorBg: AppColors.secondary_60),
+            const AppButton(label: 'Submit', colorBg: AppColors.orange),
           ],
         )
       ]);

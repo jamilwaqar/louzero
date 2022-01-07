@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_avatar.dart';
-import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_icon_button.dart';
-import 'package:louzero/common/app_nav_button.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
@@ -25,7 +22,6 @@ class SideMenuView extends StatefulWidget {
 }
 
 class _SideMenuViewState extends State<SideMenuView> {
-
   @override
   Widget build(BuildContext context) {
     // _sideMenuKey.currentState?.open();
@@ -89,7 +85,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.dashboard,
                 onPressed: () {
                   _pop();
-                  Get.to(()=> DashboardPage());
+                  Get.to(() => DashboardPage());
                 },
               ),
               AppNavButton(
@@ -97,7 +93,8 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.person,
                 onPressed: () {
                   _pop();
-                  Get.to(()=> const CustomerListPage(), binding: CustomerBinding());
+                  Get.to(() => const CustomerListPage(),
+                      binding: CustomerBinding());
                 },
               ),
               AppNavButton(
@@ -133,7 +130,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.settings,
                 onPressed: () {
                   _pop();
-                  Get.to(()=> const SettingsPage());
+                  Get.to(() => const SettingsPage());
                 },
               ),
               AppNavButton(
@@ -141,7 +138,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                 icon: Icons.star_border_outlined,
                 onPressed: () {
                   _pop();
-                  Get.to(()=> Demo());
+                  Get.to(() => Demo());
                 },
               ),
             ],
@@ -162,7 +159,7 @@ class _SideMenuViewState extends State<SideMenuView> {
             colorIco: AppColors.primary_1,
             onPressed: () {
               _pop();
-              Get.to(()=> const AccountSetup());
+              Get.to(() => const AccountSetup());
             },
           ),
         ],
@@ -173,13 +170,16 @@ class _SideMenuViewState extends State<SideMenuView> {
   Widget _profile() {
     return Column(
       children: [
-        AppAvatar(url: AuthManager.userModel!.avatar, text: AuthManager.userModel!.initials, size: 96),
+        AppAvatar(
+            url: AuthManager.userModel!.avatar,
+            text: AuthManager.userModel!.initials,
+            size: 96),
         const SizedBox(height: 8),
-        const Text('Corey Holton', style: AppStyles.header_default),
+        const Text('Corey Holton', style: AppStyles.headerRegular),
         const SizedBox(height: 8),
         const Text(
           'Patio Pools and Spas',
-          style: AppStyles.label_default,
+          style: AppStyles.labelRegular,
         ),
         const AppDivider(
           mt: 32,

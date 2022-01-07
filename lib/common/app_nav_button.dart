@@ -59,7 +59,7 @@ class AppNavButton extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: AppStyles.label_bold.copyWith(color: color),
+                style: AppStyles.labelBold.copyWith(color: color),
               ),
             )
           ],

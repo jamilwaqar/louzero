@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/common.dart';
 import 'app_text_body.dart';
 
 class AppInputText extends StatelessWidget {
@@ -7,6 +9,7 @@ class AppInputText extends StatelessWidget {
       {Key? key,
       required this.label,
       this.initial,
+      this.hint,
       this.controller,
       this.onSaved,
       this.validator,
@@ -16,8 +19,13 @@ class AppInputText extends StatelessWidget {
       this.password = false,
       this.autofocus = false,
       this.required = false,
+      this.readOnly = false,
+      this.labelHidden = false,
+      this.labelRemoved = false,
+      this.inputFormatters,
       this.colorTx = AppColors.dark_3,
       this.colorBd = AppColors.light_3,
+      this.colorBdFocus = AppColors.dark_3,
       this.colorBg = AppColors.lightest,
       this.enabled = true,
       this.height = 48,
@@ -27,17 +35,23 @@ class AppInputText extends StatelessWidget {
       : super(key: key);
 
   final String label;
+  final String? hint;
   final String? initial;
   final TextEditingController? controller;
+  final List<TextInputFormatter>? inputFormatters;
   final void Function(String?)? onSaved;
   final String? Function(String?)? validator;
   final Color colorBg;
   final Color colorBd;
+  final Color colorBdFocus;
   final Color colorTx;
   final TextInputType keyboardType;
   final TextCapitalization? textCapitalization;
   final bool password;
   final bool required;
+  final bool readOnly;
+  final bool labelHidden;
+  final bool labelRemoved;
   final double mt;
   final double mb;
   final bool autofocus;
@@ -46,10 +60,8 @@ class AppInputText extends StatelessWidget {
   final List<String>? options;
   final bool enabled;
   //Input border props:
-  final double _radius = 4;
+  final BorderRadius _radius = Common.border_4;
   final double _width = 1;
-  final Color _color = AppColors.light_3;
-  final Color _focus = AppColors.darkest;
 
   @override
   Widget build(BuildContext context) {
@@ -62,28 +74,29 @@ class AppInputText extends StatelessWidget {
 
     InputDecoration inputStyle = InputDecoration(
       filled: true,
-      fillColor: AppColors.lightest,
+      hintText: hint,
+      fillColor: colorBg,
       contentPadding:
           const EdgeInsets.only(top: 0, left: 12, right: 12, bottom: 0),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
-        borderSide: BorderSide(color: _color, width: _width),
+        borderRadius: _radius,
+        borderSide: BorderSide(color: colorBd, width: _width),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
-        borderSide: BorderSide(color: _focus, width: _width),
+        borderRadius: _radius,
+        borderSide: BorderSide(color: colorBdFocus, width: _width),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
-        borderSide: BorderSide(color: _color, width: _width),
+        borderRadius: _radius,
+        borderSide: BorderSide(color: colorBd, width: _width),
       ),
       disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
-        borderSide: BorderSide(color: _color, width: _width),
+        borderRadius: _radius,
+        borderSide: BorderSide(color: colorBd, width: _width),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(_radius),
-        borderSide: BorderSide(color: _focus, width: _width),
+        borderRadius: _radius,
+        borderSide: BorderSide(color: colorBdFocus, width: _width),
       ),
     );
 
@@ -91,8 +104,20 @@ class AppInputText extends StatelessWidget {
       // mainAxisSize: MainAxisSize.
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppTextBody(label + reqText,
-            size: 14, color: AppColors.dark_2, bold: true, mb: 8, mt: mt),
+        Visibility(
+          visible: !labelRemoved,
+          child: Opacity(
+            opacity: labelHidden ? 0 : 1,
+            child: AppTextBody(
+              label + reqText,
+              size: 14,
+              color: AppColors.dark_2,
+              bold: true,
+              mb: 8,
+              mt: mt,
+            ),
+          ),
+        ),
         TextFormField(
           initialValue: initial,
           autofocus: autofocus,
@@ -102,6 +127,8 @@ class AppInputText extends StatelessWidget {
           obscureText: password,
           onChanged: onChanged,
           onSaved: onSaved,
+          readOnly: readOnly,
+          inputFormatters: inputFormatters,
           validator: validator,
           style: inputText,
           enabled: enabled,
