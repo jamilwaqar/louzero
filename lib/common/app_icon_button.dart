@@ -5,6 +5,7 @@ class AppIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
   final double size;
+  final double iconSize;
   final Color color;
   final Color colorBg;
   final double pl;
@@ -14,14 +15,15 @@ class AppIconButton extends StatelessWidget {
 
   const AppIconButton(
       {Key? key,
-      this.size = 40,
+      this.size = 24,
       this.icon = Icons.close,
+      this.iconSize = 18,
       this.color = AppColors.secondary_60,
       this.colorBg = AppColors.secondary_95,
-      this.pt = 8,
+      this.pt = 0,
       this.pb = 0,
-      this.pl = 8,
-      this.pr = 8,
+      this.pl = 0,
+      this.pr = 0,
       this.onTap})
       : super(key: key);
 
@@ -34,20 +36,16 @@ class AppIconButton extends StatelessWidget {
         shape: const CircleBorder(),
         color: Colors.transparent,
         child: Center(
-          child: Ink(
-            width: size,
-            height: size,
-            decoration: ShapeDecoration(
-              color: colorBg,
-              shape: const CircleBorder(),
-            ),
-            child: IconButton(
-              splashColor: Colors.transparent,
-              iconSize: size / 2,
-              icon: Icon(icon),
-              color: color,
-              onPressed: onTap ?? () {},
-            ),
+          child: GestureDetector(
+            onTap: onTap ?? () {},
+            child: Ink(
+                width: size,
+                height: size,
+                decoration: ShapeDecoration(
+                  color: colorBg,
+                  shape: const CircleBorder(),
+                ),
+                child: Icon(icon, color: color, size: iconSize)),
           ),
         ),
       ),

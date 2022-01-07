@@ -101,7 +101,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
             AppButton(
               margin: const EdgeInsets.only(right: 8),
               label: 'SWITCH TO',
-              color: AppColors.dark_1,
+              colorBg: AppColors.dark_1,
               colorText: AppColors.darkest,
               primary: false,
               onPressed: () {},

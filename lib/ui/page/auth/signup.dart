@@ -112,7 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
     NavigationController().loading();
     var code = verificationCode();
     var email = _emailController.text;
-    var res = await AuthAPI(auth: Backendless.userService).sendVerificationCode(email, code);
+    var res = await AuthAPI(auth: Backendless.userService)
+        .sendVerificationCode(email, code);
     await Future.delayed(const Duration(seconds: 1));
     NavigationController().loading(isLoading: false);
     if (res is String) {

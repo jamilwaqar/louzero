@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppFlexRow extends StatelessWidget {
-  AppFlexRow({
+class FlexRow extends StatelessWidget {
+  FlexRow({
     Key? key,
     this.children = const <Widget>[],
     this.flex = const <int>[],

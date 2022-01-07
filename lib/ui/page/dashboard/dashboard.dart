@@ -10,6 +10,7 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
 import 'package:louzero/ui/page/job/jobs.dart';
+import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
 
@@ -81,7 +82,7 @@ class _DashboardPageState extends State<DashboardPage> {
         child: SingleChildScrollView(
           child: Padding(
             padding:
-            EdgeInsets.only(left: margin, right: margin, top: margin * 2),
+                EdgeInsets.only(left: margin, right: margin, top: margin * 2),
             child: _body(),
           ),
         ));
@@ -106,8 +107,19 @@ class _DashboardPageState extends State<DashboardPage> {
                     fontSize: btnSize,
                     height: btnHeight,
                     margin: const EdgeInsets.only(right: 8),
+                    label: 'Dev Page',
+                    colorBg: Colors.red,
+                    borderColor: Colors.red,
+                    primary: false,
+                    onPressed: () =>
+                        Get.to(() => const JobsHome(), binding: JobBinding()),
+                  ),
+                  AppButton(
+                    fontSize: btnSize,
+                    height: btnHeight,
+                    margin: const EdgeInsets.only(right: 8),
                     label: 'Add Job',
-                    color: AppColors.dark_1,
+                    colorBg: AppColors.dark_1,
                     colorText: AppColors.darkest,
                     primary: false,
                     onPressed: () =>
@@ -116,10 +128,11 @@ class _DashboardPageState extends State<DashboardPage> {
                   AppButton(
                       fontSize: btnSize,
                       height: btnHeight,
-                      color: AppColors.dark_1,
+                      colorBg: AppColors.dark_1,
                       label: 'Search Jobs',
                       onPressed: () {
-                        Get.to(() => const JobListPage(), binding: JobBinding());
+                        Get.to(() => const JobListPage(),
+                            binding: JobBinding());
                       })
                 ],
               ),
@@ -146,16 +159,17 @@ class _DashboardPageState extends State<DashboardPage> {
                       height: btnHeight,
                       margin: const EdgeInsets.only(right: 8),
                       label: 'Add Customer',
-                      color: AppColors.dark_1,
+                      colorBg: AppColors.dark_1,
                       colorText: AppColors.darkest,
                       primary: false,
                     ),
                     AppButton(
                       fontSize: btnSize,
                       height: btnHeight,
-                      color: AppColors.dark_1,
+                      colorBg: AppColors.dark_1,
                       label: 'View All',
-                      onPressed: () => Get.to(() => const CustomerListPage(), binding: CustomerBinding()),
+                      onPressed: () => Get.to(() => const CustomerListPage(),
+                          binding: CustomerBinding()),
                     )
                   ]),
               SizedBox(height: spacing),

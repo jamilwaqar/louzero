@@ -30,25 +30,40 @@ class AddCustomerPage extends StatefulWidget {
 }
 
 class _AddCustomerPageState extends State<AddCustomerPage> {
-  late final TextEditingController _companyNameController = TextEditingController(text: widget.model?.companyName);
+  late final TextEditingController _companyNameController =
+      TextEditingController(text: widget.model?.companyName);
   late final TextEditingController _parentAccountNameController =
       TextEditingController(text: widget.model?.parentAccountName);
 
   late final TextEditingController _serviceCountryController =
-      TextEditingController(text: widget.model?.billingAddress.country ?? AppDefaultValue.country.name);
+      TextEditingController(
+          text: widget.model?.billingAddress.country ??
+              AppDefaultValue.country.name);
   late final TextEditingController _serviceStreetController =
       TextEditingController(text: widget.model?.serviceAddress.street);
-  late final TextEditingController _serviceCityController = TextEditingController(text: widget.model?.serviceAddress.city);
-  late final TextEditingController _serviceAptController = TextEditingController(text: widget.model?.serviceAddress.suite);
-  late final TextEditingController _serviceStateController = TextEditingController(text: widget.model?.serviceAddress.state);
-  late final TextEditingController _serviceZipController = TextEditingController(text: widget.model?.serviceAddress.zip);
+  late final TextEditingController _serviceCityController =
+      TextEditingController(text: widget.model?.serviceAddress.city);
+  late final TextEditingController _serviceAptController =
+      TextEditingController(text: widget.model?.serviceAddress.suite);
+  late final TextEditingController _serviceStateController =
+      TextEditingController(text: widget.model?.serviceAddress.state);
+  late final TextEditingController _serviceZipController =
+      TextEditingController(text: widget.model?.serviceAddress.zip);
 
-  late final TextEditingController _billCountryController = TextEditingController(text: widget.model?.billingAddress.country ?? AppDefaultValue.country.name);
-  late final TextEditingController _billStreetController = TextEditingController(text: widget.model?.billingAddress.street);
-  late final TextEditingController _billCityController = TextEditingController(text: widget.model?.billingAddress.city);
-  late final TextEditingController _billAptController = TextEditingController(text: widget.model?.billingAddress.suite);
-  late final TextEditingController _billStateController = TextEditingController(text: widget.model?.billingAddress.state);
-  late final TextEditingController _billZipController = TextEditingController(text: widget.model?.billingAddress.zip);
+  late final TextEditingController _billCountryController =
+      TextEditingController(
+          text: widget.model?.billingAddress.country ??
+              AppDefaultValue.country.name);
+  late final TextEditingController _billStreetController =
+      TextEditingController(text: widget.model?.billingAddress.street);
+  late final TextEditingController _billCityController =
+      TextEditingController(text: widget.model?.billingAddress.city);
+  late final TextEditingController _billAptController =
+      TextEditingController(text: widget.model?.billingAddress.suite);
+  late final TextEditingController _billStateController =
+      TextEditingController(text: widget.model?.billingAddress.state);
+  late final TextEditingController _billZipController =
+      TextEditingController(text: widget.model?.billingAddress.zip);
 
   late final List<TextEditingController> _contactFNameControllers = [
     TextEditingController(text: widget.model?.customerContacts.first.firstName)
@@ -72,7 +87,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   final List<Widget> _customerContactList = [];
   String? _customerType = AuthManager.userModel!.customerTypes[0];
-  late final List<List<CTContactType>> _contactTypes = [widget.model?.customerContacts.first.types ?? []];
+  late final List<List<CTContactType>> _contactTypes = [
+    widget.model?.customerContacts.first.types ?? []
+  ];
   Country _country = AppDefaultValue.country;
   SearchAddressModel? _serviceSearchAddressModel;
   SearchAddressModel? _billSearchAddressModel;
@@ -109,7 +126,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       footerEnd: [
         AppButton(
             label: 'Cancel',
-            color: AppColors.secondary_70.withAlpha(40),
+            colorBg: AppColors.secondary_70.withAlpha(40),
             colorText: AppColors.secondary_70,
             onPressed: () {
               NavigationController().pop(context);
@@ -134,9 +151,11 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       const SizedBox(height: 32),
       _saveOrCancel(),
     ];
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(32, 0, 32, 30),
-      children: list,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: list,
+      ),
     );
   }
 
@@ -265,8 +284,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                       : _billStreetController,
                   label: "Street Address",
                   onChanged: (val) {
-                    _baseController.searchAddress(
-                        val, _country.countryCode);
+                    _baseController.searchAddress(val, _country.countryCode);
                   },
                 ),
                 AppInputText(
@@ -320,6 +338,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   Widget _billingAddress() {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.light_2, width: 1),
@@ -570,7 +589,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     model.customerContacts = contacts;
     model.objectId = widget.model?.objectId;
     NavigationController().loading();
-    final response = await controller.save(model, Backendless.data.of(BLPath.customer));
+    final response =
+        await controller.save(model, Backendless.data.of(BLPath.customer));
     String msg;
     if (response is String) {
       msg = response;

@@ -127,7 +127,8 @@ class _InviteCustomerPageState extends State<InviteCustomerPage> {
 
   void _inviteCustomer() async {
     NavigationController().loading();
-    var res = await AuthAPI(auth: Backendless.userService).sendInvitationCode(widget.email, _code!);
+    var res = await AuthAPI(auth: Backendless.userService)
+        .sendInvitationCode(widget.email, _code!);
     await Future.delayed(const Duration(milliseconds: 500));
     NavigationController().loading(isLoading: false);
     var msg = res is String ? res : 'Sent an invitation with the code!';

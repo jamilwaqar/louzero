@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NavigationController {
-  static final NavigationController _singleton = NavigationController._internal();
+  static final NavigationController _singleton =
+      NavigationController._internal();
   factory NavigationController() {
     return _singleton;
   }

@@ -113,7 +113,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                     child: Container(
                       alignment: Alignment.center,
                       color: AppColors.secondary_95.withOpacity(0.6),
-                      child: AppSpinner(
+                      child: const AppSpinner(
                         size: 160,
                         width: 8,
                       ),

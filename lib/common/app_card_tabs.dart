@@ -4,7 +4,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'app_card.dart';
 
 class AppCardTabs extends StatelessWidget {
-  const AppCardTabs({
+  AppCardTabs({
     Key? key,
     required this.children,
     required this.length,
@@ -32,56 +32,61 @@ class AppCardTabs extends StatelessWidget {
     return Tab(
       child: Text(
         _label,
-        style: AppStyles.header_small,
+        style: AppStyles.headerSmall,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-        mt: 24,
-        pl: 0,
-        pr: 0,
-        pt: 0,
-        pb: 0,
-        radius: radius,
-        children: [
-          DefaultTabController(
-            length: 3,
-            // ignore: sized_box_for_whitespace
-            child: Container(
-              height: height,
-              child: Column(
-                children: [
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: _backgroundTabs.withOpacity(0.5),
-                      border: Border(
-                          bottom: BorderSide(
-                              color: _borderBlur, width: _borderWidth)),
-                    ),
-                    child: TabBar(
-                      indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                              width: _borderWidth, color: _borderFocus),
-                          insets: const EdgeInsets.symmetric(horizontal: 0)),
-                      labelColor: _labelColor,
-                      indicatorColor: _borderFocus,
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      tabs: tabNames.map((name) {
-                        return _tab(name);
-                      }).toList(),
-                    ),
-                  ),
-                  Expanded(
-                      child: TabBarView(
-                    children: children,
-                  ))
-                ],
-              ),
+    return DefaultTabController(
+      length: length,
+      child: SizedBox(
+        height: height,
+        child: AppCard(mx: 0, my: 0, px: 0, py: 0, radius: radius, children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: _backgroundTabs.withOpacity(0.5),
+              border: Border(
+                  bottom: BorderSide(color: _borderBlur, width: _borderWidth)),
             ),
-          )
-        ]);
+            child: TabBar(
+              indicator: UnderlineTabIndicator(
+                  borderSide:
+                      BorderSide(width: _borderWidth, color: _borderFocus),
+                  insets: const EdgeInsets.symmetric(horizontal: 0)),
+              labelColor: _labelColor,
+              indicatorColor: _borderFocus,
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              tabs: tabNames.map((name) {
+                return _tab(name);
+              }).toList(),
+            ),
+          ),
+          Expanded(
+              child: TabBarView(
+            children: children,
+          )),
+        ]),
+      ),
+    );
+  }
+}
+
+class AppTabPanel extends StatelessWidget {
+  final List<Widget> children;
+  final Color color;
+
+  const AppTabPanel(
+      {Key? key, this.children = const [], this.color = Colors.white})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.only(top: 24, bottom: 3, left: 24, right: 24),
+      physics: const ClampingScrollPhysics(),
+      children: children,
+    );
   }
 }

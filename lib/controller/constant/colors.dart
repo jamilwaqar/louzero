@@ -27,9 +27,12 @@ abstract class AppColors {
   static const Color secondary_40 = Color(0xFF546E7A);
   static const Color secondary_60 = Color(0xFF78909C);
   static const Color secondary_70 = Color(0xFF90A4AE);
+  static const Color secondary_80 = Color(0xFFB0BEC5);
   static const Color secondary_90 = Color(0xFFCFD8DC);
   static const Color secondary_95 = Color(0xFFECEFF1);
   static const Color secondary_99 = Color(0xFFF1F3F5);
+  static const Color secondary_100 = Color(0xFFF6F8FA);
+  static const Color error_60 = Color(0xFFE46962);
 
   static const Color icon = Color(0xFF323232);
   static const Color black = Colors.black;
@@ -39,36 +42,50 @@ abstract class AppColors {
 }
 
 abstract class AppStyles {
-  static const header_small = TextStyle(
+  static const bodyLarge = TextStyle(
+    fontFamily: 'Lato',
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.4,
+    letterSpacing: 0.1,
+  );
+
+  static const headerSmall = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 16,
     fontWeight: FontWeight.w700,
   );
-  static const header_default = TextStyle(
+  static const headerRegular = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 24,
     fontWeight: FontWeight.w700,
-    color: AppColors.darkest,
+    color: AppColors.secondary_20,
   );
-  static const header_appbar = TextStyle(
+  static const headerSmallCaps = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: AppColors.secondary_30,
+  );
+  static const headerAppBar = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 32,
     fontWeight: FontWeight.w700,
     color: AppColors.lightest,
   );
-  static const header_dialog = TextStyle(
+  static const headerDialog = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.secondary_30,
   );
-  static const label_default = TextStyle(
+  static const labelRegular = TextStyle(
     fontFamily: 'Lato',
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.secondary_20,
   );
-  static const label_bold = TextStyle(
+  static const labelBold = TextStyle(
     fontFamily: 'Lato',
     fontSize: 16,
     fontWeight: FontWeight.w700,

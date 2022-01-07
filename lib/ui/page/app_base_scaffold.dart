@@ -2,9 +2,7 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:louzero/common/app_avatar.dart';
-import 'package:louzero/common/app_pop_menu.dart';
-import 'package:louzero/common/app_spinner.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
@@ -56,6 +54,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
         return ValueListenableBuilder<bool>(
           valueListenable: AuthManager().loggedIn,
           builder: (ctx, isLoggedIn, child) {
+            double minHeight = MediaQuery.of(context).size.height;
             return Stack(
               children: [
                 GestureDetector(
@@ -95,7 +94,8 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                       body: widget.logoOnly
                           ? Container(
                               color: AppColors.secondary_99,
-                              child: widget.child,
+                              // ignore: unnecessary_null_in_if_null_operators
+                              child: widget.child ?? null,
                             )
                           : NestedScrollView(
                               floatHeaderSlivers: true,
@@ -111,7 +111,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                   footerStart: [
                                     if (widget.subheader != null)
                                       Text(widget.subheader!,
-                                          style: AppStyles.header_appbar),
+                                          style: AppStyles.headerAppBar),
                                     if (widget.footerStart != null)
                                       ...widget.footerStart!,
                                   ],
@@ -131,7 +131,6 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                       )
                                   ],
                                   onMenuPress: () {
-                                    print('menu!');
                                     _key.currentState?.openDrawer();
                                   },
                                 )
@@ -141,9 +140,17 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                   topLeft: Radius.circular(40),
                                   topRight: Radius.circular(40),
                                 ),
-                                child: Container(
-                                  color: AppColors.secondary_99,
-                                  child: widget.child,
+                                child: SingleChildScrollView(
+                                  physics: const ClampingScrollPhysics(),
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                      minHeight: minHeight,
+                                      minWidth: double.infinity,
+                                    ),
+                                    color: AppColors.secondary_99,
+                                    // ignore: unnecessary_null_in_if_null_operators
+                                    child: widget.child ?? null,
+                                  ),
                                 ),
                               ),
                             ),

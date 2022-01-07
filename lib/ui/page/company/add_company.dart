@@ -17,6 +17,7 @@ class AddCompanyPage extends GetWidget<CompanyController> {
 
   Widget _body() {
     return ListView.builder(
+      shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         itemCount: 1,
         itemBuilder: (context, index) {

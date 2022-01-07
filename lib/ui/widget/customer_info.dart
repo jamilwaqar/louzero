@@ -14,14 +14,13 @@ import 'buttons/top_left_button.dart';
 class CustomerInfo extends StatelessWidget {
   final CustomerModel customerModel;
   final bool fromJob;
-
-  const CustomerInfo(this.customerModel,
-      {this.fromJob = false, Key? key})
+  const CustomerInfo(this.customerModel, {this.fromJob = false, Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double mapH = fromJob ? 286 : 240;
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.light_2, width: 1),
@@ -45,24 +44,30 @@ class CustomerInfo extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(customerModel.customerContacts.first.fullName,
+                              Text(
+                                  customerModel.customerContacts.first.fullName,
                                   style: TextStyles.headLineS
                                       .copyWith(color: AppColors.dark_2)),
                               const SizedBox(width: 8),
                               TopLeftButton(
                                   onPressed: () {
                                     // Get.find<CustomerController>().customerModel = customerModel;
-                                    Get.to(() => AddCustomerPage(model: customerModel,));
-                                  }, iconData: Icons.edit),
+                                    Get.to(() => AddCustomerPage(
+                                          model: customerModel,
+                                        ));
+                                  },
+                                  iconData: Icons.edit),
                             ],
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Flexible(
-                                flex:4,
-                                child: Text(customerModel.serviceAddress.fullAddress,
-                                    style: TextStyles.bodyL, overflow: TextOverflow.ellipsis),
+                                flex: 4,
+                                child: Text(
+                                    customerModel.serviceAddress.fullAddress,
+                                    style: TextStyles.bodyL,
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               const SizedBox(width: 50),
                               appIcon(Icons.attach_money),
@@ -131,7 +136,7 @@ class CustomerInfo extends StatelessWidget {
                         right: 8,
                         child: InkWell(
                           onTap: () {
-                            Get.to(()=> CustomerLocationPage(customerModel));
+                            Get.to(() => CustomerLocationPage(customerModel));
                           },
                           child: Container(
                             width: 40,
@@ -222,14 +227,22 @@ class CustomerInfo extends StatelessWidget {
                                 children: [
                                   const SizedBox(height: 16),
                                   const Divider(
-                                      thickness: 2, color: AppColors.light_1, height: 0),
-                                  const SizedBox(height: 16,),
+                                      thickness: 2,
+                                      color: AppColors.light_1,
+                                      height: 0),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      _bottomButton("Site Profile", Icons.home_work, () {}),
-                                      const SizedBox(width: 8,),
-                                      _bottomButton("Notes", Icons.note_sharp, () {}),
+                                      _bottomButton("Site Profile",
+                                          Icons.home_work, () {}),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      _bottomButton(
+                                          "Notes", Icons.note_sharp, () {}),
                                     ],
                                   ),
                                 ],
@@ -257,15 +270,16 @@ class CustomerInfo extends StatelessWidget {
         height: 32,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: AppColors.light_1
-        ),
+            borderRadius: BorderRadius.circular(16), color: AppColors.light_1),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             appIcon(icon),
             const SizedBox(width: 8),
-            Text(label, style: TextStyles.titleS.copyWith(color: AppColors.dark_2),)
+            Text(
+              label,
+              style: TextStyles.titleS.copyWith(color: AppColors.dark_2),
+            )
           ],
         ),
       ),
