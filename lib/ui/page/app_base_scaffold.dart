@@ -184,7 +184,7 @@ class AppUserDropdownMenu extends StatelessWidget {
           icon: Icons.person_rounded,
           onTap: () {
             Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-                Get.to(() => const MyAccountPage(),
+                Get.to(() => MyAccountPage(AuthManager.userModel!),
                     binding: CompanyBinding()));
           },
         ),

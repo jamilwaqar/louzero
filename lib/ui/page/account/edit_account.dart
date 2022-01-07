@@ -11,13 +11,14 @@ import 'package:louzero/controller/constant/list_state_names.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 
 class EditAccountPage extends GetWidget<CompanyController> {
-  EditAccountPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  EditAccountPage(this.userModel, {Key? key}) : super(key: key);
 
   final _countryController = TextEditingController();
   final _streetController = TextEditingController();
@@ -25,6 +26,10 @@ class EditAccountPage extends GetWidget<CompanyController> {
   final _stateController = TextEditingController();
   final _suiteController = TextEditingController();
   final _zipController = TextEditingController();
+
+  late final _nameController = TextEditingController(text: userModel.fullName);
+  late final _phoneController = TextEditingController(text: userModel.phone);
+  late final _emailController = TextEditingController(text: userModel.email);
 
   final BaseController _baseController = Get.find();
 
@@ -136,9 +141,9 @@ class EditAccountPage extends GetWidget<CompanyController> {
                                 const Divider(
                                     thickness: 2, color: AppColors.light_1, height: 0),
                                 const SizedBox(height: 24),
-                                const AppInputText(label: 'Name', mb: 24),
-                                const AppInputText(label: 'Phone', mb: 24),
-                                const AppInputText(label: 'Email', mb: 24),
+                                AppInputText(label: 'Name', mb: 24, controller: _nameController),
+                                AppInputText(label: 'Phone', mb: 24, controller: _phoneController),
+                                AppInputText(label: 'Email', mb: 24, controller: _emailController),
                                 Stack(
                                   clipBehavior: Clip.none,
                                   children: [
@@ -348,8 +353,8 @@ class EditAccountPage extends GetWidget<CompanyController> {
         Stack(
           children: [
             AppAvatar(
-                url: AuthManager.userModel!.avatar,
-                text: AuthManager.userModel!.initials,
+                url: userModel.avatar,
+                text: userModel.initials,
                 size: 96,
                 backgroundColor: AppColors.medium_2),
             Positioned(
@@ -371,7 +376,7 @@ class EditAccountPage extends GetWidget<CompanyController> {
           ],
         ),
         const SizedBox(height: 8),
-        Text(AuthManager.userModel!.fullName,
+        Text(userModel.fullName,
             style: TextStyles.titleM.copyWith(fontWeight: FontWeight.bold, color: AppColors.dark_3)),
         const SizedBox(height: 8),
         Container(

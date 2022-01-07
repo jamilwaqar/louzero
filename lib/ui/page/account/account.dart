@@ -11,9 +11,9 @@ import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/company_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/company_models.dart';
+import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/account/edit_account.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';
@@ -22,7 +22,8 @@ import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
 class MyAccountPage extends GetWidget<CompanyController> {
-  const MyAccountPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  const MyAccountPage(this.userModel, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +253,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                             TopLeftButton(
                                 onPressed: () {
                                   // // Get.find<CustomerController>().customerModel = customerModel;
-                                  Get.to(() => EditAccountPage());
+                                  Get.to(() => EditAccountPage(userModel));
                                 },
                                 iconData: Icons.edit),
                           ],
@@ -287,15 +288,16 @@ class MyAccountPage extends GetWidget<CompanyController> {
                               height: 0),
                           const SizedBox(height: 24),
                           _profileItem('Name', Icons.person,
-                              AuthManager.userModel!.fullName),
+                              userModel.fullName),
                           _profileItem('Phone', Icons.call,
-                              AuthManager.userModel!.phone),
+                              userModel.phone),
                           _profileItem('Email', Icons.email,
-                              AuthManager.userModel!.email),
+                              userModel.email),
                           _profileItem('Service Address', Icons.location_pin,
-                              AuthManager.userModel!.serviceAddress),
+                              userModel.serviceAddress),
                           const Expanded(child: SizedBox()),
                           AppAddButton('Change Password',
+                              key: const ValueKey('currentPasswordButton'),
                               iconData: Icons.lock_open, onPressed: () {
                                 _showAlertDialog();
                               }),
@@ -342,12 +344,12 @@ class MyAccountPage extends GetWidget<CompanyController> {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppAvatar(
-            url: AuthManager.userModel!.avatar,
-            text: AuthManager.userModel!.initials,
+            url: userModel.avatar,
+            text: userModel.initials,
             size: 96,
             backgroundColor: AppColors.medium_2),
         const SizedBox(height: 8),
-        Text(AuthManager.userModel!.fullName,
+        Text(userModel.fullName,
             style: TextStyles.titleM.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         Container(
@@ -375,7 +377,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
           children: <Widget>[
             const AppTextHeader('Change Password', size: 24, alignLeft: true,),
             const SizedBox(height: 24),
-            const AppInputText(label: 'Current Password', mb: 24),
+            const AppInputText(label: 'Current Password', mb: 24, key: ValueKey('currentPassword'),),
             const AppInputText(label: 'New Password', mb: 24),
             const AppInputText(label: 'Conform New Password', mb: 24),
             Align(
