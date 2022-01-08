@@ -6,7 +6,9 @@ import 'package:louzero/common/app_flex_row.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_multiselect.dart';
 import 'package:louzero/common/app_pop_menu.dart';
+import 'package:louzero/common/app_segment_item.dart';
 import 'package:louzero/common/app_segmented_control.dart';
+import 'package:louzero/common/app_segmented_toggle.dart';
 import 'package:louzero/common/app_spinner.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
@@ -234,47 +236,22 @@ class Demo extends StatelessWidget {
     AppSegmentedControl(
       fromMax: true,
       isStretch: true,
-      children: {
-        1: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Icon(MdiIcons.calculator, size: 20),
-            SizedBox(width: 5),
-            Text('Estimate (103)')
-          ],
-        ),
-        2: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Icon(MdiIcons.calendar),
-            SizedBox(width: 5),
-            Text('Booked (97)')
-          ],
-        ),
-        3: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Icon(MdiIcons.currencyUsd, size: 20),
-            SizedBox(width: 5),
-            Text('Invoiced')
-          ],
-        ),
-        4: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Icon(MdiIcons.cancel),
-            SizedBox(width: 5),
-            Text('Canceled')
-          ],
-        ),
+      children: const {
+        1:  AppSegmentItem(text: 'Estimate (99)', icon: MdiIcons.calculator,),
+        2:  AppSegmentItem(text: 'Booked (97)', icon: MdiIcons.calendar,),
+        3:  AppSegmentItem(text: 'Invoiced', icon: MdiIcons.currencyUsd,),
+        4:  AppSegmentItem(text: 'Canceled', icon: MdiIcons.cancel,),
       },
       onValueChanged: (int value) {
         print(value);
       },
+    ),
+    const SizedBox(height: 20,),
+    AppSegmentedToggle(
+        itemList: const ["%", "\$"],
+        onChange: (value){
+          print('value has been changed $value');
+        }
     )
   ]);
 }
