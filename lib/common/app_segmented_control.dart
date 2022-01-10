@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -279,24 +278,5 @@ class _MeasureSizeState extends State<MeasureSize> {
 
     oldSize = newSize;
     widget.onChange(newSize!);
-  }
-}
-
-class SegmentItem extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  const SegmentItem({
-    required this.icon,
-    required this.text,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [Icon(icon, size: 20), const SizedBox(width: 5), Text(text)],
-    );
   }
 }
