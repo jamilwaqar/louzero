@@ -11,6 +11,7 @@ JobModel _$JobModelFromJson(Map<String, dynamic> json) => JobModel(
       description: json['description'] as String,
       billingLineModel: BillingLineModel.fromJson(
           json['billingLineModel'] as Map<String, dynamic>),
+      jobType: json['jobType'] as String,
       customerIds: (json['customerIds'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -30,6 +31,7 @@ Map<String, dynamic> _$JobModelToJson(JobModel instance) {
 
   writeNotNull('objectId', instance.objectId);
   writeNotNull('ownerId', instance.ownerId);
+  val['jobType'] = instance.jobType;
   val['status'] = instance.status;
   val['description'] = instance.description;
   val['customerIds'] = instance.customerIds;

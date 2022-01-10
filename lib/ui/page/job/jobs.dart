@@ -45,7 +45,7 @@ class JobListPage extends GetWidget<JobController> {
             count: 0,
             buttonTitleLeft: "",
             buttonTitleRight: "",
-            onPressed: ()=> Get.to(()=> JobDetailPage(tempJobModels![index])),
+            onPressed: ()=> Get.to(()=> JobDetailPage(controller.jobModels[index])),
             onPressedLeft: () {},
             onPressedRight: () {},
           );

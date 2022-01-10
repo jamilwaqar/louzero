@@ -7,11 +7,14 @@ class JobModel {
       {required this.status,
       required this.description,
       required this.billingLineModel,
+      required this.jobType,
       this.customerIds = const []});
 
   @JsonKey(includeIfNull: false) String? objectId;
   @JsonKey(includeIfNull: false) String? ownerId;
+  String jobType;
   String status;
+
   String description;
   @JsonKey(defaultValue: []) List<String> customerIds;
   BillingLineModel billingLineModel;

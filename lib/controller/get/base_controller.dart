@@ -13,8 +13,8 @@ class BaseController extends GetxController {
   final _isUpdating = false.obs;
   final _companies = Rx<List<CompanyModel>>([]);
   final _customers = Rx<List<CustomerModel>>([]);
+  final _jobs = Rx<List<JobModel>>([]);
 
-  List<JobModel> totalJobs = [];
   final _siteProfileTemplates = Rx<List<CTSiteProfile>>([]);
   final _activeCompany = Rx<CompanyModel?>(null);
 
@@ -23,6 +23,9 @@ class BaseController extends GetxController {
 
   List<CustomerModel> get customers => _customers.value;
   set customers(List<CustomerModel> value) => _customers.value = value;
+
+  List<JobModel> get jobs => _jobs.value;
+  set jobs(List<JobModel> value) => _jobs.value = value;
 
   List<CTSiteProfile> get siteProfileTemplates => _siteProfileTemplates.value;
   set siteProfileTemplates(List<CTSiteProfile> value) => _siteProfileTemplates.value = value;

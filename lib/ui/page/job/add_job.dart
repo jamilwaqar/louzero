@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
@@ -17,9 +20,9 @@ enum SelectCustomerType { none, search, select }
 class AddJobPage extends GetWidget<JobController> {
   final TextEditingController _customerNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
-  final List<String> _mockJobType = ["Repair"];
-  final List<String> _mockCustomerList = ["Test", "Mark"];
+  final _baseController = Get.find<BaseController>();
+  late final List<String> _jobTypes = AuthManager.userModel!.jobTypes;
+  late final List<String> _customerList = _baseController.customers.map((e) => e.customerContacts[0].fullName).toList();
   final _status = JobStatus.estimate.obs;
   final _jobType = Rx<String?>(null);
   final _customerId = Rx<String?>(null);
@@ -184,7 +187,7 @@ class AddJobPage extends GetWidget<JobController> {
                   Flexible(
                       child: AppDropDown(
                     label: "Job Type*",
-                    itemList: _mockJobType,
+                    itemList: _jobTypes,
                     initValue: _jobType.value,
                     onChanged: (value) {
                       _jobType.value = value;
@@ -227,7 +230,7 @@ class AddJobPage extends GetWidget<JobController> {
             value: _customerId.value,
             isDense: true,
             onChanged: (val) => _customerId.value = val,
-            items: _mockCustomerList.map((String value) {
+            items: _customerList.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -251,7 +254,7 @@ class AddJobPage extends GetWidget<JobController> {
               children: [
                 appIcon(_status.value == status
                     ? Icons.radio_button_checked_outlined
-                    : Icons.radio_button_off),
+                    : Icons.radio_button_off, color: AppColors.orange),
                 const SizedBox(width: 8),
                 Text(status.name.capitalizeFirst!, style: TextStyles.bodyL),
               ],
@@ -278,31 +281,12 @@ class AddJobPage extends GetWidget<JobController> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                height: 56,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColors.dark_2,
-                  borderRadius: BorderRadius.circular(28),
-                ),
-                child: Text(
-                  "SAVE JOB",
-                  style: TextStyles.bodyL.copyWith(color: Colors.white),
-                ),
-              ),
-              onPressed: () => controller.save()),
-          const SizedBox(width: 8),
-          CupertinoButton(
-              child: Container(
-                width: 125,
-                height: 56,
-                alignment: Alignment.center,
-                child: const Text("CANCEL", style: TextStyles.bodyL),
-              ),
-              onPressed: () => Get.back()),
+          AppButton(label: 'Submit', colorBg: AppColors.orange, onPressed: _save),
+          const AppButton(
+              label: 'Cancel',
+              primary: false,
+              colorBg: AppColors.secondary_60),
+
         ],
       ),
     );
@@ -347,5 +331,9 @@ class AddJobPage extends GetWidget<JobController> {
         ),
       ],
     );
+  }
+
+  void _save() {
+    // controller.save();
   }
 }

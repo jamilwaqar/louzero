@@ -21,7 +21,7 @@ abstract class AppDefaultValue {
 }
 
 CustomerModel? tempCustomerModel;
-List<JobModel>? tempJobModels;
+
 /// Backendless Data Paths
 abstract class BLPath {
   static const String user = "Users";
