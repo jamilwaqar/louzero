@@ -118,26 +118,6 @@ class Demo extends StatelessWidget {
         ));
   }
 
-  Widget _segmentControls() {
-    return AppCard(
-      children: [
-        const Text('Segment Controls', style: AppStyles.headerRegular),
-        const SizedBox(
-          height: 24,
-        ),
-        AppSegmentedControl(
-            isStretch: true,
-            backgroundColor: AppColors.secondary_99,
-            thumbColor: Colors.grey.shade50,
-            children: const {
-              1: SegmentItem(icon: Icons.settings, text: 'Settings'),
-              2: SegmentItem(icon: MdiIcons.calendar, text: 'Calendar'),
-              3: SegmentItem(icon: MdiIcons.calculator, text: 'Estimates')
-            })
-      ],
-    );
-  }
-
   Widget _formTextInput() {
     return AppCard(children: [
       const Text('Form Inputs', style: AppStyles.headerRegular),
@@ -313,5 +293,42 @@ class Demo extends StatelessWidget {
             ),
           ],
         )
+      ]);
+
+  Widget _segmentControls() => AppCard(children: [
+        _heading('Segmented Control'),
+        AppSegmentedControl(
+          fromMax: true,
+          isStretch: true,
+          children: const {
+            1: AppSegmentItem(
+              text: 'Estimate (99)',
+              icon: MdiIcons.calculator,
+            ),
+            2: AppSegmentItem(
+              text: 'Booked (97)',
+              icon: MdiIcons.calendar,
+            ),
+            3: AppSegmentItem(
+              text: 'Invoiced',
+              icon: MdiIcons.currencyUsd,
+            ),
+            4: AppSegmentItem(
+              text: 'Canceled',
+              icon: MdiIcons.cancel,
+            ),
+          },
+          onValueChanged: (int value) {
+            print(value);
+          },
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        AppSegmentedToggle(
+            itemList: const ["%", "\$"],
+            onChange: (value) {
+              print('value has been changed $value');
+            })
       ]);
 }
