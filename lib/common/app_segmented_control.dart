@@ -63,7 +63,7 @@ class _AppSegmentedControlState<T> extends State<AppSegmentedControl<T>> {
     if (widget.initialValue != null) {
       current = _keys[_index];
     } else {
-      current = _keys.first;
+      current = _keys.first;``
     }
   }
 
