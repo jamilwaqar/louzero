@@ -1,34 +1,41 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_add_button.dart';
-import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
+import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/widget/customer_info.dart';
+import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
+
+import 'views/widget/contact_card.dart';
 
 enum SelectCustomerType { none, search, select }
 
 class AddJobPage extends GetWidget<JobController> {
+  final JobModel? jobModel;
+  AddJobPage({this.jobModel, Key? key}) : super(key: key);
+
   final TextEditingController _customerNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final _baseController = Get.find<BaseController>();
   late final List<String> _jobTypes = AuthManager.userModel!.jobTypes;
-  late final List<String> _customerList = _baseController.customers.map((e) => e.customerContacts[0].fullName).toList();
+  late final List<String> _customerList = _baseController.customers.map((e) => e.objectId!).toList();
   final _status = JobStatus.estimate.obs;
   final _jobType = Rx<String?>(null);
   final _customerId = Rx<String?>(null);
   final _selectCustomerType = SelectCustomerType.none.obs;
-
-  AddJobPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,48 +68,61 @@ class AddJobPage extends GetWidget<JobController> {
   }
 
   Widget _addCustomer() {
-    return Obx(() => _customerId.value != null && tempCustomerModel != null
-        ? CustomerInfo(
-            tempCustomerModel!,
-            fromJob: true,
-          )
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.light_2, width: 1),
-              color: AppColors.lightest,
-              borderRadius: BorderRadius.circular(16),
+    return Obx(() {
+      if (_customerId.value != null) {
+        CustomerModel model = _baseController.customers
+            .firstWhere((e) => e.objectId == _customerId.value);
+
+        return ContactCard(
+          title: model.customerContacts[0].fullName,
+          contact: model.customerContacts[0],
+          address: model.billingAddress,
+          trailing: const TextKeyVal('Account Balance', '\$0.00'),
+          onClickIcon: () {
+            Get.to(() => AddCustomerPage(
+                  model: model,
+                ));
+          },
+        );
+      }
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.light_2, width: 1),
+          color: AppColors.lightest,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _itemTitle("Customer", Icons.person),
+            const SizedBox(height: 32),
+            const Text(
+              "Select Customer",
+              style: TextStyle(
+                color: AppColors.dark_1,
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+            const SizedBox(height: 8),
+            Row(
               children: [
-                _itemTitle("Customer", Icons.person),
-                const SizedBox(height: 32),
-                const Text(
-                  "Select Customer",
-                  style: TextStyle(
-                    color: AppColors.dark_1,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
+                Flexible(child: _chooseCustomer()),
+                const SizedBox(width: 32),
+                Flexible(
+                  child: AppAddButton(
+                    "Add New Customer",
+                    onPressed: () => Get.to(() => const AddCustomerPage()),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Flexible(child: _chooseCustomer()),
-                    const SizedBox(width: 32),
-                    Flexible(
-                      child: AppAddButton(
-                        "Add New Customer",
-                        onPressed: () => Get.to(() => const AddCustomerPage()),
-                      ),
-                    ),
-                  ],
-                )
               ],
-            ),
-          ));
+            )
+          ],
+        ),
+      );
+    } );
   }
 
   Widget _chooseCustomer() {
@@ -233,7 +253,7 @@ class AddJobPage extends GetWidget<JobController> {
             items: _customerList.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(_baseController.customerModelById(value)!.customerContacts[0].fullName),
               );
             }).toList(),
           ),
@@ -333,7 +353,20 @@ class AddJobPage extends GetWidget<JobController> {
     );
   }
 
-  void _save() {
-    // controller.save();
+  void _save() async {
+    JobModel model = JobModel(status: _status.value.name, description: _descriptionController.text, jobType: _jobType.value!);
+    model.objectId = jobModel?.objectId;
+    NavigationController().loading();
+    final response =
+        await controller.save(model, Backendless.data.of(BLPath.job));
+    String msg;
+    if (response is String) {
+      msg = response;
+    } else {
+      NavigationController().pop(Get.context!, delay: 2);
+      msg = "Saved Customer!";
+    }
+    WarningMessageDialog.showDialog(Get.context!, msg);
+    NavigationController().loading(isLoading: false);
   }
 }

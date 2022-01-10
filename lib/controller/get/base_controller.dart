@@ -107,9 +107,6 @@ class BaseController extends GetxController {
     try {
       var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
       List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
-      if (list.isNotEmpty) {
-        tempCustomerModel = list[0];
-      }
       return list;
     } catch (e) {
       return e.toString();
@@ -120,6 +117,22 @@ class BaseController extends GetxController {
 
   set searchedAddressList(List<SearchAddressModel> list) {
     searchedAddresses.value = list;
+  }
+
+  JobModel? jobModelById(String objectId) {
+    try {
+      return jobs.firstWhere((e) => e.objectId == objectId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  CustomerModel? customerModelById(String objectId) {
+    try {
+      return customers.firstWhere((e) => e.objectId == objectId);
+    } catch (e) {
+      return null;
+    }
   }
 
   searchAddress(String input, String countryCode) async {

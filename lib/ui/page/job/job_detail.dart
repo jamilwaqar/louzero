@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/utils.dart';
@@ -64,10 +63,10 @@ class JobDetailPage extends GetWidget<JobController> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CustomerInfo(
-                tempCustomerModel!,
-                fromJob: true,
-              ),
+              // CustomerInfo(
+              //   tempCustomerModel!,
+              //   fromJob: true,
+              // ),
               const SizedBox(height: 16),
               _bottomWidget()
             ],
@@ -352,7 +351,7 @@ class JobDetailPage extends GetWidget<JobController> {
   final Color _oddItemColor = const Color(0xFFF1F2F4);
   final Color _evenItemColor = const Color(0xFFF8F9FB);
   Widget _reorderList() {
-    Map<String, dynamic>items = jobModel.billingLineModel.items;
+    Map<String, dynamic>items = jobModel.billingLineModel?.items ?? {};
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
       child: ReorderableListView(

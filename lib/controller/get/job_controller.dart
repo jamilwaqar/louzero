@@ -10,7 +10,9 @@ class JobController extends GetxController {
 
   Future save(JobModel model, IDataStore store) async {
     Map<String, dynamic> data = model.toJson();
-    data['billingAddress'] = model.billingLineModel.toJson();
+    if (model.billingLineModel != null) {
+      data['billingAddress'] = model.billingLineModel!.toJson();
+    }
     if (data['objectId'] == null) {
       data.remove('objectId');
     }
@@ -37,13 +39,5 @@ class JobController extends GetxController {
     models.removeWhere((e) => e.objectId == model.objectId);
     models.insert(index, model);
     baseController.jobs = models;
-  }
-
-  JobModel? jobModelById(String jobId) {
-    try {
-      return jobModels.firstWhere((e) => e.objectId == jobId);
-    } catch (e) {
-      return null;
-    }
   }
 }

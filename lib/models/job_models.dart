@@ -6,7 +6,7 @@ class JobModel {
   JobModel(
       {required this.status,
       required this.description,
-      required this.billingLineModel,
+      this.billingLineModel,
       required this.jobType,
       this.customerIds = const []});
 
@@ -17,7 +17,7 @@ class JobModel {
 
   String description;
   @JsonKey(defaultValue: []) List<String> customerIds;
-  BillingLineModel billingLineModel;
+  BillingLineModel? billingLineModel;
 
   factory JobModel.fromMap(Map map) {
     Map profiles = map.remove('profiles');
