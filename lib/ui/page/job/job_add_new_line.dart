@@ -253,9 +253,13 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                   controller: _discountDescription,
                   label: "Discount description"),
               Column(
-                children: const [
+                children: [
                   SizedBox(height: 24),
-                  Text("Discount Switch Here.")
+                  AppSegmentedToggle(
+                      itemList: ["%", "\$"],
+                      onChange: (value) {
+                        print('value changed: $value');
+                      })
                 ],
               ),
               AppInputText(
