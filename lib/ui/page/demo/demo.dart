@@ -26,12 +26,13 @@ class Demo extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: 32),
+            _segmentControls(),
             _tabs(),
             _loadingSpinner(),
             _multiSelect(),
             _formInputs(),
             _buttonsAndMenus(),
-            _segmentControls()
           ],
         ),
       ),
@@ -232,27 +233,39 @@ class Demo extends StatelessWidget {
       ]);
 
   Widget _segmentControls() => AppCard(children: [
-    _heading('Segmented Control'),
-    AppSegmentedControl(
-      fromMax: true,
-      isStretch: true,
-      children: const {
-        1:  AppSegmentItem(text: 'Estimate (99)', icon: MdiIcons.calculator,),
-        2:  AppSegmentItem(text: 'Booked (97)', icon: MdiIcons.calendar,),
-        3:  AppSegmentItem(text: 'Invoiced', icon: MdiIcons.currencyUsd,),
-        4:  AppSegmentItem(text: 'Canceled', icon: MdiIcons.cancel,),
-      },
-      onValueChanged: (int value) {
-        print(value);
-      },
-    ),
-    const SizedBox(height: 20,),
-    AppSegmentedToggle(
-        itemList: const ["%", "\$"],
-        onChange: (value){
-          print('value has been changed $value');
-        }
-    )
-  ]);
+        _heading('Segmented Control'),
+        AppSegmentedControl(
+          fromMax: true,
+          isStretch: true,
+          children: const {
+            1: AppSegmentItem(
+              text: 'Estimate (99)',
+              icon: MdiIcons.calculator,
+            ),
+            2: AppSegmentItem(
+              text: 'Booked (97)',
+              icon: MdiIcons.calendar,
+            ),
+            3: AppSegmentItem(
+              text: 'Invoiced',
+              icon: MdiIcons.currencyUsd,
+            ),
+            4: AppSegmentItem(
+              text: 'Canceled',
+              icon: MdiIcons.cancel,
+            ),
+          },
+          onValueChanged: (int value) {
+            print(value);
+          },
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        AppSegmentedToggle(
+            itemList: const ["%", "\$"],
+            onChange: (value) {
+              print('value has been changed $value');
+            })
+      ]);
 }
-
