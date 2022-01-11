@@ -73,7 +73,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-
   final BaseController _baseController = Get.find();
 
   @override
@@ -96,7 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _body() {
     List<Widget> itemList = List.generate(SettingType.values.length,
-            (index) => _categoryItem(SettingType.values[index])).toList();
+        (index) => _categoryItem(SettingType.values[index])).toList();
     return GridView.count(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
       physics: const NeverScrollableScrollPhysics(),
@@ -136,9 +135,11 @@ class _SettingsPageState extends State<SettingsPage> {
             // TODO: Handle this case.
             break;
           case SettingType.siteProfileTemplate:
-            Get.to(()=> CustomerSiteProfilePage(
-                _baseController.siteProfileTemplates,
-                isTemplate: true), binding: CustomerBinding());
+            Get.to(
+                () => CustomerSiteProfilePage(
+                    _baseController.siteProfileTemplates,
+                    isTemplate: true),
+                binding: CustomerBinding());
             break;
         }
       },
@@ -154,7 +155,8 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             const Align(
               alignment: Alignment.topLeft,
-              child: AppImage('icon-setting-placeholder', width: 80, height: 80),
+              child:
+                  AppImage('icon-setting-placeholder', width: 80, height: 80),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -163,8 +165,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   const SizedBox(height: 16),
                   Text(category.title,
-                      style: TextStyles.titleL
-                          .copyWith(color: AppColors.dark_3)),
+                      style:
+                          TextStyles.titleL.copyWith(color: AppColors.dark_3)),
                   const SizedBox(height: 8),
                   Text(
                     category.description,

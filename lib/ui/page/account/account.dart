@@ -28,6 +28,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
+      hasKeyboard: true,
       child: ListView.builder(
         itemCount: 1,
         shrinkWrap: true,
@@ -60,7 +61,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                 itemBuilder: (context, index) => _companyItem(index))),
         const SizedBox(height: 32),
         AppAddButton("Add Company", onPressed: () {
-          Get.to(()=> const AddCompanyPage());
+          Get.to(() => const AddCompanyPage());
         }),
       ],
     );
@@ -69,63 +70,58 @@ class MyAccountPage extends GetWidget<CompanyController> {
   Widget _companyItem(int index) {
     CompanyModel model = controller.companies[index];
     return Container(
-      color: index.isOdd
-          ? AppColors.oddItemColor
-          : AppColors.evenItemColor,
+      color: index.isOdd ? AppColors.oddItemColor : AppColors.evenItemColor,
       height: 65,
-      child: Row(
-          children: [
-            const SizedBox(width: 24),
-            _companyAvatar(model),
-            const SizedBox(width: 24),
-            Expanded(
-              child: AppTextBody(
-                model.name,
-                color: AppColors.dark_2,
-                bold: true,
-              ),
-            ),
-            Container(
-              width: 10,
-              height: 10,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.medium_2),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: AppTextBody(
-                model.status.label,
-              ),
-            ),
-            AppButton(
-              margin: const EdgeInsets.only(right: 8),
-              label: 'SWITCH TO',
-              colorBg: AppColors.dark_1,
-              colorText: AppColors.darkest,
-              primary: false,
-              onPressed: () {},
-            ),
-            const SizedBox(width: 24),
-            PopupMenuButton(
-                padding: EdgeInsets.zero,
-                offset: const Offset(0, 40),
-                onSelected: (value) {
-                  controller.company = model;
-                  if (value == 0) {
-                    Get.to(() => CompanyPage(),
-                        arguments: model);
-                  } else if (value == 1) {
-                    Get.to(() => const AddCompanyPage());
-                  }
-                },
-                elevation: 2,
-                shape: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                        color: AppColors.medium_2, width: 0)),
-                child: const Icon(Icons.more_vert),
-                itemBuilder: (context) => [
+      child: Row(children: [
+        const SizedBox(width: 24),
+        _companyAvatar(model),
+        const SizedBox(width: 24),
+        Expanded(
+          child: AppTextBody(
+            model.name,
+            color: AppColors.dark_2,
+            bold: true,
+          ),
+        ),
+        Container(
+          width: 10,
+          height: 10,
+          decoration: const BoxDecoration(
+              shape: BoxShape.circle, color: AppColors.medium_2),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: AppTextBody(
+            model.status.label,
+          ),
+        ),
+        AppButton(
+          margin: const EdgeInsets.only(right: 8),
+          label: 'SWITCH TO',
+          colorBg: AppColors.dark_1,
+          colorText: AppColors.darkest,
+          primary: false,
+          onPressed: () {},
+        ),
+        const SizedBox(width: 24),
+        PopupMenuButton(
+            padding: EdgeInsets.zero,
+            offset: const Offset(0, 40),
+            onSelected: (value) {
+              controller.company = model;
+              if (value == 0) {
+                Get.to(() => CompanyPage(), arguments: model);
+              } else if (value == 1) {
+                Get.to(() => const AddCompanyPage());
+              }
+            },
+            elevation: 2,
+            shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide:
+                    const BorderSide(color: AppColors.medium_2, width: 0)),
+            child: const Icon(Icons.more_vert),
+            itemBuilder: (context) => [
                   PopupMenuItem(
                     child: SizedBox(
                       width: 200,
@@ -140,8 +136,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                           Text("View Company",
                               style: TextStyle(
                                 color: AppColors.icon,
-                                fontWeight:
-                                FontWeight.w400,
+                                fontWeight: FontWeight.w400,
                                 fontSize: 16,
                               )),
                         ],
@@ -163,8 +158,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                           Text("Edit Company",
                               style: TextStyle(
                                 color: AppColors.icon,
-                                fontWeight:
-                                FontWeight.w400,
+                                fontWeight: FontWeight.w400,
                                 fontSize: 16,
                               )),
                         ],
@@ -173,8 +167,8 @@ class MyAccountPage extends GetWidget<CompanyController> {
                     value: 1,
                   ),
                 ]),
-            const SizedBox(width: 24),
-          ]),
+        const SizedBox(width: 24),
+      ]),
     );
   }
 
@@ -287,20 +281,30 @@ class MyAccountPage extends GetWidget<CompanyController> {
                               color: AppColors.light_1,
                               height: 0),
                           const SizedBox(height: 24),
-                          _profileItem('Name', Icons.person,
-                              userModel.fullName),
-                          _profileItem('Phone', Icons.call,
-                              userModel.phone),
-                          _profileItem('Email', Icons.email,
-                              userModel.email),
-                          _profileItem('Service Address', Icons.location_pin,
-                              userModel.serviceAddress),
+                          // Text(userModel.email),
+                          AppIconLabelText(
+                              label: 'phone',
+                              text: userModel.phone,
+                              hint: 'Add Phone Number.',
+                              icon: Icons.phone),
+                          AppIconLabelText(
+                            label: 'Email',
+                            text: userModel.email,
+                            hint: 'Add Account Email.',
+                            icon: Icons.mail,
+                            colorText: AppColors.primary_30,
+                          ),
+                          AppIconLabelText(
+                              label: 'Address',
+                              hint: 'Add Service Address.',
+                              text: userModel.serviceAddress,
+                              icon: Icons.location_pin),
                           const Expanded(child: SizedBox()),
                           AppAddButton('Change Password',
                               key: const ValueKey('currentPasswordButton'),
                               iconData: Icons.lock_open, onPressed: () {
-                                _showAlertDialog();
-                              }),
+                            _showAlertDialog();
+                          }),
                           const SizedBox(height: 24),
                         ],
                       ),
@@ -312,29 +316,6 @@ class MyAccountPage extends GetWidget<CompanyController> {
             ],
           ),
         )
-      ],
-    );
-  }
-
-  Widget _profileItem(String title, IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          children: [
-            appIcon(icon, color: AppColors.dark_1),
-            const SizedBox(width: 8),
-            Text(title, style: TextStyles.labelL),
-          ],
-        ),
-        Container(
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.only(left: 32.0),
-          child: Text(label,
-              style: TextStyles.labelL.copyWith(
-                  color: AppColors.dark_3, fontWeight: FontWeight.w500)),
-        ),
-        const SizedBox(height: 24),
       ],
     );
   }
@@ -368,16 +349,25 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
   _showAlertDialog() {
     Dialog errorDialog = Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)), //this right here
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.0)), //this right here
       child: Container(
         width: 360.0,
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const AppTextHeader('Change Password', size: 24, alignLeft: true,),
+            const AppTextHeader(
+              'Change Password',
+              size: 24,
+              alignLeft: true,
+            ),
             const SizedBox(height: 24),
-            const AppInputText(label: 'Current Password', mb: 24, key: ValueKey('currentPassword'),),
+            const AppInputText(
+              label: 'Current Password',
+              mb: 24,
+              key: ValueKey('currentPassword'),
+            ),
             const AppInputText(label: 'New Password', mb: 24),
             const AppInputText(label: 'Conform New Password', mb: 24),
             Align(
@@ -386,16 +376,23 @@ class MyAccountPage extends GetWidget<CompanyController> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppButton(label: 'Cancel', primary: false, onPressed: () {
-                    Get.back();
-                  },),
+                  AppButton(
+                    label: 'Cancel',
+                    primary: false,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
                   const SizedBox(width: 16),
-                  AppButton(label: 'Save', onPressed: () {
-                    Get.back();
-                  },),
+                  AppButton(
+                    label: 'Save',
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -409,16 +406,22 @@ class MyAccountPage extends GetWidget<CompanyController> {
   }
 
   _showReactivateDialog() {
-    String _desc = 'To reactivate *Old Cancelled Company*, please email us *help@evosus.com* and we’ll get back to you as soon as possible';
+    String _desc =
+        'To reactivate *Old Cancelled Company*, please email us *help@evosus.com* and we’ll get back to you as soon as possible';
     Dialog errorDialog = Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)), //this right here
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.0)), //this right here
       child: Container(
         width: 360.0,
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const AppTextHeader('Reactivate Company', size: 24, alignLeft: true,),
+            const AppTextHeader(
+              'Reactivate Company',
+              size: 24,
+              alignLeft: true,
+            ),
             const SizedBox(height: 24),
             SimpleRichText(
               _desc,
@@ -431,13 +434,20 @@ class MyAccountPage extends GetWidget<CompanyController> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppButton(label: 'Cancel', primary: false, onPressed: () {
-                    Get.back();
-                  },),
+                  AppButton(
+                    label: 'Cancel',
+                    primary: false,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
                   const SizedBox(width: 16),
-                  AppButton(label: 'Email', onPressed: () {
-                    Get.back();
-                  },),
+                  AppButton(
+                    label: 'Email',
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
                 ],
               ),
             )
@@ -452,6 +462,68 @@ class MyAccountPage extends GetWidget<CompanyController> {
       builder: (BuildContext context) {
         return errorDialog;
       },
+    );
+  }
+}
+
+class AppIconLabelText extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String hint;
+  final String text;
+  final Color colorLabel;
+  final Color colorText;
+  final Color colorIcon;
+  const AppIconLabelText({
+    required this.label,
+    required this.text,
+    required this.hint,
+    this.icon = Icons.chevron_right,
+    this.colorIcon = AppColors.secondary_70,
+    this.colorLabel = AppColors.secondary_30,
+    this.colorText = AppColors.secondary_20,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 24,
+              alignment: Alignment(-1, -1),
+              child: Icon(icon, size: 18, color: colorIcon),
+            ),
+            Text(label,
+                style: AppStyles.headerRegular
+                    .copyWith(fontSize: 16, color: colorLabel)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (text.isNotEmpty)
+          Row(
+            children: [
+              const SizedBox(width: 24),
+              Text(text,
+                  style: AppStyles.labelRegular.copyWith(color: colorText)),
+            ],
+          ),
+        if (text.isEmpty)
+          Row(
+            children: [
+              const SizedBox(width: 24),
+              Text(hint,
+                  style: AppStyles.labelRegular
+                      .copyWith(color: AppColors.secondary_60)
+                      .copyWith(fontSize: 14)),
+            ],
+          ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 }

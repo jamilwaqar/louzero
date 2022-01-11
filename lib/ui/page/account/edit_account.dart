@@ -36,22 +36,16 @@ class EditAccountPage extends GetWidget<CompanyController> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      child: ListView.builder(
-        itemCount: 1,
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(32),
-        itemBuilder: (_, __) => _body(),
-      ),
+      // logoOnly: true,
+      child: _body(),
       subheader: 'Edit Account',
     );
   }
 
   Widget _body() {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
         _accountInfo(),
-        const Divider(height: 64, thickness: 1),
         Row(
           children: [
             AppButton(
@@ -67,7 +61,7 @@ class EditAccountPage extends GetWidget<CompanyController> {
               onPressed: () {},
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -79,9 +73,6 @@ class EditAccountPage extends GetWidget<CompanyController> {
       pt: 0,
       pb: 0,
       pr: 0,
-      mb: 0,
-      ml: 0,
-      mr: 0,
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -114,7 +105,7 @@ class EditAccountPage extends GetWidget<CompanyController> {
               ],
             ),
             Container(
-              color: AppColors.light_1,
+              // color: AppColors.light_1,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -139,11 +130,22 @@ class EditAccountPage extends GetWidget<CompanyController> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Divider(
-                                    thickness: 2, color: AppColors.light_1, height: 0),
+                                    thickness: 2,
+                                    color: AppColors.light_1,
+                                    height: 0),
                                 const SizedBox(height: 24),
-                                AppInputText(label: 'Name', mb: 24, controller: _nameController),
-                                AppInputText(label: 'Phone', mb: 24, controller: _phoneController),
-                                AppInputText(label: 'Email', mb: 24, controller: _emailController),
+                                AppInputText(
+                                    label: 'Name',
+                                    mb: 24,
+                                    controller: _nameController),
+                                AppInputText(
+                                    label: 'Phone',
+                                    mb: 24,
+                                    controller: _phoneController),
+                                AppInputText(
+                                    label: 'Email',
+                                    mb: 24,
+                                    controller: _emailController),
                                 Stack(
                                   clipBehavior: Clip.none,
                                   children: [
@@ -185,7 +187,6 @@ class EditAccountPage extends GetWidget<CompanyController> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -364,20 +365,24 @@ class EditAccountPage extends GetWidget<CompanyController> {
                   width: 20,
                   height: 20,
                   alignment: Alignment.center,
-                  decoration: const BoxDecoration(color: AppColors.lightest, shape: BoxShape.circle),
+                  decoration: const BoxDecoration(
+                      color: AppColors.lightest, shape: BoxShape.circle),
                   child: Container(
                     width: 18,
                     height: 18,
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(color: AppColors.medium_3, shape: BoxShape.circle),
-                    child: const Icon(Icons.edit, color: AppColors.lightest, size: 14),
+                    decoration: const BoxDecoration(
+                        color: AppColors.medium_3, shape: BoxShape.circle),
+                    child: const Icon(Icons.edit,
+                        color: AppColors.lightest, size: 14),
                   ),
                 ))
           ],
         ),
         const SizedBox(height: 8),
         Text(userModel.fullName,
-            style: TextStyles.titleM.copyWith(fontWeight: FontWeight.bold, color: AppColors.dark_3)),
+            style: TextStyles.titleM.copyWith(
+                fontWeight: FontWeight.bold, color: AppColors.dark_3)),
         const SizedBox(height: 8),
         Container(
           width: 64,
