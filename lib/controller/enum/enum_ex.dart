@@ -1,4 +1,5 @@
 import 'package:louzero/controller/enum/enums.dart';
+import 'package:get/get_utils/get_utils.dart';
 
 extension CTContactTypeEx on CTContactType {
   String get name {
@@ -53,7 +54,7 @@ extension CustomerCategoryEx on CustomerCategory {
 
 extension JobStatusEx on JobStatus {
   String get name {
-    return toString().split('.').last;
+    return toString().split('.').last.capitalizeFirst!;
   }
 
   String get icon {

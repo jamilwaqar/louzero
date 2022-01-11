@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,6 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
-import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
@@ -16,8 +17,7 @@ import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
-import 'package:louzero/ui/widget/customer_info.dart';
-import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
+import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 
 import 'views/widget/contact_card.dart';
 
@@ -27,14 +27,15 @@ class AddJobPage extends GetWidget<JobController> {
   final JobModel? jobModel;
   AddJobPage({this.jobModel, Key? key}) : super(key: key);
 
-  final TextEditingController _customerNameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+
   final _baseController = Get.find<BaseController>();
+  final TextEditingController _customerNameController = TextEditingController();
+  late final TextEditingController _descriptionController = TextEditingController(text: jobModel?.description);
   late final List<String> _jobTypes = AuthManager.userModel!.jobTypes;
   late final List<String> _customerList = _baseController.customers.map((e) => e.objectId!).toList();
   final _status = JobStatus.estimate.obs;
-  final _jobType = Rx<String?>(null);
-  final _customerId = Rx<String?>(null);
+  late final _jobType = Rx<String?>(jobModel?.jobType);
+  late final _customerId = Rx<String?>(jobModel?.customerId);
   final _selectCustomerType = SelectCustomerType.none.obs;
 
   @override
@@ -306,7 +307,6 @@ class AddJobPage extends GetWidget<JobController> {
               label: 'Cancel',
               primary: false,
               colorBg: AppColors.secondary_60),
-
         ],
       ),
     );
@@ -354,7 +354,12 @@ class AddJobPage extends GetWidget<JobController> {
   }
 
   void _save() async {
-    JobModel model = JobModel(status: _status.value.name, description: _descriptionController.text, jobType: _jobType.value!);
+    JobModel model = JobModel(status: _status.value.name,
+        customerId: _customerId.value,
+        jobId: Random().nextInt(9000)+ 1000,
+        description: _descriptionController.text,
+        jobType: _jobType.value!);
+
     model.objectId = jobModel?.objectId;
     NavigationController().loading();
     final response =

@@ -10,9 +10,8 @@ class JobController extends GetxController {
 
   Future save(JobModel model, IDataStore store) async {
     Map<String, dynamic> data = model.toJson();
-    if (model.billingLineModel != null) {
-      data['billingAddress'] = model.billingLineModel!.toJson();
-    }
+    data['billingLineModels'] =
+        model.billingLineModels.map((e) => e.toJson()).toList();
     if (data['objectId'] == null) {
       data.remove('objectId');
     }

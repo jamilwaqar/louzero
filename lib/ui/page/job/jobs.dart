@@ -4,8 +4,8 @@ import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/job/job_detail.dart';
 import 'package:louzero/ui/widget/widget.dart';
-
 import '../app_base_scaffold.dart';
+import 'views/jobs_home.dart';
 
 class JobListPage extends GetWidget<JobController> {
   const JobListPage({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class JobListPage extends GetWidget<JobController> {
             count: 0,
             buttonTitleLeft: "",
             buttonTitleRight: "",
-            onPressed: ()=> Get.to(()=> JobDetailPage(controller.jobModels[index])),
+            onPressed: ()=> Get.to(()=> JobsHome(controller.jobModels[index])),
             onPressedLeft: () {},
             onPressedRight: () {},
           );

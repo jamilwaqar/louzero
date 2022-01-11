@@ -10,7 +10,6 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
 import 'package:louzero/ui/page/job/jobs.dart';
-import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
 
@@ -103,17 +102,17 @@ class _DashboardPageState extends State<DashboardPage> {
                 items: widget.chartDataJobs,
                 title: 'Jobs',
                 footer: [
-                  AppButton(
-                    fontSize: btnSize,
-                    height: btnHeight,
-                    margin: const EdgeInsets.only(right: 8),
-                    label: 'Dev Page',
-                    colorBg: Colors.red,
-                    borderColor: Colors.red,
-                    primary: false,
-                    onPressed: () =>
-                        Get.to(() => const JobsHome(), binding: JobBinding()),
-                  ),
+                  // AppButton(
+                  //   fontSize: btnSize,
+                  //   height: btnHeight,
+                  //   margin: const EdgeInsets.only(right: 8),
+                  //   label: 'Dev Page',
+                  //   colorBg: Colors.red,
+                  //   borderColor: Colors.red,
+                  //   primary: false,
+                  //   onPressed: () =>
+                  //       Get.to(() => const JobsHome(), binding: JobBinding()),
+                  // ),
                   AppButton(
                     fontSize: btnSize,
                     height: btnHeight,

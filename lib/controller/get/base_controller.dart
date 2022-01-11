@@ -65,6 +65,12 @@ class BaseController extends GetxController {
     if (customerList is List) {
       customers = customerList as List<CustomerModel>;
     }
+
+    /// Jobs
+    var jobList = await _fetchJobs();
+    if (jobList is List) {
+      jobs = jobList as List<JobModel>;
+    }
   }
 
   Future _fetchSiteProfileTemplate() async {
@@ -107,6 +113,18 @@ class BaseController extends GetxController {
     try {
       var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
       List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
+      return list;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future _fetchJobs() async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+    try {
+      var response = await Backendless.data.of(BLPath.job).find(queryBuilder);
+      List<JobModel>list = List<Map>.from(response!).map((e) => JobModel.fromMap(e)).toList();
       return list;
     } catch (e) {
       return e.toString();

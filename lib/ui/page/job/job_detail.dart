@@ -6,7 +6,6 @@ import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/base_scaffold.dart';
-import 'package:louzero/ui/widget/customer_info.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:louzero/utils/utils.dart';
 
@@ -351,7 +350,7 @@ class JobDetailPage extends GetWidget<JobController> {
   final Color _oddItemColor = const Color(0xFFF1F2F4);
   final Color _evenItemColor = const Color(0xFFF8F9FB);
   Widget _reorderList() {
-    Map<String, dynamic>items = jobModel.billingLineModel?.items ?? {};
+    Map<String, dynamic>items = /*jobModel.billingLineModel?.items ?? */{};
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
       child: ReorderableListView(

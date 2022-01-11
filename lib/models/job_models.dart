@@ -3,25 +3,36 @@ part 'job_models.g.dart';
 
 @JsonSerializable()
 class JobModel {
-  JobModel(
-      {required this.status,
-      required this.description,
-      this.billingLineModel,
-      required this.jobType,
-      this.customerIds = const []});
+  JobModel({
+    required this.jobId,
+    required this.status,
+    required this.description,
+    required this.jobType,
+    this.customerId,
+  });
 
   @JsonKey(includeIfNull: false) String? objectId;
   @JsonKey(includeIfNull: false) String? ownerId;
+  @JsonKey(includeIfNull: false) int? created;
+  @JsonKey(includeIfNull: false) int? updated;
+
+  DateTime get createdAt => DateTime.fromMillisecondsSinceEpoch(created!);
+
+  DateTime? get updatedAt =>
+      updated != null ? DateTime.fromMillisecondsSinceEpoch(updated!) : null;
+
   String jobType;
   String status;
 
+  int jobId;
   String description;
-  @JsonKey(defaultValue: []) List<String> customerIds;
-  BillingLineModel? billingLineModel;
+  String? customerId;
+  @JsonKey(defaultValue: [])
+  List<BillingLineModel> billingLineModels = [];
 
   factory JobModel.fromMap(Map map) {
-    Map profiles = map.remove('profiles');
-    map['profiles'] = Map<String, dynamic>.from(profiles);
+    List billingLineModels = map.remove('billingLineModels');
+    map['billingLineModels'] = billingLineModels.map((e) => Map<String, dynamic>.from(e)).toList();
     Map<String, dynamic> json = Map<String, dynamic>.from(map);
     return JobModel.fromJson(json);
   }
@@ -36,18 +47,26 @@ class JobModel {
 class BillingLineModel {
 
   BillingLineModel(
-      {this.jobId, this.items = const {}});
+      {required this.jobId, required this.productName, required this.quantity, required this.price});
 
+  String jobId; // job ObjectId
+  String productName;
+  int quantity;
+  double price;
+  String? comment;
+  @JsonKey(defaultValue: false)
+  bool taxable = false;
+  // Discount
+  @JsonKey(defaultValue: false)
+  bool addDiscount = false;
+  String? discountDescription;
 
-  @JsonKey(includeIfNull: false) String? jobId;
-  Map<String, dynamic> items;
+  @JsonKey(defaultValue: true)
+  bool isPercentDiscount = true;
+  @JsonKey(defaultValue: 0.0)
+  double discountAmount = 0.0;
 
-  factory BillingLineModel.fromMap(Map map) {
-    Map profiles = map.remove('items');
-    map['items'] = Map<String, dynamic>.from(profiles);
-    Map<String, dynamic> json = Map<String, dynamic>.from(map);
-    return BillingLineModel.fromJson(json);
-  }
+  String? note;
 
   factory BillingLineModel.fromJson(Map<String, dynamic> json) =>
       _$BillingLineModelFromJson(json);

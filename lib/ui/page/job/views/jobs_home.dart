@@ -1,8 +1,12 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:louzero/controller/extension/extensions.dart';
+import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/common/common.dart';
@@ -14,13 +18,15 @@ import '../models/line_item.dart';
 import 'package:collection/collection.dart';
 
 class JobsHome extends StatefulWidget {
-  const JobsHome({Key? key}) : super(key: key);
-
+  const JobsHome(this.jobModel, {Key? key}) : super(key: key);
+  final JobModel jobModel;
   @override
   State<JobsHome> createState() => _JobsHomeState();
 }
 
 class _JobsHomeState extends State<JobsHome> {
+
+  final _baseController = Get.find<BaseController>();
   final _controller = Get.put(LineItemController());
   bool addLineVisible = false;
   int inventoryIndex = 0;
@@ -36,16 +42,16 @@ class _JobsHomeState extends State<JobsHome> {
           return _body();
         },
       ),
-      subheader: 'Repair',
-      footerEnd: const [
+      subheader: widget.jobModel.jobType,
+      footerEnd: [
         AppPopMenu(
           button: [
             AppButtons.appBar(
-              label: "Job Status",
+              label: "Job Status: ${widget.jobModel.status}",
               isMenu: true,
             )
           ],
-          items: [
+          items: const [
             PopMenuItem(label: 'Scheduled', icon: MdiIcons.calendarBlank),
             PopMenuItem(label: 'In Progress', icon: MdiIcons.progressClock)
           ],
@@ -79,6 +85,7 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   Widget _body() {
+    CustomerModel customerModel = _baseController.customerModelById(widget.jobModel.customerId!)!;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
@@ -87,9 +94,9 @@ class _JobsHomeState extends State<JobsHome> {
       child: Column(
         children: [
           ContactCard(
-            title: 'Archwood House',
-            contact: _controller.contact,
-            address: _controller.address,
+            title: customerModel.customerContacts[0].fullName,
+            contact: customerModel.customerContacts[0],
+            address: customerModel.billingAddress,
             trailing: const TextKeyVal("Acct. Balance:", "\$978.00"),
           ),
           _tabs(),
@@ -103,12 +110,150 @@ class _JobsHomeState extends State<JobsHome> {
         height: 1200,
         radius: 24,
         children: [
-          _tabBilling(),
           _tabDetails(),
           _tabSchedule(),
+          _tabBilling(),
         ],
         length: 3,
         tabNames: const ['Job Details', 'Schedule', 'Billing']);
+  }
+
+  Widget _tabDetails() {
+    JobModel jobModel = widget.jobModel;
+    DateTime updatedAt = jobModel.updatedAt != null ? jobModel.updatedAt! : jobModel.createdAt;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Job Description', style: AppStyles.headerSmallCaps),
+                    const SizedBox(height: 8),
+                    Text(widget.jobModel.description, style: AppStyles.labelRegular),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 90),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextKeyVal(
+                    "Job Id:",
+                    "#${widget.jobModel.jobId}",
+                    keyStyle: AppStyles.headerSmallCaps,
+                    valStyle:
+                        AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
+                  ),
+                  const SizedBox(height: 4),
+                  TextKeyVal(
+                    "Status:",
+                    widget.jobModel.status,
+                    keyStyle: AppStyles.headerSmallCaps,
+                    valStyle:
+                    AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text('Last Updated', style: AppStyles.labelRegular),
+                  const SizedBox(height: 8),
+                  Text(updatedAt.simpleDate, style: AppStyles.bodyMedium),
+                  const SizedBox(height: 8),
+                  Text('by ${AuthManager.userModel!.fullName}', style: AppStyles.labelRegular),
+                  const SizedBox(height: 16),
+                  AppButton(label: 'View Job History', colorBg: AppColors.secondary_99, colorText: AppColors.secondary_20, onPressed: () {}),
+
+                ],
+              ),
+
+            ],
+          ),
+          const AppDivider(color: AppColors.secondary_95,),
+          Row(
+            children: [
+              _categoryItem('Pictures', 'Keep track of location photos, job photos, and more.', 'icon-camera', 3),
+              const SizedBox(width: 24),
+              _categoryItem('Checklists', 'Check off items that need to be completed for this job.', 'icon-checklists', 3),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _categoryItem(String title, String description, String icon, int count) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+
+        },
+        child: Container(
+          alignment: Alignment.topLeft,
+          height: 132,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.light_2, width: 1),
+            color: AppColors.lightest,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: AppImage(
+                  icon,
+                  isSvg: true,
+                  width: 64,
+                  height: 64,
+                  color: AppColors.orange,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Text(title,
+                                style: TextStyles.titleL
+                                    .copyWith(color: AppColors.dark_3))),
+                        Container(
+                          width: 32,
+                          height: 32,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primary_95,
+                            border: Border.all(color: AppColors.primary_80)
+                          ),
+                          child: Text('$count',
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.dark_3,
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      description,
+                      style: AppStyles.labelRegular.copyWith(color: AppColors.dark_3, fontSize: 14),
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _tabBilling() {
@@ -167,12 +312,6 @@ class _JobsHomeState extends State<JobsHome> {
   Widget _tabSchedule() {
     return const AppTabPanel(children: [
       Text('Job Schedule', style: AppStyles.headerRegular),
-    ]);
-  }
-
-  Widget _tabDetails() {
-    return const AppTabPanel(children: [
-      Text('Job Details', style: AppStyles.headerRegular),
     ]);
   }
 
