@@ -10,6 +10,7 @@ export 'app_card_expandable.dart';
 export 'app_card_tabs.dart';
 export 'app_checkbox.dart';
 export 'app_circular.dart';
+export 'app_contact_info_line.dart';
 export 'app_cutomer_info.dart';
 export 'app_divider.dart';
 export 'app_drop_down.dart';
