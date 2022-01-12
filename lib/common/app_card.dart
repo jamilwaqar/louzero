@@ -5,7 +5,7 @@ class AppCard extends StatelessWidget {
   const AppCard({
     Key? key,
     required this.children,
-    this.radius = 8,
+    this.radius = 16,
     this.pt = 24,
     this.pb = 24,
     this.pl = 24,

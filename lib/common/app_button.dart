@@ -63,10 +63,11 @@ class AppButton extends StatelessWidget {
         icon: icon != null
             ? Icon(
                 icon,
-                size: fontSize * 1.2,
+                size: fontSize * 1.3,
                 color: colorIcon,
               )
             : null,
+        extendedIconLabelSpacing: 5,
         elevation: 0,
         extendedPadding: EdgeInsetsDirectional.only(
           start: isMenu ? 16 : padX,
@@ -194,6 +195,50 @@ class AppBarButtonAdd extends StatelessWidget {
       colorBg: AppColors.secondary_20,
       colorIcon: AppColors.accent_1,
       onPressed: onPressed,
+    );
+  }
+}
+
+class AppButtonGradient extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final String label;
+  final Color colorFrom;
+  final Color colorTo;
+  final Color colorText;
+  final double height;
+
+  const AppButtonGradient({
+    Key? key,
+    this.label = "Button",
+    this.onPressed,
+    this.colorFrom = const Color(0xFFEC5B2A),
+    this.colorTo = const Color(0xFFEB7649),
+    this.colorText = AppColors.secondary_99,
+    this.height = 48,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      child: Ink(
+        padding: EdgeInsets.only(left: 24, right: 24),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [colorFrom, colorTo],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(30.0)),
+        child: Container(
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: AppStyles.labelBold.copyWith(color: colorText),
+          ),
+        ),
+      ),
     );
   }
 }

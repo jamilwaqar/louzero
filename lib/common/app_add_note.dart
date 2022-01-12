@@ -84,7 +84,9 @@ class _AppAddNoteState extends State<AppAddNote> {
             visible: visible,
             child: Column(
               children: [
-                AppInputMultiLine(
+                AppTextField(
+                  multiline: true,
+                  label: 'Add Note',
                   controller: _noteController,
                   // autofocus: currentText.isEmpty,
                 ),

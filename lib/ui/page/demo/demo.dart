@@ -141,15 +141,27 @@ class Demo extends StatelessWidget {
 
   Widget _formTextInput() {
     return AppCard(children: [
-      const Text('Form Inputs', style: AppStyles.headerRegular),
+      const Text('TextField', style: AppStyles.headerRegular),
       const SizedBox(
         height: 24,
       ),
       FlexRow(
         children: const [
-          AppTexfield(label: 'Basic'),
-          AppTexfield(label: 'Basic'),
+          AppTextField(
+            label: 'First Name',
+            initialValue: 'Tennessee',
+          ),
+          AppTextField(label: 'Last Name')
         ],
+      ),
+      SizedBox(
+        height: 16,
+      ),
+      AppTextField(
+        label: 'Multi Line',
+        multiline: true,
+        initialValue:
+            'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
       )
     ]);
   }
