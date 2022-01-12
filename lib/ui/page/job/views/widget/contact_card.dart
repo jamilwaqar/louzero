@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/models.dart';
@@ -59,6 +60,24 @@ class ContactCard extends StatelessWidget {
                       topRight: const Radius.circular(0),
                       bottomRight: const Radius.circular(0),
                     )),
+                child: address.latLng != null ? GoogleMap(
+                  mapType: MapType.normal,
+                  myLocationEnabled: false,
+                  myLocationButtonEnabled: false,
+                  zoomControlsEnabled: false,
+                  initialCameraPosition: CameraPosition(
+                    target: address.latLng!,
+                    zoom: 18,
+                  ),
+                  onMapCreated: (GoogleMapController controller) {
+                    Future.delayed(const Duration(milliseconds: 500))
+                        .then((value) {
+                      // setState(() {
+                      //   // mapController.complete(controller);
+                      // });
+                    });
+                  },
+                ) : null,
               ),
             ),
             const SizedBox(width: 16),

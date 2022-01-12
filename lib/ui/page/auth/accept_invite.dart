@@ -17,7 +17,7 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/complete.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
-import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
+import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 
 class AcceptInvitePage extends StatefulWidget {
   const AcceptInvitePage({Key? key}) : super(key: key);

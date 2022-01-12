@@ -20,8 +20,6 @@ abstract class AppDefaultValue {
       e164Key: "1-US-0");
 }
 
-CustomerModel? tempCustomerModel;
-List<JobModel>? tempJobModels;
 /// Backendless Data Paths
 abstract class BLPath {
   static const String user = "Users";
@@ -30,6 +28,7 @@ abstract class BLPath {
   static const String siteProfileTemplate = "SiteProfileTemplate";
   static const String invites = "Invites";
   static const String company = "Company";
+  static const String job = "Job";
 }
 
 abstract class AppPlaceHolder {

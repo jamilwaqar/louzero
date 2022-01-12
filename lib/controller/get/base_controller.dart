@@ -13,8 +13,8 @@ class BaseController extends GetxController {
   final _isUpdating = false.obs;
   final _companies = Rx<List<CompanyModel>>([]);
   final _customers = Rx<List<CustomerModel>>([]);
+  final _jobs = Rx<List<JobModel>>([]);
 
-  List<JobModel> totalJobs = [];
   final _siteProfileTemplates = Rx<List<CTSiteProfile>>([]);
   final _activeCompany = Rx<CompanyModel?>(null);
 
@@ -23,6 +23,9 @@ class BaseController extends GetxController {
 
   List<CustomerModel> get customers => _customers.value;
   set customers(List<CustomerModel> value) => _customers.value = value;
+
+  List<JobModel> get jobs => _jobs.value;
+  set jobs(List<JobModel> value) => _jobs.value = value;
 
   List<CTSiteProfile> get siteProfileTemplates => _siteProfileTemplates.value;
   set siteProfileTemplates(List<CTSiteProfile> value) => _siteProfileTemplates.value = value;
@@ -61,6 +64,12 @@ class BaseController extends GetxController {
     var customerList = await _fetchCustomers();
     if (customerList is List) {
       customers = customerList as List<CustomerModel>;
+    }
+
+    /// Jobs
+    var jobList = await _fetchJobs();
+    if (jobList is List) {
+      jobs = jobList as List<JobModel>;
     }
   }
 
@@ -104,9 +113,18 @@ class BaseController extends GetxController {
     try {
       var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
       List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
-      if (list.isNotEmpty) {
-        tempCustomerModel = list[0];
-      }
+      return list;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future _fetchJobs() async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+    try {
+      var response = await Backendless.data.of(BLPath.job).find(queryBuilder);
+      List<JobModel>list = List<Map>.from(response!).map((e) => JobModel.fromMap(e)).toList();
       return list;
     } catch (e) {
       return e.toString();
@@ -117,6 +135,22 @@ class BaseController extends GetxController {
 
   set searchedAddressList(List<SearchAddressModel> list) {
     searchedAddresses.value = list;
+  }
+
+  JobModel? jobModelById(String objectId) {
+    try {
+      return jobs.firstWhere((e) => e.objectId == objectId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  CustomerModel? customerModelById(String objectId) {
+    try {
+      return customers.firstWhere((e) => e.objectId == objectId);
+    } catch (e) {
+      return null;
+    }
   }
 
   searchAddress(String input, String countryCode) async {

@@ -6,7 +6,7 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
-import 'package:louzero/ui/widget/dialolg/popup/camera_option.dart';
+import 'package:louzero/ui/widget/dialog/popup/camera_option.dart';
 import 'package:uuid/uuid.dart';
 import 'base_controller.dart';
 
