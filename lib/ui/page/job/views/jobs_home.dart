@@ -1,9 +1,12 @@
 import 'dart:developer';
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
@@ -13,9 +16,10 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
+import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../models/line_item.dart';
 import 'package:collection/collection.dart';
+import 'package:uuid/uuid.dart';
 
 class JobsHome extends StatefulWidget {
   const JobsHome(this.jobModel, {Key? key}) : super(key: key);
@@ -27,10 +31,20 @@ class JobsHome extends StatefulWidget {
 class _JobsHomeState extends State<JobsHome> {
 
   final _baseController = Get.find<BaseController>();
-  final _controller = Get.put(LineItemController());
+  final _lineItemController = Get.put(LineItemController());
+  final controller = Get.find<JobController>();
+  late final jobModel = widget.jobModel;
   bool addLineVisible = false;
   int inventoryIndex = 0;
   bool miscLineItem = false;
+
+  @override
+  void initState() {
+    _lineItemController.lineItems.value = [
+      ...widget.jobModel.billingLineModels
+    ];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +55,12 @@ class _JobsHomeState extends State<JobsHome> {
           return _body();
         },
       ),
-      subheader: widget.jobModel.jobType,
+      subheader: jobModel.jobType,
       footerEnd: [
         AppPopMenu(
           button: [
             AppButtons.appBar(
-              label: "Job Status: ${widget.jobModel.status}",
+              label: "Job Status: ${jobModel.status}",
               isMenu: true,
             )
           ],
@@ -60,7 +74,7 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   _editLineItem(String id) {
-    var item = _controller.lineItems.firstWhereOrNull((el) {
+    var item = _lineItemController.lineItems.firstWhereOrNull((el) {
       return el.objectId == id;
     });
 
@@ -70,12 +84,13 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   _duplicateLineItem(String id) {
-    var item = _controller.lineItems.firstWhereOrNull((el) {
+    var item = _lineItemController.lineItems.firstWhereOrNull((el) {
       return el.objectId == id;
     });
 
     if (item != null) {
-      inspect(item);
+      item.objectId = const Uuid().v4();
+      _lineItemController.addLineItem(item);
     }
   }
 
@@ -259,17 +274,22 @@ class _JobsHomeState extends State<JobsHome> {
     return AppTabPanel(
       children: [
         const Text('Billing Line Items', style: AppStyles.headerRegular),
-        if (_controller.lineItems.isEmpty && !addLineVisible)
+        if (_lineItemController.lineItems.isEmpty && !addLineVisible)
           const AppPlaceholder(
             title: 'No Line Items',
             subtitle: "Add new line to get started.",
           ),
         AppBillingLines(
-          data: _controller.lineItems,
-          onDelete: (id) {
-            _controller.deleteLineItemById(id);
+          data: _lineItemController.lineItems,
+          onDelete: (id) async {
+            dynamic response = await _lineItemController.deleteLineItemById(id, widget.jobModel.objectId!);
+            if (response is String) {
+              WarningMessageDialog.showDialog(context, response);
+            }
           },
-          onDuplicate: _duplicateLineItem,
+          onDuplicate: (id) {
+            _duplicateLineItem(id);
+          },
           onEdit: _editLineItem,
           onReorder: _reorderLineItems,
         ),
@@ -296,10 +316,13 @@ class _JobsHomeState extends State<JobsHome> {
         FlexRow(
           flex: const [12, 0, 7],
           children: [
-            const AppAddNote(),
+            AppAddNote(initialText: jobModel.note ?? '', onChange: (value) {
+              jobModel.note = value;
+              controller.save(jobModel);
+            }),
             const SizedBox(width: 1),
             AppBillingTotal(
-              subtotal: _controller.subTotal,
+              subtotal: _lineItemController.subTotal,
               tax: 7.32,
             ),
           ],

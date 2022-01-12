@@ -1,63 +1,50 @@
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:louzero/controller/enum/enums.dart';
-import 'package:louzero/models/customer_models.dart';
+import 'package:get/get.dart';
+import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
 import 'package:uuid/uuid.dart';
 
 class LineItemController extends GetxController {
   final Uuid uuid = const Uuid();
-
-  final CustomerContact contact = CustomerContact(
-      email: 'nswanson@emailaddress.net',
-      firstName: 'Nicole',
-      lastName: 'Swanson',
-      phone: '1 (360) 936-7594',
-      role: 'Home Owner',
-      types: [CTContactType.primary]);
-
-  final AddressModel address = AddressModel(
-      country: 'United States',
-      street: '123 Alphabet Blvd.',
-      city: 'Portland',
-      state: 'OR',
-      zip: '97202');
-
+  final baseController = Get.find<BaseController>();
+  final jobController = Get.find<JobController>();
   RxList<BillingLineModel> lineItems = <BillingLineModel>[].obs;
 
-  addLineItem(BillingLineModel item) {
-    lineItems.add(item);
-    update();
+  addLineItem(BillingLineModel item) async {
+    try {
+      JobModel jobModel = baseController.jobModelById(item.jobId)!;
+      jobModel.billingLineModels = [... jobModel.billingLineModels, item];
+      dynamic response = await jobController.save(jobModel);
+      lineItems.add(item);
+      update();
+      return response;
+    } catch (e) {
+      return e.toString();
+    }
   }
 
-  deleteLineItemById(String id) {
-    lineItems.removeWhere((element) => element.objectId == id);
-    update();
+  Future deleteLineItemById(String id, String jobId) async {
+    try {
+      JobModel jobModel = baseController.jobModelById(jobId)!;
+      lineItems.removeWhere((element) => element.objectId == id);
+      jobModel.billingLineModels = [... lineItems];
+      dynamic response = await jobController.save(jobModel);
+      update();
+      return response;
+    } catch(e) {
+      return e.toString();
+    }
   }
 
   String get newId {
     return uuid.v1();
   }
 
-  String get nameAndRole {
-    return "${contact.firstName} ${contact.lastName} - ${contact.role}";
-  }
-
-  String get fullAddress {
-    return " ${address.street} ${address.city},  ${address.state}  ${address.zip}";
-  }
-
-  String get cityStateZip {
-    return "${address.city},  ${address.state}  ${address.zip}";
-  }
-
   double get subTotal {
     return lineItems.fold(0, (sum, item) {
       double price = item.price * item.quantity;
-      if (item.discountAmount != null) {
-        price = price - item.discountAmount!;
-      }
+      price = price - item.discountAmount;
       return sum + price;
     });
   }

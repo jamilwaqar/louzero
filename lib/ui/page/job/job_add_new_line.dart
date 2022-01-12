@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
@@ -17,6 +18,7 @@ class JobAddNewLine extends StatefulWidget {
   final int selectedIndex;
   final bool isTextInput;
   final String jobId;
+
   const JobAddNewLine({
     Key? key,
     this.onCreate,
@@ -124,7 +126,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
 
   @override
   Widget build(BuildContext context) {
-    _onSubmit() {
+    _onSubmit() async {
       var description = _description.text;
       var note = _note.text;
       var count = double.tryParse(_count.text) ?? 1;
@@ -146,11 +148,12 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
         inventoryId: inventoryId,
       );
 
-      if (newItem.description?.isEmpty ?? true) {
+
+      if (newItem.description.isEmpty) {
         // print('enter description please');
       } else {
         if (widget.onCreate != null) {
-          _controller.addLineItem(newItem);
+          await _controller.addLineItem(newItem);
           widget.onCreate!();
           _clearInputs();
         }
@@ -257,9 +260,9 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                   label: "Discount description"),
               Column(
                 children: [
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   AppSegmentedToggle(
-                      itemList: ["%", "\$"],
+                      itemList: const ["%", "\$"],
                       onChange: (value) {
                         print('value changed: $value');
                       })
@@ -297,9 +300,9 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
               )
             ],
           ),
-          right: const TextKeyValIcon(
+          right: TextKeyValIcon(
             kkey: 'Sold By',
-            val: 'Allen Whitaker',
+            val: AuthManager.userModel!.fullName,
           ),
         ),
       ],
