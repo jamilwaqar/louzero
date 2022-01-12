@@ -3,6 +3,7 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -13,29 +14,18 @@ class Demo extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       subheader: 'Demo Components',
-      child: Column(
-        children: [
-          const SizedBox(height: 32),
-          _segmentControls(),
-          _formTextInput(),
-          _addNote(),
-          _numberStepper(),
-          _contactCard(),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
-            child: AppCardTabs(
-              height: 500,
-              length: 3,
-              tabNames: const ['Overview', 'Schedule', 'Billing'],
-              children: tabItems,
-            ),
-          ),
-          _loadingSpinner(),
-          _multiSelect(),
-          _formInputs(),
-          _buttonsAndMenus(),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _loadingSpinner(),
+            _multiSelect(),
+            _formInputs(),
+            _buttonsAndMenus(),
+            _segmentControls(),
+            _calendar(),
+            // _timePicker()
+          ],
+        ),
       ),
     );
   }
@@ -296,39 +286,52 @@ class Demo extends StatelessWidget {
       ]);
 
   Widget _segmentControls() => AppCard(children: [
-        _heading('Segmented Control'),
-        AppSegmentedControl(
-          fromMax: true,
-          isStretch: true,
-          children: const {
-            1: AppSegmentItem(
-              text: 'Estimate (99)',
-              icon: MdiIcons.calculator,
-            ),
-            2: AppSegmentItem(
-              text: 'Booked (97)',
-              icon: MdiIcons.calendar,
-            ),
-            3: AppSegmentItem(
-              text: 'Invoiced',
-              icon: MdiIcons.currencyUsd,
-            ),
-            4: AppSegmentItem(
-              text: 'Canceled',
-              icon: MdiIcons.cancel,
-            ),
-          },
-          onValueChanged: (int value) {
-            print(value);
-          },
+    _heading('Segmented Control'),
+    AppSegmentedControl(
+      fromMax: true,
+      isStretch: true,
+      children: const {
+        1: AppSegmentItem(
+          text: 'Estimate (99)',
+          icon: MdiIcons.calculator,
         ),
-        const SizedBox(
-          height: 20,
+        2: AppSegmentItem(
+          text: 'Booked (97)',
+          icon: MdiIcons.calendar,
         ),
-        AppSegmentedToggle(
-            itemList: const ["%", "\$"],
-            onChange: (value) {
-              print('value has been changed $value');
-            })
-      ]);
+        3: AppSegmentItem(
+          text: 'Invoiced',
+          icon: MdiIcons.currencyUsd,
+        ),
+        4: AppSegmentItem(
+          text: 'Canceled',
+          icon: MdiIcons.cancel,
+        ),
+      },
+      onValueChanged: (int value) {
+        print(value);
+      },
+    ),
+    const SizedBox(height: 20,),
+    AppSegmentedToggle(
+        itemList: const ["%", "\$"],
+        onChange: (value){
+          print('value has been changed $value');
+        }
+    )
+  ]);
+
+  Widget _calendar() => AppCard(children: [
+    _heading('Calendar'),
+    NZCalendar(
+      onDateSelected: (value){ print('date has been changed $value');},
+    )
+  ]);
+
+  Widget _timePicker() => AppCard(children: [
+    _heading('Time Picker'),
+    NZCalendar(
+      onDateSelected: (value){ print('date has been changed $value');},
+    )
+  ]);
 }
