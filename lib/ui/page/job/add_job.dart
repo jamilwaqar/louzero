@@ -364,9 +364,9 @@ class AddJobPage extends GetWidget<JobController> {
     if (response is String) {
       msg = response;
     } else {
-      NavigationController().pop(Get.context!, delay: 2);
+      NavigationController().pop(Get.context!, delay: 1);
       msg = "Saved Customer!";
     }
-    WarningMessageDialog.showDialog(Get.context!, msg);
+    // WarningMessageDialog.showDialog(Get.context!, msg);
   }
 }

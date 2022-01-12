@@ -1,9 +1,6 @@
-import 'dart:developer';
-import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
@@ -77,9 +74,8 @@ class _JobsHomeState extends State<JobsHome> {
     var item = _lineItemController.lineItems.firstWhereOrNull((el) {
       return el.objectId == id;
     });
-
     if (item != null) {
-      inspect(item);
+      _lineItemController.editLineId = id;
     }
   }
 
@@ -89,8 +85,7 @@ class _JobsHomeState extends State<JobsHome> {
     });
 
     if (item != null) {
-      item.objectId = const Uuid().v4();
-      _lineItemController.addLineItem(item);
+      _lineItemController.addLineItem(item.clone());
     }
   }
 
@@ -220,7 +215,6 @@ class _JobsHomeState extends State<JobsHome> {
                 alignment: Alignment.topLeft,
                 child: AppImage(
                   icon,
-                  isSvg: true,
                   width: 64,
                   height: 64,
                   color: AppColors.orange,
@@ -290,27 +284,12 @@ class _JobsHomeState extends State<JobsHome> {
           onDuplicate: (id) {
             _duplicateLineItem(id);
           },
-          onEdit: _editLineItem,
+          onEdit: (id) {
+            _editLineItem(id);
+          },
           onReorder: _reorderLineItems,
         ),
-        Visibility(
-          visible: addLineVisible,
-          child: JobAddNewLine(
-            jobId: widget.jobModel.objectId!,
-            selectedIndex: inventoryIndex,
-            isTextInput: miscLineItem,
-            onCreate: () {
-              setState(() {
-                addLineVisible = false;
-              });
-            },
-            onCancel: () {
-              setState(() {
-                addLineVisible = false;
-              });
-            },
-          ),
-        ),
+        _addNewLine(),
         _addItemButton(),
         const AppDivider(),
         FlexRow(
@@ -353,6 +332,7 @@ class _JobsHomeState extends State<JobsHome> {
             setState(() {
               miscLineItem = false;
               addLineVisible = true;
+              inventoryIndex = 0;
             });
           },
         ),
@@ -366,6 +346,27 @@ class _JobsHomeState extends State<JobsHome> {
               });
             }),
       ],
+    );
+  }
+
+  Widget _addNewLine() {
+    return Visibility(
+      visible: addLineVisible,
+      child: JobAddNewLine(
+        jobId: widget.jobModel.objectId!,
+        selectedIndex: inventoryIndex,
+        isTextInput: miscLineItem,
+        onCreate: () {
+          setState(() {
+            addLineVisible = false;
+          });
+        },
+        onCancel: () {
+          setState(() {
+            addLineVisible = false;
+          });
+        },
+      ),
     );
   }
 }

@@ -10,13 +10,27 @@ class LineItemController extends GetxController {
   final baseController = Get.find<BaseController>();
   final jobController = Get.find<JobController>();
   RxList<BillingLineModel> lineItems = <BillingLineModel>[].obs;
+  final _editLineId = ''.obs;
+  String get editLineId => _editLineId.value;
+
+  set editLineId(val) {
+    _editLineId.value = val;
+    update();
+  }
 
   addLineItem(BillingLineModel item) async {
     try {
       JobModel jobModel = baseController.jobModelById(item.jobId)!;
       jobModel.billingLineModels = [... jobModel.billingLineModels, item];
       dynamic response = await jobController.save(jobModel);
-      lineItems.add(item);
+      if (editLineId.isNotEmpty) {
+        int index = lineItems.indexWhere((e) => e.objectId == item.objectId);
+        lineItems.removeWhere((e) => e.objectId == item.objectId);
+        lineItems.insert(index, item);
+        editLineId = '';
+      } else {
+        lineItems.add(item);
+      }
       update();
       return response;
     } catch (e) {

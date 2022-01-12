@@ -27,7 +27,7 @@ class JobListPage extends GetWidget<JobController> {
         itemBuilder: (context, index) {
           JobModel model = controller.jobModels[index];
           return DashboardCell(
-            title: model.status,
+            title: model.jobType,
             description: "",
             count: 0,
             buttonTitleLeft: "",

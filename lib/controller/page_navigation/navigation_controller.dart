@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NavigationController {
   static final NavigationController _singleton =
@@ -18,7 +19,7 @@ class NavigationController {
       Navigator.pop(context);
     } else {
       Future.delayed(Duration(seconds: delay))
-          .then((value) => Navigator.pop(context));
+          .then((value) => Get.back());
     }
   }
 

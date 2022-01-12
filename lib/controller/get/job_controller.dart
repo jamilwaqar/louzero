@@ -28,7 +28,7 @@ class JobController extends GetxController {
         List<JobModel> newList = [...baseController.jobs, newModel];
         baseController.jobs = newList;
       } else {
-        updateCustomerModel(newModel);
+        updateJobModel(newModel);
       }
       update();
       if (showLoading) {
@@ -43,7 +43,7 @@ class JobController extends GetxController {
     }
   }
 
-  updateCustomerModel(JobModel model) {
+  updateJobModel(JobModel model) {
     List<JobModel> models = [...jobModels];
     int index = models.indexWhere((e) => e.objectId == model.objectId);
     models.removeWhere((e) => e.objectId == model.objectId);

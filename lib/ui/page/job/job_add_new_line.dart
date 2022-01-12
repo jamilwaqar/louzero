@@ -45,14 +45,39 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
   final _discountDescription = TextEditingController();
   final _discountAmount = TextEditingController();
 
-  String inventoryId = '';
-  bool hasDiscount = false;
-  bool isTaxable = false;
-
+  String _inventoryId = '';
+  bool _hasDiscount = false;
+  bool _isTaxable = false;
+  bool _isPercentDiscount = true;
   int _selected = 0;
+
+  late final bool _isEdit = _controller.editLineId.isNotEmpty;
+  BillingLineModel? lineModel;
 
   @override
   void initState() {
+    try {
+      lineModel = _controller.lineItems.firstWhere((e) => e.objectId == _controller.editLineId);
+      _description.text = lineModel?.description ?? '';
+      _count.text = lineModel?.quantity.toStringAsFixed(2) ?? '';
+      _price.text = lineModel?.price.toStringAsFixed(2) ?? '';
+      _note.text = lineModel?.note ?? '';
+      _subtotal.text = lineModel?.subtotal.toStringAsFixed(2) ?? '';
+      _discountAmount.text = lineModel?.discountAmount.toStringAsFixed(2) ?? '';
+      _discountDescription.text = lineModel?.discountDescription ?? '';
+      _hasDiscount = (lineModel?.discountAmount ?? -1) > 0;
+      _isTaxable = lineModel?.taxable ?? false;
+      _isPercentDiscount = lineModel?.isPercentDiscount ?? true;
+    } catch(e) {
+      lineModel = null;
+    }
+    try {
+      InventoryItem? inventoryItem = _controller.inventory.firstWhere((e) => e.id == lineModel?.inventoryId);
+      _selected = _controller.inventory.indexOf(inventoryItem);
+    } catch(e) {
+      _selected = 0;
+    }
+
     super.initState();
     _initializeData();
   }
@@ -134,18 +159,22 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       var discount = double.tryParse(_discountAmount.text) ?? 0;
       var discountText = _discountDescription.text;
       var subtotal = double.parse((price * count).toStringAsFixed(2));
-
+      if (!widget.isTextInput) {
+        _inventoryId = _controller.inventory[_selected].id;
+      }
       BillingLineModel newItem = BillingLineModel(
         jobId: widget.jobId,
-        objectId: const Uuid().v4(),
+        objectId: _isEdit ? lineModel!.objectId! : const Uuid().v4(),
         quantity: count,
         price: price,
         description: description,
         subtotal: subtotal,
+        taxable: _isTaxable,
+        isPercentDiscount: _isPercentDiscount,
         note: note,
         discountAmount: discount,
         discountDescription: discountText.length > 1 ? discountText : null,
-        inventoryId: inventoryId,
+        inventoryId: _inventoryId,
       );
 
 
@@ -172,7 +201,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
         _subtotal.text = _item.price.toStringAsFixed(2);
         _count.text = '1';
         _description.text = item.description;
-        inventoryId = item.id;
+        _inventoryId = item.id;
       });
     }
 
@@ -182,7 +211,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       radius: 24,
       children: [
         RowSplit(
-            left: const Text("Add New Line", style: AppStyles.headerRegular),
+            left: Text(_isEdit? "Edit Billing Line" : "Add New Line", style: AppStyles.headerRegular),
             right: AppIconButton(
               colorBg: Colors.transparent,
               onTap: () {
@@ -228,30 +257,30 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
           flex: const [1, 1, 1],
           children: [
             AppSwitch(
-                value: hasDiscount,
+                value: _hasDiscount,
                 label: 'Add Discount',
                 onChanged: (v) {
                   setState(() {
-                    hasDiscount = v;
+                    _hasDiscount = v;
                   });
                 }),
             const SizedBox(width: 90),
             AppCheckbox(
               label: 'Taxable',
-              checked: isTaxable,
+              checked: _isTaxable,
               onChanged: (val) {
                 setState(() {
-                  isTaxable = val!;
+                  _isTaxable = val!;
                 });
               },
             ),
           ],
         ),
-        if (hasDiscount)
+        if (_hasDiscount)
           const SizedBox(
             height: 16,
           ),
-        if (hasDiscount)
+        if (_hasDiscount)
           FlexRow(
             flex: const [2, 0, 1],
             children: [
@@ -262,8 +291,10 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
                 children: [
                   const SizedBox(height: 24),
                   AppSegmentedToggle(
+                      selectedItem: _isPercentDiscount ? 0 : 1,
                       itemList: const ["%", "\$"],
                       onChange: (value) {
+                        _isPercentDiscount = value == "%";
                         print('value changed: $value');
                       })
                 ],

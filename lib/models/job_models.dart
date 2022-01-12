@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 part 'job_models.g.dart';
 
 @JsonSerializable()
@@ -59,6 +60,9 @@ class BillingLineModel {
     required this.subtotal,
     this.objectId,
     this.note,
+    this.addDiscount = false,
+    this.taxable = false,
+    this.isPercentDiscount = true,
     required this.discountAmount,
     this.discountDescription,
     this.inventoryId,
@@ -82,11 +86,28 @@ class BillingLineModel {
   String? discountDescription;
 
   @JsonKey(defaultValue: true)
-  bool isPercentDiscount = true;
+  bool isPercentDiscount = true; /// % or $
   @JsonKey(defaultValue: 0.0)
   double discountAmount = 0.0;
 
   String? inventoryId;
+
+  BillingLineModel clone() {
+    return BillingLineModel(
+        description: description,
+        jobId: jobId,
+        objectId: const Uuid().v4(),
+        discountDescription: discountDescription,
+        note: note,
+        isPercentDiscount: isPercentDiscount,
+        addDiscount: addDiscount,
+        quantity: quantity,
+        price: price,
+        taxable: taxable,
+        subtotal: subtotal,
+        inventoryId: inventoryId,
+        discountAmount: discountAmount);
+  }
 
   factory BillingLineModel.fromJson(Map<String, dynamic> json) =>
       _$BillingLineModelFromJson(json);

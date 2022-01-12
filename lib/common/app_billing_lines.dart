@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/job_models.dart';
+import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
+import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AppBillingLines extends StatelessWidget {
@@ -11,7 +14,9 @@ class AppBillingLines extends StatelessWidget {
   final Function(String)? onDuplicate;
   final Function(int, int)? onReorder;
 
-  const AppBillingLines({
+  final controller = Get.find<LineItemController>();
+
+  AppBillingLines({
     Key? key,
     this.onEdit,
     this.onDelete,
@@ -43,6 +48,20 @@ class AppBillingLines extends StatelessWidget {
               double pad = item.note != null ? 16 : 4;
               bool hasDiscount =
                   item.discountAmount > 0 && item.discountDescription != null;
+              if (controller.editLineId == item.objectId) {
+               return JobAddNewLine(
+                  key: ValueKey('${item.objectId}-$index'),
+                  jobId: item.jobId,
+                  selectedIndex: 0,
+                  isTextInput: item.inventoryId?.isEmpty ?? true,
+                  onCreate: () {
+
+                  },
+                  onCancel: () {
+                    controller.editLineId = '';
+                  },
+                );
+              }
               return Container(
                 key: ValueKey('${item.objectId}-$index'),
                 color: index % 2 == 0
