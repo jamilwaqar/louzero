@@ -11,10 +11,14 @@ class JobModel {
     this.customerId,
   });
 
-  @JsonKey(includeIfNull: false) String? objectId;
-  @JsonKey(includeIfNull: false) String? ownerId;
-  @JsonKey(includeIfNull: false) int? created;
-  @JsonKey(includeIfNull: false) int? updated;
+  @JsonKey(includeIfNull: false)
+  String? objectId;
+  @JsonKey(includeIfNull: false)
+  String? ownerId;
+  @JsonKey(includeIfNull: false)
+  int? created;
+  @JsonKey(includeIfNull: false)
+  int? updated;
 
   DateTime get createdAt => DateTime.fromMillisecondsSinceEpoch(created!);
 
@@ -29,10 +33,12 @@ class JobModel {
   String? customerId;
   @JsonKey(defaultValue: [])
   List<BillingLineModel> billingLineModels = [];
+  String? note;
 
   factory JobModel.fromMap(Map map) {
     List billingLineModels = map.remove('billingLineModels');
-    map['billingLineModels'] = billingLineModels.map((e) => Map<String, dynamic>.from(e)).toList();
+    map['billingLineModels'] =
+        billingLineModels.map((e) => Map<String, dynamic>.from(e)).toList();
     Map<String, dynamic> json = Map<String, dynamic>.from(map);
     return JobModel.fromJson(json);
   }
@@ -45,17 +51,24 @@ class JobModel {
 
 @JsonSerializable()
 class BillingLineModel {
-
   BillingLineModel(
-      {required this.jobId, required this.productName, required this.quantity, required this.price});
+      {required this.jobId,
+      required this.productName,
+      required this.quantity,
+      required this.price,
+      this.comment,
+      });
 
+  @JsonKey(includeIfNull: false)
+  String? objectId;
   String jobId; // job ObjectId
   String productName;
-  int quantity;
+  double quantity;
   double price;
   String? comment;
   @JsonKey(defaultValue: false)
   bool taxable = false;
+
   // Discount
   @JsonKey(defaultValue: false)
   bool addDiscount = false;
@@ -66,7 +79,7 @@ class BillingLineModel {
   @JsonKey(defaultValue: 0.0)
   double discountAmount = 0.0;
 
-  String? note;
+  String? inventoryId;
 
   factory BillingLineModel.fromJson(Map<String, dynamic> json) =>
       _$BillingLineModelFromJson(json);

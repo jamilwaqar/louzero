@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_pop_menu.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/ui/page/job/models/line_item.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AppBillingLines extends StatelessWidget {
-  final List<LineItem> data;
+  final List<BillingLineModel> data;
   final Function(String)? onEdit;
   final Function(String)? onDelete;
   final Function(String)? onDuplicate;
@@ -39,11 +38,11 @@ class AppBillingLines extends StatelessWidget {
           shrinkWrap: true,
           children: [
             ...data.asMap().entries.map((entry) {
-              LineItem item = entry.value;
+              BillingLineModel item = entry.value;
               int index = entry.key;
               double pad = item.note != null ? 16 : 4;
               bool hasDiscount =
-                  item.discount != null && item.discountText != null;
+                  item.discountAmount >0 && item.discountDescription != null;
               return Container(
                 key: ValueKey(item),
                 color: index % 2 == 0
@@ -62,7 +61,7 @@ class AppBillingLines extends StatelessWidget {
                             _quantity(item),
                             _price(item),
                             _subtotal(item),
-                            _actions(item.id),
+                            _actions(item.objectId!),
                           ]),
                       //Discount line
                       if (hasDiscount) ..._discount(item),
@@ -75,20 +74,20 @@ class AppBillingLines extends StatelessWidget {
     );
   }
 
-  List<Widget> _discount(LineItem item) {
+  List<Widget> _discount(BillingLineModel item) {
     return [
       const AppDivider(mt: 16, mb: 16, mr: 48, ml: 48),
       Padding(
         padding: const EdgeInsets.only(left: 48, right: 48),
         child: RowSplit(
-          left: Text(item.discountText!, style: style.copyWith(fontSize: 14)),
-          right: Text('- \$${item.discount!.toStringAsFixed(2)}', style: style),
+          left: Text(item.discountDescription!, style: style.copyWith(fontSize: 14)),
+          right: Text('- \$${item.discountAmount.toStringAsFixed(2)}', style: style),
         ),
       )
     ];
   }
 
-  Widget _description(LineItem item) {
+  Widget _description(BillingLineModel item) {
     return Expanded(
       flex: 6,
       child: Row(
@@ -112,7 +111,7 @@ class AppBillingLines extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    item.description,
+                    item.comment ?? '',
                     style: style,
                   ),
                   if (item.note != null && item.note!.isNotEmpty)
@@ -132,7 +131,7 @@ class AppBillingLines extends StatelessWidget {
     );
   }
 
-  Widget _quantity(LineItem item) {
+  Widget _quantity(BillingLineModel item) {
     return Expanded(
       flex: 1,
       child: Column(
@@ -140,14 +139,14 @@ class AppBillingLines extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              prettify(item.count),
+              prettify(item.quantity),
               style: style.copyWith(fontWeight: FontWeight.w400),
             ),
           ]),
     );
   }
 
-  Widget _price(LineItem item) {
+  Widget _price(BillingLineModel item) {
     return Expanded(
       flex: 1,
       child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -159,12 +158,13 @@ class AppBillingLines extends StatelessWidget {
     );
   }
 
-  Widget _subtotal(LineItem item) {
+  Widget _subtotal(BillingLineModel item) {
+    double subtotal = item.quantity * item.price;
     return Expanded(
       flex: 1,
       child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
         Text(
-          item.subtotal.toStringAsFixed(2).padRight(5, "0"),
+          subtotal.toStringAsFixed(2).padRight(5, "0"),
           style: style,
         ),
       ]),

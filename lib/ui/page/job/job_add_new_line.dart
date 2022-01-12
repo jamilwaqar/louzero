@@ -3,16 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
 import 'package:uuid/uuid.dart';
-import 'models/line_item.dart';
 
 class JobAddNewLine extends StatefulWidget {
   final Uuid uuid = const Uuid();
   final void Function()? onCreate;
   final VoidCallback? onCancel;
-  final LineItem? initialData;
+  final BillingLineModel? initialData;
   final List<InventoryItem>? inventory;
   final int selectedIndex;
   final bool isTextInput;
@@ -96,7 +96,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
     }
   }
 
-  int getInventoryIndex(LineItem item) {
+  int getInventoryIndex(BillingLineModel item) {
     var idx =
         _controller.inventory.indexWhere((el) => el.id == item.inventoryId);
     return idx >= 0 ? idx : 0;
@@ -131,11 +131,11 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       var discountText = _discountDescription.text;
       var subtotal = double.parse((price * count).toStringAsFixed(2));
 
-      LineItem newItem = LineItem(
-        id: _controller.newId,
-        count: count,
+      BillingLineModel newItem = BillingLineModel(
+        // id: _controller.newId,
+        quantity: count,
         price: price,
-        description: description,
+        comment: description,
         subtotal: subtotal,
         note: note,
         discount: discount > 0 ? discount : null,

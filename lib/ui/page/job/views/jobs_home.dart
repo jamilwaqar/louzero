@@ -4,17 +4,16 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/common/common.dart';
-import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../models/line_item.dart';
 import 'package:collection/collection.dart';
 
 class JobsHome extends StatefulWidget {
@@ -27,27 +26,27 @@ class JobsHome extends StatefulWidget {
 class _JobsHomeState extends State<JobsHome> {
 
   final _baseController = Get.find<BaseController>();
-  final _controller = Get.put(LineItemController());
+  final controller = Get.find<JobController>();
   bool addLineVisible = false;
   int inventoryIndex = 0;
   bool miscLineItem = false;
-  LineItem? initialData;
+  late JobModel jobModel = widget.jobModel;
 
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       hasKeyboard: true,
-      child: GetBuilder<LineItemController>(
+      child: GetBuilder<JobController>(
         builder: (controller) {
           return _body();
         },
       ),
-      subheader: widget.jobModel.jobType,
+      subheader: jobModel.jobType,
       footerEnd: [
         AppPopMenu(
           button: [
             AppButtons.appBar(
-              label: "Job Status: ${widget.jobModel.status}",
+              label: "Job Status: ${jobModel.status}",
               isMenu: true,
             )
           ],
@@ -61,8 +60,8 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   _editLineItem(String id) {
-    var item = _controller.lineItems.firstWhereOrNull((el) {
-      return el.id == id;
+    var item = jobModel.billingLineModels.firstWhereOrNull((el) {
+      return el.objectId == id;
     });
 
     if (item != null) {
@@ -71,8 +70,8 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   _duplicateLineItem(String id) {
-    var item = _controller.lineItems.firstWhereOrNull((el) {
-      return el.id == id;
+    var item = jobModel.billingLineModels.firstWhereOrNull((el) {
+      return el.objectId == id;
     });
 
     if (item != null) {
@@ -85,7 +84,7 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   Widget _body() {
-    CustomerModel customerModel = _baseController.customerModelById(widget.jobModel.customerId!)!;
+    CustomerModel customerModel = _baseController.customerModelById(jobModel.customerId!)!;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
@@ -135,7 +134,7 @@ class _JobsHomeState extends State<JobsHome> {
                   children: [
                     const Text('Job Description', style: AppStyles.headerSmallCaps),
                     const SizedBox(height: 8),
-                    Text(widget.jobModel.description, style: AppStyles.labelRegular),
+                    Text(jobModel.description, style: AppStyles.labelRegular),
                   ],
                 ),
               ),
@@ -145,7 +144,7 @@ class _JobsHomeState extends State<JobsHome> {
                 children: [
                   TextKeyVal(
                     "Job Id:",
-                    "#${widget.jobModel.jobId}",
+                    "#${jobModel.jobId}",
                     keyStyle: AppStyles.headerSmallCaps,
                     valStyle:
                         AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
@@ -153,7 +152,7 @@ class _JobsHomeState extends State<JobsHome> {
                   const SizedBox(height: 4),
                   TextKeyVal(
                     "Status:",
-                    widget.jobModel.status,
+                    jobModel.status,
                     keyStyle: AppStyles.headerSmallCaps,
                     valStyle:
                     AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
@@ -260,15 +259,15 @@ class _JobsHomeState extends State<JobsHome> {
     return AppTabPanel(
       children: [
         const Text('Billing Line Items', style: AppStyles.headerRegular),
-        if (_controller.lineItems.isEmpty && !addLineVisible)
+        if (jobModel.billingLineModels.isEmpty && !addLineVisible)
           const AppPlaceholder(
             title: 'No Line Items',
             subtitle: "Add new line to get started.",
           ),
         AppBillingLines(
-          data: _controller.lineItems,
+          data: jobModel.billingLineModels,
           onDelete: (id) {
-            _controller.deleteLineItemById(id);
+            controller.deleteLineItemById(id);
           },
           onDuplicate: _duplicateLineItem,
           onEdit: _editLineItem,
@@ -277,7 +276,6 @@ class _JobsHomeState extends State<JobsHome> {
         Visibility(
           visible: addLineVisible,
           child: JobAddNewLine(
-            initialData: initialData,
             selectedIndex: inventoryIndex,
             isTextInput: miscLineItem,
             onCreate: () {
@@ -300,7 +298,7 @@ class _JobsHomeState extends State<JobsHome> {
             const AppAddNote(),
             const SizedBox(width: 1),
             AppBillingTotal(
-              subtotal: _controller.subTotal,
+              subtotal: controller.subTotal,
               tax: 7.32,
             ),
           ],
