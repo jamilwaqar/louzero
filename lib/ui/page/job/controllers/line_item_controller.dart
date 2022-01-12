@@ -2,8 +2,8 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
-import 'package:louzero/ui/page/job/models/line_item.dart';
 import 'package:uuid/uuid.dart';
 
 class LineItemController extends GetxController {
@@ -24,15 +24,15 @@ class LineItemController extends GetxController {
       state: 'OR',
       zip: '97202');
 
-  RxList<LineItem> lineItems = <LineItem>[].obs;
+  RxList<BillingLineModel> lineItems = <BillingLineModel>[].obs;
 
-  addLineItem(LineItem item) {
+  addLineItem(BillingLineModel item) {
     lineItems.add(item);
     update();
   }
 
   deleteLineItemById(String id) {
-    lineItems.removeWhere((element) => element.id == id);
+    lineItems.removeWhere((element) => element.objectId == id);
     update();
   }
 
@@ -54,9 +54,9 @@ class LineItemController extends GetxController {
 
   double get subTotal {
     return lineItems.fold(0, (sum, item) {
-      double price = item.price * item.count;
-      if (item.discount != null) {
-        price = price - item.discount!;
+      double price = item.price * item.quantity;
+      if (item.discountAmount != null) {
+        price = price - item.discountAmount!;
       }
       return sum + price;
     });

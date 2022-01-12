@@ -42,7 +42,7 @@ class AppBillingLines extends StatelessWidget {
               int index = entry.key;
               double pad = item.note != null ? 16 : 4;
               bool hasDiscount =
-                  item.discountAmount >0 && item.discountDescription != null;
+                  item.discountAmount! > 0 && item.discountDescription != null;
               return Container(
                 key: ValueKey(item),
                 color: index % 2 == 0
@@ -81,7 +81,7 @@ class AppBillingLines extends StatelessWidget {
         padding: const EdgeInsets.only(left: 48, right: 48),
         child: RowSplit(
           left: Text(item.discountDescription!, style: style.copyWith(fontSize: 14)),
-          right: Text('- \$${item.discountAmount.toStringAsFixed(2)}', style: style),
+          right: Text('- \$${item.discountAmount!.toStringAsFixed(2)}', style: style),
         ),
       )
     ];
@@ -111,7 +111,7 @@ class AppBillingLines extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    item.comment ?? '',
+                    item.description ?? '',
                     style: style,
                   ),
                   if (item.note != null && item.note!.isNotEmpty)

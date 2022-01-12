@@ -51,21 +51,28 @@ class JobModel {
 
 @JsonSerializable()
 class BillingLineModel {
-  BillingLineModel(
-      {required this.jobId,
-      required this.productName,
-      required this.quantity,
-      required this.price,
-      this.comment,
-      });
+  BillingLineModel({
+    required this.description,
+    required this.jobId,
+    required this.quantity,
+    required this.price,
+    required this.subtotal,
+    this.objectId,
+    this.note,
+    required this.discountAmount,
+    this.discountDescription,
+    this.inventoryId,
+  });
 
   @JsonKey(includeIfNull: false)
   String? objectId;
   String jobId; // job ObjectId
-  String productName;
+
   double quantity;
   double price;
-  String? comment;
+  String description;
+  String? note;
+  double subtotal = 0;
   @JsonKey(defaultValue: false)
   bool taxable = false;
 

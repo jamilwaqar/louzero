@@ -20,7 +20,8 @@ JobModel _$JobModelFromJson(Map<String, dynamic> json) => JobModel(
       ..billingLineModels = (json['billingLineModels'] as List<dynamic>?)
               ?.map((e) => BillingLineModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          [];
+          []
+      ..note = json['note'] as String?;
 
 Map<String, dynamic> _$JobModelToJson(JobModel instance) {
   final val = <String, dynamic>{};
@@ -41,24 +42,26 @@ Map<String, dynamic> _$JobModelToJson(JobModel instance) {
   val['description'] = instance.description;
   val['customerId'] = instance.customerId;
   val['billingLineModels'] = instance.billingLineModels;
+  val['note'] = instance.note;
   return val;
 }
 
 BillingLineModel _$BillingLineModelFromJson(Map<String, dynamic> json) =>
     BillingLineModel(
       jobId: json['jobId'] as String,
-      productName: json['productName'] as String,
-      quantity: json['quantity'] as int,
+      quantity: (json['quantity'] as num).toDouble(),
       price: (json['price'] as num).toDouble(),
+      subtotal: (json['subtotal'] as num).toDouble(),
+      note: json['note'] as String?,
+      description: json['description'] as String,
+      discountAmount: (json['discountAmount'] as num?)?.toDouble() ?? 0.0,
+      discountDescription: json['discountDescription'] as String?,
+      inventoryId: json['inventoryId'] as String?,
     )
       ..objectId = json['objectId'] as String?
-      ..comment = json['comment'] as String?
       ..taxable = json['taxable'] as bool? ?? false
       ..addDiscount = json['addDiscount'] as bool? ?? false
-      ..discountDescription = json['discountDescription'] as String?
-      ..isPercentDiscount = json['isPercentDiscount'] as bool? ?? true
-      ..discountAmount = (json['discountAmount'] as num?)?.toDouble() ?? 0.0
-      ..note = json['note'] as String?;
+      ..isPercentDiscount = json['isPercentDiscount'] as bool? ?? true;
 
 Map<String, dynamic> _$BillingLineModelToJson(BillingLineModel instance) {
   final val = <String, dynamic>{};
@@ -71,15 +74,16 @@ Map<String, dynamic> _$BillingLineModelToJson(BillingLineModel instance) {
 
   writeNotNull('objectId', instance.objectId);
   val['jobId'] = instance.jobId;
-  val['productName'] = instance.productName;
   val['quantity'] = instance.quantity;
   val['price'] = instance.price;
-  val['comment'] = instance.comment;
+  val['description'] = instance.description;
+  val['note'] = instance.note;
+  val['subtotal'] = instance.subtotal;
   val['taxable'] = instance.taxable;
   val['addDiscount'] = instance.addDiscount;
   val['discountDescription'] = instance.discountDescription;
   val['isPercentDiscount'] = instance.isPercentDiscount;
   val['discountAmount'] = instance.discountAmount;
-  val['note'] = instance.note;
+  val['inventoryId'] = instance.inventoryId;
   return val;
 }

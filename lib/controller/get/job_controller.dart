@@ -32,21 +32,6 @@ class JobController extends GetxController {
     }
   }
 
-  double get subTotal {
-    return lineItems.fold(0, (sum, item) {
-      double price = item.price * item.count;
-      if (item.discount != null) {
-        price = price - item.discount!;
-      }
-      return sum + price;
-    });
-  }
-
-  deleteLineItemById(String id) {
-    lineItems.removeWhere((element) => element.id == id);
-    update();
-  }
-
   updateCustomerModel(JobModel model) {
     List<JobModel> models = [...jobModels];
     int index = models.indexWhere((e) => e.objectId == model.objectId);

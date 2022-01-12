@@ -16,10 +16,12 @@ class JobAddNewLine extends StatefulWidget {
   final List<InventoryItem>? inventory;
   final int selectedIndex;
   final bool isTextInput;
+  final String jobId;
   const JobAddNewLine({
     Key? key,
     this.onCreate,
     this.onCancel,
+    required this.jobId,
     this.isTextInput = false,
     this.inventory = const [],
     this.selectedIndex = 0,
@@ -132,18 +134,19 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       var subtotal = double.parse((price * count).toStringAsFixed(2));
 
       BillingLineModel newItem = BillingLineModel(
-        // id: _controller.newId,
+        jobId: widget.jobId,
+        objectId: const Uuid().v4(),
         quantity: count,
         price: price,
-        comment: description,
+        description: description,
         subtotal: subtotal,
         note: note,
-        discount: discount > 0 ? discount : null,
-        discountText: discountText.length > 1 ? discountText : null,
+        discountAmount: discount,
+        discountDescription: discountText.length > 1 ? discountText : null,
         inventoryId: inventoryId,
       );
 
-      if (newItem.description.isEmpty) {
+      if (newItem.description?.isEmpty ?? true) {
         // print('enter description please');
       } else {
         if (widget.onCreate != null) {
