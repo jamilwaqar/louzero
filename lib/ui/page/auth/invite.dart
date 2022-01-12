@@ -12,7 +12,7 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/common/app_button.dart';
-import 'package:louzero/ui/widget/dialolg/warning_dialog.dart';
+import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 
 class InviteCustomerPage extends StatefulWidget {
   final String email;

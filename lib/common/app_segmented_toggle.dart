@@ -5,17 +5,21 @@ class AppSegmentedToggle extends StatefulWidget {
     Key? key,
     required this.itemList,
     this.width,
+    this.selectedItem = 0,
     required this.onChange
   }) : super(key: key);
+
   final List<String> itemList;
   final double? width;
   final Function onChange;
-
+  final int selectedItem;
   @override
   _AppSegmentedToggleState createState() => _AppSegmentedToggleState();
 }
+
 class _AppSegmentedToggleState extends State<AppSegmentedToggle> {
-  int selectedItem = 0;
+
+  late int selectedItem = widget.selectedItem;
 
   @override
   Widget build(BuildContext context) {

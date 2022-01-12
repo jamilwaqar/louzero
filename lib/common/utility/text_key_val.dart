@@ -24,7 +24,7 @@ class TextKeyVal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle s1 = keyStyle ?? AppStyles.labelRegular.copyWith(fontSize: size);
-    TextStyle s2 = keyStyle ?? AppStyles.labelBold.copyWith(fontSize: size);
+    TextStyle s2 = valStyle ?? AppStyles.labelBold.copyWith(fontSize: size);
     return Row(
       mainAxisAlignment:
           split ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,

@@ -23,6 +23,8 @@ abstract class AppColors {
   static const Color primary_30 = Color(0xFF86421A);
   static const Color primary_50 = Color(0xFFCE6620);
   static const Color primary_60 = Color(0xFFE77C33);
+  static const Color primary_80 = Color(0xFFF6C096);
+  static const Color primary_95 = Color(0xFFFDEFE6);
   static const Color secondary_20 = Color(0xFF37474F);
   static const Color secondary_30 = Color(0xFF455A64);
   static const Color secondary_40 = Color(0xFF546E7A);
@@ -48,6 +50,14 @@ abstract class AppStyles {
     fontFamily: 'Lato',
     fontSize: 16,
     fontWeight: FontWeight.w400,
+    height: 1.4,
+    letterSpacing: 0.1,
+  );
+
+  static const bodyMedium = TextStyle(
+    fontFamily: 'Lato',
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
     height: 1.4,
     letterSpacing: 0.1,
   );
