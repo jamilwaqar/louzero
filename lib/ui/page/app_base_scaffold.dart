@@ -141,7 +141,9 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                   topRight: Radius.circular(40),
                                 ),
                                 child: SingleChildScrollView(
-                                  physics: const ClampingScrollPhysics(),
+                                  // physics: const ClampingScrollPhysics(),
+                                  physics: CustomScrollPhysics(
+                                      parent: ClampingScrollPhysics()),
                                   child: Container(
                                     constraints: BoxConstraints(
                                       minHeight: minHeight,
@@ -175,6 +177,21 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
       },
     );
   }
+}
+
+// This is a hack for development:
+class CustomScrollPhysics extends FixedExtentScrollPhysics {
+  const CustomScrollPhysics({required ScrollPhysics parent})
+      : super(parent: parent);
+
+  @override
+  double get minFlingVelocity => double.infinity;
+
+  @override
+  double get maxFlingVelocity => double.infinity;
+
+  @override
+  double get minFlingDistance => double.infinity;
 }
 
 class AppUserDropdownMenu extends StatelessWidget {
