@@ -43,6 +43,7 @@ dependencies:
   image_pickers: ^2.0.0+2
   simple_rich_text: ^2.0.43
   intl: ^0.17.0
+  google_maps_flutter_web: ^0.3.2+1
 
 dev_dependencies:
   flutter_driver:

@@ -43,7 +43,6 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
                   ));
             },
           ),
-          CustomerInfo(controller.customerModel!),
           _category()
         ],
       ),
