@@ -54,17 +54,17 @@ class Demo extends StatelessWidget {
         FlexRow(
           flex: const [2, 2],
           children: const [
-            AppInputText(
+            AppTextField(
               label: 'First',
-              initial: 'Brad',
+              initialValue: 'Brad',
             ),
-            AppInputText(
+            AppTextField(
               label: 'Last',
-              initial: 'Smith',
+              initialValue: 'Smith',
             ),
-            AppInputText(
+            AppTextField(
               label: 'Alias',
-              initial: 'The Closer',
+              initialValue: 'The Closer',
             ),
           ],
         ),
@@ -133,7 +133,7 @@ class Demo extends StatelessWidget {
           runSpacing: 20,
           children: [
             Buttons.submit('Submit', icon: Icons.save),
-            Buttons.primary('Primary', icon: Icons.favorite),
+            Buttons.primary('Primary', icon: Icons.star),
             Buttons.outline('Outline', icon: MdiIcons.accountCircle),
             Buttons.menu('Menu', icon: Icons.settings),
             Buttons.flat('Flat', icon: Icons.chevron_right),
@@ -147,7 +147,7 @@ class Demo extends StatelessWidget {
           runSpacing: 20,
           children: [
             Buttons.submit('Submit', icon: Icons.save, expanded: true),
-            Buttons.primary('Primary', icon: Icons.favorite, expanded: true),
+            Buttons.primary('Primary', icon: Icons.star, expanded: true),
             Buttons.outline('Outline',
                 icon: MdiIcons.accountCircle, expanded: true),
             Buttons.menu('Menu', icon: Icons.settings, expanded: true),
@@ -307,29 +307,26 @@ class Demo extends StatelessWidget {
         const SizedBox(height: 24),
         FlexRow(
           children: const [
-            AppInputText(label: 'First'),
-            AppInputText(label: 'Last'),
-            AppInputText(label: 'Nickname'),
+            AppTextField(label: 'First'),
+            AppTextField(label: 'Last'),
+            AppTextField(label: 'Nickname'),
           ],
         ),
         FlexRow(
           flex: const [2, 3],
           children: const [
-            AppInputText(label: 'Alias'),
-            AppInputText(
+            AppTextField(label: 'Alias'),
+            AppTextField(
               label: 'Home Planet',
             ),
           ],
         ),
         FlexRow(
-          flex: const [3],
+          flex: const [3, 1, 2],
           children: [
             Container(),
-            const AppButton(
-                label: 'Cancel',
-                primary: false,
-                colorBg: AppColors.secondary_60),
-            const AppButton(label: 'Submit', colorBg: AppColors.orange),
+            Buttons.text('Cancel', expanded: true),
+            Buttons.primary('Update Account', expanded: true),
           ],
         )
       ]);
