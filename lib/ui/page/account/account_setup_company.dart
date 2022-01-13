@@ -52,7 +52,8 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _formKey = GlobalKey<FormState>();
 
   CompanyModel _companyModel = CompanyModel();
-  AddressModel _addressModel = AddressModel(country: '', street: '', city: '', state: '', zip: '');
+  AddressModel _addressModel =
+      AddressModel(country: '', street: '', city: '', state: '', zip: '');
 
   final _companyNameController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -71,11 +72,16 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   bool _isActiveCompany = false;
   SearchAddressModel? _searchAddressModel;
   final BaseController _baseController = Get.find();
-  List<SelectItem> _initialIndustries = [industries[0], industries[1], industries[4]];
+  List<SelectItem> _initialIndustries = [
+    industries[0],
+    industries[1],
+    industries[4]
+  ];
 
   @override
   void initState() {
-    _isEdit = widget.companyModel != null && widget.companyModel!.objectId != null;
+    _isEdit =
+        widget.companyModel != null && widget.companyModel!.objectId != null;
     _isActiveCompany = widget.isFromAccountSetup;
     if (_isEdit) {
       _companyModel = widget.companyModel!;
@@ -94,10 +100,12 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       _initialIndustries = industries
           .where((element) => _companyModel.industries.contains(element.label))
           .toList();
-      _isActiveCompany = _companyModel.objectId == _baseController.activeCompany!.objectId;
+      _isActiveCompany =
+          _companyModel.objectId == _baseController.activeCompany!.objectId;
     } else {
       _countryController.text = _selectCountry.name;
-      _companyModel.industries = _initialIndustries.map((e) => e.value).toList();
+      _companyModel.industries =
+          _initialIndustries.map((e) => e.value).toList();
     }
     super.initState();
   }
@@ -193,14 +201,15 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             ),
             Row(
               children: [
-                AppButton(
-                  margin: const EdgeInsets.only(left: 24, bottom: 64),
-                  label: 'Save & Continue',
-                  onPressed: _submit,
+                Padding(
+                  padding: const EdgeInsets.only(left: 24, bottom: 128),
+                  child: Buttons.submit(
+                    'Save & Continue',
+                    onPressed: _submit,
+                  ),
                 ),
               ],
             ),
-
           ],
         ));
   }
@@ -293,13 +302,13 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         label: 'What Industries do you Serve?',
       );
   _country() => InkWell(
-    onTap: ()=> countryPicker(context, (country) {
-      _selectCountry = country;
-      setState(() {
-        _countryController.text = country.name;
-      });
-    }),
-    child: AppInputText(
+        onTap: () => countryPicker(context, (country) {
+          _selectCountry = country;
+          setState(() {
+            _countryController.text = country.name;
+          });
+        }),
+        child: AppInputText(
           label: 'Country',
           enabled: false,
           controller: _countryController,
@@ -307,7 +316,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             _addressModel.country = val ?? '';
           },
         ),
-  );
+      );
 
   _street() => AppInputText(
         label: 'Street',
@@ -320,7 +329,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
   _suite() => AppInputText(
-      controller: _suiteController,
+        controller: _suiteController,
         label: 'Suite',
         onSaved: (val) {
           _addressModel.suite = val ?? '';
@@ -375,7 +384,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   }
 
   Widget _searchAddressItem(int index) {
-    SearchAddressModel model =_baseController.searchedAddresses.value[index];
+    SearchAddressModel model = _baseController.searchedAddresses.value[index];
     return InkWell(
       onTap: () => _onSelectAddress(model),
       child: Container(
@@ -387,25 +396,25 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             const SizedBox(width: 14),
             Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(model.name,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis),
-                    Text(model.description,
-                        style: const TextStyle(
-                            color: Color(0xFF9B9B9B),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis),
-                  ],
-                )),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(model.name,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+                Text(model.description,
+                    style: const TextStyle(
+                        color: Color(0xFF9B9B9B),
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+              ],
+            )),
             IconButton(
                 icon: const Icon(Icons.save_outlined, color: AppColors.dark_1),
                 onPressed: () {})
@@ -414,7 +423,9 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       ),
     );
   }
-  void _onSelectAddress(SearchAddressModel model, {bool isService = true}) async {
+
+  void _onSelectAddress(SearchAddressModel model,
+      {bool isService = true}) async {
     NavigationController().loading();
     List? res = await _baseController.getLatLng(model.placeId);
     if (res != null) {
@@ -430,9 +441,9 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
       List<String> arr = formattedAddress.split(',');
       if (arr.length > 2) {
-          _streetController.text = arr[0];
-          _cityController.text = arr[1];
-          _stateController.text = model.state;
+        _streetController.text = arr[0];
+        _cityController.text = arr[1];
+        _stateController.text = model.state;
         setState(() {});
       }
     }

@@ -16,6 +16,7 @@ class Demo extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 32),
+          _buttonStyles(),
           _contactInfoLine(),
           _segmentControls(),
           _formTextInput(),
@@ -100,6 +101,62 @@ class Demo extends StatelessWidget {
       children: [Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)],
     ),
   ];
+
+  Widget _buttonStyles() {
+    return AppCard(
+      children: [
+        Text("Button Styles Default", style: AppStyles.headerRegular),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+            'Buttons accesed via static functions -> Buttons.flat("label"), Buttons.submit("label"). These are all fixed styles with minimal props for use.',
+            style: AppStyles.labelRegular.copyWith(height: 1.4)),
+        SizedBox(height: 24),
+        Wrap(
+          spacing: 10,
+          runSpacing: 20,
+          children: [
+            Buttons.submit('Submit'),
+            Buttons.primary('Primary'),
+            Buttons.outline('Outline'),
+            Buttons.menu('Menu'),
+            Buttons.flat('Flat'),
+            Buttons.text('Text'),
+          ],
+        ),
+        SizedBox(height: 24),
+        Text("With Icons", style: AppStyles.headerRegular),
+        SizedBox(height: 24),
+        Wrap(
+          spacing: 10,
+          runSpacing: 20,
+          children: [
+            Buttons.submit('Submit', icon: Icons.save),
+            Buttons.primary('Primary', icon: Icons.favorite),
+            Buttons.outline('Outline', icon: MdiIcons.accountCircle),
+            Buttons.menu('Menu', icon: Icons.settings),
+            Buttons.flat('Flat', icon: Icons.chevron_right),
+          ],
+        ),
+        SizedBox(height: 24),
+        Text("With Icons & Expanded", style: AppStyles.headerRegular),
+        SizedBox(height: 24),
+        Wrap(
+          spacing: 10,
+          runSpacing: 20,
+          children: [
+            Buttons.submit('Submit', icon: Icons.save, expanded: true),
+            Buttons.primary('Primary', icon: Icons.favorite, expanded: true),
+            Buttons.outline('Outline',
+                icon: MdiIcons.accountCircle, expanded: true),
+            Buttons.menu('Menu', icon: Icons.settings, expanded: true),
+            Buttons.flat('Flat', icon: Icons.chevron_right, expanded: true),
+          ],
+        )
+      ],
+    );
+  }
 
   Widget _contactInfoLine() {
     return const AppCard(

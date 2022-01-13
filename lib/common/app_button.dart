@@ -162,6 +162,7 @@ class AppButtonGradient extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
   final double height;
+  final bool expanded;
   final IconData? iconLeading;
   final IconData? iconTrailing;
   final Color colorText;
@@ -184,6 +185,7 @@ class AppButtonGradient extends StatelessWidget {
     this.colorIconLeading = Colors.white,
     this.colorIconTrailing = Colors.white,
     this.height = 40,
+    this.expanded = false,
   }) : super(key: key);
 
   @override
@@ -193,45 +195,52 @@ class AppButtonGradient extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: colorBd ?? Colors.transparent),
+          gradient: LinearGradient(
+            colors: colors ?? [_from, _to],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(30.0),
+        ),
         height: height,
-        child: Ink(
-          decoration: BoxDecoration(
-              border: Border.all(color: colorBd ?? Colors.transparent),
-              gradient: LinearGradient(
-                colors: colors ?? [_from, _to],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              borderRadius: BorderRadius.circular(30.0)),
-          child: Container(
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                Container(
-                  width: iconLeading != null ? 40 : 20,
-                  padding: const EdgeInsets.only(right: 5),
-                  alignment: const Alignment(1, 0),
-                  child: iconLeading != null
-                      ? Icon(iconLeading, color: colorIconLeading, size: 20)
-                      : null,
-                ),
-                Text(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: iconLeading != null ? 40 : 20,
+              padding: const EdgeInsets.only(right: 5),
+              alignment: const Alignment(1, 0),
+              child: iconLeading != null
+                  ? Icon(iconLeading, color: colorIconLeading, size: 20)
+                  : null,
+            ),
+            if (expanded)
+              Expanded(
+                child: Text(
                   label,
                   textAlign: TextAlign.center,
                   style: AppStyles.labelBold
                       .copyWith(color: colorText, fontWeight: FontWeight.w700),
                 ),
-                Container(
-                  width: iconTrailing != null ? 40 : 20,
-                  padding: const EdgeInsets.only(left: 5),
-                  alignment: const Alignment(-1, 0),
-                  child: iconTrailing != null
-                      ? Icon(iconLeading, color: colorIconTrailing, size: 20)
-                      : null,
-                ),
-              ],
+              ),
+            if (!expanded)
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: AppStyles.labelBold
+                    .copyWith(color: colorText, fontWeight: FontWeight.w700),
+              ),
+            Container(
+              width: iconTrailing != null ? 40 : 20,
+              padding: const EdgeInsets.only(left: 5),
+              alignment: const Alignment(-1, 0),
+              child: iconTrailing != null
+                  ? Icon(iconTrailing, color: colorIconTrailing, size: 20)
+                  : null,
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -239,7 +248,8 @@ class AppButtonGradient extends StatelessWidget {
 }
 
 abstract class Buttons {
-  static Widget lock(String label, {VoidCallback? onPressed}) {
+  static Widget lock(String label,
+      {bool expanded = false, VoidCallback? onPressed}) {
     return AppButtonGradient(
       label: label,
       onPressed: onPressed,
@@ -252,8 +262,9 @@ abstract class Buttons {
   }
 
   static Widget outline(String label,
-      {VoidCallback? onPressed, IconData? icon}) {
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
     return AppButtonGradient(
+      expanded: expanded,
       label: label,
       onPressed: onPressed,
       colorBg: Colors.transparent,
@@ -264,37 +275,77 @@ abstract class Buttons {
     );
   }
 
-  static Widget flat(String label, {VoidCallback? onPressed, IconData? icon}) {
+  static Widget flat(String label,
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
     return AppButtonGradient(
+      expanded: expanded,
       label: label,
       onPressed: onPressed,
       colorBg: AppColors.secondary_99,
       colorText: AppColors.secondary_20,
       iconLeading: icon,
-      colorIconLeading: AppColors.orange,
+      colorIconLeading: AppColors.secondary_20,
     );
   }
 
-  static Widget submit(String label, {VoidCallback? onPressed}) {
+  static Widget menu(String label,
+      {bool expanded = false,
+      VoidCallback? onPressed,
+      IconData? icon,
+      Color colorText = AppColors.secondary_20,
+      Color colorBg = AppColors.secondary_99,
+      Color? colorIcon}) {
     return AppButtonGradient(
+      expanded: expanded,
+      label: label,
+      onPressed: onPressed,
+      colorBg: colorBg,
+      colorText: AppColors.secondary_20,
+      iconLeading: icon,
+      colorIconLeading: colorText,
+      colorIconTrailing: colorIcon ?? colorText,
+      iconTrailing: Icons.arrow_drop_down,
+    );
+  }
+
+  static Widget submit(String label,
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+      expanded: expanded,
       label: label,
       onPressed: onPressed,
       colorBg: AppColors.secondary_20,
+      iconLeading: icon,
     );
   }
 
-  static Widget text(String label, {VoidCallback? onPressed}) {
+  static Widget primary(String label,
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
     return AppButtonGradient(
+      expanded: expanded,
+      label: label,
+      onPressed: onPressed,
+      iconLeading: icon,
+    );
+  }
+
+  static Widget text(String label,
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+      expanded: expanded,
       label: label,
       onPressed: onPressed,
       colorBg: Colors.transparent,
       colorText: AppColors.secondary_20,
+      iconLeading: icon,
+      colorIconLeading: AppColors.secondary_20,
     );
   }
 
   static Widget appBar(String label,
-      {VoidCallback? onPressed, IconData? icon}) {
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
     return AppButtonGradient(
+      expanded: expanded,
       label: label,
       iconLeading: icon,
       onPressed: onPressed,
