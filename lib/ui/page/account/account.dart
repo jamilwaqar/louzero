@@ -1,14 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_add_button.dart';
-import 'package:louzero/common/app_avatar.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card.dart';
-import 'package:louzero/common/app_image.dart';
-import 'package:louzero/common/app_input_text.dart';
-import 'package:louzero/common/app_text_body.dart';
-import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/utils.dart';
@@ -19,22 +12,20 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';
 import 'package:louzero/ui/page/company/company.dart';
 import 'package:louzero/ui/widget/buttons/top_left_button.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
 class MyAccountPage extends GetWidget<CompanyController> {
   final UserModel userModel;
-  const MyAccountPage(this.userModel, {Key? key}) : super(key: key);
+  MyAccountPage(this.userModel, {Key? key}) : super(key: key);
+  var editContact = false.obs;
+  toggleEdit() => editContact.toggle();
 
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       hasKeyboard: true,
-      child: ListView.builder(
-        itemCount: 1,
-        shrinkWrap: true,
-        padding: const EdgeInsets.only(top: 32),
-        itemBuilder: (_, __) => _body(),
-      ),
+      child: _body(),
       subheader: 'My Account',
     );
   }
@@ -42,8 +33,127 @@ class MyAccountPage extends GetWidget<CompanyController> {
   Widget _body() {
     return Column(
       children: [
+        SizedBox(height: 32),
         _accountInfo(),
         _companies(),
+      ],
+    );
+  }
+
+  Widget _editContact() {
+    List<Widget> display = [
+      _phoneDisplay(),
+      _emailDisplay(),
+      _addressDisplay(),
+    ];
+
+    List<Widget> edit = [
+      _nameEdit(),
+      _phoneEdit(),
+      _emailEdit(),
+      _addressEdit()
+    ];
+
+    return Obx(() {
+      return Column(
+        children: editContact.value ? display : edit,
+      );
+    });
+  }
+
+  Widget _nameEdit() {
+    return ColumnWithIconPrefix(
+      icon: MdiIcons.accountCircle,
+      children: [
+        AppTextField(
+          label: 'Name',
+          initialValue: userModel.fullName,
+        ),
+      ],
+    );
+  }
+
+  Widget _phoneDisplay() {
+    return AppIconLabelText(
+        label: 'phone',
+        text: userModel.phone,
+        hint: 'Add Phone Number.',
+        icon: Icons.phone);
+  }
+
+  Widget _phoneEdit() {
+    return ColumnWithIconPrefix(
+      icon: Icons.phone,
+      children: [
+        AppTextField(
+          label: 'Phone Number',
+          initialValue: userModel.phone,
+        ),
+      ],
+    );
+  }
+
+  Widget _emailDisplay() {
+    return AppIconLabelText(
+      label: 'Email',
+      text: userModel.email,
+      hint: 'Add Email.',
+      icon: Icons.mail,
+    );
+  }
+
+  Widget _emailEdit() {
+    return ColumnWithIconPrefix(
+      icon: Icons.mail,
+      children: [
+        AppTextField(
+          label: 'Email',
+          initialValue: userModel.email,
+        ),
+      ],
+    );
+  }
+
+  Widget _addressDisplay() {
+    return AppIconLabelText(
+      label: 'Address',
+      hint: 'Add Service Address.',
+      text: userModel.serviceAddress,
+      icon: Icons.location_pin,
+    );
+  }
+
+  Widget _addressEdit() {
+    return ColumnWithIconPrefix(
+      icon: Icons.location_pin,
+      children: [
+        AppTextField(
+          label: 'Street Address',
+          initialValue: '123 Alphabet Street',
+        ),
+        AppTextField(
+          label: 'Apartment, unit, suite, or floor #',
+        ),
+        AppTextField(
+          label: 'City',
+          initialValue: 'San Francisco',
+        ),
+        FlexRow(
+          children: [
+            AppTextField(
+              label: 'State',
+              initialValue: 'California',
+            ),
+            AppTextField(
+              label: 'Zip',
+              initialValue: '97209',
+            ),
+          ],
+        ),
+        AppTextField(
+          label: 'Country / Region',
+          initialValue: 'United States',
+        )
       ],
     );
   }
@@ -209,111 +319,54 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
   Widget _accountInfo() {
     return AppCard(
-      radius: 16,
-      pl: 0,
-      pt: 0,
-      pb: 0,
-      pr: 0,
-      mb: 24,
       children: [
-        SizedBox(
-          height: 432,
-          child: Column(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        AppHeaderIcon(
+          'Alan Whitaker',
+          icon: Icons.edit,
+          iconStart: MdiIcons.accountCircle,
+          onTap: () {
+            toggleEdit();
+            // Get.to(() => EditAccountPage(userModel));
+          },
+        ),
+        const AppDivider(
+          mt: 16,
+          mb: 32,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    height: 75,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const AppImage('icon-account',
-                                width: 24,
-                                height: 24,
-                                color: AppColors.dark_3,
-                                isSvg: true),
-                            const SizedBox(width: 8),
-                            Text('My Account',
-                                style: TextStyles.headLineS
-                                    .copyWith(color: AppColors.dark_2)),
-                            const SizedBox(width: 8),
-                            TopLeftButton(
-                                onPressed: () {
-                                  // // Get.find<CustomerController>().customerModel = customerModel;
-                                  Get.to(() => EditAccountPage(userModel));
-                                },
-                                iconData: Icons.edit),
-                          ],
-                        ),
-                      ],
-                    ),
+                  AppAvatar(
+                    url: userModel.avatar,
+                    text: userModel.initials,
+                    size: 136,
+                    backgroundColor: AppColors.secondary_50,
                   )
                 ],
               ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Container(
-                      width: 246,
-                      padding: const EdgeInsets.symmetric(vertical: 31),
-                      alignment: Alignment.topCenter,
-                      decoration: const BoxDecoration(
-                          color: AppColors.light_1,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(8))),
-                      child: _profile(),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Divider(
-                              thickness: 2,
-                              color: AppColors.light_1,
-                              height: 0),
-                          const SizedBox(height: 24),
-                          // Text(userModel.email),
-                          AppIconLabelText(
-                              label: 'phone',
-                              text: userModel.phone,
-                              hint: 'Add Phone Number.',
-                              icon: Icons.phone),
-                          AppIconLabelText(
-                            label: 'Email',
-                            text: userModel.email,
-                            hint: 'Add Account Email.',
-                            icon: Icons.mail,
-                            colorText: AppColors.primary_30,
-                          ),
-                          AppIconLabelText(
-                              label: 'Address',
-                              hint: 'Add Service Address.',
-                              text: userModel.serviceAddress,
-                              icon: Icons.location_pin),
-                          const Expanded(child: SizedBox()),
-                          AppAddButton('Change Password',
-                              key: const ValueKey('currentPasswordButton'),
-                              iconData: Icons.lock_open, onPressed: () {
-                            _showAlertDialog();
-                          }),
-                          const SizedBox(height: 24),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 24),
-                  ],
-                ),
-              )
-            ],
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [_editContact()],
+              ),
+            )
+          ],
+        ),
+        const AppDivider(
+          mt: 32,
+        ),
+        RowSplit(
+          right: AppButtons.iconOutline(
+            'Change Password',
+            icon: MdiIcons.lock,
+            onPressed: () {
+              _showAlertDialog();
+            },
           ),
         )
       ],
@@ -357,19 +410,19 @@ class MyAccountPage extends GetWidget<CompanyController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const AppTextHeader(
-              'Change Password',
-              size: 24,
-              alignLeft: true,
+            const AppHeadingIcon(
+              label: "Change Password",
+              icon: MdiIcons.lock,
+              colorIcon: AppColors.primary_1,
             ),
             const SizedBox(height: 24),
-            const AppInputText(
-              label: 'Current Password',
+            const AppTextField(
+              label: 'Old Password',
               mb: 24,
               key: ValueKey('currentPassword'),
             ),
-            const AppInputText(label: 'New Password', mb: 24),
-            const AppInputText(label: 'Conform New Password', mb: 24),
+            const AppTextField(label: 'New Password', mb: 24),
+            const AppTextField(label: 'Confirm New Password', mb: 24),
             Align(
               alignment: Alignment.centerRight,
               child: Row(
@@ -384,8 +437,8 @@ class MyAccountPage extends GetWidget<CompanyController> {
                     },
                   ),
                   const SizedBox(width: 16),
-                  AppButton(
-                    label: 'Save',
+                  AppButtonGradient(
+                    label: 'Update Password',
                     onPressed: () {
                       Get.back();
                     },
@@ -474,10 +527,12 @@ class AppIconLabelText extends StatelessWidget {
   final Color colorLabel;
   final Color colorText;
   final Color colorIcon;
+  final Widget? child;
   const AppIconLabelText({
     required this.label,
     required this.text,
     required this.hint,
+    this.child,
     this.icon = Icons.chevron_right,
     this.colorIcon = AppColors.secondary_70,
     this.colorLabel = AppColors.secondary_30,
@@ -487,42 +542,101 @@ class AppIconLabelText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ColumnWithIconPrefix(
+      icon: icon,
+      alignment: Alignment(-1, -1),
       children: [
-        Row(
-          children: [
-            Container(
-              width: 24,
-              alignment: Alignment(-1, -1),
-              child: Icon(icon, size: 18, color: colorIcon),
-            ),
-            Text(label,
-                style: AppStyles.headerRegular
-                    .copyWith(fontSize: 16, color: colorLabel)),
-          ],
+        Text(
+          label,
+          style: AppStyles.headerRegular.copyWith(
+            fontSize: 16,
+            color: colorLabel,
+          ),
         ),
         const SizedBox(height: 8),
         if (text.isNotEmpty)
-          Row(
-            children: [
-              const SizedBox(width: 24),
-              Text(text,
-                  style: AppStyles.labelRegular.copyWith(color: colorText)),
-            ],
-          ),
+          Text(text,
+              style: AppStyles.labelRegular.copyWith(
+                color: colorText,
+              )),
         if (text.isEmpty)
-          Row(
-            children: [
-              const SizedBox(width: 24),
-              Text(hint,
-                  style: AppStyles.labelRegular
-                      .copyWith(color: AppColors.secondary_60)
-                      .copyWith(fontSize: 14)),
-            ],
+          Text(
+            hint,
+            style: AppStyles.labelRegular.copyWith(
+              color: AppColors.secondary_60,
+              fontSize: 14,
+            ),
           ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24)
+      ],
+    );
+  }
+}
+
+class AppHeadingIcon extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final Color colorIcon;
+  final Color colorText;
+  final Widget? trailing;
+
+  const AppHeadingIcon({
+    required this.label,
+    this.icon = MdiIcons.chevronRightBox,
+    this.colorIcon = AppColors.secondary_60,
+    this.colorText = AppColors.secondary_30,
+    this.trailing,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Transform.translate(
+          offset: const Offset(-3, 0),
+          child: Icon(icon, color: colorIcon),
+        ),
+        const SizedBox(
+          width: 2,
+        ),
+        Text(label,
+            style: AppStyles.headerRegular
+                .copyWith(color: colorText, fontSize: 24))
+      ],
+    );
+  }
+}
+
+class ColumnWithIconPrefix extends StatelessWidget {
+  final List<Widget> children;
+  final IconData icon;
+  final AlignmentGeometry alignment;
+
+  const ColumnWithIconPrefix(
+      {this.children = const <Widget>[],
+      this.icon = Icons.chevron_right,
+      this.alignment = const Alignment(-1, 0),
+      Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 32,
+          height: 59,
+          alignment: alignment,
+          child: Icon(icon, size: 18, color: AppColors.secondary_70),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: children,
+          ),
+        )
       ],
     );
   }

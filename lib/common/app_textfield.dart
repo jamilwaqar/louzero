@@ -4,7 +4,7 @@ import 'package:louzero/controller/constant/colors.dart';
 class AppTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? label;
-  final String? initialValue;
+  final String initialValue;
   final double height;
   final bool autofocus;
   final int minLines;
@@ -14,8 +14,8 @@ class AppTextField extends StatefulWidget {
   const AppTextField({
     this.controller,
     this.label,
-    this.initialValue,
-    this.height = 139,
+    this.initialValue = '',
+    this.height = 48,
     this.autofocus = false,
     this.multiline = false,
     this.minLines = 1,
@@ -50,17 +50,18 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Widget _input() {
     return TextFormField(
-      initialValue: widget.initialValue,
+      initialValue: widget.initialValue.isEmpty ? widget.initialValue : null,
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,
       controller: widget.controller,
       style: AppStyles.labelBold
-          .copyWith(height: 1.7, fontSize: 16, color: AppColors.secondary_20),
+          .copyWith(height: 1.5, fontSize: 16, color: AppColors.secondary_20),
       minLines: 1,
       maxLines: widget.multiline ? null : widget.maxLines,
       decoration: AppStyles.inputDefault.copyWith(
         labelText: widget.label,
         fillColor: _color,
+        isDense: true,
       ),
     );
   }

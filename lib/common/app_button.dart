@@ -202,30 +202,35 @@ class AppBarButtonAdd extends StatelessWidget {
 class AppButtonGradient extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
-  final Color colorFrom;
-  final Color colorTo;
-  final Color colorText;
   final double height;
+  final Color? colorText;
+  final Color? colorBg;
+  final Color? colorBd;
+  final List<Color>? colors;
 
   const AppButtonGradient({
     Key? key,
     this.label = "Button",
     this.onPressed,
-    this.colorFrom = const Color(0xFFEC5B2A),
-    this.colorTo = const Color(0xFFEB7649),
-    this.colorText = AppColors.secondary_99,
+    this.colorText,
+    this.colorBg,
+    this.colorBd,
+    this.colors,
     this.height = 48,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color _fromColor = colorBg ?? Color(0xFFEC5B2A);
+    Color _toColor = colorBg ?? Color(0xFFEB7649);
     return Container(
       height: height,
       child: Ink(
         padding: EdgeInsets.only(left: 24, right: 24),
         decoration: BoxDecoration(
+            border: Border.all(color: colorBd ?? Colors.transparent),
             gradient: LinearGradient(
-              colors: [colorFrom, colorTo],
+              colors: colors ?? [_fromColor, _toColor],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
@@ -235,7 +240,8 @@ class AppButtonGradient extends StatelessWidget {
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: AppStyles.labelBold.copyWith(color: colorText),
+            style:
+                AppStyles.labelBold.copyWith(color: colorText ?? Colors.white),
           ),
         ),
       ),
