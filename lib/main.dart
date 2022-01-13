@@ -18,9 +18,10 @@ void main() async {
   await GetStorage.init();
   // await Backendless.setUrl(APIManager.API_HOST);
   await Backendless.initApp(
-      applicationId: APIManager.APPLICATION_ID,
-      androidApiKey: APIManager.ANDROID_API_KEY,
-      iosApiKey: APIManager.IOS_API_KEY);
+      applicationId: APIManager.applicationId,
+      androidApiKey: APIManager.androidApiKey,
+      jsApiKey: APIManager.jsApiKey,
+      iosApiKey: APIManager.iosApiKey);
   await Utils().initialize();
   runApp(const MyApp());
 }
