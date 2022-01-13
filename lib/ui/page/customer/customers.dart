@@ -74,7 +74,7 @@ class CustomerListPage extends GetWidget<CustomerController> {
                             model.type,
                           ),
                           AppPopMenu(
-                            button: [
+                            button: const [
                               Icon(Icons.control_point_rounded,
                                   size: 40, color: AppColors.orange),
                             ],
