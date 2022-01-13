@@ -8,7 +8,6 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
-import 'package:louzero/ui/widget/customer_info.dart';
 
 class CustomerProfilePage extends GetWidget<CustomerController> {
   const CustomerProfilePage({Key? key}) : super(key: key);

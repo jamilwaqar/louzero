@@ -3,8 +3,6 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'app_button.dart';
-
 class AppAddNote extends StatefulWidget {
   final String initialText;
   final Function(String)? onChange;
