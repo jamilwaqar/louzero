@@ -7,11 +7,9 @@ import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/user_models.dart';
-import 'package:louzero/ui/page/account/edit_account.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';
 import 'package:louzero/ui/page/company/company.dart';
-import 'package:louzero/ui/widget/buttons/top_left_button.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
@@ -56,7 +54,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
     return Obx(() {
       return Column(
-        children: editContact.value ? display : edit,
+        children: editContact.value ? edit : display,
       );
     });
   }
@@ -360,42 +358,33 @@ class MyAccountPage extends GetWidget<CompanyController> {
         const AppDivider(
           mt: 32,
         ),
-        RowSplit(
-          right: AppButtons.iconOutline(
-            'Change Password',
-            icon: MdiIcons.lock,
-            onPressed: () {
-              _showAlertDialog();
-            },
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _profile() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppAvatar(
-            url: userModel.avatar,
-            text: userModel.initials,
-            size: 96,
-            backgroundColor: AppColors.medium_2),
-        const SizedBox(height: 8),
-        Text(userModel.fullName,
-            style: TextStyles.titleM.copyWith(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Container(
-          width: 64,
-          height: 28,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: AppColors.medium_2,
-              borderRadius: BorderRadius.circular(14)),
-          child: Text('ADMIN',
-              style: TextStyles.labelM.copyWith(color: AppColors.lightest)),
-        )
+        Obx(() {
+          return RowSplit(
+            left: editContact.value
+                ? Row(
+                    children: [
+                      Buttons.submit('Update Account'),
+                      Buttons.text('cancel', onPressed: toggleEdit),
+                    ],
+                  )
+                : null,
+            right: Stack(
+              children: [
+                Buttons.lock(
+                  'Change Password',
+                  onPressed: () {
+                    _showAlertDialog();
+                  },
+                ),
+                if (editContact.value)
+                  Container(
+                      color: Colors.white.withAlpha(200),
+                      height: 41,
+                      width: 200)
+              ],
+            ),
+          );
+        })
       ],
     );
   }

@@ -50,7 +50,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Widget _input() {
     return TextFormField(
-      initialValue: widget.initialValue.isEmpty ? widget.initialValue : null,
+      initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,
       controller: widget.controller,

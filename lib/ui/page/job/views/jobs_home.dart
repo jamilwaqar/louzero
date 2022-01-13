@@ -26,7 +26,6 @@ class JobsHome extends StatefulWidget {
 }
 
 class _JobsHomeState extends State<JobsHome> {
-
   final _baseController = Get.find<BaseController>();
   final _lineItemController = Get.put(LineItemController());
   final controller = Get.find<JobController>();
@@ -56,9 +55,9 @@ class _JobsHomeState extends State<JobsHome> {
       footerEnd: [
         AppPopMenu(
           button: [
-            AppButtons.appBar(
-              label: "Job Status: ${jobModel.status}",
-              isMenu: true,
+            Buttons.appBar(
+              'Job Status: ${jobModel.status}',
+              icon: MdiIcons.calculator,
             )
           ],
           items: const [
@@ -94,7 +93,8 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   Widget _body() {
-    CustomerModel customerModel = _baseController.customerModelById(widget.jobModel.customerId!)!;
+    CustomerModel customerModel =
+        _baseController.customerModelById(widget.jobModel.customerId!)!;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
@@ -129,7 +129,8 @@ class _JobsHomeState extends State<JobsHome> {
 
   Widget _tabDetails() {
     JobModel jobModel = widget.jobModel;
-    DateTime updatedAt = jobModel.updatedAt != null ? jobModel.updatedAt! : jobModel.createdAt;
+    DateTime updatedAt =
+        jobModel.updatedAt != null ? jobModel.updatedAt! : jobModel.createdAt;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
       child: Column(
@@ -142,9 +143,11 @@ class _JobsHomeState extends State<JobsHome> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Job Description', style: AppStyles.headerSmallCaps),
+                    const Text('Job Description',
+                        style: AppStyles.headerSmallCaps),
                     const SizedBox(height: 8),
-                    Text(widget.jobModel.description, style: AppStyles.labelRegular),
+                    Text(widget.jobModel.description,
+                        style: AppStyles.labelRegular),
                   ],
                 ),
               ),
@@ -157,7 +160,7 @@ class _JobsHomeState extends State<JobsHome> {
                     "#${widget.jobModel.jobId}",
                     keyStyle: AppStyles.headerSmallCaps,
                     valStyle:
-                    AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
+                        AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
                   ),
                   const SizedBox(height: 4),
                   TextKeyVal(
@@ -165,28 +168,41 @@ class _JobsHomeState extends State<JobsHome> {
                     widget.jobModel.status,
                     keyStyle: AppStyles.headerSmallCaps,
                     valStyle:
-                    AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
+                        AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
                   ),
                   const SizedBox(height: 8),
                   const Text('Last Updated', style: AppStyles.labelRegular),
                   const SizedBox(height: 8),
                   Text(updatedAt.simpleDate, style: AppStyles.bodyMedium),
                   const SizedBox(height: 8),
-                  Text('by ${AuthManager.userModel!.fullName}', style: AppStyles.labelRegular),
+                  Text('by ${AuthManager.userModel!.fullName}',
+                      style: AppStyles.labelRegular),
                   const SizedBox(height: 16),
-                  AppButton(label: 'View Job History', colorBg: AppColors.secondary_99, colorText: AppColors.secondary_20, onPressed: () {}),
-
+                  AppButton(
+                      label: 'View Job History',
+                      colorBg: AppColors.secondary_99,
+                      colorText: AppColors.secondary_20,
+                      onPressed: () {}),
                 ],
               ),
-
             ],
           ),
-          const AppDivider(color: AppColors.secondary_95,),
+          const AppDivider(
+            color: AppColors.secondary_95,
+          ),
           Row(
             children: [
-              _categoryItem('Pictures', 'Keep track of location photos, job photos, and more.', 'icon-camera', 3),
+              _categoryItem(
+                  'Pictures',
+                  'Keep track of location photos, job photos, and more.',
+                  'icon-camera',
+                  3),
               const SizedBox(width: 24),
-              _categoryItem('Checklists', 'Check off items that need to be completed for this job.', 'icon-checklists', 3),
+              _categoryItem(
+                  'Checklists',
+                  'Check off items that need to be completed for this job.',
+                  'icon-checklists',
+                  3),
             ],
           )
         ],
@@ -194,12 +210,11 @@ class _JobsHomeState extends State<JobsHome> {
     );
   }
 
-  Widget _categoryItem(String title, String description, String icon, int count) {
+  Widget _categoryItem(
+      String title, String description, String icon, int count) {
     return Expanded(
       child: InkWell(
-        onTap: () {
-
-        },
+        onTap: () {},
         child: Container(
           alignment: Alignment.topLeft,
           height: 132,
@@ -238,8 +253,7 @@ class _JobsHomeState extends State<JobsHome> {
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: AppColors.primary_95,
-                              border: Border.all(color: AppColors.primary_80)
-                          ),
+                              border: Border.all(color: AppColors.primary_80)),
                           child: Text('$count',
                               style: const TextStyle(
                                   fontSize: 14,
@@ -251,7 +265,8 @@ class _JobsHomeState extends State<JobsHome> {
                     const SizedBox(height: 12),
                     Text(
                       description,
-                      style: AppStyles.labelRegular.copyWith(color: AppColors.dark_3, fontSize: 14),
+                      style: AppStyles.labelRegular
+                          .copyWith(color: AppColors.dark_3, fontSize: 14),
                       maxLines: 2,
                     ),
                   ],
@@ -276,7 +291,8 @@ class _JobsHomeState extends State<JobsHome> {
         AppBillingLines(
           data: _lineItemController.lineItems,
           onDelete: (id) async {
-            dynamic response = await _lineItemController.deleteLineItemById(id, widget.jobModel.objectId!);
+            dynamic response = await _lineItemController.deleteLineItemById(
+                id, widget.jobModel.objectId!);
             if (response is String) {
               WarningMessageDialog.showDialog(context, response);
             }
@@ -295,10 +311,12 @@ class _JobsHomeState extends State<JobsHome> {
         FlexRow(
           flex: const [12, 0, 7],
           children: [
-            AppAddNote(initialText: jobModel.note ?? '', onChange: (value) {
-              jobModel.note = value;
-              controller.save(jobModel);
-            }),
+            AppAddNote(
+                initialText: jobModel.note ?? '',
+                onChange: (value) {
+                  jobModel.note = value;
+                  controller.save(jobModel);
+                }),
             const SizedBox(width: 1),
             AppBillingTotal(
               subtotal: _lineItemController.subTotal,

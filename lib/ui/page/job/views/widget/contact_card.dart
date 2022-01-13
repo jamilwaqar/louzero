@@ -12,6 +12,7 @@ class ContactCard extends StatelessWidget {
   final AddressModel address;
   final VoidCallback? onClickIcon;
   final Widget? trailing;
+  final List<Widget> footerActions;
 
   const ContactCard({
     Key? key,
@@ -20,6 +21,7 @@ class ContactCard extends StatelessWidget {
     required this.address,
     this.trailing,
     this.onClickIcon,
+    this.footerActions = const [],
   }) : super(key: key);
 
   String _fullAddress() {
@@ -60,24 +62,26 @@ class ContactCard extends StatelessWidget {
                       topRight: const Radius.circular(0),
                       bottomRight: const Radius.circular(0),
                     )),
-                child: address.latLng != null ? GoogleMap(
-                  mapType: MapType.normal,
-                  myLocationEnabled: false,
-                  myLocationButtonEnabled: false,
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: CameraPosition(
-                    target: address.latLng!,
-                    zoom: 18,
-                  ),
-                  onMapCreated: (GoogleMapController controller) {
-                    Future.delayed(const Duration(milliseconds: 500))
-                        .then((value) {
-                      // setState(() {
-                      //   // mapController.complete(controller);
-                      // });
-                    });
-                  },
-                ) : null,
+                child: address.latLng != null
+                    ? GoogleMap(
+                        mapType: MapType.normal,
+                        myLocationEnabled: false,
+                        myLocationButtonEnabled: false,
+                        zoomControlsEnabled: false,
+                        initialCameraPosition: CameraPosition(
+                          target: address.latLng!,
+                          zoom: 18,
+                        ),
+                        onMapCreated: (GoogleMapController controller) {
+                          Future.delayed(const Duration(milliseconds: 500))
+                              .then((value) {
+                            // setState(() {
+                            //   // mapController.complete(controller);
+                            // });
+                          });
+                        },
+                      )
+                    : null,
               ),
             ),
             const SizedBox(width: 16),
@@ -101,23 +105,7 @@ class ContactCard extends StatelessWidget {
                       children: [
                         const AppDivider(mt: 0, mb: 16),
                         Row(
-                          children: const [
-                            AppButtons.iconFlat(
-                              'Parent Account',
-                              icon: MdiIcons.arrowTopRight,
-                              colorIcon: AppColors.secondary_60,
-                            ),
-                            Spacer(),
-                            AppButtons.iconOutline(
-                              'Site Profile',
-                              icon: MdiIcons.homeCity,
-                            ),
-                            SizedBox(width: 8),
-                            AppButtons.iconOutline(
-                              'Site Profile',
-                              icon: MdiIcons.homeCity,
-                            ),
-                          ],
+                          children: footerActions,
                         )
                       ],
                     )

@@ -82,9 +82,7 @@ class AppButton extends StatelessWidget {
         label: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              label,
-            ),
+            Text(label, style: AppStyles.labelBold),
             if (isMenu) const SizedBox(width: 8),
             if (isMenu)
               Icon(
@@ -110,32 +108,6 @@ class AppButtons extends StatelessWidget {
   final Color colorIcon;
   final bool isMenu;
 
-  const AppButtons({
-    Key? key,
-    this.onPressed,
-    this.fontSize = 16,
-    this.icon = MdiIcons.briefcase,
-    this.colorBackground = AppColors.secondary_20,
-    this.colorIcon = AppColors.accent_1,
-    this.colorBorder = AppColors.orange,
-    this.colorText = AppColors.secondary_20,
-    this.isMenu = false,
-    this.label = 'New',
-  }) : super(key: key);
-
-  const AppButtons.appBar({
-    Key? key,
-    this.onPressed,
-    this.fontSize = 14,
-    this.icon = MdiIcons.calculator,
-    this.colorBackground = AppColors.secondary_20,
-    this.colorIcon = AppColors.accent_1,
-    this.colorBorder = Colors.transparent,
-    this.colorText = AppColors.secondary_99,
-    this.label = 'New',
-    this.isMenu = false,
-  }) : super(key: key);
-
   const AppButtons.iconOutline(
     this.label, {
     Key? key,
@@ -145,19 +117,6 @@ class AppButtons extends StatelessWidget {
     this.colorBackground = Colors.white,
     this.colorIcon = AppColors.orange,
     this.colorBorder = AppColors.secondary_70,
-    this.colorText = AppColors.secondary_20,
-    this.isMenu = false,
-  }) : super(key: key);
-
-  const AppButtons.iconFlat(
-    this.label, {
-    Key? key,
-    this.onPressed,
-    this.fontSize = 14,
-    this.icon = Icons.add_circle,
-    this.colorBackground = AppColors.secondary_99,
-    this.colorIcon = AppColors.orange,
-    this.colorBorder = Colors.transparent,
     this.colorText = AppColors.secondary_20,
     this.isMenu = false,
   }) : super(key: key);
@@ -203,48 +162,145 @@ class AppButtonGradient extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
   final double height;
-  final Color? colorText;
+  final IconData? iconLeading;
+  final IconData? iconTrailing;
+  final Color colorText;
   final Color? colorBg;
   final Color? colorBd;
+  final Color colorIconLeading;
+  final Color colorIconTrailing;
   final List<Color>? colors;
 
   const AppButtonGradient({
     Key? key,
     this.label = "Button",
     this.onPressed,
-    this.colorText,
+    this.iconLeading,
+    this.iconTrailing,
     this.colorBg,
     this.colorBd,
     this.colors,
-    this.height = 48,
+    this.colorText = Colors.white,
+    this.colorIconLeading = Colors.white,
+    this.colorIconTrailing = Colors.white,
+    this.height = 40,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color _fromColor = colorBg ?? Color(0xFFEC5B2A);
-    Color _toColor = colorBg ?? Color(0xFFEB7649);
-    return Container(
-      height: height,
-      child: Ink(
-        padding: EdgeInsets.only(left: 24, right: 24),
-        decoration: BoxDecoration(
-            border: Border.all(color: colorBd ?? Colors.transparent),
-            gradient: LinearGradient(
-              colors: colors ?? [_fromColor, _toColor],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+    Color _from = colorBg ?? const Color(0xFFEC5B2A);
+    Color _to = colorBg ?? const Color(0xFFEB7649);
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: height,
+        child: Ink(
+          decoration: BoxDecoration(
+              border: Border.all(color: colorBd ?? Colors.transparent),
+              gradient: LinearGradient(
+                colors: colors ?? [_from, _to],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(30.0)),
+          child: Container(
+            alignment: Alignment.center,
+            child: Row(
+              children: [
+                Container(
+                  width: iconLeading != null ? 40 : 20,
+                  padding: const EdgeInsets.only(right: 5),
+                  alignment: const Alignment(1, 0),
+                  child: iconLeading != null
+                      ? Icon(iconLeading, color: colorIconLeading, size: 20)
+                      : null,
+                ),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: AppStyles.labelBold
+                      .copyWith(color: colorText, fontWeight: FontWeight.w700),
+                ),
+                Container(
+                  width: iconTrailing != null ? 40 : 20,
+                  padding: const EdgeInsets.only(left: 5),
+                  alignment: const Alignment(-1, 0),
+                  child: iconTrailing != null
+                      ? Icon(iconLeading, color: colorIconTrailing, size: 20)
+                      : null,
+                ),
+              ],
             ),
-            borderRadius: BorderRadius.circular(30.0)),
-        child: Container(
-          alignment: Alignment.center,
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style:
-                AppStyles.labelBold.copyWith(color: colorText ?? Colors.white),
           ),
         ),
       ),
+    );
+  }
+}
+
+abstract class Buttons {
+  static Widget lock(String label, {VoidCallback? onPressed}) {
+    return AppButtonGradient(
+      label: label,
+      onPressed: onPressed,
+      colorBg: Colors.transparent,
+      colorBd: AppColors.secondary_70,
+      colorText: AppColors.secondary_20,
+      iconLeading: Icons.lock,
+      colorIconLeading: AppColors.orange,
+    );
+  }
+
+  static Widget outline(String label,
+      {VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+      label: label,
+      onPressed: onPressed,
+      colorBg: Colors.transparent,
+      colorBd: AppColors.secondary_70,
+      colorText: AppColors.secondary_20,
+      iconLeading: icon,
+      colorIconLeading: AppColors.orange,
+    );
+  }
+
+  static Widget flat(String label, {VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+      label: label,
+      onPressed: onPressed,
+      colorBg: AppColors.secondary_99,
+      colorText: AppColors.secondary_20,
+      iconLeading: icon,
+      colorIconLeading: AppColors.orange,
+    );
+  }
+
+  static Widget submit(String label, {VoidCallback? onPressed}) {
+    return AppButtonGradient(
+      label: label,
+      onPressed: onPressed,
+      colorBg: AppColors.secondary_20,
+    );
+  }
+
+  static Widget text(String label, {VoidCallback? onPressed}) {
+    return AppButtonGradient(
+      label: label,
+      onPressed: onPressed,
+      colorBg: Colors.transparent,
+      colorText: AppColors.secondary_20,
+    );
+  }
+
+  static Widget appBar(String label,
+      {VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+      label: label,
+      iconLeading: icon,
+      onPressed: onPressed,
+      colorIconLeading: AppColors.accent_1,
+      colorText: AppColors.secondary_99,
+      colorBg: AppColors.secondary_20,
     );
   }
 }
