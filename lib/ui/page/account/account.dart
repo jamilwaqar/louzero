@@ -194,4 +194,52 @@ class MyAccountPage extends GetWidget<CompanyController> {
       errorWidget: (context, url, error) {
         return Container();
       });
+
+  // TODO: Don't remove this: Reactivate Dialog
+  _showReactivateDialog() {
+    String _desc = 'To reactivate *Old Cancelled Company*, please email us *help@evosus.com* and we’ll get back to you as soon as possible';
+    Dialog errorDialog = Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)), //this right here
+      child: Container(
+        width: 360.0,
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const AppTextHeader('Reactivate Company', size: 24, alignLeft: true,),
+            const SizedBox(height: 24),
+            SimpleRichText(
+              _desc,
+              style: TextStyles.titleS,
+            ),
+            const SizedBox(height: 24),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppButton(label: 'Cancel', primary: false, onPressed: () {
+                    Get.back();
+                  },),
+                  const SizedBox(width: 16),
+                  AppButton(label: 'Email', onPressed: () {
+                    Get.back();
+                  },),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+
+    // show the dialog
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return errorDialog;
+      },
+    );
+  }
 }
