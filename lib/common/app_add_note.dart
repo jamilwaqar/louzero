@@ -70,7 +70,7 @@ class _AppAddNoteState extends State<AppAddNote> {
         ),
         Visibility(
           visible: !visible && currentText.isEmpty,
-          child: AppButtons.iconFlat(
+          child: Buttons.flat(
             'Add Note',
             icon: MdiIcons.note,
             onPressed: () {
@@ -84,7 +84,9 @@ class _AppAddNoteState extends State<AppAddNote> {
             visible: visible,
             child: Column(
               children: [
-                AppInputMultiLine(
+                AppTextField(
+                  multiline: true,
+                  label: 'Add Note',
                   controller: _noteController,
                   // autofocus: currentText.isEmpty,
                 ),
@@ -94,21 +96,17 @@ class _AppAddNoteState extends State<AppAddNote> {
                 RowSplit(
                   left: Row(
                     children: [
-                      AppButton(
-                          label: 'Save Note',
-                          padX: 24,
-                          onPressed: () {
-                            setState(() {
-                              currentText = _noteController.text;
-                              visible = false;
-                              if (widget.onChange != null) {
-                                widget.onChange!(_noteController.text);
-                              }
-                            });
-                          }),
-                      AppButton(
-                        label: 'Cancel',
-                        primary: false,
+                      Buttons.submit('Save Note', onPressed: () {
+                        setState(() {
+                          currentText = _noteController.text;
+                          visible = false;
+                          if (widget.onChange != null) {
+                            widget.onChange!(_noteController.text);
+                          }
+                        });
+                      }),
+                      Buttons.text(
+                        'Cancel',
                         onPressed: () {
                           setState(() {
                             visible = false;

@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
-class AppTexfield extends StatefulWidget {
-  final String? label;
+class AppTextField extends StatefulWidget {
   final TextEditingController? controller;
+  final String? label;
+  final String initialValue;
   final double height;
   final bool autofocus;
-  const AppTexfield({
-    this.label,
+  final int minLines;
+  final int maxLines;
+  final bool multiline;
+  final double mb;
+  const AppTextField({
     this.controller,
-    this.height = 139,
+    this.label,
+    this.initialValue = '',
+    this.height = 48,
     this.autofocus = false,
+    this.multiline = false,
+    this.minLines = 1,
+    this.maxLines = 1,
+    this.mb = 16,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<AppTexfield> createState() => _AppTexfieldState();
+  State<AppTextField> createState() => _AppTextFieldState();
 }
 
-class _AppTexfieldState extends State<AppTexfield> {
+class _AppTextFieldState extends State<AppTextField> {
   final _textFieldFocus = FocusNode();
   Color _color = AppColors.secondary_99;
 
@@ -38,36 +48,29 @@ class _AppTexfieldState extends State<AppTexfield> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      cursorHeight: 16,
-      cursorColor: AppColors.secondary_70,
-      cursorWidth: 2,
+  Widget _input() {
+    return TextFormField(
+      initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,
       controller: widget.controller,
       style: AppStyles.labelBold
-          .copyWith(height: 1.7, fontSize: 16, color: AppColors.secondary_20),
+          .copyWith(height: 1.5, fontSize: 16, color: AppColors.secondary_20),
       minLines: 1,
-      maxLines: null,
-      decoration: InputDecoration(
-        isDense: true,
-        labelStyle:
-            const TextStyle(fontFamily: 'Lato', color: AppColors.secondary_40),
-        fillColor: _color,
-        filled: true,
+      maxLines: widget.multiline ? null : widget.maxLines,
+      decoration: AppStyles.inputDefault.copyWith(
         labelText: widget.label,
-        border: const UnderlineInputBorder(),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.all(Radius.circular(4)),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.orange),
-          borderRadius: BorderRadius.all(Radius.circular(0)),
-        ),
+        fillColor: _color,
+        isDense: true,
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: widget.mb),
+      child: _input(),
     );
   }
 }

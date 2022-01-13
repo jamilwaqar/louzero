@@ -20,6 +20,7 @@ abstract class AppColors {
   static const Color appBar = Color(0xFF263842);
   static const Color accent_1 = Color(0xFF65D19D);
   static const Color primary_1 = Color(0xFFE77C33);
+  static const Color primary_30 = Color(0xFF86421A);
   static const Color primary_50 = Color(0xFFCE6620);
   static const Color primary_60 = Color(0xFFE77C33);
   static const Color primary_80 = Color(0xFFF6C096);
@@ -27,6 +28,7 @@ abstract class AppColors {
   static const Color secondary_20 = Color(0xFF37474F);
   static const Color secondary_30 = Color(0xFF455A64);
   static const Color secondary_40 = Color(0xFF546E7A);
+  static const Color secondary_50 = Color(0xFF607D8B);
   static const Color secondary_60 = Color(0xFF78909C);
   static const Color secondary_70 = Color(0xFF90A4AE);
   static const Color secondary_80 = Color(0xFFB0BEC5);
@@ -99,6 +101,21 @@ abstract class AppStyles {
     fontFamily: 'Lato',
     fontSize: 16,
     fontWeight: FontWeight.w700,
+  );
+
+  static const inputDefault = InputDecoration(
+    isDense: false,
+    labelStyle: TextStyle(fontFamily: 'Lato', color: AppColors.secondary_40),
+    fillColor: AppColors.secondary_99,
+    filled: true,
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.transparent),
+      borderRadius: BorderRadius.all(Radius.circular(4)),
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: AppColors.orange),
+      borderRadius: BorderRadius.all(Radius.circular(0)),
+    ),
   );
 }
 

@@ -11,8 +11,13 @@ import 'package:uuid/uuid.dart';
 import 'base_controller.dart';
 
 class CompanyController extends GetxController {
-
   final _companyModel = CompanyModel().obs;
+
+  RxBool isEditing = false.obs;
+  void toggleEdit(bool val) {
+    isEditing = RxBool(val);
+    update();
+  }
 
   CompanyModel get company => _companyModel.value;
 
@@ -59,11 +64,13 @@ class CompanyController extends GetxController {
     File? file = await CameraOption().showCameraOptions(Get.context!);
     if (file != null) {
       NavigationController().loading();
-      String? response = await APIManager.uploadFile(file, BLPath.company, const Uuid().v4());
+      String? response =
+          await APIManager.uploadFile(file, BLPath.company, const Uuid().v4());
       if (response != null) {
         Uri uri = Uri.parse(response);
         company.avatar = uri;
-        createOrEditCompany(company, addressModel: company.address!, isEdit: true);
+        createOrEditCompany(company,
+            addressModel: company.address!, isEdit: true);
       } else {
         Get.snackbar('Upload image Error', "Something wrong!");
         NavigationController().loading(isLoading: false);

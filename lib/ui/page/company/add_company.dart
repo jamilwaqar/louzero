@@ -10,20 +10,16 @@ class AddCompanyPage extends GetWidget<CompanyController> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      child: _body(),
-      subheader: controller.company.name.isEmpty ? "Add New Company" : "Edit Company",
-    );
-  }
-
-  Widget _body() {
-    return ListView.builder(
-      shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return AccountSetupCompany(
+      child: Column(
+        children: [
+          SizedBox(height: 32),
+          AccountSetupCompany(
             companyModel: controller.company,
-          );
-        });
+          ),
+        ],
+      ),
+      subheader:
+          controller.company.name.isEmpty ? "Add New Company" : "Edit Company",
+    );
   }
 }

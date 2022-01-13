@@ -16,6 +16,8 @@ class Demo extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 32),
+          _buttonStyles(),
+          _contactInfoLine(),
           _segmentControls(),
           _formTextInput(),
           _addNote(),
@@ -35,24 +37,13 @@ class Demo extends StatelessWidget {
           _multiSelect(),
           _formInputs(),
           _buttonsAndMenus(),
+          const SizedBox(
+            height: 200,
+          )
         ],
       ),
     );
   }
-
-  // MOCK DATA (MULTISELECT)
-  final List<SelectItem> selectItems = const [
-    SelectItem(id: '1', value: '', label: 'Cheese'),
-    SelectItem(id: '2', value: '', label: 'Mushrooms'),
-    SelectItem(id: '3', value: '', label: 'Jalepenos'),
-    SelectItem(id: '4', value: '', label: 'Tomatos'),
-    SelectItem(id: '4', value: '', label: 'Peperoni'),
-    SelectItem(id: '4', value: '', label: 'Cookie Dough'),
-    SelectItem(id: '4', value: '', label: 'Sausage'),
-    SelectItem(id: '5', value: '', label: 'Onions'),
-    SelectItem(id: '5', value: '', label: 'Garlic'),
-    SelectItem(id: '5', value: '', label: 'Gravel'),
-  ];
 
   // MOCK DATA (TABS)
   final List<Widget> tabItems = [
@@ -63,17 +54,17 @@ class Demo extends StatelessWidget {
         FlexRow(
           flex: const [2, 2],
           children: const [
-            AppInputText(
+            AppTextField(
               label: 'First',
-              initial: 'Brad',
+              initialValue: 'Brad',
             ),
-            AppInputText(
+            AppTextField(
               label: 'Last',
-              initial: 'Smith',
+              initialValue: 'Smith',
             ),
-            AppInputText(
+            AppTextField(
               label: 'Alias',
-              initial: 'The Closer',
+              initialValue: 'The Closer',
             ),
           ],
         ),
@@ -111,6 +102,93 @@ class Demo extends StatelessWidget {
     ),
   ];
 
+  Widget _buttonStyles() {
+    return AppCard(
+      children: [
+        Text("Button Styles Default", style: AppStyles.headerRegular),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+            'Buttons accesed via static functions -> Buttons.flat("label"), Buttons.submit("label"). These are all fixed styles with minimal props for use.',
+            style: AppStyles.labelRegular.copyWith(height: 1.4)),
+        SizedBox(height: 24),
+        Wrap(
+          spacing: 10,
+          runSpacing: 20,
+          children: [
+            Buttons.submit('Submit'),
+            Buttons.primary('Primary'),
+            Buttons.outline('Outline'),
+            Buttons.menu('Menu'),
+            Buttons.flat('Flat'),
+            Buttons.text('Text'),
+          ],
+        ),
+        SizedBox(height: 24),
+        Text("With Icons", style: AppStyles.headerRegular),
+        SizedBox(height: 24),
+        Wrap(
+          spacing: 10,
+          runSpacing: 20,
+          children: [
+            Buttons.submit('Submit', icon: Icons.save),
+            Buttons.primary('Primary', icon: Icons.star),
+            Buttons.outline('Outline', icon: MdiIcons.accountCircle),
+            Buttons.menu('Menu', icon: Icons.settings),
+            Buttons.flat('Flat', icon: Icons.chevron_right),
+          ],
+        ),
+        SizedBox(height: 24),
+        Text("With Icons & Expanded", style: AppStyles.headerRegular),
+        SizedBox(height: 24),
+        Wrap(
+          spacing: 10,
+          runSpacing: 20,
+          children: [
+            Buttons.submit('Submit', icon: Icons.save, expanded: true),
+            Buttons.primary('Primary', icon: Icons.star, expanded: true),
+            Buttons.outline('Outline',
+                icon: MdiIcons.accountCircle, expanded: true),
+            Buttons.menu('Menu', icon: Icons.settings, expanded: true),
+            Buttons.flat('Flat', icon: Icons.chevron_right, expanded: true),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _contactInfoLine() {
+    return const AppCard(
+      children: [
+        Text("Contact Info Line", style: AppStyles.headerRegular),
+        SizedBox(height: 24),
+        AppContactInfoLine(
+            label: "Phone",
+            text: '745-876-9876',
+            hint: 'Add your phone',
+            icon: Icons.phone),
+        AppContactInfoLine(
+            label: "Email",
+            text: 'jacksparrow@skullisland.com',
+            hint: 'Add your email',
+            icon: Icons.mail),
+        AppContactInfoLine(
+          label: "Service Address",
+          text: '123 Alphabet Street, Suite 400, Portland OR 97202',
+          hint: 'Add your email',
+          icon: Icons.location_pin,
+        ),
+        AppContactInfoLine(
+          label: "Super Power",
+          text: '',
+          hint: 'Add your Super Power',
+          icon: MdiIcons.lightningBolt,
+        )
+      ],
+    );
+  }
+
   Widget _addNote() {
     return _demoCenterCard('Add Note Widget',
         child: const AppAddNote(
@@ -120,15 +198,27 @@ class Demo extends StatelessWidget {
 
   Widget _formTextInput() {
     return AppCard(children: [
-      const Text('Form Inputs', style: AppStyles.headerRegular),
+      const Text('TextField', style: AppStyles.headerRegular),
       const SizedBox(
         height: 24,
       ),
       FlexRow(
         children: const [
-          AppTexfield(label: 'Basic'),
-          AppTexfield(label: 'Basic'),
+          AppTextField(
+            label: 'First Name',
+            initialValue: 'Tennessee',
+          ),
+          AppTextField(label: 'Last Name')
         ],
+      ),
+      SizedBox(
+        height: 16,
+      ),
+      AppTextField(
+        label: 'Multi Line',
+        multiline: true,
+        initialValue:
+            'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
       )
     ]);
   }
@@ -187,79 +277,63 @@ class Demo extends StatelessWidget {
     );
   }
 
-  // RENDER FUNCTIONS
-  Widget _heading(String text,
-      [icon = Icons.chevron_right, double px = 0, double py = 0]) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: px, vertical: py),
-      child: AppTextHeader(
-        text,
-        alignLeft: true,
-        icon: icon,
-        size: 24,
-      ),
-    );
-  }
-
-  Widget _loadingSpinner() => AppCard(pb: 48, children: [
-        _heading('Loading Spinner', MdiIcons.pirate),
-        const AppSpinner(),
+  Widget _loadingSpinner() => const AppCard(pb: 48, children: [
+        Text("Loading Spinner", style: AppStyles.headerRegular),
+        SizedBox(height: 24),
+        AppSpinner(),
       ]);
 
-  Widget _multiSelect() => AppCard(children: [
-        _heading('MultiSelect Widget', Icons.list),
+  Widget _multiSelect() => const AppCard(children: [
+        Text("MultiSelect Widget", style: AppStyles.headerRegular),
+        SizedBox(height: 24),
         AppMultiSelect(
-          items: selectItems,
+          items: [
+            SelectItem(id: '1', value: '', label: 'Cheese'),
+            SelectItem(id: '2', value: '', label: 'Mushrooms'),
+            SelectItem(id: '3', value: '', label: 'Jalepenos'),
+            SelectItem(id: '4', value: '', label: 'Tomatos'),
+            SelectItem(id: '4', value: '', label: 'Peperoni'),
+            SelectItem(id: '4', value: '', label: 'Cookie Dough'),
+            SelectItem(id: '4', value: '', label: 'Sausage'),
+            SelectItem(id: '5', value: '', label: 'Onions'),
+            SelectItem(id: '5', value: '', label: 'Garlic'),
+            SelectItem(id: '5', value: '', label: 'Gravel'),
+          ],
         ),
       ]);
 
   Widget _formInputs() => AppCard(children: [
-        _heading('Form Inputs', Icons.forum_rounded),
+        const Text("Form Inputs", style: AppStyles.headerRegular),
+        const SizedBox(height: 24),
         FlexRow(
           children: const [
-            AppInputText(label: 'First'),
-            AppInputText(label: 'Last'),
-            AppInputText(label: 'Nickname'),
-          ],
-        ),
-        FlexRow(
-          flex: const [4, 1],
-          children: const [
-            AppInputText(label: 'Address'),
-            AppInputText(label: 'Suite'),
-          ],
-        ),
-        FlexRow(
-          children: [
-            const AppInputText(label: 'Country'),
-            AppMultiSelect(
-              label: 'Toppings',
-              items: selectItems,
-            )
+            AppTextField(label: 'First'),
+            AppTextField(label: 'Last'),
+            AppTextField(label: 'Nickname'),
           ],
         ),
         FlexRow(
           flex: const [2, 3],
           children: const [
-            AppInputText(label: 'Alias'),
-            AppInputText(label: 'Planet of Origin'),
+            AppTextField(label: 'Alias'),
+            AppTextField(
+              label: 'Home Planet',
+            ),
           ],
         ),
         FlexRow(
-          flex: const [3],
+          flex: const [3, 1, 2],
           children: [
             Container(),
-            const AppButton(
-                label: 'Cancel',
-                primary: false,
-                colorBg: AppColors.secondary_60),
-            const AppButton(label: 'Submit', colorBg: AppColors.orange),
+            Buttons.text('Cancel', expanded: true),
+            Buttons.primary('Update Account', expanded: true),
           ],
         )
       ]);
 
   Widget _buttonsAndMenus() => AppCard(children: [
-        _heading('Buttons and Menus', Icons.control_point_rounded),
+        const Text("Buttons and Menus", style: AppStyles.headerRegular),
+        const SizedBox(height: 24),
         Row(
           children: const [
             Expanded(
@@ -296,7 +370,8 @@ class Demo extends StatelessWidget {
       ]);
 
   Widget _segmentControls() => AppCard(children: [
-        _heading('Segmented Control'),
+        const Text("Segmented Control", style: AppStyles.headerRegular),
+        const SizedBox(height: 24),
         AppSegmentedControl(
           fromMax: true,
           isStretch: true,
@@ -319,7 +394,7 @@ class Demo extends StatelessWidget {
             ),
           },
           onValueChanged: (int value) {
-            print(value);
+            // print(value);
           },
         ),
         const SizedBox(
@@ -328,7 +403,7 @@ class Demo extends StatelessWidget {
         AppSegmentedToggle(
             itemList: const ["%", "\$"],
             onChange: (value) {
-              print('value has been changed $value');
+              //print('value has been changed $value');
             })
       ]);
 }
