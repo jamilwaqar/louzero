@@ -1,10 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/widget/buttons/text_button.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
+import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Demo extends StatelessWidget {
@@ -23,7 +26,7 @@ class Demo extends StatelessWidget {
             _buttonsAndMenus(),
             _segmentControls(),
             _calendar(),
-            // _timePicker()
+            _timePicker(context)
           ],
         ),
       ),
@@ -328,10 +331,22 @@ class Demo extends StatelessWidget {
     )
   ]);
 
-  Widget _timePicker() => AppCard(children: [
+  Widget _timePicker(context) => AppCard(children: [
     _heading('Time Picker'),
-    NZCalendar(
-      onDateSelected: (value){ print('date has been changed $value');},
-    )
+    AppSegmentedToggle(
+        isVertical: true,
+        itemList: const ["AM", "PM"],
+        onChange: (value){
+          print('value has been changed $value');
+        }
+    ),
+    LZTextButton("Open Time Picker",  onPressed: (){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return NZTimePicker(onChange: (time) {print('the time is $time');},);
+        },
+      );
+    },)
   ]);
 }
