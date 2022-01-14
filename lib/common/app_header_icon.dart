@@ -36,7 +36,7 @@ class AppHeaderIcon extends StatelessWidget {
               color: AppColors.secondary_60,
               size: 22,
             ),
-          if (iconStart != null) SizedBox(width: 8),
+          if (iconStart != null) const SizedBox(width: 8),
           Text(
             title,
             style: style,
