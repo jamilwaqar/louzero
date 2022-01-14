@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/models.dart';
-import 'package:louzero/ui/page/job/job_detail.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import '../app_base_scaffold.dart';
 import 'views/jobs_home.dart';

@@ -15,7 +15,6 @@ import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
-import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'views/widget/contact_card.dart';
 
 enum SelectCustomerType { none, search, select }
