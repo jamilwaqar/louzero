@@ -3,7 +3,10 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/widget/buttons/text_button.dart';
+import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
+import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Demo extends StatelessWidget {
@@ -13,34 +16,23 @@ class Demo extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       subheader: 'Demo Components',
-      child: Column(
-        children: [
-          const SizedBox(height: 32),
-          _buttonStyles(),
-          _contactInfoLine(),
-          _segmentControls(),
-          _formTextInput(),
-          _addNote(),
-          _numberStepper(),
-          _contactCard(),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
-            child: AppCardTabs(
-              height: 500,
-              length: 3,
-              tabNames: const ['Overview', 'Schedule', 'Billing'],
-              children: tabItems,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 48,
             ),
-          ),
-          _loadingSpinner(),
-          _multiSelect(),
-          _formInputs(),
-          _buttonsAndMenus(),
-          const SizedBox(
-            height: 200,
-          )
-        ],
+            _calendar(),
+            _segmentControls(),
+            _timePicker(context),
+            _addNote(),
+            _contactCard(),
+            _contactInfoLine(),
+            _buttonStyles(),
+            _formTextInput(),
+            _loadingSpinner(),
+          ],
+        ),
       ),
     );
   }
@@ -105,7 +97,7 @@ class Demo extends StatelessWidget {
   Widget _buttonStyles() {
     return AppCard(
       children: [
-        Text("Button Styles Default", style: AppStyles.headerRegular),
+        _heading("Button Styles"),
         SizedBox(
           height: 8,
         ),
@@ -153,33 +145,46 @@ class Demo extends StatelessWidget {
             Buttons.menu('Menu', icon: Icons.settings, expanded: true),
             Buttons.flat('Flat', icon: Icons.chevron_right, expanded: true),
           ],
+        ),
+        SizedBox(height: 24),
+        Text("With Popup Action Menu", style: AppStyles.headerRegular),
+        SizedBox(height: 24),
+        AppPopMenu(
+          button: [Buttons.outline('Quick Action Menu', icon: Icons.settings)],
+          items: [
+            PopMenuItem(label: 'Action One', icon: Icons.settings),
+            PopMenuItem(
+                label: 'Action Two', icon: Icons.location_city_outlined),
+            PopMenuItem(
+                label: 'Action Three', icon: Icons.mail_outline_rounded),
+          ],
         )
       ],
     );
   }
 
   Widget _contactInfoLine() {
-    return const AppCard(
+    return AppCard(
       children: [
-        Text("Contact Info Line", style: AppStyles.headerRegular),
-        SizedBox(height: 24),
-        AppContactInfoLine(
+        _heading("Contact Info Line"),
+        const SizedBox(height: 24),
+        const AppContactInfoLine(
             label: "Phone",
             text: '745-876-9876',
             hint: 'Add your phone',
             icon: Icons.phone),
-        AppContactInfoLine(
+        const AppContactInfoLine(
             label: "Email",
             text: 'jacksparrow@skullisland.com',
             hint: 'Add your email',
             icon: Icons.mail),
-        AppContactInfoLine(
+        const AppContactInfoLine(
           label: "Service Address",
           text: '123 Alphabet Street, Suite 400, Portland OR 97202',
           hint: 'Add your email',
           icon: Icons.location_pin,
         ),
-        AppContactInfoLine(
+        const AppContactInfoLine(
           label: "Super Power",
           text: '',
           hint: 'Add your Super Power',
@@ -198,7 +203,7 @@ class Demo extends StatelessWidget {
 
   Widget _formTextInput() {
     return AppCard(children: [
-      const Text('TextField', style: AppStyles.headerRegular),
+      _heading('Form Inputs'),
       const SizedBox(
         height: 24,
       ),
@@ -219,19 +224,38 @@ class Demo extends StatelessWidget {
         multiline: true,
         initialValue:
             'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
+      ),
+      AppMultiSelect(
+        items: [
+          SelectItem(id: '1', value: '', label: 'Cheese'),
+          SelectItem(id: '2', value: '', label: 'Mushrooms'),
+          SelectItem(id: '3', value: '', label: 'Jalepenos'),
+          SelectItem(id: '4', value: '', label: 'Tomatos'),
+          SelectItem(id: '4', value: '', label: 'Peperoni'),
+          SelectItem(id: '4', value: '', label: 'Cookie Dough'),
+          SelectItem(id: '4', value: '', label: 'Sausage'),
+          SelectItem(id: '5', value: '', label: 'Onions'),
+          SelectItem(id: '5', value: '', label: 'Garlic'),
+          SelectItem(id: '5', value: '', label: 'Gravel'),
+        ],
+      ),
+      SizedBox(height: 24),
+      FlexRow(
+        flex: const [3, 1, 2],
+        children: [
+          Container(),
+          Buttons.text('Cancel', expanded: true),
+          Buttons.primary('Update Account', expanded: true),
+        ],
       )
     ]);
   }
 
   Widget _demoCenterCard(String label, {Widget? child}) {
     return AppCard(children: [
-      Text(
-        label,
-        style: AppStyles.headerRegular,
-      ),
-      const SizedBox(height: 24),
+      _heading(label),
       Container(
-        color: const Color(0xFFF6F2EC),
+        color: AppColors.secondary_99,
         padding: const EdgeInsets.all(40),
         child: Center(
           child: Container(
@@ -277,101 +301,14 @@ class Demo extends StatelessWidget {
     );
   }
 
-  Widget _loadingSpinner() => const AppCard(pb: 48, children: [
-        Text("Loading Spinner", style: AppStyles.headerRegular),
+  Widget _loadingSpinner() => AppCard(pb: 48, children: [
+        _heading("Loading Spinner"),
         SizedBox(height: 24),
         AppSpinner(),
       ]);
 
-  Widget _multiSelect() => const AppCard(children: [
-        Text("MultiSelect Widget", style: AppStyles.headerRegular),
-        SizedBox(height: 24),
-        AppMultiSelect(
-          items: [
-            SelectItem(id: '1', value: '', label: 'Cheese'),
-            SelectItem(id: '2', value: '', label: 'Mushrooms'),
-            SelectItem(id: '3', value: '', label: 'Jalepenos'),
-            SelectItem(id: '4', value: '', label: 'Tomatos'),
-            SelectItem(id: '4', value: '', label: 'Peperoni'),
-            SelectItem(id: '4', value: '', label: 'Cookie Dough'),
-            SelectItem(id: '4', value: '', label: 'Sausage'),
-            SelectItem(id: '5', value: '', label: 'Onions'),
-            SelectItem(id: '5', value: '', label: 'Garlic'),
-            SelectItem(id: '5', value: '', label: 'Gravel'),
-          ],
-        ),
-      ]);
-
-  Widget _formInputs() => AppCard(children: [
-        const Text("Form Inputs", style: AppStyles.headerRegular),
-        const SizedBox(height: 24),
-        FlexRow(
-          children: const [
-            AppTextField(label: 'First'),
-            AppTextField(label: 'Last'),
-            AppTextField(label: 'Nickname'),
-          ],
-        ),
-        FlexRow(
-          flex: const [2, 3],
-          children: const [
-            AppTextField(label: 'Alias'),
-            AppTextField(
-              label: 'Home Planet',
-            ),
-          ],
-        ),
-        FlexRow(
-          flex: const [3, 1, 2],
-          children: [
-            Container(),
-            Buttons.text('Cancel', expanded: true),
-            Buttons.primary('Update Account', expanded: true),
-          ],
-        )
-      ]);
-
-  Widget _buttonsAndMenus() => AppCard(children: [
-        const Text("Buttons and Menus", style: AppStyles.headerRegular),
-        const SizedBox(height: 24),
-        Row(
-          children: const [
-            Expanded(
-              child: AppButton(
-                label: 'Primary',
-              ),
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              flex: 0,
-              child: AppPopMenu(
-                button: [
-                  Icon(Icons.control_point_rounded,
-                      size: 40, color: AppColors.orange)
-                ],
-                items: [
-                  PopMenuItem(label: 'Action One', icon: Icons.settings),
-                  PopMenuItem(
-                      label: 'Action Two', icon: Icons.location_city_outlined),
-                  PopMenuItem(
-                      label: 'Action Three', icon: Icons.mail_outline_rounded),
-                ],
-              ),
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              child: AppButton(
-                label: 'Secondary',
-                primary: false,
-              ),
-            ),
-          ],
-        )
-      ]);
-
   Widget _segmentControls() => AppCard(children: [
-        const Text("Segmented Control", style: AppStyles.headerRegular),
-        const SizedBox(height: 24),
+        _heading('Segmented Control'),
         AppSegmentedControl(
           fromMax: true,
           isStretch: true,
@@ -394,7 +331,7 @@ class Demo extends StatelessWidget {
             ),
           },
           onValueChanged: (int value) {
-            // print(value);
+            print(value);
           },
         ),
         const SizedBox(
@@ -403,7 +340,57 @@ class Demo extends StatelessWidget {
         AppSegmentedToggle(
             itemList: const ["%", "\$"],
             onChange: (value) {
-              //print('value has been changed $value');
+              print('value has been changed $value');
             })
       ]);
+
+  Widget _calendar() => AppCard(children: [
+        _heading('Calendar'),
+        NZCalendar(
+          onDateSelected: (value) {
+            print('date has been changed $value');
+          },
+        )
+      ]);
+
+  Widget _timePicker(context) => AppCard(children: [
+        _heading('Time Picker'),
+        AppSegmentedToggle(
+            isVertical: true,
+            itemList: const ["AM", "PM"],
+            onChange: (value) {
+              print('value has been changed $value');
+            }),
+        LZTextButton(
+          "Open Time Picker",
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return NZTimePicker(
+                  onChange: (time) {
+                    print('the time is $time');
+                  },
+                );
+              },
+            );
+          },
+        )
+      ]);
+
+  Widget _heading(String label) {
+    return Container(
+        // height: 60,
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label.toUpperCase(),
+            style: AppStyles.headerRegular.copyWith(
+                color: AppColors.secondary_30,
+                fontSize: 24,
+                letterSpacing: .5)),
+        AppDivider(mt: 16, mb: 24)
+      ],
+    ));
+  }
 }
