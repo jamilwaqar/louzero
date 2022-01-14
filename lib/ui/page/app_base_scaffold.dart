@@ -88,30 +88,35 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
             return _appBackground(
               child: Stack(
                 children: [
-                  Scaffold(
-                    key: _key,
-                    drawer: loggedIn ? const SideMenuView() : null,
-                    appBar: widget.logoOnly ? AppBaseAppBarBrand() : null,
-                    body: widget.logoOnly
-                        ? Container(
-                            color: AppColors.secondary_99,
-                            // ignore: unnecessary_null_in_if_null_operators
-                            child: widget.child ?? null,
-                          )
-                        : AppBaseShell(
-                            footerStart: _getHeader(),
-                            footerEnd: widget.footerEnd,
-                            actions: [
-                              if (loggedIn)
-                                AppBaseUserMenu(onChange: _menuChange)
-                            ],
-                            onMenuPress: _toggleDrawer,
-                            child: widget.child ?? null,
-                          ),
-                    drawerScrimColor: Colors.black.withOpacity(0),
-                    resizeToAvoidBottomInset: widget.hasKeyboard,
-                    backgroundColor: Colors.transparent,
-                    drawerEnableOpenDragGesture: false,
+                  GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    child: Scaffold(
+                      key: _key,
+                      drawer: loggedIn ? const SideMenuView() : null,
+                      appBar: widget.logoOnly ? AppBaseAppBarBrand() : null,
+                      body: widget.logoOnly
+                          ? Container(
+                              color: AppColors.secondary_99,
+                              // ignore: unnecessary_null_in_if_null_operators
+                              child: widget.child ?? null,
+                            )
+                          : AppBaseShell(
+                              footerStart: _getHeader(),
+                              footerEnd: widget.footerEnd,
+                              actions: [
+                                if (loggedIn)
+                                  AppBaseUserMenu(onChange: _menuChange)
+                              ],
+                              onMenuPress: _toggleDrawer,
+                              child: widget.child ?? null,
+                            ),
+                      drawerScrimColor: Colors.black.withOpacity(0),
+                      resizeToAvoidBottomInset: widget.hasKeyboard,
+                      backgroundColor: Colors.transparent,
+                      drawerEnableOpenDragGesture: false,
+                    ),
                   ),
                   if (isLoading) _spinner()
                 ],
