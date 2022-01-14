@@ -1,5 +1,6 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/common.dart';
@@ -46,6 +47,36 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
     AuthManager().loggedIn.value = false;
   }
 
+  void _toggleDrawer() {
+    _key.currentState?.openDrawer();
+  }
+
+  void _menuChange(String val) {
+    if (val == 'logout') {
+      _logout(context);
+    }
+  }
+
+  List<Widget> _getHeader() {
+    return [
+      if (widget.subheader != null)
+        Text(widget.subheader!, style: AppStyles.headerAppBar),
+      if (widget.footerStart != null) ...widget.footerStart!,
+    ];
+  }
+
+  Widget _appBackground({required Widget child}) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+            colors: [Color(0xFF465D66), Color(0xFF182933)],
+            begin: Alignment.topLeft,
+            end: Alignment.topRight),
+      ),
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
@@ -53,136 +84,206 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
       builder: (ctx, isLoading, child) {
         return ValueListenableBuilder<bool>(
           valueListenable: AuthManager().loggedIn,
-          builder: (ctx, isLoggedIn, child) {
-            double minHeight = MediaQuery.of(context).size.height;
-            return Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Color(0xFF465D66), Color(0xFF182933)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.topRight),
-                    ),
-                    child: Scaffold(
-                      drawer: isLoggedIn ? const SideMenuView() : null,
-                      drawerScrimColor: Colors.black.withOpacity(0),
-                      key: _key,
-                      resizeToAvoidBottomInset: widget.hasKeyboard,
-                      // backgroundColor: AppColors.secondary_99,
-                      backgroundColor: Colors.transparent,
-                      drawerEnableOpenDragGesture: false,
-
-                      appBar: widget.logoOnly
-                          ? PreferredSize(
-                              preferredSize: const Size.fromHeight(100.0),
-                              child: AppBar(
-                                elevation: 0,
-                                backgroundColor: Colors.transparent,
-                                flexibleSpace: Center(
-                                  child: Image.asset(
-                                      "assets/icons/general/logo_icon.png"),
-                                ),
-                              ),
-                            )
-                          : null,
-
-                      body: widget.logoOnly
-                          ? Container(
-                              color: AppColors.secondary_99,
-                              // ignore: unnecessary_null_in_if_null_operators
-                              child: widget.child ?? null,
-                            )
-                          : NestedScrollView(
-                              floatHeaderSlivers: true,
-                              headerSliverBuilder:
-                                  (context, innerBoxIsScrolled) => [
-                                AppBarPageHeader(
-                                  context: context,
-                                  title: SizedBox(
-                                    height: 80,
-                                    child: Image.asset(
-                                        "assets/icons/general/logo_icon.png"),
-                                  ),
-                                  footerStart: [
-                                    if (widget.subheader != null)
-                                      Text(widget.subheader!,
-                                          style: AppStyles.headerAppBar),
-                                    if (widget.footerStart != null)
-                                      ...widget.footerStart!,
-                                  ],
-                                  footerEnd: widget.footerEnd,
-                                  actions: [
-                                    if (isLoggedIn)
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8),
-                                        child: AppUserDropdownMenu(
-                                          onChange: (val) {
-                                            if (val == 'logout') {
-                                              _logout(context);
-                                            }
-                                          },
-                                        ),
-                                      )
-                                  ],
-                                  onMenuPress: () {
-                                    _key.currentState?.openDrawer();
-                                  },
-                                )
-                              ],
-                              body: ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(40),
-                                  topRight: Radius.circular(40),
-                                ),
-                                child: SingleChildScrollView(
-                                  // physics: const ClampingScrollPhysics(),
-                                  physics: CustomScrollPhysics(
-                                      parent: ClampingScrollPhysics()),
-                                  child: Container(
-                                    constraints: BoxConstraints(
-                                      minHeight: minHeight,
-                                      minWidth: double.infinity,
-                                    ),
-                                    color: AppColors.secondary_99,
-                                    // ignore: unnecessary_null_in_if_null_operators
-                                    child: widget.child ?? null,
-                                  ),
-                                ),
-                              ),
-                            ),
-                    ),
+          builder: (ctx, loggedIn, child) {
+            return _appBackground(
+              child: Stack(
+                children: [
+                  Scaffold(
+                    key: _key,
+                    drawer: loggedIn ? const SideMenuView() : null,
+                    appBar: widget.logoOnly ? AppBaseAppBarBrand() : null,
+                    body: widget.logoOnly
+                        ? Container(
+                            color: AppColors.secondary_99,
+                            // ignore: unnecessary_null_in_if_null_operators
+                            child: widget.child ?? null,
+                          )
+                        : AppBaseShell(
+                            footerStart: _getHeader(),
+                            footerEnd: widget.footerEnd,
+                            actions: [
+                              if (loggedIn)
+                                AppBaseUserMenu(onChange: _menuChange)
+                            ],
+                            onMenuPress: _toggleDrawer,
+                            child: widget.child ?? null,
+                          ),
+                    drawerScrimColor: Colors.black.withOpacity(0),
+                    resizeToAvoidBottomInset: widget.hasKeyboard,
+                    backgroundColor: Colors.transparent,
+                    drawerEnableOpenDragGesture: false,
                   ),
-                ),
-                if (isLoading)
-                  Positioned.fill(
-                    child: Container(
-                      alignment: Alignment.center,
-                      color: AppColors.secondary_95.withOpacity(0.6),
-                      child: const AppSpinner(
-                        size: 160,
-                        width: 8,
-                      ),
-                    ),
-                  ),
-              ],
+                  if (isLoading) _spinner()
+                ],
+              ),
             );
           },
         );
       },
     );
   }
+
+  Widget _spinner() {
+    return Positioned.fill(
+      child: Container(
+        alignment: Alignment.center,
+        color: AppColors.secondary_95.withOpacity(0.6),
+        child: const AppSpinner(
+          size: 160,
+          width: 8,
+        ),
+      ),
+    );
+  }
 }
 
-// This is a hack for development:
-class CustomScrollPhysics extends FixedExtentScrollPhysics {
-  const CustomScrollPhysics({required ScrollPhysics parent})
-      : super(parent: parent);
+class AppBaseUserMenu extends StatelessWidget {
+  final void Function(String val)? onChange;
+
+  const AppBaseUserMenu({Key? key, this.onChange}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 0, left: 0, right: 8, bottom: 0),
+      child: AppPopMenu(
+        items: [
+          PopMenuItem(
+            label: 'My Account',
+            icon: Icons.person_rounded,
+            onTap: () {
+              Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+                  Get.to(() => MyAccountPage(AuthManager.userModel!),
+                      binding: CompanyBinding()));
+            },
+          ),
+          PopMenuItem(
+            label: 'Settings',
+            icon: Icons.settings,
+            onTap: () {},
+          ),
+          PopMenuItem(
+            label: 'Account Setup',
+            icon: MdiIcons.briefcase,
+            onTap: () {},
+          ),
+          PopMenuItem(
+            label: 'Log Out',
+            icon: Icons.exit_to_app,
+            onTap: () {
+              if (onChange != null) {
+                onChange!('logout');
+              }
+            },
+          )
+        ],
+        button: [
+          AppAvatar(
+            url: AuthManager.userModel!.avatar,
+            size: 40,
+            text: AuthManager.userModel!.initials,
+            borderColor: AppColors.lightest,
+          ),
+          const Icon(Icons.arrow_drop_down, color: AppColors.lightest)
+        ],
+      ),
+    );
+  }
+}
+
+class AppBaseAppBarBrand extends StatefulWidget implements PreferredSizeWidget {
+  const AppBaseAppBarBrand({Key? key})
+      : preferredSize = const Size.fromHeight(kToolbarHeight),
+        super(key: key);
+
+  @override
+  final Size preferredSize; // default is 56.0
+
+  @override
+  State<AppBaseAppBarBrand> createState() => _AppBaseAppBarBrandState();
+}
+
+class _AppBaseAppBarBrandState extends State<AppBaseAppBarBrand> {
+  @override
+  Widget build(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(100.0),
+      child: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Center(
+          child: Image.asset("assets/icons/general/logo_icon.png"),
+        ),
+      ),
+    );
+  }
+}
+
+class AppBaseShell extends StatelessWidget {
+  final Widget? child;
+  final bool hasKeyboard;
+  final bool logoOnly;
+  final bool loggedIn;
+  void Function()? onMenuPress;
+  List<Widget>? actions;
+  final List<Widget>? footerStart;
+  final List<Widget>? footerEnd;
+  final String? subheader;
+
+  AppBaseShell(
+      {Key? key,
+      this.child,
+      this.footerStart,
+      this.footerEnd,
+      this.subheader,
+      this.actions,
+      this.onMenuPress,
+      this.hasKeyboard = false,
+      this.logoOnly = false,
+      this.loggedIn = false})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return NestedScrollView(
+      physics: AppBasePhysics(),
+      floatHeaderSlivers: true,
+      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+        AppBarPageHeader(
+            context: context,
+            title: SizedBox(
+              height: 80,
+              child: Image.asset("assets/icons/general/logo_icon.png"),
+            ),
+            footerStart: footerStart,
+            footerEnd: footerEnd,
+            actions: actions,
+            onMenuPress: onMenuPress)
+      ],
+      body: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Container(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+              minWidth: double.infinity,
+            ),
+            color: AppColors.secondary_99,
+            // ignore: unnecessary_null_in_if_null_operators
+            child: child ?? null,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AppBasePhysics extends ClampingScrollPhysics {
+  AppBasePhysics({ScrollPhysics? parent}) : super(parent: parent);
 
   @override
   double get minFlingVelocity => double.infinity;
@@ -192,55 +293,13 @@ class CustomScrollPhysics extends FixedExtentScrollPhysics {
 
   @override
   double get minFlingDistance => double.infinity;
-}
-
-class AppUserDropdownMenu extends StatelessWidget {
-  final void Function(String val)? onChange;
-
-  const AppUserDropdownMenu({Key? key, this.onChange}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return AppPopMenu(
-      items: [
-        PopMenuItem(
-          label: 'My Account',
-          icon: Icons.person_rounded,
-          onTap: () {
-            Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-                Get.to(() => MyAccountPage(AuthManager.userModel!),
-                    binding: CompanyBinding()));
-          },
-        ),
-        PopMenuItem(
-          label: 'Settings',
-          icon: Icons.settings,
-          onTap: () {},
-        ),
-        PopMenuItem(
-          label: 'Account Setup',
-          icon: MdiIcons.briefcase,
-          onTap: () {},
-        ),
-        PopMenuItem(
-          label: 'Log Out',
-          icon: Icons.exit_to_app,
-          onTap: () {
-            if (onChange != null) {
-              onChange!('logout');
-            }
-          },
-        )
-      ],
-      button: [
-        AppAvatar(
-          url: AuthManager.userModel!.avatar,
-          size: 40,
-          text: AuthManager.userModel!.initials,
-          borderColor: AppColors.lightest,
-        ),
-        const Icon(Icons.arrow_drop_down, color: AppColors.lightest)
-      ],
-    );
+  SpringDescription spring =
+      SpringDescription.withDampingRatio(mass: 300, stiffness: 80);
+
+  @override
+  AppBasePhysics applyTo(ScrollPhysics? ancestor) {
+    return AppBasePhysics(parent: buildParent(ancestor)!);
   }
 }
