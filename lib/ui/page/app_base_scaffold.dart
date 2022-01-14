@@ -21,6 +21,7 @@ class AppBaseScaffold extends StatefulWidget {
   final List<Widget>? footerStart;
   final List<Widget>? footerEnd;
   final String? subheader;
+
   const AppBaseScaffold({
     Key? key,
     this.child,
