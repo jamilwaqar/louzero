@@ -1,5 +1,6 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/common.dart';
@@ -99,6 +100,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                               child: widget.child ?? null,
                             )
                           : NestedScrollView(
+                              physics: AppBasePhysics(),
                               floatHeaderSlivers: true,
                               headerSliverBuilder:
                                   (context, innerBoxIsScrolled) => [
@@ -143,8 +145,6 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                                 ),
                                 child: SingleChildScrollView(
                                   // physics: const ClampingScrollPhysics(),
-                                  physics: CustomScrollPhysics(
-                                      parent: ClampingScrollPhysics()),
                                   child: Container(
                                     constraints: BoxConstraints(
                                       minHeight: minHeight,
@@ -181,9 +181,8 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
 }
 
 // This is a hack for development:
-class CustomScrollPhysics extends FixedExtentScrollPhysics {
-  const CustomScrollPhysics({required ScrollPhysics parent})
-      : super(parent: parent);
+class AppBasePhysics extends ClampingScrollPhysics {
+  AppBasePhysics({ScrollPhysics? parent}) : super(parent: parent);
 
   @override
   double get minFlingVelocity => double.infinity;
@@ -193,6 +192,15 @@ class CustomScrollPhysics extends FixedExtentScrollPhysics {
 
   @override
   double get minFlingDistance => double.infinity;
+
+  @override
+  SpringDescription spring =
+      SpringDescription.withDampingRatio(mass: 300, stiffness: 80);
+
+  @override
+  AppBasePhysics applyTo(ScrollPhysics? ancestor) {
+    return AppBasePhysics(parent: buildParent(ancestor)!);
+  }
 }
 
 class AppUserDropdownMenu extends StatelessWidget {
