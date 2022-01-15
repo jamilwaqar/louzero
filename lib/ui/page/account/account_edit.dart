@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/company_controller.dart';
+import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
@@ -10,7 +11,7 @@ import 'package:simple_rich_text/simple_rich_text.dart';
 class AccountEdit extends GetWidget<CompanyController> {
   final UserModel userModel;
   AccountEdit({required this.userModel, Key? key}) : super(key: key);
-  var editContact = false.obs;
+  final editContact = false.obs;
   toggleEdit() => editContact.toggle();
 
   @override
@@ -18,7 +19,7 @@ class AccountEdit extends GetWidget<CompanyController> {
     return AppCard(
       children: [
         AppHeaderIcon(
-          'Alan Whitaker',
+          AuthManager.userModel!.fullName,
           icon: Icons.edit,
           iconStart: MdiIcons.accountCircle,
           onTap: () {

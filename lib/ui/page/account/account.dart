@@ -12,14 +12,11 @@ import 'package:louzero/ui/page/account/account_edit.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';
 import 'package:louzero/ui/page/company/company.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
 class MyAccountPage extends GetWidget<CompanyController> {
   final UserModel userModel;
-  MyAccountPage(this.userModel, {Key? key}) : super(key: key);
-  var editContact = false.obs;
-  toggleEdit() => editContact.toggle();
+  const MyAccountPage(this.userModel, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +24,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
       hasKeyboard: true,
       child: Column(
         children: [
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           AccountEdit(userModel: AuthManager.userModel!),
           _companies(),
         ],
