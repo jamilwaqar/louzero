@@ -143,100 +143,20 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
   }
 }
 
-class AppBaseUserMenu extends StatelessWidget {
-  final void Function(String val)? onChange;
-
-  const AppBaseUserMenu({Key? key, this.onChange}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 0, left: 0, right: 8, bottom: 0),
-      child: AppPopMenu(
-        items: [
-          PopMenuItem(
-            label: 'My Account',
-            icon: Icons.person_rounded,
-            onTap: () {
-              Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-                  Get.to(() => MyAccountPage(AuthManager.userModel!),
-                      binding: CompanyBinding()));
-            },
-          ),
-          PopMenuItem(
-            label: 'Settings',
-            icon: Icons.settings,
-            onTap: () {},
-          ),
-          PopMenuItem(
-            label: 'Account Setup',
-            icon: MdiIcons.briefcase,
-            onTap: () {},
-          ),
-          PopMenuItem(
-            label: 'Log Out',
-            icon: Icons.exit_to_app,
-            onTap: () {
-              if (onChange != null) {
-                onChange!('logout');
-              }
-            },
-          )
-        ],
-        button: [
-          AppAvatar(
-            url: AuthManager.userModel!.avatar,
-            size: 40,
-            text: AuthManager.userModel!.initials,
-            borderColor: AppColors.lightest,
-          ),
-          const Icon(Icons.arrow_drop_down, color: AppColors.lightest)
-        ],
-      ),
-    );
-  }
-}
-
-class AppBaseAppBarBrand extends StatefulWidget implements PreferredSizeWidget {
-  const AppBaseAppBarBrand({Key? key})
-      : preferredSize = const Size.fromHeight(kToolbarHeight),
-        super(key: key);
-
-  @override
-  final Size preferredSize; // default is 56.0
-
-  @override
-  State<AppBaseAppBarBrand> createState() => _AppBaseAppBarBrandState();
-}
-
-class _AppBaseAppBarBrandState extends State<AppBaseAppBarBrand> {
-  @override
-  Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(100.0),
-      child: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Center(
-          child: Image.asset("assets/icons/general/logo_icon.png"),
-        ),
-      ),
-    );
-  }
-}
+// MAIN Wrapper for all views in the app
 
 class AppBaseShell extends StatelessWidget {
   final Widget? child;
   final bool hasKeyboard;
   final bool logoOnly;
   final bool loggedIn;
-  void Function()? onMenuPress;
-  List<Widget>? actions;
+  final VoidCallback? onMenuPress;
+  final List<Widget>? actions;
   final List<Widget>? footerStart;
   final List<Widget>? footerEnd;
   final String? subheader;
 
-  AppBaseShell(
+  const AppBaseShell(
       {Key? key,
       this.child,
       this.footerStart,
@@ -288,6 +208,38 @@ class AppBaseShell extends StatelessWidget {
   }
 }
 
+// LOGGED OUT appbar - Just branding and logo without navigation links
+
+class AppBaseAppBarBrand extends StatefulWidget implements PreferredSizeWidget {
+  const AppBaseAppBarBrand({Key? key})
+      : preferredSize = const Size.fromHeight(kToolbarHeight),
+        super(key: key);
+
+  @override
+  final Size preferredSize;
+
+  @override
+  State<AppBaseAppBarBrand> createState() => _AppBaseAppBarBrandState();
+}
+
+class _AppBaseAppBarBrandState extends State<AppBaseAppBarBrand> {
+  @override
+  Widget build(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(100.0),
+      child: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Center(
+          child: Image.asset("assets/icons/general/logo_icon.png"),
+        ),
+      ),
+    );
+  }
+}
+
+// PHYSICS for NestedScrollView = removes fling and auto scroll (may need to remove on prod )
+
 class AppBasePhysics extends ClampingScrollPhysics {
   AppBasePhysics({ScrollPhysics? parent}) : super(parent: parent);
 
@@ -301,11 +253,67 @@ class AppBasePhysics extends ClampingScrollPhysics {
   double get minFlingDistance => double.infinity;
 
   @override
-  SpringDescription spring =
+  final SpringDescription spring =
       SpringDescription.withDampingRatio(mass: 300, stiffness: 80);
 
   @override
   AppBasePhysics applyTo(ScrollPhysics? ancestor) {
     return AppBasePhysics(parent: buildParent(ancestor)!);
+  }
+}
+
+// LOGGED IN USER MENU (IN PROGRESS)
+
+class AppBaseUserMenu extends StatelessWidget {
+  final void Function(String val)? onChange;
+
+  const AppBaseUserMenu({Key? key, this.onChange}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 0, left: 0, right: 8, bottom: 0),
+      child: AppPopMenu(
+        items: [
+          PopMenuItem(
+            label: 'My Account',
+            icon: Icons.person_rounded,
+            onTap: () {
+              Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+                  Get.to(() => MyAccountPage(AuthManager.userModel!),
+                      binding: CompanyBinding()));
+            },
+          ),
+          PopMenuItem(
+            label: 'Settings',
+            icon: Icons.settings,
+            onTap: () {},
+          ),
+          PopMenuItem(
+            label: 'Account Setup',
+            icon: MdiIcons.briefcase,
+            onTap: () {},
+          ),
+          PopMenuItem(
+            label: 'Log Out',
+            icon: Icons.exit_to_app,
+            onTap: () {
+              if (onChange != null) {
+                onChange!('logout');
+              }
+            },
+          )
+        ],
+        button: [
+          AppAvatar(
+            url: AuthManager.userModel!.avatar,
+            size: 40,
+            text: AuthManager.userModel!.initials,
+            borderColor: AppColors.lightest,
+          ),
+          const Icon(Icons.arrow_drop_down, color: AppColors.lightest)
+        ],
+      ),
+    );
   }
 }
