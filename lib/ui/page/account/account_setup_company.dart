@@ -10,6 +10,7 @@ import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_multiselect.dart';
+import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
@@ -253,7 +254,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     }
   }
 
-  _phone() => AppInputText(
+  _phone() => AppTextField(
         controller: _phoneController,
         required: true,
         label: 'Phone Number',
@@ -264,7 +265,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _companyName() => AppInputText(
+  _companyName() => AppTextField(
         controller: _companyNameController,
         required: true,
         label: 'Company Name',
@@ -274,7 +275,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _website() => AppInputText(
+  _website() => AppTextField(
         controller: _webController,
         label: 'Website',
         onSaved: (val) {
@@ -282,7 +283,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _email() => AppInputText(
+  _email() => AppTextField(
         controller: _emailController,
         label: 'Email Address',
         required: true,
@@ -308,7 +309,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             _countryController.text = country.name;
           });
         }),
-        child: AppInputText(
+        child: AppTextField(
           label: 'Country',
           enabled: false,
           controller: _countryController,
@@ -318,7 +319,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         ),
       );
 
-  _street() => AppInputText(
+  _street() => AppTextField(
         label: 'Street',
         controller: _streetController,
         onSaved: (val) {
@@ -328,7 +329,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           _baseController.searchAddress(val, _selectCountry.countryCode);
         },
       );
-  _suite() => AppInputText(
+  _suite() => AppTextField(
         controller: _suiteController,
         label: 'Suite',
         onSaved: (val) {
@@ -336,7 +337,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _city() => AppInputText(
+  _city() => AppTextField(
         label: 'City',
         controller: _cityController,
         onSaved: (val) {
@@ -344,7 +345,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _state() => AppInputText(
+  _state() => AppTextField(
         label: 'State',
         controller: _stateController,
         options: listStateNames,
@@ -352,7 +353,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           _addressModel.state = val ?? '';
         },
       );
-  _zip() => AppInputText(
+  _zip() => AppTextField(
         controller: _zipController,
         label: 'Zip',
         onSaved: (val) {

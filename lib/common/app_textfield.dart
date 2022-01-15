@@ -10,14 +10,28 @@ class AppTextField extends StatefulWidget {
   final int minLines;
   final int maxLines;
   final bool multiline;
+  final bool required;
+  final bool enabled;
+  final TextInputType keyboardType;
+  final String? Function(String?)? validator;
+  final Function(String)? onChanged;
+  final void Function(String?)? onSaved;
+  final List<String>? options;
   final double mb;
   const AppTextField({
     this.controller,
     this.label,
     this.initialValue = '',
     this.height = 48,
+    this.required = false,
+    this.keyboardType = TextInputType.text,
+    this.validator,
+    this.onChanged,
+    this.onSaved,
+    this.options,
     this.autofocus = false,
     this.multiline = false,
+    this.enabled = true,
     this.minLines = 1,
     this.maxLines = 1,
     this.mb = 16,
@@ -54,6 +68,11 @@ class _AppTextFieldState extends State<AppTextField> {
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,
       controller: widget.controller,
+      validator: widget.validator,
+      onSaved: widget.onSaved,
+      keyboardType: widget.keyboardType,
+      enabled: widget.enabled,
+      onChanged: widget.onChanged,
       style: AppStyles.labelBold
           .copyWith(height: 1.5, fontSize: 16, color: AppColors.secondary_20),
       minLines: 1,
