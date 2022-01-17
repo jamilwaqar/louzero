@@ -1,25 +1,27 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
-class AccountEdit extends GetWidget<CompanyController> {
+class AccountEdit extends StatelessWidget {
   final UserModel userModel;
-  AccountEdit({required this.userModel, Key? key}) : super(key: key);
-  final editContact = false.obs;
-  toggleEdit() => editContact.toggle();
+  late final _model = Rx<UserModel>(userModel); 
+  
+  AccountEdit(this.userModel, {Key? key}) : super(key: key);
+  final _isEditContact = false.obs;
+  toggleEdit() => _isEditContact.toggle();
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return Obx(()=> AppCard(
       children: [
         AppHeaderIcon(
-          AuthManager.userModel!.fullName,
+          !_isEditContact.value ? _model.value.fullName : 'Edit Account',
           icon: Icons.edit,
           iconStart: MdiIcons.accountCircle,
           onTap: () {
@@ -38,11 +40,16 @@ class AccountEdit extends GetWidget<CompanyController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  AppAvatar(
-                    url: userModel.avatar,
-                    text: userModel.initials,
-                    size: 136,
-                    backgroundColor: AppColors.secondary_50,
+                  Stack(
+                    children: [
+                      Obx(()=> AppAvatar(
+                        url: _model.value.avatar,
+                        text: _model.value.initials,
+                        size: 136,
+                        backgroundColor: AppColors.secondary_50,
+                      )),
+                      _uploadAvatar(),
+                    ],
                   )
                 ],
               ),
@@ -60,13 +67,15 @@ class AccountEdit extends GetWidget<CompanyController> {
         ),
         Obx(() {
           return RowSplit(
-            left: editContact.value
+            left: _isEditContact.value
                 ? Row(
-                    children: [
-                      Buttons.submit('Update Account'),
-                      Buttons.text('cancel', onPressed: toggleEdit),
-                    ],
-                  )
+              children: [
+                Buttons.submit('Update Account', onPressed: () {
+                  _model.value.phone = '111';
+                }),
+                Buttons.text('cancel', onPressed: toggleEdit),
+              ],
+            )
                 : null,
             right: Stack(
               children: [
@@ -76,7 +85,7 @@ class AccountEdit extends GetWidget<CompanyController> {
                     _showAlertDialog();
                   },
                 ),
-                if (editContact.value)
+                if (_isEditContact.value)
                   Container(
                       color: Colors.white.withAlpha(200),
                       height: 41,
@@ -86,8 +95,29 @@ class AccountEdit extends GetWidget<CompanyController> {
           );
         })
       ],
-    );
+    ));
   }
+
+  Widget _uploadAvatar() => Positioned(
+      right: -20,
+      bottom: -20,
+      child: CupertinoButton(
+        onPressed: () async {
+          var response = await AuthManager().uploadAccountAvatar();
+          if (response is UserModel) {
+            _model.value = response;
+          }
+        },
+        // padding: EdgeInsets.zero,
+        child: Container(
+          width: 36,
+          height: 36,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+              color: AppColors.secondary_95, shape: BoxShape.circle),
+          child: const Icon(Icons.edit, size: 14, color: AppColors.icon),
+        ),
+      ));
 
   Widget _editContact() {
     List<Widget> display = [
@@ -105,7 +135,7 @@ class AccountEdit extends GetWidget<CompanyController> {
 
     return Obx(() {
       return Column(
-        children: editContact.value ? edit : display,
+        children: _isEditContact.value ? edit : display,
       );
     });
   }
@@ -116,7 +146,7 @@ class AccountEdit extends GetWidget<CompanyController> {
       children: [
         AppTextField(
           label: 'Name',
-          initialValue: userModel.fullName,
+          initialValue: _model.value.fullName,
         ),
       ],
     );
@@ -125,7 +155,7 @@ class AccountEdit extends GetWidget<CompanyController> {
   Widget _phoneDisplay() {
     return AppIconLabelText(
         label: 'phone',
-        text: userModel.phone,
+        text: _model.value.phone,
         hint: 'Add Phone Number.',
         icon: Icons.phone);
   }
@@ -136,7 +166,7 @@ class AccountEdit extends GetWidget<CompanyController> {
       children: [
         AppTextField(
           label: 'Phone Number',
-          initialValue: userModel.phone,
+          initialValue: _model.value.phone,
         ),
       ],
     );
@@ -145,7 +175,7 @@ class AccountEdit extends GetWidget<CompanyController> {
   Widget _emailDisplay() {
     return AppIconLabelText(
       label: 'Email',
-      text: userModel.email,
+      text: _model.value.email,
       hint: 'Add Email.',
       icon: Icons.mail,
     );
@@ -157,7 +187,7 @@ class AccountEdit extends GetWidget<CompanyController> {
       children: [
         AppTextField(
           label: 'Email',
-          initialValue: userModel.email,
+          initialValue: _model.value.email,
         ),
       ],
     );
@@ -167,7 +197,7 @@ class AccountEdit extends GetWidget<CompanyController> {
     return AppIconLabelText(
       label: 'Address',
       hint: 'Add Service Address.',
-      text: userModel.serviceAddress,
+      text: _model.value.serviceAddress,
       icon: Icons.location_pin,
     );
   }

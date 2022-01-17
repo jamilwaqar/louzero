@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'app_image.dart';
 
 class AppAvatar extends StatelessWidget {
+
   final Uri? url;
   final String? text;
   final Color? borderColor;
@@ -33,20 +35,15 @@ class AppAvatar extends StatelessWidget {
           border: Border.all(color: borderColor ?? Colors.transparent),
           borderRadius: BorderRadius.circular(999),
           color: backgroundColor ?? Colors.transparent),
-      child: Text(
-        text!.isNotEmpty ? text! : 'ME',
-        style: AppStyles.headerRegular
-            .copyWith(color: AppColors.secondary_99, fontSize: size * .50),
-      ),
-      // child: url == null
-      //     ? placeHolder != null
-      //         ? AppImage(
-      //             placeHolder!,
-      //             width: size,
-      //             height: size,
-      //           )
-      //         : _initials()
-      //     : _cachedNetworkImage(),
+      child: url == null
+          ? placeHolder != null
+              ? AppImage(
+                  placeHolder!,
+                  width: size,
+                  height: size,
+                )
+              : _initials()
+          : _cachedNetworkImage(),
     );
   }
 
@@ -61,9 +58,14 @@ class AppAvatar extends StatelessWidget {
               ),
             ),
           ),
-      placeholder: (context, url) => const Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
+      placeholder: (context, url) => Center(
+            child: Container(
+              width: size / 2,
+              height: size / 2,
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
             ),
           ),
       errorWidget: (context, url, error) {
@@ -71,7 +73,7 @@ class AppAvatar extends StatelessWidget {
       });
 
   Widget _initials() => Text(
-        text!,
+        text?.isNotEmpty ?? false ? text! : 'ME',
         style: TextStyle(
           color: AppColors.lightest,
           fontWeight: FontWeight.w500,

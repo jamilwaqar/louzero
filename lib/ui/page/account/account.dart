@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/company_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/user_models.dart';
@@ -25,7 +24,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
       child: Column(
         children: [
           const SizedBox(height: 32),
-          AccountEdit(userModel: AuthManager.userModel!),
+          AccountEdit(userModel),
           _companies(),
         ],
       ),
