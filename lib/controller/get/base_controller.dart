@@ -12,7 +12,7 @@ import 'package:louzero/models/job_models.dart';
 class BaseController extends GetxController {
   final _authController = Get.put(AuthController(), permanent: true);
 
-  final _isUpdating = false.obs;
+  final _isLoading = false.obs;
   final _companies = Rx<List<CompanyModel>>([]);
   final _customers = Rx<List<CustomerModel>>([]);
   final _jobs = Rx<List<JobModel>>([]);
@@ -38,8 +38,8 @@ class BaseController extends GetxController {
     _activeCompany.value = value;
   }
 
-  bool get isUpdating => _isUpdating.value;
-  set isUpdating(bool value) => _isUpdating.value = value;
+  bool get isLoading => _isLoading.value;
+  set isLoading(bool value) => _isLoading.value = value;
 
   fetchInitialData() async {
     if (_authController.user.objectId == null) return;

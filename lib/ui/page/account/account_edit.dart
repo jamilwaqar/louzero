@@ -8,11 +8,9 @@ import 'package:louzero/models/user_models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
-class AccountEdit extends StatelessWidget {
-  final UserModel userModel;
-  late final _model = Rx<UserModel>(userModel); 
+class AccountEdit extends GetWidget<AuthController> {
   
-  AccountEdit(this.userModel, {Key? key}) : super(key: key);
+  AccountEdit({Key? key}) : super(key: key);
   final _isEditContact = false.obs;
   toggleEdit() => _isEditContact.toggle();
 
@@ -21,7 +19,7 @@ class AccountEdit extends StatelessWidget {
     return Obx(()=> AppCard(
       children: [
         AppHeaderIcon(
-          !_isEditContact.value ? _model.value.fullName : 'Edit Account',
+          !_isEditContact.value ? controller.user.fullName : 'Edit Account',
           icon: Icons.edit,
           iconStart: MdiIcons.accountCircle,
           onTap: () {
@@ -43,8 +41,8 @@ class AccountEdit extends StatelessWidget {
                   Stack(
                     children: [
                       Obx(()=> AppAvatar(
-                        url: _model.value.avatar,
-                        text: _model.value.initials,
+                        url: controller.user.avatar,
+                        text: controller.user.initials,
                         size: 136,
                         backgroundColor: AppColors.secondary_50,
                       )),
@@ -71,7 +69,7 @@ class AccountEdit extends StatelessWidget {
                 ? Row(
               children: [
                 Buttons.submit('Update Account', onPressed: () {
-                  _model.value.phone = '111';
+                  controller.user.phone = '111';
                 }),
                 Buttons.text('cancel', onPressed: toggleEdit),
               ],
@@ -102,11 +100,8 @@ class AccountEdit extends StatelessWidget {
       right: -20,
       bottom: -20,
       child: CupertinoButton(
-        onPressed: () async {
-          var response = await Get.find<AuthController>().uploadAccountAvatar();
-          if (response is UserModel) {
-            _model.value = response;
-          }
+        onPressed: () {
+          Get.find<AuthController>().uploadAccountAvatar();
         },
         // padding: EdgeInsets.zero,
         child: Container(
@@ -146,7 +141,7 @@ class AccountEdit extends StatelessWidget {
       children: [
         AppTextField(
           label: 'Name',
-          initialValue: _model.value.fullName,
+          initialValue: controller.user.fullName,
         ),
       ],
     );
@@ -155,7 +150,7 @@ class AccountEdit extends StatelessWidget {
   Widget _phoneDisplay() {
     return AppIconLabelText(
         label: 'phone',
-        text: _model.value.phone,
+        text: controller.user.phone,
         hint: 'Add Phone Number.',
         icon: Icons.phone);
   }
@@ -166,7 +161,7 @@ class AccountEdit extends StatelessWidget {
       children: [
         AppTextField(
           label: 'Phone Number',
-          initialValue: _model.value.phone,
+          initialValue: controller.user.phone,
         ),
       ],
     );
@@ -175,7 +170,7 @@ class AccountEdit extends StatelessWidget {
   Widget _emailDisplay() {
     return AppIconLabelText(
       label: 'Email',
-      text: _model.value.email,
+      text: controller.user.email,
       hint: 'Add Email.',
       icon: Icons.mail,
     );
@@ -187,7 +182,7 @@ class AccountEdit extends StatelessWidget {
       children: [
         AppTextField(
           label: 'Email',
-          initialValue: _model.value.email,
+          initialValue: controller.user.email,
         ),
       ],
     );
@@ -197,7 +192,7 @@ class AccountEdit extends StatelessWidget {
     return AppIconLabelText(
       label: 'Address',
       hint: 'Add Service Address.',
-      text: _model.value.serviceAddress,
+      text: controller.user.serviceAddress,
       icon: Icons.location_pin,
     );
   }

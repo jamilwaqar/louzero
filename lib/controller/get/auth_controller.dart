@@ -67,7 +67,7 @@ class AuthController extends GetxController {
     );
     try {
       var res = await Backendless.userService.update(user);
-      UserModel userModel = UserModel.fromJson(Map<String, dynamic>.from(res!.properties));
+      userModel.value = UserModel.fromJson(Map<String, dynamic>.from(res!.properties));
       return userModel;
     } catch (e) {
       return e.toString();

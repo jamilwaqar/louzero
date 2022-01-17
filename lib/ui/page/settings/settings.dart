@@ -113,7 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
       onTap: () {
         switch (category) {
           case SettingType.account:
-            Get.to(() => MyAccountPage(Get.find<AuthController>().user),
+            Get.to(() => const MyAccountPage(),
                 binding: CompanyBinding());
             break;
           case SettingType.company:

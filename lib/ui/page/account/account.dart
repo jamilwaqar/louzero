@@ -14,8 +14,8 @@ import 'package:louzero/ui/page/company/company.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
 class MyAccountPage extends GetWidget<CompanyController> {
-  final UserModel userModel;
-  const MyAccountPage(this.userModel, {Key? key}) : super(key: key);
+
+  const MyAccountPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
       child: Column(
         children: [
           const SizedBox(height: 32),
-          AccountEdit(userModel),
+          AccountEdit(),
           _companies(),
         ],
       ),
