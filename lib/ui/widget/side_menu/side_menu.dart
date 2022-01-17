@@ -5,7 +5,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
@@ -22,6 +22,8 @@ class SideMenuView extends StatefulWidget {
 }
 
 class _SideMenuViewState extends State<SideMenuView> {
+  final _authController = Get.find<AuthController>();
+  
   @override
   Widget build(BuildContext context) {
     // _sideMenuKey.currentState?.open();
@@ -170,9 +172,9 @@ class _SideMenuViewState extends State<SideMenuView> {
   Widget _profile() {
     return Column(
       children: [
-        AppAvatar(url: AuthManager.userModel!.avatar, text: AuthManager.userModel!.initials, size: 96, backgroundColor: AppColors.medium_2),
+        AppAvatar(url: _authController.user.avatar, text: _authController.user.initials, size: 96, backgroundColor: AppColors.medium_2),
         const SizedBox(height: 8),
-        Text(AuthManager.userModel!.fullName, style: AppStyles.headerRegular),
+        Text(_authController.user.fullName, style: AppStyles.headerRegular),
         const SizedBox(height: 8),
         const Text(
           'Patio Pools and Spas',

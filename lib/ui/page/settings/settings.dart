@@ -5,7 +5,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/account/account.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import '../app_base_scaffold.dart';
@@ -113,7 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
       onTap: () {
         switch (category) {
           case SettingType.account:
-            Get.to(() => MyAccountPage(AuthManager.userModel!),
+            Get.to(() => MyAccountPage(Get.find<AuthController>().user),
                 binding: CompanyBinding());
             break;
           case SettingType.company:

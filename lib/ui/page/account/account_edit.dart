@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
@@ -103,7 +103,7 @@ class AccountEdit extends StatelessWidget {
       bottom: -20,
       child: CupertinoButton(
         onPressed: () async {
-          var response = await AuthManager().uploadAccountAvatar();
+          var response = await AuthController().uploadAccountAvatar();
           if (response is UserModel) {
             _model.value = response;
           }

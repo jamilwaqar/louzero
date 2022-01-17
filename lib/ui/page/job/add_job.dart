@@ -9,7 +9,7 @@ import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
@@ -27,7 +27,7 @@ class AddJobPage extends GetWidget<JobController> {
   final _baseController = Get.find<BaseController>();
   final TextEditingController _customerNameController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController(text: jobModel?.description);
-  late final List<String> _jobTypes = AuthManager.userModel!.jobTypes;
+  late final List<String> _jobTypes = Get.find<AuthController>().user.jobTypes;
   late final List<String> _customerList = _baseController.customers.map((e) => e.objectId!).toList();
   final _status = JobStatus.estimate.obs;
   late final _jobType = Rx<String?>(jobModel?.jobType);

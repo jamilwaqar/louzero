@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 
 class Utils {
   static final Utils _singleton = Utils._internal();
@@ -20,7 +20,7 @@ class Utils {
   Size screenSize(BuildContext context) => MediaQuery.of(context).size;
 
   Future initialize() async {
-    AuthManager().initializeManager();
+    AuthController().initializeManager();
   }
 }
 

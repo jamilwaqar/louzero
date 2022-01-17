@@ -15,7 +15,7 @@ import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
@@ -30,6 +30,7 @@ class AddCustomerPage extends StatefulWidget {
 }
 
 class _AddCustomerPageState extends State<AddCustomerPage> {
+  final _authController = Get.find<AuthController>();
   late final TextEditingController _companyNameController =
       TextEditingController(text: widget.model?.companyName);
   late final TextEditingController _parentAccountNameController =
@@ -86,7 +87,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   late bool _sameAsService = widget.model?.billAddressSame ?? true;
 
   final List<Widget> _customerContactList = [];
-  String? _customerType = AuthManager.userModel!.customerTypes[0];
+  late String? _customerType = _authController.user.customerTypes[0];
   late final List<List<CTContactType>> _contactTypes = [
     widget.model?.customerContacts.first.types ?? []
   ];
@@ -182,7 +183,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               Flexible(
                   child: AppDropDown(
                 label: "Customer Type*",
-                itemList: AuthManager.userModel!.customerTypes,
+                itemList: _authController.user.customerTypes,
                 initValue: _customerType,
                 onChanged: (value) {
                   setState(() {

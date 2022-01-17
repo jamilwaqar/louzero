@@ -3,7 +3,7 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/login.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
@@ -16,7 +16,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(BaseController());
   await GetStorage.init();
-  // await Backendless.setUrl(APIManager.API_HOST);
   await Backendless.initApp(
       applicationId: APIManager.applicationId,
       androidApiKey: APIManager.androidApiKey,
@@ -50,9 +49,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: AuthManager().loggedIn,
+      valueListenable: AuthController().loggedIn,
       builder: (ctx, value, child) {
-        if (!value && AuthManager().isAuthUser) {
+        if (!value && AuthController().isAuthUser) {
           NavigationController().loading();
           return const AppBaseScaffold(
             logoOnly: true,

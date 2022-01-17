@@ -9,7 +9,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/widget/appbar/app_bar_page_header.dart';
 import 'package:louzero/ui/widget/side_menu/side_menu.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -45,7 +45,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
     GetStorage().write(GSKey.isAuthUser, false);
     await AuthAPI(auth: Backendless.userService).logout();
     NavigationController().popToFirst(context);
-    AuthManager().loggedIn.value = false;
+    AuthController().loggedIn.value = false;
   }
 
   @override
@@ -54,7 +54,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
       valueListenable: NavigationController().notifierInitLoading,
       builder: (ctx, isLoading, child) {
         return ValueListenableBuilder<bool>(
-          valueListenable: AuthManager().loggedIn,
+          valueListenable: AuthController().loggedIn,
           builder: (ctx, isLoggedIn, child) {
             double minHeight = MediaQuery.of(context).size.height;
             return Stack(
@@ -205,8 +205,8 @@ class AppBasePhysics extends ClampingScrollPhysics {
 
 class AppUserDropdownMenu extends StatelessWidget {
   final void Function(String val)? onChange;
-
-  const AppUserDropdownMenu({Key? key, this.onChange}) : super(key: key);
+  final _authController = Get.find<AuthController>();
+  AppUserDropdownMenu({Key? key, this.onChange}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +217,7 @@ class AppUserDropdownMenu extends StatelessWidget {
           icon: Icons.person_rounded,
           onTap: () {
             Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-                Get.to(() => MyAccountPage(AuthManager.userModel!),
+                Get.to(() => MyAccountPage(_authController.user),
                     binding: CompanyBinding()));
           },
         ),
@@ -243,9 +243,9 @@ class AppUserDropdownMenu extends StatelessWidget {
       ],
       button: [
         AppAvatar(
-          url: AuthManager.userModel!.avatar,
+          url: _authController.user.avatar,
           size: 40,
-          text: AuthManager.userModel!.initials,
+          text: _authController.user.initials,
           borderColor: AppColors.lightest,
         ),
         const Icon(Icons.arrow_drop_down, color: AppColors.lightest)

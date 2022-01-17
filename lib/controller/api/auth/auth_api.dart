@@ -1,12 +1,13 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 
 class AuthAPI {
   final BackendlessUserService auth;
-  
+  final _authController = Get.find<AuthController>();
   AuthAPI({required this.auth});
   Future<BackendlessUser?> get user => auth.getCurrentUser();
 
@@ -14,7 +15,7 @@ class AuthAPI {
     try {
       var authUser = await auth.login(email, password, true);
       try {
-        AuthManager.initUser(authUser);
+        _authController.initUser(authUser);
       } catch (e){}
       if (authUser != null) {
         return authUser;
@@ -32,7 +33,7 @@ class AuthAPI {
     try {
       var authUser = await auth.loginAsGuest();
       try {
-        AuthManager.guestUserId = authUser?.getObjectId();
+        _authController.guestUserId = authUser?.getObjectId();
       } catch (e) {}
       // AuthStateManager.initUser(authUser);
       if (authUser != null) {
@@ -80,8 +81,8 @@ class AuthAPI {
       EmailEnvelope envelope = EmailEnvelope();
       envelope.to = {email};
       Map<String, String> json = {
-        'senderName': AuthManager.userModel!.fullName,
-        'senderEmail': AuthManager.userModel!.email,
+        'senderName': _authController.user.fullName,
+        'senderEmail': _authController.user.email,
         'code': code.toString(),
       };
       await Backendless.messaging
@@ -131,9 +132,9 @@ class AuthAPI {
   }
 
   Future cleanupGuestUser() async {
-    await deleteAccount(AuthManager.guestUserId!);
-    if (AuthManager.inviteModelId != null) {
-      await APIManager.delete(BLPath.invites, AuthManager.inviteModelId!);
+    await deleteAccount(_authController.guestUserId!);
+    if (_authController.inviteModelId != null) {
+      await APIManager.delete(BLPath.invites, _authController.inviteModelId!);
     }
     return;
   }
