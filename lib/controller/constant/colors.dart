@@ -17,6 +17,9 @@ abstract class AppColors {
   static const Color light_4 = Color(0xFFE2E2E3);
 
   static const Color orange = Color(0xFFEC6A3A);
+  static const Color success = Color(0xFF008484);
+  static const Color errorText = Color(0xFFB3261E);
+  static const Color errorTint = Color(0xFFFCEEEE);
   static const Color appBar = Color(0xFF263842);
   static const Color accent_1 = Color(0xFF65D19D);
   static const Color primary_1 = Color(0xFFE77C33);

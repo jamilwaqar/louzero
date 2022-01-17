@@ -45,21 +45,45 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   final _textFieldFocus = FocusNode();
   Color _color = AppColors.secondary_99;
+  Color _borderColor = Colors.transparent;
 
   @override
   void initState() {
     _textFieldFocus.addListener(() {
       if (_textFieldFocus.hasFocus) {
         setState(() {
-          _color = Colors.transparent;
+          _color = _hasError() ? AppColors.errorTint : Colors.transparent;
         });
       } else {
         setState(() {
-          _color = AppColors.secondary_99;
+          _color = _hasValue() ? Colors.transparent : AppColors.secondary_99;
+          _borderColor =
+              _hasValue() ? AppColors.secondary_70 : Colors.transparent;
+
+          if (_hasError()) {
+            _color = AppColors.errorTint;
+          }
         });
       }
     });
     super.initState();
+  }
+
+  bool _hasError() {
+    // if (widget.validator != null && widget.controller != null) {
+    //   if (widget.controller!.text.isNotEmpty) {
+    //     String? error = widget.validator!.call(widget.controller!.text);
+    //     return error != null && error.isNotEmpty;
+    //   }
+    // }
+    return false;
+  }
+
+  bool _hasValue() {
+    if (widget.controller != null) {
+      return widget.controller!.text.isNotEmpty;
+    }
+    return false;
   }
 
   Widget _input() {
@@ -73,15 +97,27 @@ class _AppTextFieldState extends State<AppTextField> {
       keyboardType: widget.keyboardType,
       enabled: widget.enabled,
       onChanged: widget.onChanged,
-      style: AppStyles.labelBold
-          .copyWith(height: 1.5, fontSize: 16, color: AppColors.secondary_20),
+      style: AppStyles.labelBold.copyWith(
+          height: 1.5,
+          fontSize: 16,
+          color: AppColors.secondary_20,
+          fontWeight: FontWeight.w700),
       minLines: 1,
       maxLines: widget.multiline ? null : widget.maxLines,
       decoration: AppStyles.inputDefault.copyWith(
-        labelText: widget.label,
-        fillColor: _color,
-        isDense: true,
-      ),
+          suffixIcon:
+              _hasValue() ? Icon(Icons.check, color: Colors.green) : null,
+          labelText: widget.label,
+          labelStyle: AppStyles.labelBold.copyWith(
+              height: 1.5,
+              fontSize: 16,
+              color: AppColors.secondary_40,
+              fontWeight: FontWeight.w700),
+          fillColor: _color,
+          isDense: true,
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: _borderColor),
+          )),
     );
   }
 
