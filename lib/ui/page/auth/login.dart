@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
     if (res is String) {
       WarningMessageDialog.showDialog(context, res);
     } else {
-      AuthController().loggedIn.value = true;
+      Get.find<AuthController>().loggedIn.value = true;
     }
   }
 

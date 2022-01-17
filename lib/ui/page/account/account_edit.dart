@@ -103,7 +103,7 @@ class AccountEdit extends StatelessWidget {
       bottom: -20,
       child: CupertinoButton(
         onPressed: () async {
-          var response = await AuthController().uploadAccountAvatar();
+          var response = await Get.find<AuthController>().uploadAccountAvatar();
           if (response is UserModel) {
             _model.value = response;
           }

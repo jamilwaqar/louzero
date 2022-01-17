@@ -19,9 +19,6 @@ class Utils {
   double safePaddingBottom(BuildContext context) => MediaQuery.of(context).padding.bottom;
   Size screenSize(BuildContext context) => MediaQuery.of(context).size;
 
-  Future initialize() async {
-    AuthController().initializeManager();
-  }
 }
 
 Icon appIcon(IconData iconData, {Color? color}) {

@@ -40,12 +40,12 @@ class AppBaseScaffold extends StatefulWidget {
 class _AppBaseScaffoldState extends State<AppBaseScaffold> {
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
   final navigatorKey = GlobalKey<NavigatorState>();
-
+  final _authController = Get.find<AuthController>();
   void _logout(BuildContext context) async {
     GetStorage().write(GSKey.isAuthUser, false);
     await AuthAPI(auth: Backendless.userService).logout();
     NavigationController().popToFirst(context);
-    AuthController().loggedIn.value = false;
+    _authController.loggedIn.value = false;
   }
 
   @override
@@ -53,128 +53,125 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
     return ValueListenableBuilder<bool>(
       valueListenable: NavigationController().notifierInitLoading,
       builder: (ctx, isLoading, child) {
-        return ValueListenableBuilder<bool>(
-          valueListenable: AuthController().loggedIn,
-          builder: (ctx, isLoggedIn, child) {
-            double minHeight = MediaQuery.of(context).size.height;
-            return Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Color(0xFF465D66), Color(0xFF182933)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.topRight),
-                    ),
-                    child: Scaffold(
-                      drawer: isLoggedIn ? const SideMenuView() : null,
-                      drawerScrimColor: Colors.black.withOpacity(0),
-                      key: _key,
-                      resizeToAvoidBottomInset: widget.hasKeyboard,
-                      // backgroundColor: AppColors.secondary_99,
-                      backgroundColor: Colors.transparent,
-                      drawerEnableOpenDragGesture: false,
-
-                      appBar: widget.logoOnly
-                          ? PreferredSize(
-                              preferredSize: const Size.fromHeight(100.0),
-                              child: AppBar(
-                                elevation: 0,
-                                backgroundColor: Colors.transparent,
-                                flexibleSpace: Center(
-                                  child: Image.asset(
-                                      "assets/icons/general/logo_icon.png"),
-                                ),
-                              ),
-                            )
-                          : null,
-
-                      body: widget.logoOnly
-                          ? Container(
-                              color: AppColors.secondary_99,
-                              // ignore: unnecessary_null_in_if_null_operators
-                              child: widget.child ?? null,
-                            )
-                          : NestedScrollView(
-                              physics: AppBasePhysics(),
-                              floatHeaderSlivers: true,
-                              headerSliverBuilder:
-                                  (context, innerBoxIsScrolled) => [
-                                AppBarPageHeader(
-                                  context: context,
-                                  title: SizedBox(
-                                    height: 80,
-                                    child: Image.asset(
-                                        "assets/icons/general/logo_icon.png"),
-                                  ),
-                                  footerStart: [
-                                    if (widget.subheader != null)
-                                      Text(widget.subheader!,
-                                          style: AppStyles.headerAppBar),
-                                    if (widget.footerStart != null)
-                                      ...widget.footerStart!,
-                                  ],
-                                  footerEnd: widget.footerEnd,
-                                  actions: [
-                                    if (isLoggedIn)
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8),
-                                        child: AppUserDropdownMenu(
-                                          onChange: (val) {
-                                            if (val == 'logout') {
-                                              _logout(context);
-                                            }
-                                          },
-                                        ),
-                                      )
-                                  ],
-                                  onMenuPress: () {
-                                    _key.currentState?.openDrawer();
-                                  },
-                                )
-                              ],
-                              body: ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(40),
-                                  topRight: Radius.circular(40),
-                                ),
-                                child: SingleChildScrollView(
-                                  // physics: const ClampingScrollPhysics(),
-                                  child: Container(
-                                    constraints: BoxConstraints(
-                                      minHeight: minHeight,
-                                      minWidth: double.infinity,
-                                    ),
-                                    color: AppColors.secondary_99,
-                                    // ignore: unnecessary_null_in_if_null_operators
-                                    child: widget.child ?? null,
-                                  ),
-                                ),
-                              ),
-                            ),
-                    ),
+        return Obx(() {
+          double minHeight = MediaQuery.of(context).size.height;
+          return Stack(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [Color(0xFF465D66), Color(0xFF182933)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.topRight),
                   ),
-                ),
-                if (isLoading)
-                  Positioned.fill(
-                    child: Container(
-                      alignment: Alignment.center,
-                      color: AppColors.secondary_95.withOpacity(0.6),
-                      child: const AppSpinner(
-                        size: 160,
-                        width: 8,
+                  child: Scaffold(
+                    drawer: _authController.loggedIn.value ? const SideMenuView() : null,
+                    drawerScrimColor: Colors.black.withOpacity(0),
+                    key: _key,
+                    resizeToAvoidBottomInset: widget.hasKeyboard,
+                    // backgroundColor: AppColors.secondary_99,
+                    backgroundColor: Colors.transparent,
+                    drawerEnableOpenDragGesture: false,
+
+                    appBar: widget.logoOnly
+                        ? PreferredSize(
+                      preferredSize: const Size.fromHeight(100.0),
+                      child: AppBar(
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        flexibleSpace: Center(
+                          child: Image.asset(
+                              "assets/icons/general/logo_icon.png"),
+                        ),
+                      ),
+                    )
+                        : null,
+
+                    body: widget.logoOnly
+                        ? Container(
+                      color: AppColors.secondary_99,
+                      // ignore: unnecessary_null_in_if_null_operators
+                      child: widget.child ?? null,
+                    )
+                        : NestedScrollView(
+                      physics: AppBasePhysics(),
+                      floatHeaderSlivers: true,
+                      headerSliverBuilder:
+                          (context, innerBoxIsScrolled) => [
+                        AppBarPageHeader(
+                          context: context,
+                          title: SizedBox(
+                            height: 80,
+                            child: Image.asset(
+                                "assets/icons/general/logo_icon.png"),
+                          ),
+                          footerStart: [
+                            if (widget.subheader != null)
+                              Text(widget.subheader!,
+                                  style: AppStyles.headerAppBar),
+                            if (widget.footerStart != null)
+                              ...widget.footerStart!,
+                          ],
+                          footerEnd: widget.footerEnd,
+                          actions: [
+                            if (_authController.loggedIn.value)
+                              Padding(
+                                padding:
+                                const EdgeInsets.only(right: 8),
+                                child: AppUserDropdownMenu(
+                                  onChange: (val) {
+                                    if (val == 'logout') {
+                                      _logout(context);
+                                    }
+                                  },
+                                ),
+                              )
+                          ],
+                          onMenuPress: () {
+                            _key.currentState?.openDrawer();
+                          },
+                        )
+                      ],
+                      body: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        ),
+                        child: SingleChildScrollView(
+                          // physics: const ClampingScrollPhysics(),
+                          child: Container(
+                            constraints: BoxConstraints(
+                              minHeight: minHeight,
+                              minWidth: double.infinity,
+                            ),
+                            color: AppColors.secondary_99,
+                            // ignore: unnecessary_null_in_if_null_operators
+                            child: widget.child ?? null,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-              ],
-            );
-          },
-        );
+                ),
+              ),
+              if (isLoading)
+                Positioned.fill(
+                  child: Container(
+                    alignment: Alignment.center,
+                    color: AppColors.secondary_95.withOpacity(0.6),
+                    child: const AppSpinner(
+                      size: 160,
+                      width: 8,
+                    ),
+                  ),
+                ),
+            ],
+          );
+        });
       },
     );
   }

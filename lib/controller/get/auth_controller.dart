@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -21,9 +20,11 @@ class AuthController extends GetxController {
   String? guestUserId;
   String? inviteModelId;
 
-  final loggedIn = ValueNotifier(false);
+  final loggedIn = false.obs;
 
-  Future initializeManager() async {
+  @override
+  void onInit() async {
+    super.onInit();
     BackendlessUser? response = await Backendless.userService.getCurrentUser();
     initUser(response);
     loggedIn.value = (await Backendless.userService.isValidLogin()) ?? false;

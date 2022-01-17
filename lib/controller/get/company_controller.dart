@@ -45,7 +45,7 @@ class CompanyController extends GetxController {
       if (isActiveCompany) {
         Get.find<AuthController>().user.activeCompanyId = res['objectId'];
         Get.find<BaseController>().activeCompany = newModel;
-        await AuthController().updateUser();
+        await Get.find<AuthController>().updateUser();
       }
     }
     update();

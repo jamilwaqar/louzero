@@ -123,10 +123,10 @@ class _CompletePageState extends State<CompletePage> {
         await AuthAPI(auth: Backendless.userService).cleanupGuestUser();
       }
       NavigationController().loading(isLoading: false);
-      AuthController().loggedIn.value = true;
+      Get.find<AuthController>().loggedIn.value = true;
       _authController.user.firstname = _firstNameController.text;
       _authController.user.lastname = _lastNameController.text;
-      await AuthController().updateUser();
+      await Get.find<AuthController>().updateUser();
       Get.to(()=> const AccountSetup());
     }
   }

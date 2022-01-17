@@ -34,7 +34,9 @@ class AuthAPI {
       var authUser = await auth.loginAsGuest();
       try {
         _authController.guestUserId = authUser?.getObjectId();
-      } catch (e) {}
+      } catch (e) {
+        print(e.toString());
+      }
       // AuthStateManager.initUser(authUser);
       if (authUser != null) {
         return authUser;

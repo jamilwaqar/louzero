@@ -164,7 +164,7 @@ class _AccountSetupState extends State<AccountSetup> {
                   onPressed: () async {
                     _authController.user.customerTypes = customerTypes;
                     NavigationController().loading();
-                    await AuthController().updateUser();
+                    await Get.find<AuthController>().updateUser();
                     NavigationController().loading(isLoading: false);
                     _saveFormInput();
                   }),
@@ -207,7 +207,7 @@ class _AccountSetupState extends State<AccountSetup> {
                   onPressed: () async {
                     _authController.user.jobTypes = jobTypes;
                     NavigationController().loading();
-                    await AuthController().updateUser();
+                    await Get.find<AuthController>().updateUser();
                     NavigationController().loading(isLoading: false);
                     _saveFormInput();
                   }),
