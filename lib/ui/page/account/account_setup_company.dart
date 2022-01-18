@@ -7,7 +7,6 @@ import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_checkbox.dart';
 import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_multiselect.dart';
 import 'package:louzero/common/app_textfield.dart';
@@ -132,6 +131,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                   size: 24,
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     expand(_companyName()),
                     gapX(24),
@@ -139,6 +139,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     expand(_email()),
                     gapX(24),

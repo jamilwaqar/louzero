@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,124 +57,97 @@ class MyAccountPage extends GetWidget<CompanyController> {
     );
   }
 
+  Color getColor(int index) {
+    if (index == controller.selectedCompany) {
+      return AppColors.primary_1;
+    }
+    return Colors.transparent;
+  }
+
+  Color getRowColor(int index) {
+    if (index == controller.selectedCompany) {
+      return Colors.white;
+    }
+    return index.isOdd ? AppColors.oddItemColor : AppColors.evenItemColor;
+  }
+
   Widget _companyItem(int index) {
     CompanyModel model = controller.companies[index];
-    return Container(
-      color: index.isOdd ? AppColors.oddItemColor : AppColors.evenItemColor,
-      height: 65,
-      child: Row(children: [
-        const SizedBox(width: 24),
-        _companyAvatar(model),
-        const SizedBox(width: 24),
-        Expanded(
-          child: AppTextBody(
-            model.name,
-            color: AppColors.dark_2,
-            bold: true,
+    inspect(model);
+    return BorderBox(
+      height: 60,
+      widthBorder: 4,
+      colorBorder: getColor(index),
+      colorBg: getRowColor(index),
+      child: FlexRow(
+        flex: const [0, 1, 0, 0, 0, 0, 0],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            child: _companyAvatar(model),
           ),
-        ),
-        Container(
-          width: 10,
-          height: 10,
-          decoration: const BoxDecoration(
-              shape: BoxShape.circle, color: AppColors.medium_2),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: AppTextBody(
-            model.status.label,
+          Row(
+            children: [
+              Text(model.name, style: AppStyles.labelBold),
+              SizedBox(
+                width: 24,
+              ),
+              if (index == controller.selectedCompany)
+                Icon(
+                  Icons.check,
+                  color: AppColors.primary_1,
+                  size: 20,
+                )
+            ],
           ),
-        ),
-        AppButton(
-          margin: const EdgeInsets.only(right: 8),
-          label: 'SWITCH TO',
-          colorBg: AppColors.dark_1,
-          colorText: AppColors.darkest,
-          primary: false,
-          onPressed: () {},
-        ),
-        const SizedBox(width: 24),
-        PopupMenuButton(
-            padding: EdgeInsets.zero,
-            offset: const Offset(0, 40),
-            onSelected: (value) {
+          if (index != controller.selectedCompany)
+            Buttons.outline_sm('Switch to Company',
+                icon: MdiIcons.swapHorizontal, onPressed: () {
+              controller.selectedCompany = index;
+            }),
+          Container(
+            width: 10,
+            height: 10,
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle, gradient: AppColors.grad_success),
+          ),
+          Text(model.status.label,
+              style: AppStyles.labelRegular
+                  .copyWith(color: AppColors.secondary_50)),
+          AppPopMenu(
+            onSelected: (val) {
               controller.company = model;
-              if (value == 0) {
+              if (val == 'View Company') {
                 Get.to(() => CompanyPage(), arguments: model);
-              } else if (value == 1) {
+              }
+              if (val == 'Edit Company') {
                 Get.to(() => const AddCompanyPage());
               }
             },
-            elevation: 2,
-            shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide:
-                    const BorderSide(color: AppColors.medium_2, width: 0)),
-            child: const Icon(Icons.more_vert),
-            itemBuilder: (context) => [
-                  PopupMenuItem(
-                    child: SizedBox(
-                      width: 200,
-                      height: 50,
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.check,
-                            color: AppColors.icon,
-                          ),
-                          SizedBox(width: 10),
-                          Text("View Company",
-                              style: TextStyle(
-                                color: AppColors.icon,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                              )),
-                        ],
-                      ),
-                    ),
-                    value: 0,
-                  ),
-                  PopupMenuItem(
-                    child: SizedBox(
-                      width: 200,
-                      height: 60,
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.edit,
-                            color: AppColors.icon,
-                          ),
-                          SizedBox(width: 10),
-                          Text("Edit Company",
-                              style: TextStyle(
-                                color: AppColors.icon,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                              )),
-                        ],
-                      ),
-                    ),
-                    value: 1,
-                  ),
-                ]),
-        const SizedBox(width: 24),
-      ]),
+            button: const [
+              Icon(Icons.more_vert, color: AppColors.secondary_30)
+            ],
+            items: const [
+              PopMenuItem(
+                label: 'View Company',
+                icon: MdiIcons.arrowTopRight,
+              ),
+              PopMenuItem(
+                label: 'Edit Company',
+                icon: Icons.edit,
+              ),
+            ],
+          ),
+          SizedBox(width: 0)
+        ],
+      ),
     );
   }
 
   Widget _companyAvatar(CompanyModel model) {
-    return Container(
-      width: 32,
-      height: 32,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          border: Border.all(color: AppColors.dark_2),
-          borderRadius: BorderRadius.circular(8),
-          color: AppColors.lightest),
-      child: model.avatar == null
-          ? appIcon(Icons.home_work)
-          : _cachedNetworkImage(model.avatar!.toString()),
-    );
+    return model.avatar == null
+        ? appIcon(Icons.home_work, color: AppColors.secondary_50)
+        : _cachedNetworkImage(model.avatar!.toString());
   }
 
   Widget _cachedNetworkImage(String url) => CachedNetworkImage(
@@ -197,16 +172,22 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
   // TODO: Don't remove this: Reactivate Dialog
   _showReactivateDialog() {
-    String _desc = 'To reactivate *Old Cancelled Company*, please email us *help@evosus.com* and we’ll get back to you as soon as possible';
+    String _desc =
+        'To reactivate *Old Cancelled Company*, please email us *help@evosus.com* and we’ll get back to you as soon as possible';
     Dialog errorDialog = Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)), //this right here
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.0)), //this right here
       child: Container(
         width: 360.0,
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const AppTextHeader('Reactivate Company', size: 24, alignLeft: true,),
+            const AppTextHeader(
+              'Reactivate Company',
+              size: 24,
+              alignLeft: true,
+            ),
             const SizedBox(height: 24),
             SimpleRichText(
               _desc,
@@ -219,13 +200,20 @@ class MyAccountPage extends GetWidget<CompanyController> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppButton(label: 'Cancel', primary: false, onPressed: () {
-                    Get.back();
-                  },),
+                  AppButton(
+                    label: 'Cancel',
+                    primary: false,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
                   const SizedBox(width: 16),
-                  AppButton(label: 'Email', onPressed: () {
-                    Get.back();
-                  },),
+                  AppButton(
+                    label: 'Email',
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
                 ],
               ),
             )
@@ -240,6 +228,44 @@ class MyAccountPage extends GetWidget<CompanyController> {
       builder: (BuildContext context) {
         return errorDialog;
       },
+    );
+  }
+}
+
+class BorderBox extends StatelessWidget {
+  final Widget? child;
+  final Color? colorBg;
+  final Color? colorBorder;
+  final double height;
+  final double widthBorder;
+  const BorderBox({
+    Key? key,
+    required this.child,
+    this.height = 60,
+    this.widthBorder = 7,
+    this.colorBg = AppColors.secondary_99,
+    this.colorBorder = AppColors.secondary_80,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+                padding: EdgeInsets.only(left: 14),
+                color: colorBg,
+                child: child),
+          ),
+          Container(
+            width: widthBorder,
+            height: height,
+            decoration: BoxDecoration(color: colorBorder),
+          )
+        ],
+      ),
     );
   }
 }
