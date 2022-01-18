@@ -117,7 +117,12 @@ abstract class AppStyles {
     ),
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(color: AppColors.orange),
-      borderRadius: BorderRadius.all(Radius.circular(0)),
+    ),
+    errorBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: AppColors.errorText),
+    ),
+    focusedErrorBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: AppColors.errorText),
     ),
   );
 }

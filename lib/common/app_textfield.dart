@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AppTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -46,15 +47,12 @@ class _AppTextFieldState extends State<AppTextField> {
   final _textFieldFocus = FocusNode();
   Color _color = AppColors.secondary_99;
   Color _borderColor = Colors.transparent;
+  AutovalidateMode _validateMode = AutovalidateMode.onUserInteraction;
 
   @override
   void initState() {
     _textFieldFocus.addListener(() {
-      if (_textFieldFocus.hasFocus) {
-        setState(() {
-          _color = _hasError() ? AppColors.errorTint : Colors.transparent;
-        });
-      } else {
+      if (!_textFieldFocus.hasFocus) {
         setState(() {
           _color = _hasValue() ? Colors.transparent : AppColors.secondary_99;
           _borderColor =
@@ -70,12 +68,10 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   bool _hasError() {
-    // if (widget.validator != null && widget.controller != null) {
-    //   if (widget.controller!.text.isNotEmpty) {
-    //     String? error = widget.validator!.call(widget.controller!.text);
-    //     return error != null && error.isNotEmpty;
-    //   }
-    // }
+    if (widget.validator != null && widget.controller != null) {
+      String? error = widget.validator!.call(widget.controller!.text);
+      return error != null && error.isNotEmpty;
+    }
     return false;
   }
 
@@ -88,15 +84,22 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Widget _input() {
     return TextFormField(
+      enableIMEPersonalizedLearning: false,
       initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,
       controller: widget.controller,
       validator: widget.validator,
+      autovalidateMode: _validateMode,
       onSaved: widget.onSaved,
       keyboardType: widget.keyboardType,
       enabled: widget.enabled,
-      onChanged: widget.onChanged,
+      onChanged: (val) {
+        widget.onChanged;
+        setState(() {
+          _color = _hasError() ? AppColors.errorTint : Colors.transparent;
+        });
+      },
       style: AppStyles.labelBold.copyWith(
           height: 1.5,
           fontSize: 16,
@@ -105,8 +108,11 @@ class _AppTextFieldState extends State<AppTextField> {
       minLines: 1,
       maxLines: widget.multiline ? null : widget.maxLines,
       decoration: AppStyles.inputDefault.copyWith(
-          suffixIcon:
-              _hasValue() ? Icon(Icons.check, color: Colors.green) : null,
+          suffixIcon: _hasError()
+              ? Icon(MdiIcons.alertCircleOutline, color: AppColors.errorText)
+              : _hasValue()
+                  ? Icon(Icons.check, color: AppColors.success)
+                  : null,
           labelText: widget.label,
           labelStyle: AppStyles.labelBold.copyWith(
               height: 1.5,
