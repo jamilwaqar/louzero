@@ -161,6 +161,8 @@ class AppButtonGradient extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
   final double height;
+  final double fontSize;
+  final double iconSize;
   final bool expanded;
   final IconData? iconLeading;
   final IconData? iconTrailing;
@@ -184,6 +186,8 @@ class AppButtonGradient extends StatelessWidget {
     this.colorIconLeading = Colors.white,
     this.colorIconTrailing = Colors.white,
     this.height = 40,
+    this.fontSize = 16,
+    this.iconSize = 20,
     this.expanded = false,
   }) : super(key: key);
 
@@ -212,7 +216,7 @@ class AppButtonGradient extends StatelessWidget {
               padding: const EdgeInsets.only(right: 5),
               alignment: const Alignment(1, 0),
               child: iconLeading != null
-                  ? Icon(iconLeading, color: colorIconLeading, size: 20)
+                  ? Icon(iconLeading, color: colorIconLeading, size: iconSize)
                   : null,
             ),
             if (expanded)
@@ -228,8 +232,10 @@ class AppButtonGradient extends StatelessWidget {
               Text(
                 label,
                 textAlign: TextAlign.center,
-                style: AppStyles.labelBold
-                    .copyWith(color: colorText, fontWeight: FontWeight.w700),
+                style: AppStyles.labelBold.copyWith(
+                    color: colorText,
+                    fontWeight: FontWeight.w700,
+                    fontSize: fontSize),
               ),
             Container(
               width: iconTrailing != null ? 40 : 20,
@@ -261,6 +267,41 @@ abstract class Buttons {
   }
 
   static Widget outline(String label,
+      {bool expanded = false,
+      VoidCallback? onPressed,
+      IconData? icon,
+      double height = 40,
+      Color colorIcon = AppColors.orange}) {
+    return AppButtonGradient(
+      expanded: expanded,
+      label: label,
+      onPressed: onPressed,
+      colorBg: Colors.transparent,
+      colorBd: AppColors.secondary_70,
+      colorText: AppColors.secondary_20,
+      iconLeading: icon,
+      colorIconLeading: colorIcon,
+      height: height,
+    );
+  }
+
+  static Widget outline_sm(String label,
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+      label: label,
+      onPressed: onPressed,
+      colorBg: Colors.white,
+      colorBd: AppColors.secondary_80,
+      colorText: AppColors.secondary_20,
+      iconLeading: icon,
+      colorIconLeading: Colors.black,
+      height: 30,
+      fontSize: 12,
+      iconSize: 18,
+    );
+  }
+
+  static Widget outlinee(String label,
       {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
     return AppButtonGradient(
       expanded: expanded,

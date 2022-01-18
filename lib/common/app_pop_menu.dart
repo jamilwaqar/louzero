@@ -16,16 +16,19 @@ class AppPopMenu extends StatelessWidget {
   final List<PopMenuItem> items;
   final List<Widget> button;
   final Color colorIcon;
-  const AppPopMenu(
-      {Key? key,
-      this.items = const [],
-      this.button = const [],
-      this.colorIcon = AppColors.primary_60})
-      : super(key: key);
+  final Function(dynamic)? onSelected;
+  AppPopMenu({
+    Key? key,
+    this.items = const [],
+    this.button = const [],
+    this.colorIcon = AppColors.primary_60,
+    this.onSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
+        onSelected: onSelected,
         child: Row(children: [
           if (button.isEmpty) const Icon(Icons.more_vert),
           if (button.isNotEmpty) ...button
@@ -43,6 +46,7 @@ class AppPopMenu extends StatelessWidget {
   PopupMenuItem popItem(String label,
       {IconData icon = Icons.chevron_right, VoidCallback? onTap}) {
     return PopupMenuItem(
+        value: label,
         onTap: onTap,
         child: Row(
           children: [

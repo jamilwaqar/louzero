@@ -47,7 +47,8 @@ class _AppTextFieldState extends State<AppTextField> {
   final _textFieldFocus = FocusNode();
   Color _color = AppColors.secondary_99;
   Color _borderColor = Colors.transparent;
-  AutovalidateMode _validateMode = AutovalidateMode.onUserInteraction;
+  Icon? _status;
+  AutovalidateMode _validateMode = AutovalidateMode.disabled;
 
   @override
   void initState() {
@@ -58,9 +59,20 @@ class _AppTextFieldState extends State<AppTextField> {
           _borderColor =
               _hasValue() ? AppColors.secondary_70 : Colors.transparent;
 
-          if (_hasError()) {
+          if (!_hasError()) {
+            _validateMode = AutovalidateMode.disabled;
+            _status = Icon(Icons.check, color: AppColors.success);
+          } else {
+            _validateMode = AutovalidateMode.always;
             _color = AppColors.errorTint;
+            _borderColor = AppColors.errorText;
+            _status =
+                Icon(MdiIcons.alertCircleOutline, color: AppColors.errorText);
           }
+        });
+      } else {
+        setState(() {
+          _color = Colors.transparent;
         });
       }
     });
@@ -96,9 +108,11 @@ class _AppTextFieldState extends State<AppTextField> {
       enabled: widget.enabled,
       onChanged: (val) {
         widget.onChanged;
-        setState(() {
-          _color = _hasError() ? AppColors.errorTint : Colors.transparent;
-        });
+        if (widget.validator != null && !_hasError()) {
+          setState(() {
+            _status = Icon(Icons.check, color: AppColors.success);
+          });
+        }
       },
       style: AppStyles.labelBold.copyWith(
           height: 1.5,
@@ -108,11 +122,7 @@ class _AppTextFieldState extends State<AppTextField> {
       minLines: 1,
       maxLines: widget.multiline ? null : widget.maxLines,
       decoration: AppStyles.inputDefault.copyWith(
-          suffixIcon: _hasError()
-              ? Icon(MdiIcons.alertCircleOutline, color: AppColors.errorText)
-              : _hasValue()
-                  ? Icon(Icons.check, color: AppColors.success)
-                  : null,
+          suffixIcon: _hasValue() ? _status : null,
           labelText: widget.label,
           labelStyle: AppStyles.labelBold.copyWith(
               height: 1.5,

@@ -7,6 +7,7 @@ class FlexRow extends StatelessWidget {
     this.flex = const <int>[],
     this.mt = 0,
     this.mb = 0,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
   }) : super(key: key);
 
   final double mt;
@@ -14,6 +15,7 @@ class FlexRow extends StatelessWidget {
   final List<int> flex;
   final List<Widget> children;
   final List<Widget> items = [];
+  final CrossAxisAlignment crossAxisAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class FlexRow extends StatelessWidget {
     }
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: crossAxisAlignment,
       children: items.toList(),
     );
   }
