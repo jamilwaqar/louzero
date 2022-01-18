@@ -32,7 +32,7 @@ class AuthController extends GetxController {
 
   void initUser(BackendlessUser? user) {
     if (user != null) {
-      userModel.value = UserModel.fromJson(Map<String, dynamic>.from(user.properties));
+      userModel.value = UserModel.fromMap(Map<String, dynamic>.from(user.properties));
       userModel.value.objectId = user.getObjectId();
       GetStorage().write(GSKey.isAuthUser, true);
     }
@@ -60,14 +60,16 @@ class AuthController extends GetxController {
   }
 
   Future updateUser() async {
-    BackendlessUser? user = await Backendless.userService.getCurrentUser();
-    if (user == null) return;
-    user.setProperties(
-      {... user.properties, ... userModel.toJson()}
+    BackendlessUser? backendUser = await Backendless.userService.getCurrentUser();
+    if (backendUser == null) return;
+    Map<String, dynamic> data = userModel.toJson();
+    data['addressModel'] = user.addressModel?.toJson();
+    backendUser.setProperties(
+      {... backendUser.properties, ... data}
     );
     try {
-      var res = await Backendless.userService.update(user);
-      userModel.value = UserModel.fromJson(Map<String, dynamic>.from(res!.properties));
+      var res = await Backendless.userService.update(backendUser);
+      userModel.value = UserModel.fromMap(Map<String, dynamic>.from(res!.properties));
       return userModel;
     } catch (e) {
       return e.toString();

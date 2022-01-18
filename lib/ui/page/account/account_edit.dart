@@ -4,12 +4,30 @@ import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
-import 'package:louzero/models/user_models.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
 class AccountEdit extends GetWidget<AuthController> {
-  
+
+  late final _nameController = TextEditingController(text: controller.user.fullName);
+  late final _phoneController = TextEditingController(text: controller.user.phone);
+  late final _emailController = TextEditingController(text: controller.user.email);
+
+  late final TextEditingController _countryController =
+  TextEditingController(text: controller.user.addressModel?.country);
+  late final TextEditingController _streetController =
+  TextEditingController(text: controller.user.addressModel?.street);
+  late final TextEditingController _cityController =
+  TextEditingController(text: controller.user.addressModel?.city);
+  late final TextEditingController _aptController =
+  TextEditingController(text: controller.user.addressModel?.suite);
+  late final TextEditingController _stateController =
+  TextEditingController(text: controller.user.addressModel?.state);
+  late final TextEditingController _zipController =
+  TextEditingController(text: controller.user.addressModel?.zip);
+
   AccountEdit({Key? key}) : super(key: key);
   final _isEditContact = false.obs;
   toggleEdit() => _isEditContact.toggle();
@@ -54,9 +72,7 @@ class AccountEdit extends GetWidget<AuthController> {
             ),
             Expanded(
               flex: 2,
-              child: Column(
-                children: [_editContact()],
-              ),
+              child: Obx(()=> _editContact()),
             )
           ],
         ),
@@ -68,9 +84,7 @@ class AccountEdit extends GetWidget<AuthController> {
             left: _isEditContact.value
                 ? Row(
               children: [
-                Buttons.submit('Update Account', onPressed: () {
-                  controller.user.phone = '111';
-                }),
+                Buttons.submit('Update Account', onPressed: _updateAccount),
                 Buttons.text('cancel', onPressed: toggleEdit),
               ],
             )
@@ -94,6 +108,26 @@ class AccountEdit extends GetWidget<AuthController> {
         })
       ],
     ));
+  }
+
+  void _updateAccount() async {
+    NavigationController().loading();
+    String fullName = _nameController.text;
+    List<String>names = fullName.split(' ');
+    controller.user.firstname = names.first;
+    controller.user.lastname = fullName.replaceAll('${names.first} ', '');
+
+    controller.user.phone = _phoneController.text;
+    controller.user.email = _emailController.text;
+    AddressModel addressModel = AddressModel(
+        country: _countryController.text,
+        street: _streetController.text,
+        city: _cityController.text,
+        state: _stateController.text,
+        zip: _zipController.text);
+    controller.user.addressModel = addressModel;
+    await controller.updateUser();
+    NavigationController().loading(isLoading: false);
   }
 
   Widget _uploadAvatar() => Positioned(
@@ -156,14 +190,15 @@ class AccountEdit extends GetWidget<AuthController> {
   }
 
   Widget _phoneEdit() {
-    return ColumnWithIconPrefix(
-      icon: Icons.phone,
-      children: [
-        AppTextField(
-          label: 'Phone Number',
-          initialValue: controller.user.phone,
-        ),
-      ],
+    return Obx(()=> ColumnWithIconPrefix(
+        icon: Icons.phone,
+        children: [
+          AppTextField(
+            label: 'Phone Number',
+            initialValue: controller.userModel.value.phone,
+          ),
+        ],
+      ),
     );
   }
 
@@ -203,30 +238,31 @@ class AccountEdit extends GetWidget<AuthController> {
       children: [
         AppTextField(
           label: 'Street Address',
-          initialValue: '123 Alphabet Street',
+          controller: _streetController,
         ),
         AppTextField(
           label: 'Apartment, unit, suite, or floor #',
+          controller: _aptController,
         ),
         AppTextField(
           label: 'City',
-          initialValue: 'San Francisco',
+          controller: _cityController,
         ),
         FlexRow(
           children: [
             AppTextField(
               label: 'State',
-              initialValue: 'California',
+              controller: _stateController,
             ),
             AppTextField(
               label: 'Zip',
-              initialValue: '97209',
+              controller: _zipController,
             ),
           ],
         ),
         AppTextField(
           label: 'Country / Region',
-          initialValue: 'United States',
+          controller: _countryController,
         )
       ],
     );

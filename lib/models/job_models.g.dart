@@ -48,20 +48,20 @@ Map<String, dynamic> _$JobModelToJson(JobModel instance) {
 
 BillingLineModel _$BillingLineModelFromJson(Map<String, dynamic> json) =>
     BillingLineModel(
+      description: json['description'] as String,
       jobId: json['jobId'] as String,
       quantity: (json['quantity'] as num).toDouble(),
       price: (json['price'] as num).toDouble(),
       subtotal: (json['subtotal'] as num).toDouble(),
+      objectId: json['objectId'] as String?,
       note: json['note'] as String?,
-      description: json['description'] as String,
+      addDiscount: json['addDiscount'] as bool? ?? false,
+      taxable: json['taxable'] as bool? ?? false,
+      isPercentDiscount: json['isPercentDiscount'] as bool? ?? true,
       discountAmount: (json['discountAmount'] as num?)?.toDouble() ?? 0.0,
       discountDescription: json['discountDescription'] as String?,
       inventoryId: json['inventoryId'] as String?,
-    )
-      ..objectId = json['objectId'] as String?
-      ..taxable = json['taxable'] as bool? ?? false
-      ..addDiscount = json['addDiscount'] as bool? ?? false
-      ..isPercentDiscount = json['isPercentDiscount'] as bool? ?? true;
+    );
 
 Map<String, dynamic> _$BillingLineModelToJson(BillingLineModel instance) {
   final val = <String, dynamic>{};
