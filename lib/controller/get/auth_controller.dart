@@ -75,4 +75,46 @@ class AuthController extends GetxController {
       return e.toString();
     }
   }
+
+  Future changePassword(
+      {required String oldPassword,
+      required String newPassword,
+      required String confirmPassword}) async {
+    String? errorMsg;
+    if (oldPassword.isEmpty) {
+      errorMsg = 'Enter Current Password';
+    } else if (newPassword.isEmpty) {
+      errorMsg = 'Enter New Password';
+    } else if (newPassword != confirmPassword) {
+      errorMsg = 'Confirm password is not matched';
+    }
+    if (errorMsg != null) {
+      WarningMessageDialog.showDialog(Get.context!, errorMsg);
+      return;
+    }
+
+    Get.back();
+    NavigationController().loading();
+    BackendlessUser? user = await Backendless.userService.getCurrentUser();
+    if (user == null) {
+      errorMsg = 'Something wrong!';
+    } else {
+      try {
+        user = await Backendless.userService.login(user.email, oldPassword);
+      } catch (e) {
+        errorMsg = 'Your current password does not match. Please try again.';
+      }
+    }
+
+    if (errorMsg != null) {
+      NavigationController().loading(isLoading: false);
+      WarningMessageDialog.showDialog(Get.context!, errorMsg);
+      return;
+    }
+
+    user!.password = newPassword;
+    await Backendless.data.of(BLPath.user).save(user.toJson());
+    NavigationController().loading(isLoading: false);
+    WarningMessageDialog.showDialog(Get.context!, 'Saved changes!');
+  }
 }

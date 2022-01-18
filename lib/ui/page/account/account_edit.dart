@@ -30,6 +30,10 @@ class AccountEdit extends GetWidget<AuthController> {
   late final TextEditingController _zipController =
   TextEditingController(text: controller.user.addressModel?.zip);
 
+  final _oldPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
   AccountEdit({Key? key}) : super(key: key);
   final _isEditContact = false.obs;
   toggleEdit() => _isEditContact.toggle();
@@ -312,13 +316,21 @@ class AccountEdit extends GetWidget<AuthController> {
               colorIcon: AppColors.primary_1,
             ),
             const SizedBox(height: 24),
-            const AppTextField(
+            AppTextField(
               label: 'Old Password',
               mb: 24,
+              controller: _oldPasswordController,
               key: ValueKey('currentPassword'),
             ),
-            const AppTextField(label: 'New Password', mb: 24),
-            const AppTextField(label: 'Confirm New Password', mb: 24),
+            AppTextField(
+                label: 'New Password',
+                mb: 24,
+                controller: _newPasswordController),
+            AppTextField(
+              label: 'Confirm New Password',
+              mb: 24,
+              controller: _confirmPasswordController,
+            ),
             Align(
               alignment: Alignment.centerRight,
               child: Row(
@@ -336,7 +348,10 @@ class AccountEdit extends GetWidget<AuthController> {
                   AppButtonGradient(
                     label: 'Update Password',
                     onPressed: () {
-                      Get.back();
+                      controller.changePassword(
+                          oldPassword: _oldPasswordController.text,
+                          newPassword: _newPasswordController.text,
+                          confirmPassword: _confirmPasswordController.text);
                     },
                   ),
                 ],
