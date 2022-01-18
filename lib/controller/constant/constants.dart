@@ -1,6 +1,4 @@
 import 'package:country_picker/country_picker.dart';
-import 'package:louzero/models/customer_models.dart';
-import 'package:louzero/models/job_models.dart';
 
 abstract class Constant {
   static const String imgPrefixPath = 'assets/icons';

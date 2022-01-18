@@ -11,9 +11,11 @@ class AppTextField extends StatefulWidget {
   final int maxLines;
   final bool multiline;
   final double mb;
+  final bool enabled;
   const AppTextField({
     this.controller,
     this.label,
+    this.enabled = true,
     this.initialValue = '',
     this.height = 48,
     this.autofocus = false,
@@ -50,6 +52,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Widget _input() {
     return TextFormField(
+      enabled: widget.enabled,
       initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,

@@ -6,7 +6,6 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/company_models.dart';
-import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/account/account_edit.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';

@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/get/auth_controller.dart';
 
 class Utils {
   static final Utils _singleton = Utils._internal();

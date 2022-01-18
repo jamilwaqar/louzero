@@ -5,7 +5,6 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
-import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/account/account.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
 import '../app_base_scaffold.dart';

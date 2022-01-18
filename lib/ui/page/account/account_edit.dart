@@ -1,8 +1,11 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/customer_models.dart';
@@ -15,8 +18,7 @@ class AccountEdit extends GetWidget<AuthController> {
   late final _phoneController = TextEditingController(text: controller.user.phone);
   late final _emailController = TextEditingController(text: controller.user.email);
 
-  late final TextEditingController _countryController =
-  TextEditingController(text: controller.user.addressModel?.country);
+  final _selectCountry = Rx<Country>(AppDefaultValue.country);
   late final TextEditingController _streetController =
   TextEditingController(text: controller.user.addressModel?.street);
   late final TextEditingController _cityController =
@@ -31,6 +33,7 @@ class AccountEdit extends GetWidget<AuthController> {
   AccountEdit({Key? key}) : super(key: key);
   final _isEditContact = false.obs;
   toggleEdit() => _isEditContact.toggle();
+
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +123,7 @@ class AccountEdit extends GetWidget<AuthController> {
     controller.user.phone = _phoneController.text;
     controller.user.email = _emailController.text;
     AddressModel addressModel = AddressModel(
-        country: _countryController.text,
+        country: _selectCountry.value.name,
         street: _streetController.text,
         city: _cityController.text,
         state: _stateController.text,
@@ -190,15 +193,14 @@ class AccountEdit extends GetWidget<AuthController> {
   }
 
   Widget _phoneEdit() {
-    return Obx(()=> ColumnWithIconPrefix(
-        icon: Icons.phone,
-        children: [
-          AppTextField(
-            label: 'Phone Number',
-            initialValue: controller.userModel.value.phone,
-          ),
-        ],
-      ),
+    return ColumnWithIconPrefix(
+      icon: Icons.phone,
+      children: [
+        AppTextField(
+          label: 'Phone Number',
+          controller: _phoneController,
+        ),
+      ],
     );
   }
 
@@ -212,12 +214,27 @@ class AccountEdit extends GetWidget<AuthController> {
   }
 
   Widget _emailEdit() {
-    return ColumnWithIconPrefix(
-      icon: Icons.mail,
+    String _desc = r'Email address can only be changed by the _{color:orange}company account owner_.';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        AppTextField(
-          label: 'Email',
-          initialValue: controller.user.email,
+        ColumnWithIconPrefix(
+          icon: Icons.mail,
+          children: [
+            AppTextField(
+              label: 'Email',
+              enabled: false,
+              initialValue: controller.user.email,
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 46.0, bottom: 30),
+          child: SimpleRichText(
+            _desc,
+            style: TextStyles.titleS,
+          ),
         ),
       ],
     );
@@ -260,13 +277,24 @@ class AccountEdit extends GetWidget<AuthController> {
             ),
           ],
         ),
-        AppTextField(
-          label: 'Country / Region',
-          controller: _countryController,
-        )
+        _country()
       ],
     );
   }
+
+  _country() => InkWell(
+    onTap: () => countryPicker(Get.context!, (country) {
+      _selectCountry.value = country;
+    }),
+    child: Obx(()=> AppInputText(
+      label: 'Country / Region',
+      enabled: false,
+      initial: _selectCountry.value.name,
+      onSaved: (val) {
+        // _addressModel.country = val ?? '';
+      },
+    )),
+  );
 
   _showAlertDialog() {
     Dialog errorDialog = Dialog(
@@ -352,7 +380,7 @@ class AppIconLabelText extends StatelessWidget {
   Widget build(BuildContext context) {
     return ColumnWithIconPrefix(
       icon: icon,
-      alignment: Alignment(-1, -1),
+      alignment: const Alignment(-1, -1),
       children: [
         Text(
           label,
@@ -375,7 +403,7 @@ class AppIconLabelText extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-        SizedBox(height: 24)
+        const SizedBox(height: 24)
       ],
     );
   }
