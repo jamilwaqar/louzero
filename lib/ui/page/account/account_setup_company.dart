@@ -10,15 +10,18 @@ import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_multiselect.dart';
 import 'package:louzero/common/app_textfield.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
+import 'package:louzero/controller/constant/layout.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 List<SelectItem> industries = const [
   SelectItem(id: '23', label: 'Residential', value: 'res'),
@@ -124,12 +127,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           children: [
             AppCard(
               children: [
-                const AppTextHeader(
-                  'Company Details',
-                  alignLeft: true,
-                  icon: Icons.home_work_sharp,
-                  size: 24,
-                ),
+                Ui.headingLG('Company Details', MdiIcons.homeCity),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -151,6 +149,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                   mb: 24,
                   color: AppColors.light_2,
                 ),
+                Ui.headingLG('Industries', MdiIcons.domain, mb: 16),
                 _tags(),
               ],
             ),
@@ -162,12 +161,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const AppTextHeader(
-                          'Company Address',
-                          alignLeft: true,
-                          icon: Icons.location_on,
-                          size: 24,
-                        ),
+                        Ui.headingLG('Company Address', MdiIcons.domain),
                         _country(),
                         _street(),
                         _suite(),
@@ -201,6 +195,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                 ),
               ],
             ),
+            ..._fullEditForm(),
             Row(
               children: [
                 Padding(
@@ -216,8 +211,40 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         ));
   }
 
+  List<Widget> _fullEditForm() {
+    return [
+      AppCard(
+        children: [
+          Ui.headingLG('Invoice Header', MdiIcons.clipboardText),
+        ],
+      ),
+      AppCard(
+        children: [
+          Ui.headingLG('Job Settings', MdiIcons.clipboardText),
+          Ui.block(children: [
+            Ui.text('this is text'),
+            Ui.text('this is text'),
+            Ui.text('this is text'),
+          ])
+        ],
+      )
+    ];
+  }
+
   Widget expand(Widget child, [flex = 1]) {
     return Expanded(child: child, flex: flex);
+  }
+
+  Widget _cardHeader(String label, IconData icon,
+      {VoidCallback? ontap, double mb = 24}) {
+    return AppHeaderIcon(
+      label.toUpperCase(),
+      iconStart: icon,
+      onTap: ontap,
+      mb: mb,
+      style: AppStyles.headerRegular
+          .copyWith(color: AppColors.secondary_30, fontSize: 20),
+    );
   }
 
   void _submit() async {
@@ -292,12 +319,11 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           _companyModel.email = val ?? '';
         },
       );
-  _tags() => AppMultiSelect(
-        width: 448,
+  _tags({bool showLabel = false}) => AppMultiSelect(
         initialItems: _initialIndustries,
+        showLabel: showLabel,
         items: industries,
         onChange: (items) {
-          inspect(items);
           _initialIndustries = items;
           _companyModel.industries = items.map((e) => e.label).toList();
         },

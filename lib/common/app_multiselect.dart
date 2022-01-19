@@ -16,19 +16,22 @@ class SelectItem {
 
 // MultiSelect Widget
 class AppMultiSelect extends StatefulWidget {
+  final List<SelectItem> items;
+  final List<SelectItem> initialItems;
+  final String label;
+  final double width;
+  final bool showLabel;
+  final void Function(List<SelectItem>)? onChange;
+
   const AppMultiSelect({
     Key? key,
     this.items = const [],
     this.initialItems = const [],
     this.label = 'Select Options',
     this.width = 300,
+    this.showLabel = true,
     this.onChange,
   }) : super(key: key);
-  final List<SelectItem> items;
-  final List<SelectItem> initialItems;
-  final String label;
-  final double width;
-  final void Function(List<SelectItem>)? onChange;
 
   @override
   State<AppMultiSelect> createState() => _AppMultiSelectState();
@@ -124,7 +127,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (selectedItems.isNotEmpty)
+          if (selectedItems.isNotEmpty && widget.showLabel)
             AppTextBody(widget.label,
                 color: AppColors.dark_2, mb: 8, bold: true, size: 14),
           ListTile(
