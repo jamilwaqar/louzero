@@ -36,6 +36,7 @@ abstract class AppColors {
   static const Color secondary_95 = Color(0xFFECEFF1);
   static const Color secondary_99 = Color(0xFFF1F3F5);
   static const Color secondary_100 = Color(0xFFF6F8FA);
+  static const Color error_50 = Color(0xFFDC362E);
   static const Color error_60 = Color(0xFFE46962);
 
   static const Color icon = Color(0xFF323232);

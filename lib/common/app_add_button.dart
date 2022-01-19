@@ -24,7 +24,7 @@ class AppAddButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            appIcon(iconData ?? Icons.add_circle, color: AppColors.dark_2),
+            appIcon(iconData ?? Icons.add_circle, color: AppColors.orange),
             const SizedBox(width: 8),
             Text(label, style: TextStyles.labelL.copyWith(color: AppColors.dark_3)),
             const SizedBox(width: 16),

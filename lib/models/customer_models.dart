@@ -73,6 +73,7 @@ class AddressModel {
       required this.street,
       required this.city,
       required this.state,
+      this.suite = '',
       required this.zip});
 
   String country;

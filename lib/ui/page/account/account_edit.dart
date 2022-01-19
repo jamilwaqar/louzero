@@ -11,6 +11,7 @@ import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
@@ -22,17 +23,17 @@ class AccountEdit extends GetWidget<AuthController> {
   late final _emailController = TextEditingController(text: controller.user.email);
 
   final _selectCountry = Rx<Country>(AppDefaultValue.country);
-  late final TextEditingController _streetController =
+  late final _streetController =
   TextEditingController(text: controller.user.addressModel?.street);
-  late final TextEditingController _cityController =
+  late final _cityController =
   TextEditingController(text: controller.user.addressModel?.city);
-  late final TextEditingController _aptController =
+  late final _aptController =
   TextEditingController(text: controller.user.addressModel?.suite);
-  late final TextEditingController _stateController =
+  late final _stateController =
   TextEditingController(text: controller.user.addressModel?.state);
-  late final TextEditingController _zipController =
+  late final _zipController =
   TextEditingController(text: controller.user.addressModel?.zip);
-
+  late final _countryController = TextEditingController(text: _selectCountry.value.name);
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -133,10 +134,14 @@ class AccountEdit extends GetWidget<AuthController> {
         street: _streetController.text,
         city: _cityController.text,
         state: _stateController.text,
+        suite: _aptController.text,
         zip: _zipController.text);
     controller.user.addressModel = addressModel;
-    await controller.updateUser();
+    final response = await controller.updateUser();
+    String msg = response is String ? response : 'Saved changes!';
+    WarningMessageDialog.showDialog(Get.context!, msg);
     NavigationController().loading(isLoading: false);
+    _isEditContact.value = false;
   }
 
   Widget _uploadAvatar() => Positioned(
@@ -250,7 +255,7 @@ class AccountEdit extends GetWidget<AuthController> {
     return AppIconLabelText(
       label: 'Address',
       hint: 'Add Service Address.',
-      text: controller.user.serviceAddress,
+      text: controller.user.addressModel?.fullAddress ?? '',
       icon: Icons.location_pin,
     );
   }
@@ -305,15 +310,14 @@ class AccountEdit extends GetWidget<AuthController> {
   _country() => InkWell(
     onTap: () => countryPicker(Get.context!, (country) {
       _selectCountry.value = country;
+      _countryController.text = country.name;
+      controller.update();
     }),
-    child: Obx(()=> AppInputText(
+    child: AppTextField(
       label: 'Country / Region',
       enabled: false,
-      initial: _selectCountry.value.name,
-      onSaved: (val) {
-        // _addressModel.country = val ?? '';
-      },
-    )),
+      controller: _countryController,
+    ),
   );
 
   _showAlertDialog() {

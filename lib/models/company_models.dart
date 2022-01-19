@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:louzero/controller/constant/colors.dart';
 import 'customer_models.dart';
 part 'company_models.g.dart';
 
@@ -11,6 +13,15 @@ extension CompanyStatusEx on CompanyStatus {
         return 'Active';
       case CompanyStatus.cancel:
         return 'Cancel';
+    }
+  }
+
+  Color get color {
+    switch(this) {
+      case CompanyStatus.active:
+        return AppColors.accent_1;
+      case CompanyStatus.cancel:
+        return AppColors.error_50;
     }
   }
 }

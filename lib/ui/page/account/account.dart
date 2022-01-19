@@ -66,27 +66,21 @@ class MyAccountPage extends GetWidget<CompanyController> {
             bold: true,
           ),
         ),
+        Buttons.outline('SWITCH TO', icon: Icons.compare_arrows_outlined),
+        const SizedBox(width: 18),
         Container(
           width: 10,
           height: 10,
-          decoration: const BoxDecoration(
-              shape: BoxShape.circle, color: AppColors.medium_2),
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: model.status.color),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 12),
         Expanded(
           child: AppTextBody(
             model.status.label,
           ),
         ),
-        AppButton(
-          margin: const EdgeInsets.only(right: 8),
-          label: 'SWITCH TO',
-          colorBg: AppColors.dark_1,
-          colorText: AppColors.darkest,
-          primary: false,
-          onPressed: () {},
-        ),
-        const SizedBox(width: 24),
         PopupMenuButton(
             padding: EdgeInsets.zero,
             offset: const Offset(0, 40),
@@ -113,7 +107,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                         children: const [
                           Icon(
                             Icons.check,
-                            color: AppColors.icon,
+                            color: AppColors.orange,
                           ),
                           SizedBox(width: 10),
                           Text("View Company",
@@ -135,7 +129,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                         children: const [
                           Icon(
                             Icons.edit,
-                            color: AppColors.icon,
+                            color: AppColors.orange,
                           ),
                           SizedBox(width: 10),
                           Text("Edit Company",
