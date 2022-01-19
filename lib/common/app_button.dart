@@ -270,13 +270,14 @@ abstract class Buttons {
       {bool expanded = false,
       VoidCallback? onPressed,
       IconData? icon,
+      Color colorBg = Colors.transparent,
       double height = 40,
       Color colorIcon = AppColors.orange}) {
     return AppButtonGradient(
       expanded: expanded,
       label: label,
       onPressed: onPressed,
-      colorBg: Colors.transparent,
+      colorBg: colorBg,
       colorBd: AppColors.secondary_70,
       colorText: AppColors.secondary_20,
       iconLeading: icon,

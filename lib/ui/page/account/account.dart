@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -73,7 +71,6 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
   Widget _companyItem(int index) {
     CompanyModel model = controller.companies[index];
-    inspect(model);
     return BorderBox(
       height: 60,
       widthBorder: 4,
@@ -89,11 +86,11 @@ class MyAccountPage extends GetWidget<CompanyController> {
           Row(
             children: [
               Text(model.name, style: AppStyles.labelBold),
-              SizedBox(
+              const SizedBox(
                 width: 24,
               ),
               if (index == controller.selectedCompany)
-                Icon(
+                const Icon(
                   Icons.check,
                   color: AppColors.primary_1,
                   size: 20,
@@ -138,7 +135,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
               ),
             ],
           ),
-          SizedBox(width: 0)
+          const SizedBox(width: 0)
         ],
       ),
     );

@@ -68,6 +68,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _stateController = TextEditingController();
   final _suiteController = TextEditingController();
   final _zipController = TextEditingController();
+  final _invoiceHeader = TextEditingController();
 
   Country _selectCountry = AppDefaultValue.country;
   late bool _isEdit;
@@ -82,6 +83,11 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
   @override
   void initState() {
+    String stuff =
+        "Thumbtack Pool Cleaner \n 1234 Street St., Vancouver, Washington 98607 \n www.thumbtackpoolcleaners.com \n\n info@thumbtackpoolcleaners.com \n 1 (360) 936-7594 ";
+
+    // _invoiceHeader.text = stuff;
+
     _isEdit =
         widget.companyModel != null && widget.companyModel!.objectId != null;
     _isActiveCompany = widget.isFromAccountSetup;
@@ -92,7 +98,6 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       _phoneController.text = _companyModel.phone;
       _emailController.text = _companyModel.email;
       _webController.text = _companyModel.website;
-
       _countryController.text = _addressModel.country;
       _streetController.text = _addressModel.street;
       _cityController.text = _addressModel.city;
@@ -197,15 +202,22 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             ..._fullEditForm(),
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 24, bottom: 128),
-                  child: Buttons.submit(
-                    'Save & Continue',
-                    onPressed: _submit,
-                  ),
-                ),
+                SizedBox(width: 32),
+                Wrap(
+                  children: [
+                    Buttons.primary(
+                      'Save & Continue',
+                      onPressed: _submit,
+                    ),
+                    Buttons.text(
+                      'Cancel',
+                      onPressed: () {},
+                    ),
+                  ],
+                )
               ],
             ),
+            SizedBox(height: 200)
           ],
         ));
   }
@@ -219,14 +231,53 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       ),
       AppCard(
         children: [
-          Ui.headingLG('Job Settings', MdiIcons.clipboardText),
+          Ui.headingLG('Job Settings', MdiIcons.briefcase),
           Ui.block(children: [
-            Ui.text('this is text'),
-            Ui.text('this is text'),
-            Ui.text('this is text'),
-          ])
+            Ui.text('Thumbtack Pool Cleaner'),
+            Ui.text('1234 Street St., Vancouver, Washington 98607'),
+            Ui.text('www.thumbtackpoolcleaners.com'),
+            SizedBox(
+              height: 24,
+            ),
+            Ui.text('info@thumbtackpoolcleaners.com'),
+            Ui.text('1 (360) 936-7594'),
+          ]),
+          SizedBox(
+            height: 200,
+            child: AppTextField(
+              multiline: true,
+              expands: true,
+              height: 200,
+              controller: _invoiceHeader,
+              label: 'Invoice Header',
+            ),
+          ),
         ],
-      )
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 32, right: 32, top: 8),
+        child: Row(
+          children: [
+            Wrap(
+              runAlignment: WrapAlignment.start,
+              spacing: 10,
+              children: [
+                Buttons.outline(
+                  "Cancel Company",
+                  icon: MdiIcons.cancel,
+                  colorBg: Colors.white,
+                ),
+                Buttons.outline(
+                  "Transfer Ownership",
+                  icon: MdiIcons.star,
+                  colorBg: Colors.white,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      AppDivider(size: 2, ml: 32, mr: 32, mb: 24, mt: 24)
     ];
   }
 

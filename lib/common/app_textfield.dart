@@ -13,6 +13,7 @@ class AppTextField extends StatefulWidget {
   final bool multiline;
   final bool required;
   final bool enabled;
+  final bool expands;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
@@ -33,6 +34,7 @@ class AppTextField extends StatefulWidget {
     this.autofocus = false,
     this.multiline = false,
     this.enabled = true,
+    this.expands = false,
     this.minLines = 1,
     this.maxLines = 1,
     this.mb = 16,
@@ -104,7 +106,8 @@ class _AppTextFieldState extends State<AppTextField> {
       validator: widget.validator,
       autovalidateMode: _validateMode,
       onSaved: widget.onSaved,
-      keyboardType: widget.keyboardType,
+      keyboardType:
+          widget.multiline ? TextInputType.multiline : widget.keyboardType,
       enabled: widget.enabled,
       onChanged: (val) {
         widget.onChanged;
@@ -119,10 +122,12 @@ class _AppTextFieldState extends State<AppTextField> {
           fontSize: 16,
           color: AppColors.secondary_20,
           fontWeight: FontWeight.w700),
-      minLines: 1,
-      maxLines: widget.multiline ? null : widget.maxLines,
+      expands: widget.expands,
+      // minLines: 1,
+      maxLines: widget.multiline || widget.expands ? null : widget.maxLines,
       decoration: AppStyles.inputDefault.copyWith(
           suffixIcon: _hasValue() ? _status : null,
+          alignLabelWithHint: widget.expands,
           labelText: widget.label,
           labelStyle: AppStyles.labelBold.copyWith(
               height: 1.5,

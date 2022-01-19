@@ -16,7 +16,6 @@ import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:collection/collection.dart';
-import 'package:uuid/uuid.dart';
 
 class JobsHome extends StatefulWidget {
   const JobsHome(this.jobModel, {Key? key}) : super(key: key);
