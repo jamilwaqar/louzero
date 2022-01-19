@@ -9,7 +9,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/widget/appbar/app_bar_page_header.dart';
 import 'package:louzero/ui/widget/side_menu/side_menu.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -40,12 +40,12 @@ class AppBaseScaffold extends StatefulWidget {
 class _AppBaseScaffoldState extends State<AppBaseScaffold> {
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
   final navigatorKey = GlobalKey<NavigatorState>();
-
+  final _authController = Get.find<AuthController>();
   void _logout(BuildContext context) async {
     GetStorage().write(GSKey.isAuthUser, false);
     await AuthAPI(auth: Backendless.userService).logout();
     NavigationController().popToFirst(context);
-    AuthManager().loggedIn.value = false;
+    _authController.loggedIn.value = false;
   }
 
   void _toggleDrawer() {
@@ -83,48 +83,45 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
     return ValueListenableBuilder<bool>(
       valueListenable: NavigationController().notifierInitLoading,
       builder: (ctx, isLoading, child) {
-        return ValueListenableBuilder<bool>(
-          valueListenable: AuthManager().loggedIn,
-          builder: (ctx, loggedIn, child) {
-            return _appBackground(
-              child: Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    child: Scaffold(
-                      key: _key,
-                      drawer: loggedIn ? const SideMenuView() : null,
-                      appBar: widget.logoOnly ? AppBaseAppBarBrand() : null,
-                      body: widget.logoOnly
-                          ? Container(
-                              color: AppColors.secondary_99,
-                              // ignore: unnecessary_null_in_if_null_operators
-                              child: widget.child ?? null,
-                            )
-                          : AppBaseShell(
-                              footerStart: _getHeader(),
-                              footerEnd: widget.footerEnd,
-                              actions: [
-                                if (loggedIn)
-                                  AppBaseUserMenu(onChange: _menuChange)
-                              ],
-                              onMenuPress: _toggleDrawer,
-                              child: widget.child ?? null,
-                            ),
-                      drawerScrimColor: Colors.black.withOpacity(0),
-                      resizeToAvoidBottomInset: widget.hasKeyboard,
-                      backgroundColor: Colors.transparent,
-                      drawerEnableOpenDragGesture: false,
+        return Obx(() {
+          return _appBackground(
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                  child: Scaffold(
+                    key: _key,
+                    drawer: _authController.loggedIn.value ? const SideMenuView() : null,
+                    appBar: widget.logoOnly ? AppBaseAppBarBrand() : null,
+                    body: widget.logoOnly
+                        ? Container(
+                      color: AppColors.secondary_99,
+                      // ignore: unnecessary_null_in_if_null_operators
+                      child: widget.child ?? null,
+                    )
+                        : AppBaseShell(
+                      footerStart: _getHeader(),
+                      footerEnd: widget.footerEnd,
+                      actions: [
+                        if (_authController.loggedIn.value)
+                          AppBaseUserMenu(onChange: _menuChange)
+                      ],
+                      onMenuPress: _toggleDrawer,
+                      child: widget.child,
                     ),
+                    drawerScrimColor: Colors.black.withOpacity(0),
+                    resizeToAvoidBottomInset: widget.hasKeyboard,
+                    backgroundColor: Colors.transparent,
+                    drawerEnableOpenDragGesture: false,
                   ),
-                  if (isLoading) _spinner()
-                ],
-              ),
-            );
-          },
-        );
+                ),
+                if (isLoading) _spinner()
+              ],
+            ),
+          );
+        });
       },
     );
   }
@@ -158,15 +155,15 @@ class AppBaseShell extends StatelessWidget {
 
   const AppBaseShell(
       {Key? key,
-      this.child,
-      this.footerStart,
-      this.footerEnd,
-      this.subheader,
-      this.actions,
-      this.onMenuPress,
-      this.hasKeyboard = false,
-      this.logoOnly = false,
-      this.loggedIn = false})
+        this.child,
+        this.footerStart,
+        this.footerEnd,
+        this.subheader,
+        this.actions,
+        this.onMenuPress,
+        this.hasKeyboard = false,
+        this.logoOnly = false,
+        this.loggedIn = false})
       : super(key: key);
 
   @override
@@ -254,7 +251,7 @@ class AppBasePhysics extends ClampingScrollPhysics {
 
   @override
   final SpringDescription spring =
-      SpringDescription.withDampingRatio(mass: 300, stiffness: 80);
+  SpringDescription.withDampingRatio(mass: 300, stiffness: 80);
 
   @override
   AppBasePhysics applyTo(ScrollPhysics? ancestor) {
@@ -280,7 +277,7 @@ class AppBaseUserMenu extends StatelessWidget {
             icon: Icons.person_rounded,
             onTap: () {
               Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-                  Get.to(() => MyAccountPage(AuthManager.userModel!),
+                  Get.to(() => MyAccountPage(),
                       binding: CompanyBinding()));
             },
           ),
@@ -306,9 +303,9 @@ class AppBaseUserMenu extends StatelessWidget {
         ],
         button: [
           AppAvatar(
-            url: AuthManager.userModel!.avatar,
+            url: Get.find<AuthController>().user.avatar,
             size: 40,
-            text: AuthManager.userModel!.initials,
+            text: Get.find<AuthController>().user.initials,
             borderColor: AppColors.lightest,
           ),
           const Icon(Icons.arrow_drop_down, color: AppColors.lightest)

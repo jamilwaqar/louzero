@@ -3,11 +3,11 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_drop_down.dart';
 import 'package:louzero/common/app_input_text.dart';
+import 'package:louzero/common/utility/address_list.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
@@ -15,7 +15,7 @@ import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
@@ -30,6 +30,7 @@ class AddCustomerPage extends StatefulWidget {
 }
 
 class _AddCustomerPageState extends State<AddCustomerPage> {
+  final _authController = Get.find<AuthController>();
   late final TextEditingController _companyNameController =
       TextEditingController(text: widget.model?.companyName);
   late final TextEditingController _parentAccountNameController =
@@ -86,7 +87,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   late bool _sameAsService = widget.model?.billAddressSame ?? true;
 
   final List<Widget> _customerContactList = [];
-  String? _customerType = AuthManager.userModel!.customerTypes[0];
+  late String? _customerType = _authController.user.customerTypes[0];
   late final List<List<CTContactType>> _contactTypes = [
     widget.model?.customerContacts.first.types ?? []
   ];
@@ -182,7 +183,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               Flexible(
                   child: AppDropDown(
                 label: "Customer Type*",
-                itemList: AuthManager.userModel!.customerTypes,
+                itemList: _authController.user.customerTypes,
                 initValue: _customerType,
                 onChanged: (value) {
                   setState(() {
@@ -248,92 +249,108 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   Widget _addressWidget(bool isService) {
-    return Obx(() => Stack(
-          clipBehavior: Clip.none,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+            Row(
               children: [
-                Row(
-                  children: [
-                    Flexible(
-                        child: InkWell(
-                            onTap: () => countryPicker(context, (country) {
-                                  _country = country;
-                                  setState(() {
-                                    _serviceCountryController.text =
-                                        country.name;
-                                  });
-                                }),
-                            child: LZTextField(
-                              controller: isService
-                                  ? _serviceCountryController
-                                  : _billCountryController,
-                              label: "Country",
-                              enabled: false,
-                            ))),
-                    const SizedBox(width: 32),
-                    const Flexible(child: SizedBox()),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                AppInputText(
-                  controller: isService
-                      ? _serviceStreetController
-                      : _billStreetController,
-                  label: "Street Address",
-                  onChanged: (val) {
-                    _baseController.searchAddress(val, _country.countryCode);
-                  },
-                ),
-                AppInputText(
-                    controller:
-                        isService ? _serviceAptController : _billAptController,
-                    label: "Apt / Suite / Other"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Flexible(
+                Flexible(
+                    child: InkWell(
+                        onTap: () => countryPicker(context, (country) {
+                          _country = country;
+                          setState(() {
+                            _serviceCountryController.text =
+                                country.name;
+                          });
+                        }),
                         child: LZTextField(
-                            controller: isService
-                                ? _serviceCityController
-                                : _billCityController,
-                            label: "City")),
-                    const SizedBox(width: 16),
-                    Flexible(
-                      child: Row(
-                        children: [
-                          Flexible(
-                              child: LZTextField(
-                                  controller: isService
-                                      ? _serviceStateController
-                                      : _billStateController,
-                                  label: "State")),
-                          const SizedBox(width: 16),
-                          Flexible(
-                              child: LZTextField(
-                                  controller: isService
-                                      ? _serviceZipController
-                                      : _billZipController,
-                                  label: "Zip")),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                LZTextButton(
-                  "Enter Address Fields Manually",
-                  textDecoration: TextDecoration.underline,
-                  onPressed: () {},
+                          controller: isService
+                              ? _serviceCountryController
+                              : _billCountryController,
+                          label: "Country",
+                          enabled: false,
+                        ))),
+                const SizedBox(width: 32),
+                const Flexible(child: SizedBox()),
+              ],
+            ),
+            const SizedBox(height: 24),
+            AppInputText(
+              controller: isService
+                  ? _serviceStreetController
+                  : _billStreetController,
+              label: "Street Address",
+              onChanged: (val) {
+                _baseController.searchAddress(val, _country.countryCode);
+              },
+            ),
+            AppInputText(
+                controller:
+                isService ? _serviceAptController : _billAptController,
+                label: "Apt / Suite / Other"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                    child: LZTextField(
+                        controller: isService
+                            ? _serviceCityController
+                            : _billCityController,
+                        label: "City")),
+                const SizedBox(width: 16),
+                Flexible(
+                  child: Row(
+                    children: [
+                      Flexible(
+                          child: LZTextField(
+                              controller: isService
+                                  ? _serviceStateController
+                                  : _billStateController,
+                              label: "State")),
+                      const SizedBox(width: 16),
+                      Flexible(
+                          child: LZTextField(
+                              controller: isService
+                                  ? _serviceZipController
+                                  : _billZipController,
+                              label: "Zip")),
+                    ],
+                  ),
                 ),
               ],
             ),
-            Positioned(
-                left: 0, right: 0, top: 180, child: _searchedAddressListView()),
+            const SizedBox(height: 16),
+            LZTextButton(
+              "Enter Address Fields Manually",
+              textDecoration: TextDecoration.underline,
+              onPressed: () {},
+            ),
           ],
-        ));
+        ),
+        AddressList(left: 0, right: 0, top: 180,onSelectedSearchedModel: (model) {
+          if (isService) {
+            _serviceSearchAddressModel = model;
+          } else {
+            _billSearchAddressModel = model;
+          }
+          if (isService) {
+            _serviceStreetController.text = model.street ?? '';
+            _serviceCityController.text = model.city ?? '';
+            _serviceStateController.text = model.state;
+          } else {
+            _billStreetController.text = model.street ?? '';
+            _billCityController.text = model.city ?? '';
+            _billStateController.text = model.state;
+          }
+          setState(() {});
+        }
+        ),
+      ],
+    );
   }
 
   Widget _billingAddress() {
@@ -599,97 +616,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       msg = "Saved Customer!";
     }
     WarningMessageDialog.showDialog(Get.context!, msg);
-    NavigationController().loading(isLoading: false);
-  }
-
-  Widget _searchedAddressListView() {
-    if (_baseController.searchedAddresses.value.isEmpty) return Container();
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: AppColors.light_1,
-        border: Border.all(color: AppColors.dark_1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListView.separated(
-          shrinkWrap: true,
-          itemBuilder: (_, int index) => _searchAddressItem(index),
-          separatorBuilder: (_, __) => const Divider(),
-          itemCount: _baseController.searchedAddresses.value.length),
-    );
-  }
-
-  Widget _searchAddressItem(int index) {
-    SearchAddressModel model = _baseController.searchedAddresses.value[index];
-    return InkWell(
-      onTap: () => _onSelectAddress(model),
-      child: Container(
-        height: 42,
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            const Icon(Icons.location_pin, color: AppColors.dark_1, size: 32),
-            const SizedBox(width: 14),
-            Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(model.name,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
-                Text(model.description,
-                    style: const TextStyle(
-                        color: Color(0xFF9B9B9B),
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
-              ],
-            )),
-            IconButton(
-                icon: const Icon(Icons.save_outlined, color: AppColors.dark_1),
-                onPressed: () {})
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _onSelectAddress(SearchAddressModel model,
-      {bool isService = true}) async {
-    NavigationController().loading();
-    List? res = await _baseController.getLatLng(model.placeId);
-    if (res != null) {
-      LatLng latLng = res[0];
-      String formattedAddress = res[1];
-      model.latitude = latLng.latitude;
-      model.longitude = latLng.longitude;
-      if (isService) {
-        _serviceSearchAddressModel = model;
-      } else {
-        _billSearchAddressModel = model;
-      }
-
-      List<String> arr = formattedAddress.split(',');
-      if (arr.length > 2) {
-        if (isService) {
-          _serviceStreetController.text = arr[0];
-          _serviceCityController.text = arr[1];
-          _serviceStateController.text = model.state;
-        } else {
-          _billStreetController.text = arr[0];
-          _billCityController.text = arr[1];
-          _billStateController.text = model.state;
-        }
-        setState(() {});
-      }
-    }
-    _baseController.searchedAddressList = [];
     NavigationController().loading(isLoading: false);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:louzero/models/customer_models.dart';
 part 'user_models.g.dart';
 
 @JsonSerializable()
@@ -11,10 +12,10 @@ class UserModel {
   @JsonKey(defaultValue: '')   String firstname = '';
   @JsonKey(defaultValue: '')   String lastname = '';
   @JsonKey(defaultValue: '')   String phone = '';
-  @JsonKey(defaultValue: '')   String serviceAddress = '';
   @JsonKey(defaultValue: '')   String activeCompanyId = '';
   @JsonKey(defaultValue: [])   List<String> customerTypes = [];
   @JsonKey(defaultValue: [])   List<String> jobTypes = [];
+  AddressModel? addressModel;
 
   String get fullName => "$firstname $lastname";
   String get initials {
@@ -23,6 +24,13 @@ class UserModel {
     } catch(e) {
       return '';
     }
+  }
+
+  factory UserModel.fromMap(Map map) {
+    Map? address = map.remove('addressModel');
+    map['addressModel'] = address != null ? Map<String, dynamic>.from(address) : null;
+    Map<String, dynamic> json = Map<String, dynamic>.from(map);
+    return UserModel.fromJson(json);
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

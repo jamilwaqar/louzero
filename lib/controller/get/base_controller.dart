@@ -3,14 +3,16 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:louzero/controller/api/api_service.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
 
 class BaseController extends GetxController {
+  final _authController = Get.put(AuthController(), permanent: true);
 
-  final _isUpdating = false.obs;
+  final _isLoading = false.obs;
   final _companies = Rx<List<CompanyModel>>([]);
   final _customers = Rx<List<CustomerModel>>([]);
   final _jobs = Rx<List<JobModel>>([]);
@@ -36,11 +38,12 @@ class BaseController extends GetxController {
     _activeCompany.value = value;
   }
 
-  bool get isUpdating => _isUpdating.value;
-  set isUpdating(bool value) => _isUpdating.value = value;
+  bool get isLoading => _isLoading.value;
+  set isLoading(bool value) => _isLoading.value = value;
 
   fetchInitialData() async {
-    if (AuthManager.userModel == null) return;
+    if (_authController.user.objectId == null) return;
+    NavigationController().loading();
     /// Company
     var companyList = await _fetchCompanies();
     CompanyModel? companyModel;
@@ -48,7 +51,7 @@ class BaseController extends GetxController {
       try {
         companyModel = (companyList as List<CompanyModel>)
             .firstWhere(
-                (com) => com.objectId == AuthManager.userModel!.activeCompanyId);
+                (com) => com.objectId == _authController.user.activeCompanyId);
       } catch (e) {
         print(e.toString());
       }
@@ -71,11 +74,12 @@ class BaseController extends GetxController {
     if (jobList is List) {
       jobs = jobList as List<JobModel>;
     }
+    NavigationController().loading(isLoading: false);
   }
 
   Future _fetchSiteProfileTemplate() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+      ..whereClause = "ownerId = '${_authController.user.objectId}'";
     List<CTSiteProfile> list = [];
     try {
       var response = await Backendless.data
@@ -92,7 +96,7 @@ class BaseController extends GetxController {
 
   Future _fetchCompanies() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+      ..whereClause = "ownerId = '${_authController.user.objectId}'";
     List<CompanyModel> list = [];
     try {
       var response = await Backendless.data
@@ -109,7 +113,7 @@ class BaseController extends GetxController {
 
   Future _fetchCustomers() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+      ..whereClause = "ownerId = '${_authController.user.objectId}'";
     try {
       var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
       List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
@@ -121,7 +125,7 @@ class BaseController extends GetxController {
 
   Future _fetchJobs() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${AuthManager.userModel!.objectId}'";
+      ..whereClause = "ownerId = '${_authController.user.objectId}'";
     try {
       var response = await Backendless.data.of(BLPath.job).find(queryBuilder);
       List<JobModel>list = List<Map>.from(response!).map((e) => JobModel.fromMap(e)).toList();

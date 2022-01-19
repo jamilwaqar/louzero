@@ -11,9 +11,13 @@ class AppTextField extends StatefulWidget {
   final int maxLines;
   final bool multiline;
   final double mb;
+  final bool enabled;
+  final void Function(String)? onChanged;
+
   const AppTextField({
     this.controller,
     this.label,
+    this.enabled = true,
     this.initialValue = '',
     this.height = 48,
     this.autofocus = false,
@@ -21,6 +25,7 @@ class AppTextField extends StatefulWidget {
     this.minLines = 1,
     this.maxLines = 1,
     this.mb = 16,
+    this.onChanged,
     Key? key,
   }) : super(key: key);
 
@@ -50,6 +55,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Widget _input() {
     return TextFormField(
+      enabled: widget.enabled,
       initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,
@@ -57,6 +63,7 @@ class _AppTextFieldState extends State<AppTextField> {
       style: AppStyles.labelBold
           .copyWith(height: 1.5, fontSize: 16, color: AppColors.secondary_20),
       minLines: 1,
+      onChanged: widget.onChanged,
       maxLines: widget.multiline ? null : widget.maxLines,
       decoration: AppStyles.inputDefault.copyWith(
         labelText: widget.label,

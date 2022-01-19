@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
 
 class Utils {
   static final Utils _singleton = Utils._internal();
@@ -19,9 +17,6 @@ class Utils {
   double safePaddingBottom(BuildContext context) => MediaQuery.of(context).padding.bottom;
   Size screenSize(BuildContext context) => MediaQuery.of(context).size;
 
-  Future initialize() async {
-    AuthManager().initializeManager();
-  }
 }
 
 Icon appIcon(IconData iconData, {Color? color}) {

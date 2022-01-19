@@ -11,7 +11,7 @@ import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/complete.dart';
@@ -174,7 +174,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
     }
     NavigationController().loading(isLoading: false);
     _inviteModel = list.first;
-    AuthManager.inviteModelId = _inviteModel?.objectId;
+    Get.find<AuthController>().inviteModelId = _inviteModel?.objectId;
     return;
   }
 }

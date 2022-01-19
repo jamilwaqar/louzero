@@ -12,7 +12,7 @@ import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
@@ -28,7 +28,7 @@ class AccountSetup extends StatefulWidget {
 
 class _AccountSetupState extends State<AccountSetup> {
   final _pageController = PageController();
-
+  final _authController = Get.find<AuthController>();
   var _step = 0;
 
   var customerTypes = ["Residential", "Commercial"];
@@ -42,12 +42,12 @@ class _AccountSetupState extends State<AccountSetup> {
 
   @override
   void initState() {
-    if (AuthManager.userModel!.customerTypes.isNotEmpty) {
-      customerTypes = AuthManager.userModel!.customerTypes;
+    if (_authController.user.customerTypes.isNotEmpty) {
+      customerTypes = _authController.user.customerTypes;
     }
 
-    if (AuthManager.userModel!.jobTypes.isNotEmpty) {
-      jobTypes = AuthManager.userModel!.jobTypes;
+    if (_authController.user.jobTypes.isNotEmpty) {
+      jobTypes = _authController.user.jobTypes;
     }
 
     super.initState();
@@ -162,9 +162,9 @@ class _AccountSetupState extends State<AccountSetup> {
                   margin: const EdgeInsets.only(left: 24, bottom: 64),
                   label: 'Save & Continue',
                   onPressed: () async {
-                    AuthManager.userModel!.customerTypes = customerTypes;
+                    _authController.user.customerTypes = customerTypes;
                     NavigationController().loading();
-                    await AuthManager().updateUser();
+                    await Get.find<AuthController>().updateUser();
                     NavigationController().loading(isLoading: false);
                     _saveFormInput();
                   }),
@@ -205,9 +205,9 @@ class _AccountSetupState extends State<AccountSetup> {
                   margin: const EdgeInsets.only(left: 24, bottom: 64),
                   label: 'Save & Continue',
                   onPressed: () async {
-                    AuthManager.userModel!.jobTypes = jobTypes;
+                    _authController.user.jobTypes = jobTypes;
                     NavigationController().loading();
-                    await AuthManager().updateUser();
+                    await Get.find<AuthController>().updateUser();
                     NavigationController().loading(isLoading: false);
                     _saveFormInput();
                   }),
