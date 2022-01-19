@@ -7,7 +7,6 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/layout.dart';
 import 'package:louzero/controller/get/company_controller.dart';
-import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';
@@ -32,25 +31,6 @@ class CompanyPage extends GetWidget<CompanyController> {
           ),
           subheader: 'My Company',
         ));
-  }
-
-  Widget _heading({
-    String label = '',
-    IconData icon = Icons.chevron_right,
-  }) {
-    return Row(
-      children: [
-        Container(
-          width: 32,
-          height: 24,
-          alignment: const Alignment(-1, 0),
-          child: appIcon(icon, color: AppColors.secondary_70),
-        ),
-        Text(label,
-            style: AppStyles.headerRegular
-                .copyWith(fontSize: 16, color: AppColors.secondary_30)),
-      ],
-    );
   }
 
   Widget _info() {

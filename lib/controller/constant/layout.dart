@@ -7,7 +7,7 @@ abstract class Ui {
   static Widget text(String label, {Color color = AppColors.secondary_20}) {
     return Text(
       label,
-      style: AppStyles.labelRegular.copyWith(height: 2, color: color),
+      style: AppStyles.labelRegular.copyWith(height: 1.65, color: color),
     );
   }
 
