@@ -12,7 +12,16 @@ extension CompanyStatusEx on CompanyStatus {
       case CompanyStatus.active:
         return 'Active';
       case CompanyStatus.cancel:
-        return 'Cancel';
+        return 'Cancelled';
+    }
+  }
+
+  Color get labelColor {
+    switch(this) {
+      case CompanyStatus.active:
+        return AppColors.secondary_50;
+      case CompanyStatus.cancel:
+        return AppColors.secondary_80;
     }
   }
 

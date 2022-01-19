@@ -189,7 +189,7 @@ class AccountEdit extends GetWidget<AuthController> {
       children: [
         AppTextField(
           label: 'Name',
-          initialValue: controller.user.fullName,
+          controller: _nameController,
         ),
       ],
     );

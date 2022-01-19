@@ -66,7 +66,10 @@ class MyAccountPage extends GetWidget<CompanyController> {
             bold: true,
           ),
         ),
-        Buttons.outline('SWITCH TO', icon: Icons.compare_arrows_outlined),
+        Opacity(
+            opacity: model.status == CompanyStatus.active ? 1 : 0,
+            child: Buttons.outline('SWITCH TO',
+                icon: Icons.compare_arrows_outlined, onPressed: () {})),
         const SizedBox(width: 18),
         Container(
           width: 10,
@@ -79,6 +82,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
         Expanded(
           child: AppTextBody(
             model.status.label,
+            color: model.status.labelColor,
           ),
         ),
         PopupMenuButton(
@@ -90,6 +94,8 @@ class MyAccountPage extends GetWidget<CompanyController> {
                 Get.to(() => CompanyPage(), arguments: model);
               } else if (value == 1) {
                 Get.to(() => const AddCompanyPage());
+              } else if (value == 2) {
+                _showReactivateDialog();
               }
             },
             elevation: 2,
@@ -99,6 +105,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                     const BorderSide(color: AppColors.medium_2, width: 0)),
             child: const Icon(Icons.more_vert),
             itemBuilder: (context) => [
+              if(model.status == CompanyStatus.active)
                   PopupMenuItem(
                     child: SizedBox(
                       width: 200,
@@ -121,6 +128,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                     ),
                     value: 0,
                   ),
+              if(model.status == CompanyStatus.active)
                   PopupMenuItem(
                     child: SizedBox(
                       width: 200,
@@ -143,6 +151,29 @@ class MyAccountPage extends GetWidget<CompanyController> {
                     ),
                     value: 1,
                   ),
+              if(model.status == CompanyStatus.cancel)
+              PopupMenuItem(
+                child: SizedBox(
+                  width: 200,
+                  height: 60,
+                  child: Row(
+                    children: const [
+                      Icon(
+                        Icons.edit,
+                        color: AppColors.orange,
+                      ),
+                      SizedBox(width: 10),
+                      Text("Reactivate Company",
+                          style: TextStyle(
+                            color: AppColors.icon,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          )),
+                    ],
+                  ),
+                ),
+                value: 2,
+              ),
                 ]),
         const SizedBox(width: 24),
       ]),
@@ -186,7 +217,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
   // TODO: Don't remove this: Reactivate Dialog
   _showReactivateDialog() {
-    String _desc = 'To reactivate *Old Cancelled Company*, please email us *help@evosus.com* and we’ll get back to you as soon as possible';
+    String _desc = 'To reactivate *Old Cancelled Company*, please email us *{color:orange}help@evosus.com* and we’ll get back to you as soon as possible';
     Dialog errorDialog = Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)), //this right here
       child: Container(
@@ -194,8 +225,9 @@ class MyAccountPage extends GetWidget<CompanyController> {
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const AppTextHeader('Reactivate Company', size: 24, alignLeft: true,),
+            Text('Reactivate Company', style: AppStyles.headerAppBar.copyWith(color: AppColors.secondary_30)),
             const SizedBox(height: 24),
             SimpleRichText(
               _desc,
@@ -212,7 +244,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                     Get.back();
                   },),
                   const SizedBox(width: 16),
-                  AppButton(label: 'Email', onPressed: () {
+                  AppButton(label: 'Got it', colorBg: AppColors.orange ,onPressed: () {
                     Get.back();
                   },),
                 ],
