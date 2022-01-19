@@ -137,6 +137,11 @@ class SearchAddressModel {
   @JsonKey(name: 'main_text', defaultValue: '')               String name = '';
   @JsonKey(name: 'secondary_text', defaultValue: '')          String description = '';
   @JsonKey(defaultValue: '')                                  String state = '';
+
+  String? street;
+  String? city;
+  String? zip;
+
   @JsonKey(defaultValue: 0.0)                                 double latitude = 0.0;
   @JsonKey(defaultValue: 0.0)                                 double longitude = 0.0;
 

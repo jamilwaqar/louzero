@@ -7,6 +7,7 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
@@ -60,6 +61,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
               GestureDetector(
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
+                  Get.find<BaseController>().searchedAddressList = [];
                 },
                 child: Container(
                   decoration: const BoxDecoration(

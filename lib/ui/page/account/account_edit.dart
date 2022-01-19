@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
+import 'package:louzero/common/utility/address_list.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -14,6 +16,7 @@ import 'package:simple_rich_text/simple_rich_text.dart';
 
 class AccountEdit extends GetWidget<AuthController> {
 
+  final _baseController = Get.find<BaseController>();
   late final _nameController = TextEditingController(text: controller.user.fullName);
   late final _phoneController = TextEditingController(text: controller.user.phone);
   late final _emailController = TextEditingController(text: controller.user.email);
@@ -37,7 +40,6 @@ class AccountEdit extends GetWidget<AuthController> {
   AccountEdit({Key? key}) : super(key: key);
   final _isEditContact = false.obs;
   toggleEdit() => _isEditContact.toggle();
-
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +144,7 @@ class AccountEdit extends GetWidget<AuthController> {
       bottom: -20,
       child: CupertinoButton(
         onPressed: () {
-          Get.find<AuthController>().uploadAccountAvatar();
+          controller.uploadAccountAvatar();
         },
         // padding: EdgeInsets.zero,
         child: Container(
@@ -254,36 +256,50 @@ class AccountEdit extends GetWidget<AuthController> {
   }
 
   Widget _addressEdit() {
-    return ColumnWithIconPrefix(
-      icon: Icons.location_pin,
-      children: [
-        AppTextField(
-          label: 'Street Address',
-          controller: _streetController,
-        ),
-        AppTextField(
-          label: 'Apartment, unit, suite, or floor #',
-          controller: _aptController,
-        ),
-        AppTextField(
-          label: 'City',
-          controller: _cityController,
-        ),
-        FlexRow(
-          children: [
-            AppTextField(
-              label: 'State',
-              controller: _stateController,
-            ),
-            AppTextField(
-              label: 'Zip',
-              controller: _zipController,
-            ),
-          ],
-        ),
-        _country()
-      ],
-    );
+    return GetBuilder<AuthController>(builder: (_) {
+      return Stack(
+        children: [
+          ColumnWithIconPrefix(
+            icon: Icons.location_pin,
+            children: [
+              AppTextField(
+                label: 'Street Address',
+                controller: _streetController,
+                onChanged: (val) {
+                  _baseController.searchAddress(val, _selectCountry.value.countryCode);
+                },
+              ),
+              AppTextField(
+                label: 'Apartment, unit, suite, or floor #',
+                controller: _aptController,
+              ),
+              AppTextField(
+                label: 'City',
+                controller: _cityController,
+              ),
+              FlexRow(
+                children: [
+                  AppTextField(
+                    label: 'State',
+                    controller: _stateController,
+                  ),
+                  AppTextField(
+                    label: 'Zip',
+                    controller: _zipController,
+                  ),
+                ],
+              ),
+              _country()
+            ],
+          ),
+          AddressList(left: 35, right: 0, top: 60,onSelectedSearchedModel: (val) {
+            _streetController.text = val.street ?? '';
+            _cityController.text = val.city ?? '';
+            controller.update();
+          }),
+        ],
+      );
+    });
   }
 
   _country() => InkWell(
