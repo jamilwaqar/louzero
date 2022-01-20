@@ -19,6 +19,7 @@ import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
+import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 List<SelectItem> industries = const [
@@ -67,7 +68,9 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _stateController = TextEditingController();
   final _suiteController = TextEditingController();
   final _zipController = TextEditingController();
-  final _invoiceHeader = TextEditingController();
+  final _invoiceHeaderController = TextEditingController();
+  final _idStartNumberController = TextEditingController();
+  final _startTimeController = TextEditingController();
 
   Country _selectCountry = AppDefaultValue.country;
   late bool _isEdit;
@@ -82,10 +85,10 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
   @override
   void initState() {
-    String stuff =
+    String mockDataInvoicHeader =
         "Thumbtack Pool Cleaner \n 1234 Street St., Vancouver, Washington 98607 \n www.thumbtackpoolcleaners.com \n\n info@thumbtackpoolcleaners.com \n 1 (360) 936-7594 ";
 
-    // _invoiceHeader.text = stuff;
+    _invoiceHeaderController.text = mockDataInvoicHeader;
 
     _isEdit =
         widget.companyModel != null && widget.companyModel!.objectId != null;
@@ -131,20 +134,25 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             AppCard(
               children: [
                 Ui.headingLG('Company Details', MdiIcons.homeCity),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                FlexRow(
+                  flex: [2, 3],
                   children: [
-                    expand(_companyName()),
-                    gapX(24),
-                    expand(_phone())
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    expand(_email()),
-                    gapX(24),
-                    expand(_website()),
+                    Column(
+                      children: [
+                        Container(
+                            height: 400,
+                            width: double.infinity,
+                            color: Colors.black12)
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        _companyName(),
+                        _website(),
+                        _email(),
+                        _phone()
+                      ],
+                    )
                   ],
                 ),
                 const AppDivider(
@@ -231,32 +239,48 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     return [
       AppCard(
         children: [
-          Ui.headingLG('Invoice Header', MdiIcons.clipboardText),
-        ],
-      ),
-      AppCard(
-        children: [
-          Ui.headingLG('Job Settings', MdiIcons.briefcase),
-          Ui.block(children: [
-            Ui.text('Thumbtack Pool Cleaner'),
-            Ui.text('1234 Street St., Vancouver, Washington 98607'),
-            Ui.text('www.thumbtackpoolcleaners.com'),
-            SizedBox(
-              height: 24,
-            ),
-            Ui.text('info@thumbtackpoolcleaners.com'),
-            Ui.text('1 (360) 936-7594'),
-          ]),
+          Ui.headingLG('Invoice Header', MdiIcons.briefcase, mb: 16),
           SizedBox(
             height: 200,
             child: AppTextField(
               multiline: true,
+              mb: 0,
               expands: true,
               height: 200,
-              controller: _invoiceHeader,
+              controller: _invoiceHeaderController,
               label: 'Invoice Header',
             ),
           ),
+        ],
+      ),
+      AppCard(
+        children: [
+          Ui.headingLG('Job Settings', MdiIcons.clipboardText),
+          FlexRow(
+            children: [
+              AppTextField(
+                label: 'ID Starting Number',
+                controller: _idStartNumberController,
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return NZTimePicker(onChange: (val) {
+                          _startTimeController.text = val;
+                        });
+                      });
+                },
+                child: AppTextField(
+                  label: 'Schedule start Time',
+                  controller: _startTimeController,
+                  iconEnd: MdiIcons.clockOutline,
+                  enabled: false,
+                ),
+              ),
+            ],
+          )
         ],
       ),
       Padding(
