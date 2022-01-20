@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:louzero/controller/extension/extensions.dart';
 import 'package:uuid/uuid.dart';
 part 'job_models.g.dart';
 
@@ -134,6 +135,12 @@ class ScheduleModel {
   String personId;
   bool anyTimeVisit;
   bool complete;
+
+  String get time {
+    DateTime start = DateTime.fromMillisecondsSinceEpoch(startTime);
+    DateTime end = DateTime.fromMillisecondsSinceEpoch(endTime);
+    return '${start.time}-${end.time}';
+  }
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
       _$ScheduleModelFromJson(json);

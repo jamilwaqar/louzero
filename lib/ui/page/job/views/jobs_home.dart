@@ -120,7 +120,7 @@ class _JobsHomeState extends State<JobsHome> {
         radius: 24,
         children: [
           _tabDetails(),
-          const JobSchedule(),
+          JobSchedule(),
           _tabBilling(),
         ],
         length: 3,

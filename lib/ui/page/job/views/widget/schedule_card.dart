@@ -1,41 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_avatar.dart';
 import 'package:louzero/common/app_pop_menu.dart';
+import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/common.dart';
+import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/models/job_models.dart';
+import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/job/views/widget/add_schedule_dialog.dart';
 import 'package:louzero/ui/widget/switch_button.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
-class ScheduleCard extends StatefulWidget{
-  const ScheduleCard({
+class ScheduleCard extends StatelessWidget{
+  ScheduleCard({
     Key? key,
     required this.schedule
   }) : super(key: key);
 
-  final Map schedule;
+  final ScheduleModel schedule;
 
-  @override
-  _ScheduleCard createState() => _ScheduleCard();
-}
-
-class _ScheduleCard extends State<ScheduleCard>{
-  bool isComplete = false;
-  bool showScheduleDialog = false;
-
-  @override
-  void initState() {
-    if(widget.schedule['isCompleted']) {
-      setState(() {
-        isComplete = true;
-      });
-    }
-    super.initState();
-  }
+  late final isComplete = schedule.complete.obs;
+  final showScheduleDialog = false.obs;
 
   @override
   Widget build(BuildContext context) {
-    DateTime parseDate = DateTime.parse(widget.schedule['date']);
+    DateTime parseDate = DateTime.fromMillisecondsSinceEpoch(schedule.startTime);
     final monthName = DateFormat.MMM().format(parseDate);
     final day = DateFormat.d().format(parseDate);
 
@@ -102,7 +93,7 @@ class _ScheduleCard extends State<ScheduleCard>{
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text("${widget.schedule['startTime']} - ${widget.schedule['endTime']}",
+                                        Text(schedule.time,
                                             style: const TextStyle(
                                               fontFamily: 'Lato',
                                               fontSize: 16,
@@ -114,7 +105,7 @@ class _ScheduleCard extends State<ScheduleCard>{
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             Expanded(
-                                              child: Text(widget.schedule['note'],style: const TextStyle(
+                                              child: Text(schedule.note ?? '', style: const TextStyle(
                                                 fontFamily: 'Lato',
                                                 fontSize: 16,
                                               )),
@@ -139,9 +130,7 @@ class _ScheduleCard extends State<ScheduleCard>{
                                               label: 'Edit Appointment',
                                               icon: MdiIcons.pencil,
                                               onTap: () {
-                                                setState(() {
-                                                  showScheduleDialog = true;
-                                                });
+                                                showScheduleDialog.value = true;
                                               },
                                             ),
                                             PopMenuItem(
@@ -170,43 +159,45 @@ class _ScheduleCard extends State<ScheduleCard>{
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 20.0,
-                                        backgroundImage: NetworkImage(widget.schedule['personnel']['image']),
-                                      ),
-                                      const SizedBox(width: 8,),
-                                      Text(widget.schedule['personnel']['name'], style: const TextStyle(
-                                        fontFamily: 'Lato',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 0.1,
-                                      )),
-                                      const SizedBox(width: 8,),
-                                      CircleAvatar(
-                                        backgroundColor: AppColors.secondary_95,
-                                        radius: 12,
-                                        child: IconButton(
-                                          iconSize: 15,
-                                          padding: EdgeInsets.zero,
-                                          icon: const Icon(MdiIcons.pencil),
-                                          color: AppColors.secondary_30,
-                                          onPressed: () {
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                                  FutureBuilder<UserModel?>(
+                                      future: APIManager.fetchUser(schedule.personId),
+                                    builder: (_, AsyncSnapshot<UserModel?> snapshot) {
+                                        if (!snapshot.hasData) return Container();
+                                        UserModel user = snapshot.data!;
+                                      return Row(
+                                        children: [
+                                          AppAvatar(size: 20, url: user.avatar, placeHolder: AppPlaceHolder.user),
+                                          const SizedBox(width: 8,),
+                                          Text(user.fullName, style: const TextStyle(
+                                            fontFamily: 'Lato',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 0.1,
+                                          )),
+                                          const SizedBox(width: 8,),
+                                          CircleAvatar(
+                                            backgroundColor: AppColors.secondary_95,
+                                            radius: 12,
+                                            child: IconButton(
+                                              iconSize: 15,
+                                              padding: EdgeInsets.zero,
+                                              icon: const Icon(MdiIcons.pencil),
+                                              color: AppColors.secondary_30,
+                                              onPressed: () {
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
                                   ),
-                                  NZSwitch(
-                                    isOn: isComplete,
+                                  Obx(()=> NZSwitch(
+                                    isOn: isComplete.value,
                                     label: "Complete",
                                     onChanged: (bool value) {
-                                      setState(() {
-                                        isComplete = value;
-                                      });
+                                      isComplete.value = value;
                                     },
-                                  )
+                                  ))
                                 ],
                               )
                             ],
@@ -217,13 +208,11 @@ class _ScheduleCard extends State<ScheduleCard>{
             )
         ),
         const SizedBox(height: 8,),
-        showScheduleDialog ?
+        showScheduleDialog.value ?
         AddScheduleDialog(
-          schedule: widget.schedule,
+          schedule: schedule,
           onClose: () {
-            setState(() {
-              showScheduleDialog = false;
-            });
+            showScheduleDialog.value = false;
           },
         ) : const SizedBox(),
         const SizedBox(height: 8,),
