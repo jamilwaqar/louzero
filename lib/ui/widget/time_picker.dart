@@ -25,7 +25,7 @@ class _NZTimePickerState extends State<NZTimePicker> {
   Color _minuteBorderColor = const Color(0xFFF1F3F5);
   Color _hourBgColor = const Color(0xFFF1F3F5);
   Color _hourBorderColor = const Color(0xFFF1F3F5);
-  late final String _timeMeridian;
+  String _timeMeridian = "";
 
   void focusNextInput(value) {
     if(int.parse(value) > 12) {
