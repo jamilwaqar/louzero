@@ -4,7 +4,7 @@ import 'package:get/instance_manager.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
@@ -174,7 +174,7 @@ class _JobsHomeState extends State<JobsHome> {
                   const SizedBox(height: 8),
                   Text(updatedAt.simpleDate, style: AppStyles.bodyMedium),
                   const SizedBox(height: 8),
-                  Text('by ${AuthManager.userModel!.fullName}',
+                  Text('by ${Get.find<AuthController>().user.fullName}',
                       style: AppStyles.labelRegular),
                   const SizedBox(height: 16),
                   AppButton(

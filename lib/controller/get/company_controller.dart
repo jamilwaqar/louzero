@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/widget/dialog/popup/camera_option.dart';
@@ -54,9 +54,9 @@ class CompanyController extends GetxController {
         companies.add(newModel);
       }
       if (isActiveCompany) {
-        AuthManager.userModel!.activeCompanyId = res['objectId'];
+        Get.find<AuthController>().user.activeCompanyId = res['objectId'];
         Get.find<BaseController>().activeCompany = newModel;
-        await AuthManager().updateUser();
+        await Get.find<AuthController>().updateUser();
       }
     }
     update();

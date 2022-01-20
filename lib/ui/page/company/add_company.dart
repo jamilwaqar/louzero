@@ -12,7 +12,7 @@ class AddCompanyPage extends GetWidget<CompanyController> {
     return AppBaseScaffold(
       child: Column(
         children: [
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           AccountSetupCompany(
             companyModel: controller.company,
           ),

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
@@ -333,7 +333,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
           ),
           right: TextKeyValIcon(
             kkey: 'Sold By',
-            val: AuthManager.userModel!.fullName,
+            val: Get.find<AuthController>().user.fullName,
           ),
         ),
       ],

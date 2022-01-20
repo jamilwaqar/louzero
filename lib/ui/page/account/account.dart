@@ -4,10 +4,8 @@ import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/company_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/company_models.dart';
-import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/account/account_edit.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';
@@ -16,10 +14,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:simple_rich_text/simple_rich_text.dart';
 
 class MyAccountPage extends GetWidget<CompanyController> {
-  final UserModel userModel;
-  MyAccountPage(this.userModel, {Key? key}) : super(key: key);
-  var editContact = false.obs;
-  toggleEdit() => editContact.toggle();
+  const MyAccountPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +22,8 @@ class MyAccountPage extends GetWidget<CompanyController> {
       hasKeyboard: true,
       child: Column(
         children: [
-          SizedBox(height: 32),
-          AccountEdit(userModel: AuthManager.userModel!),
+          const SizedBox(height: 32),
+          AccountEdit(),
           _companies(),
         ],
       ),
@@ -119,6 +114,8 @@ class MyAccountPage extends GetWidget<CompanyController> {
               }
               if (val == 'Edit Company') {
                 Get.to(() => const AddCompanyPage());
+              } else if (val == 2) {
+                _showReactivateDialog();
               }
             },
             button: const [
@@ -170,7 +167,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
   // TODO: Don't remove this: Reactivate Dialog
   _showReactivateDialog() {
     String _desc =
-        'To reactivate *Old Cancelled Company*, please email us *help@evosus.com* and we’ll get back to you as soon as possible';
+        'To reactivate *Old Cancelled Company*, please email us *{color:orange}help@evosus.com* and we’ll get back to you as soon as possible';
     Dialog errorDialog = Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24.0)), //this right here
@@ -179,12 +176,11 @@ class MyAccountPage extends GetWidget<CompanyController> {
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const AppTextHeader(
-              'Reactivate Company',
-              size: 24,
-              alignLeft: true,
-            ),
+            Text('Reactivate Company',
+                style: AppStyles.headerAppBar
+                    .copyWith(color: AppColors.secondary_30)),
             const SizedBox(height: 24),
             SimpleRichText(
               _desc,
@@ -206,7 +202,8 @@ class MyAccountPage extends GetWidget<CompanyController> {
                   ),
                   const SizedBox(width: 16),
                   AppButton(
-                    label: 'Email',
+                    label: 'Got it',
+                    colorBg: AppColors.orange,
                     onPressed: () {
                       Get.back();
                     },

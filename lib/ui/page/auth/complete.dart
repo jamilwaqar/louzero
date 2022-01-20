@@ -10,7 +10,7 @@ import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
-import 'package:louzero/controller/state/auth_manager.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
@@ -24,6 +24,7 @@ class CompletePage extends StatefulWidget {
 }
 
 class _CompletePageState extends State<CompletePage> {
+  final _authController = Get.find<AuthController>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -118,14 +119,14 @@ class _CompletePageState extends State<CompletePage> {
     } else {
       var res = await AuthAPI(auth: Backendless.userService)
           .login(widget.email, _passwordController.text);
-      if (AuthManager.guestUserId != null) {
+      if (_authController.guestUserId != null) {
         await AuthAPI(auth: Backendless.userService).cleanupGuestUser();
       }
       NavigationController().loading(isLoading: false);
-      AuthManager().loggedIn.value = true;
-      AuthManager.userModel!.firstname = _firstNameController.text;
-      AuthManager.userModel!.lastname = _lastNameController.text;
-      await AuthManager().updateUser();
+      Get.find<AuthController>().loggedIn.value = true;
+      _authController.user.firstname = _firstNameController.text;
+      _authController.user.lastname = _lastNameController.text;
+      await Get.find<AuthController>().updateUser();
       Get.to(()=> const AccountSetup());
     }
   }

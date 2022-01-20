@@ -20,9 +20,11 @@ class AppTextField extends StatefulWidget {
   final void Function(String?)? onSaved;
   final List<String>? options;
   final double mb;
+
   const AppTextField({
     this.controller,
     this.label,
+    this.enabled = true,
     this.initialValue = '',
     this.height = 48,
     this.required = false,
@@ -33,7 +35,6 @@ class AppTextField extends StatefulWidget {
     this.options,
     this.autofocus = false,
     this.multiline = false,
-    this.enabled = true,
     this.expands = false,
     this.minLines = 1,
     this.maxLines = 1,
@@ -99,6 +100,7 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget _input() {
     return TextFormField(
       enableIMEPersonalizedLearning: false,
+      enabled: widget.enabled,
       initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
       focusNode: _textFieldFocus,
       autofocus: widget.autofocus,
@@ -108,7 +110,6 @@ class _AppTextFieldState extends State<AppTextField> {
       onSaved: widget.onSaved,
       keyboardType:
           widget.multiline ? TextInputType.multiline : widget.keyboardType,
-      enabled: widget.enabled,
       onChanged: (val) {
         widget.onChanged;
         if (widget.validator != null && !_hasError()) {
