@@ -79,9 +79,9 @@ AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
       street: json['street'] as String,
       city: json['city'] as String,
       state: json['state'] as String,
+      suite: json['suite'] as String? ?? '',
       zip: json['zip'] as String,
     )
-      ..suite = json['suite'] as String? ?? ''
       ..latitude = (json['latitude'] as num?)?.toDouble() ?? 0.0
       ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0;
 
@@ -133,6 +133,9 @@ SearchAddressModel _$SearchAddressModelFromJson(Map<String, dynamic> json) =>
       ..name = json['main_text'] as String? ?? ''
       ..description = json['secondary_text'] as String? ?? ''
       ..state = json['state'] as String? ?? ''
+      ..street = json['street'] as String?
+      ..city = json['city'] as String?
+      ..zip = json['zip'] as String?
       ..latitude = (json['latitude'] as num?)?.toDouble() ?? 0.0
       ..longitude = (json['longitude'] as num?)?.toDouble() ?? 0.0;
 
@@ -142,6 +145,9 @@ Map<String, dynamic> _$SearchAddressModelToJson(SearchAddressModel instance) =>
       'main_text': instance.name,
       'secondary_text': instance.description,
       'state': instance.state,
+      'street': instance.street,
+      'city': instance.city,
+      'zip': instance.zip,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
     };

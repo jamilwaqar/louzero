@@ -34,6 +34,8 @@ class JobModel {
   String? customerId;
   @JsonKey(defaultValue: [])
   List<BillingLineModel> billingLineModels = [];
+  @JsonKey(defaultValue: [])
+  List<ScheduleModel> scheduleModels = [];
   String? note;
 
   factory JobModel.fromMap(Map map) {
@@ -113,4 +115,28 @@ class BillingLineModel {
       _$BillingLineModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$BillingLineModelToJson(this);
+}
+
+@JsonSerializable()
+class ScheduleModel {
+  ScheduleModel({
+    required this.startTime,
+    required this.endTime,
+    this.note,
+    required this.personId,
+    this.anyTimeVisit = false,
+    this.complete = false,
+  });
+
+  int startTime;
+  int endTime;
+  String? note;
+  String personId;
+  bool anyTimeVisit;
+  bool complete;
+
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ScheduleModelToJson(this);
 }
