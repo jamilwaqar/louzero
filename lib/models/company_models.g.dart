@@ -8,10 +8,13 @@ part of 'company_models.dart';
 
 CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel()
   ..objectId = json['objectId'] as String?
+  ..ownerId = json['ownerId'] as String?
   ..avatar = json['avatar'] == null ? null : Uri.parse(json['avatar'] as String)
   ..website = json['website'] as String? ?? ''
   ..admins =
       (json['admins'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []
+  ..users =
+      (json['users'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []
   ..name = json['name'] as String? ?? ''
   ..phone = json['phone'] as String? ?? ''
   ..email = json['email'] as String? ?? ''
@@ -28,9 +31,11 @@ CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel()
 Map<String, dynamic> _$CompanyModelToJson(CompanyModel instance) =>
     <String, dynamic>{
       'objectId': instance.objectId,
+      'ownerId': instance.ownerId,
       'avatar': instance.avatar?.toString(),
       'website': instance.website,
       'admins': instance.admins,
+      'users': instance.users,
       'name': instance.name,
       'phone': instance.phone,
       'email': instance.email,
