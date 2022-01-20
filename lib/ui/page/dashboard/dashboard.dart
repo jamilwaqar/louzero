@@ -6,10 +6,12 @@ import 'package:get/get.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
 import 'package:louzero/controller/get/bindings/job_binding.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
 import 'package:louzero/ui/page/job/jobs.dart';
+import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'app_card_chart_pie.dart';
 import 'chart_list_item.dart';
 
@@ -111,7 +113,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   //   borderColor: Colors.red,
                   //   primary: false,
                   //   onPressed: () =>
-                  //       Get.to(() => const JobsHome(), binding: JobBinding()),
+                  //       Get.to(() => JobsHome(JobModel(jobId: 1, status: 'done', description: 'dd', jobType: 'repair')), binding: JobBinding()),
                   // ),
                   AppButton(
                     fontSize: btnSize,

@@ -12,6 +12,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
+import 'package:louzero/ui/page/job/views/job_schedule.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -119,7 +120,7 @@ class _JobsHomeState extends State<JobsHome> {
         radius: 24,
         children: [
           _tabDetails(),
-          _tabSchedule(),
+          const JobSchedule(),
           _tabBilling(),
         ],
         length: 3,

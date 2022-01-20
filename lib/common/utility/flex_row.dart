@@ -8,6 +8,7 @@ class FlexRow extends StatelessWidget {
     this.mt = 0,
     this.mb = 0,
     this.crossAxisAlignment = CrossAxisAlignment.start,
+    this.mainAxisAlignment = MainAxisAlignment.start,
   }) : super(key: key);
 
   final double mt;
@@ -16,6 +17,7 @@ class FlexRow extends StatelessWidget {
   final List<Widget> children;
   final List<Widget> items = [];
   final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisAlignment mainAxisAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class FlexRow extends StatelessWidget {
 
     return Row(
       crossAxisAlignment: crossAxisAlignment,
+      mainAxisAlignment: mainAxisAlignment,
       children: items.toList(),
     );
   }

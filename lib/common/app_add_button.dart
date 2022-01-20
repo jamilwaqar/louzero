@@ -7,7 +7,8 @@ class AppAddButton extends StatelessWidget {
   final String label;
   final Function() onPressed;
   final IconData? iconData;
-  const AppAddButton(this.label, {Key? key, required this.onPressed, this.iconData}) : super(key: key);
+  final Color? iconColor;
+  const AppAddButton(this.label, {Key? key, required this.onPressed, this.iconData, this.iconColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class AppAddButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            appIcon(iconData ?? Icons.add_circle, color: AppColors.orange),
+            appIcon(iconData ?? Icons.add_circle, color: iconColor ?? AppColors.orange),
             const SizedBox(width: 8),
             Text(label, style: TextStyles.labelL.copyWith(color: AppColors.dark_3)),
             const SizedBox(width: 16),

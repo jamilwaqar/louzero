@@ -12,9 +12,11 @@ final kLastDay = DateTime(kToday.year, kToday.month + 60, kToday.day);
 class NZCalendar extends StatefulWidget{
   const NZCalendar({
     Key? key,
-    required this.onDateSelected
+    required this.onDateSelected,
+    this.selectedDate
   }) : super(key: key);
   final Function onDateSelected;
+  final String? selectedDate;
 
   @override
   _NZCalendarState createState() => _NZCalendarState();
@@ -22,7 +24,6 @@ class NZCalendar extends StatefulWidget{
 
 class _NZCalendarState extends State<NZCalendar> {
   late final PageController _pageController;
-  late final ValueNotifier<List<Event>> _selectedEvents;
   final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -32,9 +33,20 @@ class _NZCalendarState extends State<NZCalendar> {
   );
 
   @override
+  void initState() {
+    if(widget.selectedDate != null) {
+      DateTime selectedDate = DateTime.parse(widget.selectedDate!);
+      setState(() {
+        _selectedDays.clear();
+        _selectedDays.add(selectedDate);
+      });
+    }
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _focusedDay.dispose();
-    _selectedEvents.dispose();
     super.dispose();
   }
 
@@ -101,10 +113,16 @@ class _NZCalendarState extends State<NZCalendar> {
                     color: AppColors.secondary_99
                 ),
                 outsideTextStyle: const TextStyle(color: AppColors.secondary_99),
+                defaultTextStyle: AppStyles.labelRegular,
+                weekendTextStyle: AppStyles.labelRegular,
                 selectedDecoration: BoxDecoration(
                   border: Border.all(color: Colors.white, width: 5),
-                  color: AppColors.primary_1,
                   shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFEC5B2A), Color(0xFFEB794B)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
                 ),
             ),
             onDaySelected: _onDaySelected,
@@ -138,10 +156,8 @@ class _DaysOfWeek extends StatelessWidget{
         children: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((e) => Expanded(
           child: Text(e,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              color: AppColors.secondary_30
-            ),),
+            style: AppStyles.labelBold
+          ),
         )).toList(),
       ),
     );
@@ -179,7 +195,7 @@ class _CalendarHeader extends StatelessWidget {
             child: Text(
               headerText,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: AppColors.secondary_30),
+              style: AppStyles.headerRegular,
             ),
           ),
           IconButton(
