@@ -113,10 +113,16 @@ class _NZCalendarState extends State<NZCalendar> {
                     color: AppColors.secondary_99
                 ),
                 outsideTextStyle: const TextStyle(color: AppColors.secondary_99),
+                defaultTextStyle: AppStyles.labelRegular,
+                weekendTextStyle: AppStyles.labelRegular,
                 selectedDecoration: BoxDecoration(
                   border: Border.all(color: Colors.white, width: 5),
-                  color: AppColors.primary_1,
                   shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFEC5B2A), Color(0xFFEB794B)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
                 ),
             ),
             onDaySelected: _onDaySelected,
@@ -150,10 +156,8 @@ class _DaysOfWeek extends StatelessWidget{
         children: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((e) => Expanded(
           child: Text(e,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              color: AppColors.secondary_30
-            ),),
+            style: AppStyles.labelBold
+          ),
         )).toList(),
       ),
     );
@@ -191,7 +195,7 @@ class _CalendarHeader extends StatelessWidget {
             child: Text(
               headerText,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: AppColors.secondary_30),
+              style: AppStyles.headerRegular,
             ),
           ),
           IconButton(
