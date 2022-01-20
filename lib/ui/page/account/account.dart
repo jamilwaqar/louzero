@@ -43,7 +43,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
                 itemCount: controller.companies.length,
                 itemBuilder: (context, index) => _companyItem(index))),
         const SizedBox(height: 32),
-        AppAddButton("Add Company", onPressed: () {
+        Buttons.outline("Add Company", icon: Icons.add_circle, onPressed: () {
           Get.to(() => const AddCompanyPage());
         }),
       ],
@@ -66,46 +66,50 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
   Widget _companyItem(int index) {
     CompanyModel model = controller.companies[index];
+    String status = model.status.label.toLowerCase();
+    Color _colorIcon =
+        status == 'cancelled' ? AppColors.secondary_90 : AppColors.secondary_50;
+    Color _colorText =
+        status == 'cancelled' ? AppColors.secondary_70 : AppColors.secondary_20;
+
     return BorderBox(
       height: 60,
       widthBorder: 4,
       colorBorder: getColor(index),
       colorBg: getRowColor(index),
-      child: FlexRow(
-        flex: const [0, 1, 0, 0, 0, 0, 0],
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            child: _companyAvatar(model),
+            width: 48,
+            alignment: Alignment(-1, 0),
+            child: _companyAvatar(model, colorIcon: _colorIcon),
           ),
-          Row(
-            children: [
-              Text(model.name, style: AppStyles.labelBold),
-              const SizedBox(
-                width: 24,
-              ),
-              if (index == controller.selectedCompany)
-                const Icon(
-                  Icons.check,
-                  color: AppColors.primary_1,
-                  size: 20,
-                )
-            ],
+          Expanded(
+            child: Row(
+              children: [
+                Text(model.name,
+                    style: AppStyles.labelBold.copyWith(color: _colorText)),
+                const SizedBox(
+                  width: 24,
+                ),
+                if (index == controller.selectedCompany)
+                  const Icon(
+                    Icons.check,
+                    color: AppColors.primary_1,
+                    size: 20,
+                  )
+              ],
+            ),
           ),
-          if (index != controller.selectedCompany)
+          if (index != controller.selectedCompany && status != 'cancelled')
             Buttons.outline_sm('Switch to Company',
                 icon: MdiIcons.swapHorizontal, onPressed: () {
               controller.selectedCompany = index;
             }),
-          Container(
-            width: 10,
-            height: 10,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, gradient: AppColors.grad_success),
+          JobStatusLabel(
+            label: model.status.label,
           ),
-          Text(model.status.label,
-              style: AppStyles.labelRegular
-                  .copyWith(color: AppColors.secondary_50)),
           AppPopMenu(
             onSelected: (val) {
               controller.company = model;
@@ -138,31 +142,38 @@ class MyAccountPage extends GetWidget<CompanyController> {
     );
   }
 
-  Widget _companyAvatar(CompanyModel model) {
+  Widget _companyAvatar(
+    CompanyModel model, {
+    IconData icon = Icons.home_work,
+    Color colorIcon = AppColors.secondary_50,
+  }) {
     return model.avatar == null
-        ? appIcon(Icons.home_work, color: AppColors.secondary_50)
+        ? appIcon(icon, color: colorIcon)
         : _cachedNetworkImage(model.avatar!.toString());
   }
 
-  Widget _cachedNetworkImage(String url) => CachedNetworkImage(
-      imageUrl: url,
-      imageBuilder: (context, imageProvider) => Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
+  Widget _cachedNetworkImage(String url, {double size = 32}) =>
+      CachedNetworkImage(
+          width: size,
+          height: size * 0.75,
+          imageUrl: url,
+          imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
-          ),
-      placeholder: (context, url) => const Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 1,
-            ),
-          ),
-      errorWidget: (context, url, error) {
-        return Container();
-      });
+          placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 1,
+                ),
+              ),
+          errorWidget: (context, url, error) {
+            return Container();
+          });
 
   // TODO: Don't remove this: Reactivate Dialog
   _showReactivateDialog() {
@@ -258,6 +269,46 @@ class BorderBox extends StatelessWidget {
             height: height,
             decoration: BoxDecoration(color: colorBorder),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class JobStatusLabel extends StatelessWidget {
+  final String label;
+  const JobStatusLabel({Key? key, required this.label}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    Color _color = AppColors.secondary_90;
+    Color _colorText = AppColors.secondary_50;
+
+    switch (label.toLowerCase()) {
+      case 'active':
+        _color = AppColors.success_lt;
+        _colorText = AppColors.secondary_50;
+        break;
+      case 'cancelled':
+        _color = AppColors.error_50;
+        _colorText = AppColors.secondary_80;
+        break;
+      default:
+        _color = AppColors.secondary_90;
+        _colorText = AppColors.secondary_50;
+    }
+
+    return Container(
+      width: 140,
+      child: Row(
+        children: [
+          SizedBox(width: 24),
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: _color),
+          ),
+          const SizedBox(width: 8),
+          Text(label, style: AppStyles.labelRegular.copyWith(color: _colorText))
         ],
       ),
     );

@@ -7,6 +7,7 @@ class AppHeaderIcon extends StatelessWidget {
   final IconData? icon;
   final IconData? iconStart;
   final String title;
+  final String? placeholder;
   final TextStyle style;
   final double mt;
   final double mb;
@@ -14,6 +15,7 @@ class AppHeaderIcon extends StatelessWidget {
   final VoidCallback? onTap;
   const AppHeaderIcon(
     this.title, {
+    this.placeholder,
     this.icon,
     this.iconStart,
     this.style = AppStyles.headerRegular,
@@ -26,6 +28,11 @@ class AppHeaderIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String _text = title.trim().isNotEmpty ? title : placeholder ?? title;
+    TextStyle _style = style;
+    if (placeholder != null && _text == placeholder) {
+      _style = _style.copyWith(color: AppColors.secondary_70);
+    }
     return Padding(
       padding: EdgeInsets.only(bottom: mb, top: mt),
       child: Row(
@@ -40,8 +47,8 @@ class AppHeaderIcon extends StatelessWidget {
             ),
           if (iconStart != null) const SizedBox(width: 8),
           Text(
-            title,
-            style: style,
+            _text,
+            style: _style,
           ),
           if (icon != null)
             AppIconButton(
