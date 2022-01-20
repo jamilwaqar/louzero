@@ -12,9 +12,11 @@ final kLastDay = DateTime(kToday.year, kToday.month + 60, kToday.day);
 class NZCalendar extends StatefulWidget{
   const NZCalendar({
     Key? key,
-    required this.onDateSelected
+    required this.onDateSelected,
+    this.selectedDate
   }) : super(key: key);
   final Function onDateSelected;
+  final String? selectedDate;
 
   @override
   _NZCalendarState createState() => _NZCalendarState();
@@ -22,7 +24,6 @@ class NZCalendar extends StatefulWidget{
 
 class _NZCalendarState extends State<NZCalendar> {
   late final PageController _pageController;
-  late final ValueNotifier<List<Event>> _selectedEvents;
   final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -32,9 +33,20 @@ class _NZCalendarState extends State<NZCalendar> {
   );
 
   @override
+  void initState() {
+    if(widget.selectedDate != null) {
+      DateTime selectedDate = DateTime.parse(widget.selectedDate!);
+      setState(() {
+        _selectedDays.clear();
+        _selectedDays.add(selectedDate);
+      });
+    }
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _focusedDay.dispose();
-    _selectedEvents.dispose();
     super.dispose();
   }
 
