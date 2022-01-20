@@ -15,7 +15,7 @@ class NZCalendar extends StatefulWidget{
     required this.onDateSelected,
     this.selectedDate
   }) : super(key: key);
-  final Function onDateSelected;
+  final Function(DateTime) onDateSelected;
   final DateTime? selectedDate;
 
   @override

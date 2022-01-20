@@ -43,6 +43,8 @@ class JobModel {
     List billingLineModels = map.remove('billingLineModels');
     map['billingLineModels'] =
         billingLineModels.map((e) => Map<String, dynamic>.from(e)).toList();
+    List scheduleModels = map.remove('scheduleModels') ?? [];
+    map['scheduleModels'] = scheduleModels.map((e) => Map<String, dynamic>.from(e)).toList();
     Map<String, dynamic> json = Map<String, dynamic>.from(map);
     return JobModel.fromJson(json);
   }
@@ -124,6 +126,7 @@ class ScheduleModel {
     required this.startTime,
     required this.endTime,
     this.note,
+    this.objectId,
     required this.personnelName,
     this.personnelAvatar,
     required this.personnelId,
@@ -131,6 +134,7 @@ class ScheduleModel {
     this.complete = false,
   });
 
+  String? objectId;
   int startTime;
   int endTime;
   String? note;

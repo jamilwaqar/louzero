@@ -31,14 +31,14 @@ class JobSchedule extends GetWidget<JobController> {
   //     "isCompleted": false
   //   }
   // ];
-  final isAddScheduleOpen = false.obs;
+  final _isAddScheduleOpen = false.obs;
 
   @override
   Widget build(BuildContext context) {
     return Obx(()=> AppTabPanel(
       children: [
         const Text('Schedule', style: AppStyles.headerRegular),
-        if (_scheduleModels.isEmpty && !isAddScheduleOpen.value)
+        if (_scheduleModels.isEmpty && !_isAddScheduleOpen.value)
           const AppPlaceholder(
             title: 'No Appointments Yet',
             subtitle: "You haven't schedules any appointments for this job yet.",
@@ -46,25 +46,26 @@ class JobSchedule extends GetWidget<JobController> {
         const SizedBox(height: 10,),
         Column(
           children: _scheduleModels.map((schedule) =>
-              ScheduleCard(schedule: schedule)).toList(),
+              ScheduleCard(schedule: schedule, jobModel: jobModel,)).toList(),
         ),
         Visibility(
-            visible: isAddScheduleOpen.value,
+            visible: _isAddScheduleOpen.value,
             child: AddScheduleDialog(
+              jobModel: jobModel,
               onClose: () {
-                isAddScheduleOpen.value = false;
+                _isAddScheduleOpen.value = false;
               },
             )
         ),
         Visibility(
-            visible: !isAddScheduleOpen.value,
+            visible: !_isAddScheduleOpen.value,
             child: Align(
               alignment: Alignment.centerLeft,
               child: AppAddButton(
                 "Add to Schedule",
                 iconColor: AppColors.primary_1,
                 onPressed: () {
-                  isAddScheduleOpen.value = true;
+                  _isAddScheduleOpen.value = true;
                 },
               ),
             )

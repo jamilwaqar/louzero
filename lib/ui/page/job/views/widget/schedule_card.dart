@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_avatar.dart';
 import 'package:louzero/common/app_pop_menu.dart';
-import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/common.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/models/job_models.dart';
-import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/job/views/widget/add_schedule_dialog.dart';
 import 'package:louzero/ui/widget/switch_button.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -16,9 +14,10 @@ import 'package:get/get.dart';
 class ScheduleCard extends StatelessWidget{
   ScheduleCard({
     Key? key,
+    required this.jobModel,
     required this.schedule
   }) : super(key: key);
-
+  final JobModel jobModel;
   final ScheduleModel schedule;
 
   late final isComplete = schedule.complete.obs;
@@ -203,6 +202,7 @@ class ScheduleCard extends StatelessWidget{
         const SizedBox(height: 8,),
         showScheduleDialog.value ?
         AddScheduleDialog(
+          jobModel: jobModel,
           schedule: schedule,
           onClose: () {
             showScheduleDialog.value = false;

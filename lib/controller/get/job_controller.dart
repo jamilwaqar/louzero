@@ -15,6 +15,8 @@ class JobController extends GetxController {
     Map<String, dynamic> data = model.toJson();
     data['billingLineModels'] =
         model.billingLineModels.map((e) => e.toJson()).toList();
+    data['scheduleModels'] =
+        model.scheduleModels.map((e) => e.toJson()).toList();
     if (data['objectId'] == null) {
       data.remove('objectId');
     }

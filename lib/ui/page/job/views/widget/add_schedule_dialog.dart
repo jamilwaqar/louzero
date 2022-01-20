@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_advanced_textfield.dart';
 import 'package:louzero/common/app_button.dart';
@@ -10,46 +11,38 @@ import 'package:louzero/common/utility/flex_row.dart';
 import 'package:louzero/common/utility/row_split.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/widget/buttons/text_button.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class AddScheduleDialog extends StatefulWidget{
-  const AddScheduleDialog({
+class AddScheduleDialog extends GetWidget<JobController> {
+
+  AddScheduleDialog({
     Key? key,
+    required this.jobModel,
     required this.onClose,
     this.schedule,
   }) : super(key: key);
-  final Function onClose;
+
+  final JobModel jobModel;
+  final Function() onClose;
   final ScheduleModel? schedule;
 
-  @override
-  _AddScheduleDialogState createState() => _AddScheduleDialogState();
-}
+  late final TextEditingController _personnelController = TextEditingController(text: schedule?.personnelName);
+  late final TextEditingController _noteController = TextEditingController(text: schedule?.note);
+  late final TextEditingController _startTimeController = TextEditingController(text: schedule?.start.time);
+  late final TextEditingController _endTimeController = TextEditingController(text: schedule?.end.time);
 
-class _AddScheduleDialogState extends State<AddScheduleDialog> {
-
-  late final TextEditingController _personnelController = TextEditingController(text: widget.schedule?.personnelName);
-  late final TextEditingController _noteController = TextEditingController(text: widget.schedule?.note);
-  late final TextEditingController _startTimeController = TextEditingController(text: widget.schedule?.start.time);
-  late final TextEditingController _endTimeController = TextEditingController(text: widget.schedule?.end.time);
-
-  String personnel = "";
-  String hoursToComplete = "";
-  String note = "";
-  String date = "";
-  String startTime = "";
-  String endTime = "";
-  bool isAnyTimeOfVisit = false;
-
+  final _isAnyTimeOfVisit = false.obs;
+  final _selectedDate = DateTime.now().obs;
 
   @override
   Widget build(BuildContext context) {
-    final leadingImage = (widget.schedule != null && widget.schedule!.personnelAvatar != null)
-        ? widget.schedule!.personnelAvatar
-        : "https://semantic-ui.com/images/avatar/large/elliot.jpg";
+    final leadingImage = schedule?.personnelAvatar;
+
     return AppCard(
       ml: 0,
       mr: 0,
@@ -59,9 +52,7 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
             left: const Text("Add New Schedule", style: AppStyles.headerRegular),
             right: AppIconButton(
               colorBg: Colors.transparent,
-              onTap: () {
-                widget.onClose();
-              },
+              onTap: onClose,
             )),
         const SizedBox(height: 24,),
         AppAdvancedTextField(
@@ -69,20 +60,14 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
           label: 'Personnel',
           isDropdown: true,
           items: const ["User 1", "User 2", "User 3"],
-          leadingImage: _personnelController.text.isNotEmpty ? leadingImage.toString() : null,
+          leadingImage: leadingImage?.toString(),
           leftPadding: _personnelController.text.isNotEmpty ? 50 : 15,
           showClearIcon: _personnelController.text.isNotEmpty,
           onChange: (value) {
-            setState(() {
-              personnel = value;
-              _personnelController.text = value;
-            });
+            _personnelController.text = value;
           },
           onClear: () {
-            setState(() {
-              personnel = "";
-              _personnelController.text = "";
-            });
+            _personnelController.text = "";
           },
         ),
         const SizedBox(height: 10,),
@@ -104,8 +89,8 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
         const AppLabeledLine(label: "OR"),
         const SizedBox(height: 16,),
         NZCalendar(
-          selectedDate: widget.schedule?.start,
-          onDateSelected: (value){ print('date has been changed $value');},
+          selectedDate: schedule?.start,
+          onDateSelected: (value){ _selectedDate.value = value;},
         ),
         const SizedBox(height: 24,),
         FlexRow(
@@ -122,10 +107,7 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
                   context: context,
                   builder: (BuildContext context) {
                     return NZTimePicker(onChange: (time) {
-                      setState(() {
-                        startTime = time;
-                        _startTimeController.text = time;
-                      });
+                      _startTimeController.text = time;
                     });
                   },
                 );
@@ -140,10 +122,7 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
                   context: context,
                   builder: (BuildContext context) {
                     return NZTimePicker(onChange: (time) {
-                      setState(() {
-                        endTime = time;
-                        _endTimeController.text = time;
-                      });
+                      _endTimeController.text = time;
                     },);
                   },
                 );
@@ -151,15 +130,13 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
             ),
             Container(
               margin: const EdgeInsets.only(top: 10),
-              child: AppCheckbox(
-                checked: isAnyTimeOfVisit,
+              child: Obx(()=> AppCheckbox(
+                checked: _isAnyTimeOfVisit.value,
                 label: "Any time on day of visit",
                 onChanged: (value) {
-                  setState(() {
-                    isAnyTimeOfVisit = value!;
-                  });
+                  _isAnyTimeOfVisit.value = value!;
                 },
-              ),
+              )),
             )
           ],
         ),
@@ -170,16 +147,20 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
           children: [
             AppButton(
               label: "Save Appointment",
-              onPressed: () {},
+              onPressed: () {
+                int start = _convertMilliseconds(_startTimeController.text);
+                int end = _convertMilliseconds(_endTimeController.text);
+                // ScheduleModel module = ScheduleModel(startTime: start, endTime: end, personnelName: _personnelController.text, personnelId: '', personnelAvatar: );
+
+                controller.updateJobModel(jobModel);
+              },
             ),
             const SizedBox(width: 32,),
             LZTextButton(
               "Cancel",
               textColor: AppColors.secondary_20,
               fontWeight: FontWeight.w500,
-              onPressed: () {
-                widget.onClose();
-              },
+              onPressed: onClose,
             )
           ],
         )
@@ -187,4 +168,11 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
     );
   }
 
+  int _convertMilliseconds(String date) {
+    int hr = date.split(':')[0] as int;
+    int min = date.split(':')[1] as int;
+    DateTime dateTime = _selectedDate.value;
+    DateTime start = DateTime(dateTime.year, dateTime.month, dateTime.day, hr, min);
+    return start.millisecondsSinceEpoch;
+  }
 }
