@@ -16,7 +16,7 @@ class NZCalendar extends StatefulWidget{
     this.selectedDate
   }) : super(key: key);
   final Function onDateSelected;
-  final String? selectedDate;
+  final DateTime? selectedDate;
 
   @override
   _NZCalendarState createState() => _NZCalendarState();
@@ -35,10 +35,9 @@ class _NZCalendarState extends State<NZCalendar> {
   @override
   void initState() {
     if(widget.selectedDate != null) {
-      DateTime selectedDate = DateTime.parse(widget.selectedDate!);
       setState(() {
         _selectedDays.clear();
-        _selectedDays.add(selectedDate);
+        _selectedDays.add(widget.selectedDate!);
       });
     }
     super.initState();

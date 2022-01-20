@@ -93,7 +93,7 @@ class ScheduleCard extends StatelessWidget{
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(schedule.time,
+                                        Text(schedule.startEndTime,
                                             style: const TextStyle(
                                               fontFamily: 'Lato',
                                               fontSize: 16,
@@ -159,37 +159,30 @@ class ScheduleCard extends StatelessWidget{
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  FutureBuilder<UserModel?>(
-                                      future: APIManager.fetchUser(schedule.personId),
-                                    builder: (_, AsyncSnapshot<UserModel?> snapshot) {
-                                        if (!snapshot.hasData) return Container();
-                                        UserModel user = snapshot.data!;
-                                      return Row(
-                                        children: [
-                                          AppAvatar(size: 20, url: user.avatar, placeHolder: AppPlaceHolder.user),
-                                          const SizedBox(width: 8,),
-                                          Text(user.fullName, style: const TextStyle(
-                                            fontFamily: 'Lato',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                            letterSpacing: 0.1,
-                                          )),
-                                          const SizedBox(width: 8,),
-                                          CircleAvatar(
-                                            backgroundColor: AppColors.secondary_95,
-                                            radius: 12,
-                                            child: IconButton(
-                                              iconSize: 15,
-                                              padding: EdgeInsets.zero,
-                                              icon: const Icon(MdiIcons.pencil),
-                                              color: AppColors.secondary_30,
-                                              onPressed: () {
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }
+                                  Row(
+                                    children: [
+                                      AppAvatar(size: 20, url: schedule.personnelAvatar, placeHolder: AppPlaceHolder.user),
+                                      const SizedBox(width: 8,),
+                                      Text(schedule.personnelName, style: const TextStyle(
+                                        fontFamily: 'Lato',
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 0.1,
+                                      )),
+                                      const SizedBox(width: 8,),
+                                      CircleAvatar(
+                                        backgroundColor: AppColors.secondary_95,
+                                        radius: 12,
+                                        child: IconButton(
+                                          iconSize: 15,
+                                          padding: EdgeInsets.zero,
+                                          icon: const Icon(MdiIcons.pencil),
+                                          color: AppColors.secondary_30,
+                                          onPressed: () {
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   Obx(()=> NZSwitch(
                                     isOn: isComplete.value,
