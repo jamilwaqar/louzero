@@ -25,7 +25,7 @@ class NZCalendar extends StatefulWidget{
 class _NZCalendarState extends State<NZCalendar> {
   late final PageController _pageController;
   final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
@@ -72,66 +72,64 @@ class _NZCalendarState extends State<NZCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          ValueListenableBuilder<DateTime>(
-            valueListenable: _focusedDay,
-            builder: (context, value, _) {
-              return _CalendarHeader(
-                  focusedDay: value,
-                  onLeftArrowTap: (){
-                    _pageController.previousPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeOut,
-                    );
-                  },
-                  onRightArrowTap: (){
-                    _pageController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeOut,
-                    );
-                  }
-              );
-            },
-          ),
-          _DaysOfWeek(),
-          TableCalendar<Event>(
-            firstDay: kFirstDay,
-            lastDay: kLastDay,
-            focusedDay: _focusedDay.value,
-            headerVisible: false,
-            daysOfWeekVisible: false,
-            calendarFormat: _calendarFormat,
-            selectedDayPredicate: (day) => _selectedDays.contains(day),
-            rangeSelectionMode: _rangeSelectionMode,
-            calendarStyle: CalendarStyle(
-                isTodayHighlighted: false,
-                cellMargin: const EdgeInsets.all(0.0),
-                tableBorder: TableBorder.all(color: AppColors.secondary_90),
-                outsideDecoration: const BoxDecoration(
-                    color: AppColors.secondary_99
+    return Column(
+      children: [
+        ValueListenableBuilder<DateTime>(
+          valueListenable: _focusedDay,
+          builder: (context, value, _) {
+            return _CalendarHeader(
+                focusedDay: value,
+                onLeftArrowTap: (){
+                  _pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                  );
+                },
+                onRightArrowTap: (){
+                  _pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                  );
+                }
+            );
+          },
+        ),
+        _DaysOfWeek(),
+        TableCalendar<Event>(
+          firstDay: kFirstDay,
+          lastDay: kLastDay,
+          focusedDay: _focusedDay.value,
+          headerVisible: false,
+          daysOfWeekVisible: false,
+          calendarFormat: _calendarFormat,
+          selectedDayPredicate: (day) => _selectedDays.contains(day),
+          rangeSelectionMode: _rangeSelectionMode,
+          calendarStyle: CalendarStyle(
+              isTodayHighlighted: false,
+              cellMargin: const EdgeInsets.all(0.0),
+              tableBorder: TableBorder.all(color: AppColors.secondary_90),
+              outsideDecoration: const BoxDecoration(
+                  color: AppColors.secondary_99
+              ),
+              outsideTextStyle: const TextStyle(color: AppColors.secondary_99),
+              defaultTextStyle: AppStyles.labelRegular,
+              weekendTextStyle: AppStyles.labelRegular,
+              selectedDecoration: BoxDecoration(
+                border: Border.all(color: Colors.white, width: 5),
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFEC5B2A), Color(0xFFEB794B)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
                 ),
-                outsideTextStyle: const TextStyle(color: AppColors.secondary_99),
-                defaultTextStyle: AppStyles.labelRegular,
-                weekendTextStyle: AppStyles.labelRegular,
-                selectedDecoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 5),
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFEC5B2A), Color(0xFFEB794B)],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
-            ),
-            onDaySelected: _onDaySelected,
-            onRangeSelected: _onRangeSelected,
-            onCalendarCreated: (controller) => _pageController = controller,
-            onPageChanged: (focusedDay) => _focusedDay.value = focusedDay,
+              ),
           ),
-        ],
-      ),
+          onDaySelected: _onDaySelected,
+          onRangeSelected: _onRangeSelected,
+          onCalendarCreated: (controller) => _pageController = controller,
+          onPageChanged: (focusedDay) => _focusedDay.value = focusedDay,
+        ),
+      ],
     );
   }
 }

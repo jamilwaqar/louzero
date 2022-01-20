@@ -22,7 +22,7 @@ class CompanyPage extends GetWidget<CompanyController> {
     return Obx(() => AppBaseScaffold(
           child: Column(
             children: [
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               _info(),
             ],
           ),

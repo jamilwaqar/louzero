@@ -19,7 +19,7 @@ class Demo extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 48,
             ),
             _calendar(),
@@ -98,13 +98,13 @@ class Demo extends StatelessWidget {
     return AppCard(
       children: [
         _heading("Button Styles"),
-        SizedBox(
+        const SizedBox(
           height: 8,
         ),
         Text(
             'Buttons accesed via static functions -> Buttons.flat("label"), Buttons.submit("label"). These are all fixed styles with minimal props for use.',
             style: AppStyles.labelRegular.copyWith(height: 1.4)),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         Wrap(
           spacing: 10,
           runSpacing: 20,
@@ -117,9 +117,9 @@ class Demo extends StatelessWidget {
             Buttons.text('Text'),
           ],
         ),
-        SizedBox(height: 24),
-        Text("With Icons", style: AppStyles.headerRegular),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
+        const Text("With Icons", style: AppStyles.headerRegular),
+        const SizedBox(height: 24),
         Wrap(
           spacing: 10,
           runSpacing: 20,
@@ -131,9 +131,9 @@ class Demo extends StatelessWidget {
             Buttons.flat('Flat', icon: Icons.chevron_right),
           ],
         ),
-        SizedBox(height: 24),
-        Text("With Icons & Expanded", style: AppStyles.headerRegular),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
+        const Text("With Icons & Expanded", style: AppStyles.headerRegular),
+        const SizedBox(height: 24),
         Wrap(
           spacing: 10,
           runSpacing: 20,
@@ -146,12 +146,12 @@ class Demo extends StatelessWidget {
             Buttons.flat('Flat', icon: Icons.chevron_right, expanded: true),
           ],
         ),
-        SizedBox(height: 24),
-        Text("With Popup Action Menu", style: AppStyles.headerRegular),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
+        const Text("With Popup Action Menu", style: AppStyles.headerRegular),
+        const SizedBox(height: 24),
         AppPopMenu(
           button: [Buttons.outline('Quick Action Menu', icon: Icons.settings)],
-          items: [
+          items: const [
             PopMenuItem(label: 'Action One', icon: Icons.settings),
             PopMenuItem(
                 label: 'Action Two', icon: Icons.location_city_outlined),
@@ -216,16 +216,16 @@ class Demo extends StatelessWidget {
           AppTextField(label: 'Last Name')
         ],
       ),
-      SizedBox(
+      const SizedBox(
         height: 16,
       ),
-      AppTextField(
+      const AppTextField(
         label: 'Multi Line',
         multiline: true,
         initialValue:
             'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
       ),
-      AppMultiSelect(
+      const AppMultiSelect(
         items: [
           SelectItem(id: '1', value: '', label: 'Cheese'),
           SelectItem(id: '2', value: '', label: 'Mushrooms'),
@@ -239,7 +239,7 @@ class Demo extends StatelessWidget {
           SelectItem(id: '5', value: '', label: 'Gravel'),
         ],
       ),
-      SizedBox(height: 24),
+      const SizedBox(height: 24),
       FlexRow(
         flex: const [3, 1, 2],
         children: [
@@ -303,8 +303,8 @@ class Demo extends StatelessWidget {
 
   Widget _loadingSpinner() => AppCard(pb: 48, children: [
         _heading("Loading Spinner"),
-        SizedBox(height: 24),
-        AppSpinner(),
+        const SizedBox(height: 24),
+        const AppSpinner(),
       ]);
 
   Widget _segmentControls() => AppCard(children: [
@@ -379,18 +379,16 @@ class Demo extends StatelessWidget {
       ]);
 
   Widget _heading(String label) {
-    return Container(
-        // height: 60,
-        child: Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label.toUpperCase(),
-            style: AppStyles.headerRegular.copyWith(
-                color: AppColors.secondary_30,
-                fontSize: 24,
-                letterSpacing: .5)),
-        AppDivider(mt: 16, mb: 24)
+    Text(label.toUpperCase(),
+        style: AppStyles.headerRegular.copyWith(
+            color: AppColors.secondary_30,
+            fontSize: 24,
+            letterSpacing: .5)),
+    const AppDivider(mt: 16, mb: 24)
       ],
-    ));
+    );
   }
 }

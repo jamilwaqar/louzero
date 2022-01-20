@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_advanced_textfield.dart';
@@ -7,7 +6,6 @@ import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_checkbox.dart';
 import 'package:louzero/common/app_icon_button.dart';
 import 'package:louzero/common/app_labeled_line.dart';
-import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/common/utility/flex_row.dart';
 import 'package:louzero/common/utility/row_split.dart';
 import 'package:louzero/controller/constant/colors.dart';
@@ -25,6 +23,7 @@ class AddScheduleDialog extends StatefulWidget{
   final Function onClose;
   final Map? schedule;
 
+  @override
   _AddScheduleDialogState createState() => _AddScheduleDialogState();
 }
 

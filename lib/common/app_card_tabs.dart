@@ -4,7 +4,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'app_card.dart';
 
 class AppCardTabs extends StatelessWidget {
-  AppCardTabs({
+  const AppCardTabs({
     Key? key,
     required this.children,
     required this.length,

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_pop_menu.dart';
 import 'package:louzero/controller/constant/colors.dart';
@@ -126,41 +125,39 @@ class _ScheduleCard extends State<ScheduleCard>{
                                     ),),
                                   Expanded(
                                     flex: 1,
-                                    child: Container(
-                                      child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: AppPopMenu(
-                                            buttonAlignment: MainAxisAlignment.end,
-                                            button: const [
-                                              SizedBox(
-                                                child: Icon(Icons.more_vert, color: AppColors.secondary_60),
-                                              ),
-                                            ],
-                                            items: [
-                                              PopMenuItem(
-                                                label: 'Edit Appointment',
-                                                icon: MdiIcons.pencil,
-                                                onTap: () {
-                                                  setState(() {
-                                                    showScheduleDialog = true;
-                                                  });
-                                                },
-                                              ),
-                                              PopMenuItem(
-                                                label: 'Manage Notes',
-                                                icon: MdiIcons.fileDocumentOutline,
-                                                onTap: () {
-                                                },
-                                              ),
-                                              PopMenuItem(
-                                                label: 'Remove',
-                                                icon: MdiIcons.trashCanOutline,
-                                                onTap: () {
-                                                },
-                                              ),
-                                            ],
-                                          )
-                                      ),
+                                    child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: AppPopMenu(
+                                          buttonAlignment: MainAxisAlignment.end,
+                                          button: const [
+                                            SizedBox(
+                                              child: Icon(Icons.more_vert, color: AppColors.secondary_60),
+                                            ),
+                                          ],
+                                          items: [
+                                            PopMenuItem(
+                                              label: 'Edit Appointment',
+                                              icon: MdiIcons.pencil,
+                                              onTap: () {
+                                                setState(() {
+                                                  showScheduleDialog = true;
+                                                });
+                                              },
+                                            ),
+                                            PopMenuItem(
+                                              label: 'Manage Notes',
+                                              icon: MdiIcons.fileDocumentOutline,
+                                              onTap: () {
+                                              },
+                                            ),
+                                            PopMenuItem(
+                                              label: 'Remove',
+                                              icon: MdiIcons.trashCanOutline,
+                                              onTap: () {
+                                              },
+                                            ),
+                                          ],
+                                        )
                                     ),
                                   )
 
@@ -229,7 +226,7 @@ class _ScheduleCard extends State<ScheduleCard>{
             });
           },
         ) : const SizedBox(),
-        SizedBox(height: 8,),
+        const SizedBox(height: 8,),
       ],
     );
   }
