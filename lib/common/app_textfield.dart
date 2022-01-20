@@ -20,6 +20,8 @@ class AppTextField extends StatefulWidget {
   final void Function(String?)? onSaved;
   final List<String>? options;
   final double mb;
+  final IconData? iconStart;
+  final IconData? iconEnd;
 
   const AppTextField({
     this.controller,
@@ -39,6 +41,8 @@ class AppTextField extends StatefulWidget {
     this.minLines = 1,
     this.maxLines = 1,
     this.mb = 16,
+    this.iconStart,
+    this.iconEnd,
     Key? key,
   }) : super(key: key);
 
@@ -55,12 +59,19 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   void initState() {
+    _setIcons();
+
+    if (_hasValue()) {
+      _color = Colors.transparent;
+      _borderColor = AppColors.secondary_90;
+    }
+
     _textFieldFocus.addListener(() {
       if (!_textFieldFocus.hasFocus) {
         setState(() {
           _color = _hasValue() ? Colors.transparent : AppColors.secondary_99;
           _borderColor =
-              _hasValue() ? AppColors.secondary_70 : Colors.transparent;
+              _hasValue() ? AppColors.secondary_90 : Colors.transparent;
 
           if (!_hasError()) {
             _validateMode = AutovalidateMode.disabled;
@@ -82,6 +93,20 @@ class _AppTextFieldState extends State<AppTextField> {
     super.initState();
   }
 
+  void _setIcons() {
+    if (widget.iconEnd == null && _hasValue()) {
+      setState(() {
+        _status = Icon(Icons.check, color: AppColors.success);
+      });
+    }
+
+    if (widget.iconEnd != null) {
+      setState(() {
+        _status = Icon(widget.iconEnd);
+      });
+    }
+  }
+
   bool _hasError() {
     if (widget.validator != null && widget.controller != null) {
       String? error = widget.validator!.call(widget.controller!.text);
@@ -95,6 +120,20 @@ class _AppTextFieldState extends State<AppTextField> {
       return widget.controller!.text.isNotEmpty;
     }
     return false;
+  }
+
+  dynamic getIcon() {
+    if (widget.iconEnd != null) {
+      return Icon(
+        widget.iconEnd,
+        color: Colors.black,
+      );
+    }
+
+    if (_hasValue() && widget.iconEnd == null) {
+      return _status;
+    }
+    return null;
   }
 
   Widget _input() {
@@ -127,9 +166,9 @@ class _AppTextFieldState extends State<AppTextField> {
       // minLines: 1,
       maxLines: widget.multiline || widget.expands ? null : widget.maxLines,
       decoration: AppStyles.inputDefault.copyWith(
-          suffixIcon: _hasValue() ? _status : null,
-          alignLabelWithHint: widget.expands,
           labelText: widget.label,
+          suffixIcon: getIcon(),
+          alignLabelWithHint: widget.expands,
           labelStyle: AppStyles.labelBold.copyWith(
               height: 1.5,
               fontSize: 16,
