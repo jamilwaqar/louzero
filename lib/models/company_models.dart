@@ -40,9 +40,11 @@ class CompanyModel {
   CompanyModel();
 
   String? objectId;
+  String? ownerId;
   Uri? avatar;
   @JsonKey(defaultValue: '')   String website = '';
   @JsonKey(defaultValue: [])   List<String> admins = [];
+  @JsonKey(defaultValue: [])   List<String> users = [];
   @JsonKey(defaultValue: '')   String name = '';
   @JsonKey(defaultValue: '')   String phone = '';
   @JsonKey(defaultValue: '')   String email = '';
