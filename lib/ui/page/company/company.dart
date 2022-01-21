@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart' hide ItemTags;
 import 'package:get/get.dart';
+import 'package:louzero/common/app_divider_with_label.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/layout.dart';
@@ -45,10 +46,8 @@ class CompanyPage extends GetWidget<CompanyController> {
             Get.to(() => const AddCompanyPage());
           },
         ),
-        const AppDivider(
-          mt: 8,
-          mb: 40,
-        ),
+        const AppDivider(mb: 40),
+        // AppDividerWithLabel(label:model.status.label, mb: 40),
         FlexRow(
           flex: [2, 3],
           children: [
@@ -57,27 +56,28 @@ class CompanyPage extends GetWidget<CompanyController> {
               children: [
                 GestureDetector(
                   onTap: _onUpload,
-                  child: _logo(),
+                  child: AppNetworkImage(
+                    uri: model.avatar,
+                  ),
                 )
               ],
             ),
             // RIGHT COLUMN
             Column(
               children: [
-                Ui.headingSM('Contact Information and mustard',
-                    icon: Icons.favorite),
+                Ui.headingSM('Contact Information', icon: Icons.favorite),
                 Ui.block(
                   children: [
                     Ui.text(model.address!.fullAddress),
-                    Ui.text(model.email, color: AppColors.primary_30),
+                    Ui.text(model.email, link: true),
                     Ui.text(model.phone),
                   ],
                 ),
                 Ui.headingSM('Account Owner', icon: Icons.person),
                 Ui.block(
                   children: [
-                    Ui.text("NAME NEEDED HERE"),
-                    Ui.text(model.email),
+                    Ui.text('NAME NEEDED HERE (DEV)'),
+                    Ui.text(model.email, link: true),
                   ],
                 ),
                 Ui.headingSM('Industries', icon: MdiIcons.domain),
@@ -94,44 +94,6 @@ class CompanyPage extends GetWidget<CompanyController> {
           ],
         ),
       ],
-    );
-  }
-
-  Widget _logo() {
-    Uri? uri = controller.company.avatar;
-    if (uri == null) {
-      return const AppImage(
-        'icon-company-logo',
-        width: 198,
-        height: 136,
-      );
-    }
-    return SizedBox(
-      width: 198,
-      height: 136,
-      child: CachedNetworkImage(
-          imageUrl: uri.toString(),
-          imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-          placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                ),
-              ),
-          errorWidget: (context, url, error) {
-            return const AppImage(
-              'icon-company-logo',
-              width: 198,
-              height: 136,
-            );
-          }),
     );
   }
 
