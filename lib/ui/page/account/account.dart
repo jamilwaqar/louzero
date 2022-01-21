@@ -136,7 +136,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
               ),
             ],
           ),
-          const SizedBox(width: 0)
+          const SizedBox(width: 16)
         ],
       ),
     );
