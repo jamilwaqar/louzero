@@ -19,6 +19,17 @@ class CompanyController extends GetxController {
     update();
   }
 
+  RxInt _selectedCompany = 1.obs;
+
+  int get selectedCompany {
+    return _selectedCompany.value;
+  }
+
+  set selectedCompany(int val) {
+    _selectedCompany.value = val;
+    update();
+  }
+
   CompanyModel get company => _companyModel.value;
 
   set company(CompanyModel model) {

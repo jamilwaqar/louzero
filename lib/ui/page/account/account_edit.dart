@@ -16,24 +16,27 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:simple_rich_text/simple_rich_text.dart';
 
 class AccountEdit extends GetWidget<AuthController> {
-
   final _baseController = Get.find<BaseController>();
-  late final _nameController = TextEditingController(text: controller.user.fullName);
-  late final _phoneController = TextEditingController(text: controller.user.phone);
-  late final _emailController = TextEditingController(text: controller.user.email);
+  late final _nameController =
+      TextEditingController(text: controller.user.fullName);
+  late final _phoneController =
+      TextEditingController(text: controller.user.phone);
+  late final _emailController =
+      TextEditingController(text: controller.user.email);
 
   final _selectCountry = Rx<Country>(AppDefaultValue.country);
   late final _streetController =
-  TextEditingController(text: controller.user.addressModel?.street);
+      TextEditingController(text: controller.user.addressModel?.street);
   late final _cityController =
-  TextEditingController(text: controller.user.addressModel?.city);
+      TextEditingController(text: controller.user.addressModel?.city);
   late final _aptController =
-  TextEditingController(text: controller.user.addressModel?.suite);
+      TextEditingController(text: controller.user.addressModel?.suite);
   late final _stateController =
-  TextEditingController(text: controller.user.addressModel?.state);
+      TextEditingController(text: controller.user.addressModel?.state);
   late final _zipController =
-  TextEditingController(text: controller.user.addressModel?.zip);
-  late final _countryController = TextEditingController(text: _selectCountry.value.name);
+      TextEditingController(text: controller.user.addressModel?.zip);
+  late final _countryController =
+      TextEditingController(text: _selectCountry.value.name);
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -44,86 +47,88 @@ class AccountEdit extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=> AppCard(
-      children: [
-        AppHeaderIcon(
-          !_isEditContact.value ? controller.user.fullName : 'Edit Account',
-          icon: Icons.edit,
-          iconStart: MdiIcons.accountCircle,
-          onTap: () {
-            toggleEdit();
-            // Get.to(() => EditAccountPage(userModel));
-          },
-        ),
-        const AppDivider(
-          mt: 16,
-          mb: 32,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Obx(() => AppCard(
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
+            AppHeaderIcon(
+              !_isEditContact.value ? controller.user.fullName : 'Edit Account',
+              placeholder: 'Your Name Here',
+              icon: Icons.edit,
+              iconStart: MdiIcons.accountCircle,
+              onTap: () {
+                toggleEdit();
+                // Get.to(() => EditAccountPage(userModel));
+              },
+            ),
+            const AppDivider(
+              mt: 16,
+              mb: 32,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Obx(()=> AppAvatar(
-                        url: controller.user.avatar,
-                        text: controller.user.initials,
-                        size: 136,
-                        backgroundColor: AppColors.secondary_50,
-                      )),
-                      _uploadAvatar(),
+                      Stack(
+                        children: [
+                          Obx(() => AppAvatar(
+                                url: controller.user.avatar,
+                                text: controller.user.initials,
+                                size: 136,
+                                backgroundColor: AppColors.secondary_50,
+                              )),
+                          _uploadAvatar(),
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Obx(()=> _editContact()),
-            )
-          ],
-        ),
-        const AppDivider(
-          mt: 32,
-        ),
-        Obx(() {
-          return RowSplit(
-            left: _isEditContact.value
-                ? Row(
-              children: [
-                Buttons.submit('Update Account', onPressed: _updateAccount),
-                Buttons.text('cancel', onPressed: toggleEdit),
-              ],
-            )
-                : null,
-            right: Stack(
-              children: [
-                Buttons.lock(
-                  'Change Password',
-                  onPressed: () {
-                    _showAlertDialog();
-                  },
+                  ),
                 ),
-                if (_isEditContact.value)
-                  Container(
-                      color: Colors.white.withAlpha(200),
-                      height: 41,
-                      width: 200)
+                Expanded(
+                  flex: 2,
+                  child: Obx(() => _editContact()),
+                )
               ],
             ),
-          );
-        })
-      ],
-    ));
+            const AppDivider(
+              mt: 32,
+            ),
+            Obx(() {
+              return RowSplit(
+                left: _isEditContact.value
+                    ? Row(
+                        children: [
+                          Buttons.submit('Update Account',
+                              onPressed: _updateAccount),
+                          Buttons.text('cancel', onPressed: toggleEdit),
+                        ],
+                      )
+                    : null,
+                right: Stack(
+                  children: [
+                    Buttons.lock(
+                      'Change Password',
+                      onPressed: () {
+                        _showAlertDialog();
+                      },
+                    ),
+                    if (_isEditContact.value)
+                      Container(
+                          color: Colors.white.withAlpha(200),
+                          height: 41,
+                          width: 200)
+                  ],
+                ),
+              );
+            })
+          ],
+        ));
   }
 
   void _updateAccount() async {
     NavigationController().loading();
     String fullName = _nameController.text;
-    List<String>names = fullName.split(' ');
+    List<String> names = fullName.split(' ');
     controller.user.firstname = names.first;
     controller.user.lastname = fullName.replaceAll('${names.first} ', '');
 
@@ -221,11 +226,13 @@ class AccountEdit extends GetWidget<AuthController> {
       text: controller.user.email,
       hint: 'Add Email.',
       icon: Icons.mail,
+      colorText: AppColors.primary_30,
     );
   }
 
   Widget _emailEdit() {
-    String _desc = r'Email address can only be changed by the _{color:orange}company account owner_.';
+    String _desc =
+        r'Email address can only be changed by the _{color:orange}company account owner_.';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -252,10 +259,11 @@ class AccountEdit extends GetWidget<AuthController> {
   }
 
   Widget _addressDisplay() {
+    String loc = controller.user.addressModel?.fullAddress ?? '';
     return AppIconLabelText(
       label: 'Address',
       hint: 'Add Service Address.',
-      text: controller.user.addressModel?.fullAddress ?? '',
+      text: loc.length > 4 ? loc : '',
       icon: Icons.location_pin,
     );
   }
@@ -271,7 +279,8 @@ class AccountEdit extends GetWidget<AuthController> {
                 label: 'Street Address',
                 controller: _streetController,
                 onChanged: (val) {
-                  _baseController.searchAddress(val, _selectCountry.value.countryCode);
+                  _baseController.searchAddress(
+                      val, _selectCountry.value.countryCode);
                 },
               ),
               AppTextField(
@@ -297,28 +306,32 @@ class AccountEdit extends GetWidget<AuthController> {
               _country()
             ],
           ),
-          AddressList(left: 35, right: 0, top: 60,onSelectedSearchedModel: (val) {
-            _streetController.text = val.street ?? '';
-            _cityController.text = val.city ?? '';
-            controller.update();
-          }),
+          AddressList(
+              left: 35,
+              right: 0,
+              top: 60,
+              onSelectedSearchedModel: (val) {
+                _streetController.text = val.street ?? '';
+                _cityController.text = val.city ?? '';
+                controller.update();
+              }),
         ],
       );
     });
   }
 
   _country() => InkWell(
-    onTap: () => countryPicker(Get.context!, (country) {
-      _selectCountry.value = country;
-      _countryController.text = country.name;
-      controller.update();
-    }),
-    child: AppTextField(
-      label: 'Country / Region',
-      enabled: false,
-      controller: _countryController,
-    ),
-  );
+        onTap: () => countryPicker(Get.context!, (country) {
+          _selectCountry.value = country;
+          _countryController.text = country.name;
+          controller.update();
+        }),
+        child: AppTextField(
+          label: 'Country / Region',
+          enabled: false,
+          controller: _countryController,
+        ),
+      );
 
   _showAlertDialog() {
     Dialog errorDialog = Dialog(

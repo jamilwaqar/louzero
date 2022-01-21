@@ -10,10 +10,10 @@ import 'package:louzero/ui/page/account/account_edit.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/company/add_company.dart';
 import 'package:louzero/ui/page/company/company.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
 
 class MyAccountPage extends GetWidget<CompanyController> {
-
   const MyAccountPage({Key? key}) : super(key: key);
 
   @override
@@ -43,183 +43,145 @@ class MyAccountPage extends GetWidget<CompanyController> {
                 itemCount: controller.companies.length,
                 itemBuilder: (context, index) => _companyItem(index))),
         const SizedBox(height: 32),
-        AppAddButton("Add Company", onPressed: () {
+        Buttons.outline("Add Company", icon: Icons.add_circle, onPressed: () {
           Get.to(() => const AddCompanyPage());
         }),
       ],
     );
   }
 
+  Color getColor(int index) {
+    if (index == controller.selectedCompany) {
+      return AppColors.primary_1;
+    }
+    return Colors.transparent;
+  }
+
+  Color getRowColor(int index) {
+    if (index == controller.selectedCompany) {
+      return Colors.white;
+    }
+    return index.isOdd ? AppColors.oddItemColor : AppColors.evenItemColor;
+  }
+
   Widget _companyItem(int index) {
     CompanyModel model = controller.companies[index];
-    return Container(
-      color: index.isOdd ? AppColors.oddItemColor : AppColors.evenItemColor,
-      height: 65,
-      child: Row(children: [
-        const SizedBox(width: 24),
-        _companyAvatar(model),
-        const SizedBox(width: 24),
-        Expanded(
-          child: AppTextBody(
-            model.name,
-            color: AppColors.dark_2,
-            bold: true,
+    String status = model.status.label.toLowerCase();
+    Color _colorIcon =
+        status == 'cancelled' ? AppColors.secondary_90 : AppColors.secondary_50;
+    Color _colorText =
+        status == 'cancelled' ? AppColors.secondary_70 : AppColors.secondary_20;
+
+    return BorderBox(
+      height: 60,
+      widthBorder: 4,
+      colorBorder: getColor(index),
+      colorBg: getRowColor(index),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 48,
+            alignment: Alignment(-1, 0),
+            child: _companyAvatar(model, colorIcon: _colorIcon),
           ),
-        ),
-        Opacity(
-            opacity: model.status == CompanyStatus.active ? 1 : 0,
-            child: Buttons.outline('SWITCH TO',
-                icon: Icons.compare_arrows_outlined, onPressed: () {})),
-        const SizedBox(width: 18),
-        Container(
-          width: 10,
-          height: 10,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: model.status.color),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: AppTextBody(
-            model.status.label,
-            color: model.status.labelColor,
+          Expanded(
+            child: Row(
+              children: [
+                Text(model.name,
+                    style: AppStyles.labelBold.copyWith(color: _colorText)),
+                const SizedBox(
+                  width: 24,
+                ),
+                if (index == controller.selectedCompany)
+                  const Icon(
+                    Icons.check,
+                    color: AppColors.primary_1,
+                    size: 20,
+                  )
+              ],
+            ),
           ),
-        ),
-        PopupMenuButton(
-            padding: EdgeInsets.zero,
-            offset: const Offset(0, 40),
-            onSelected: (value) {
+          if (index != controller.selectedCompany && status != 'cancelled')
+            Buttons.outlineSM('Switch to Company',
+                icon: MdiIcons.swapHorizontal, onPressed: () {
+              controller.selectedCompany = index;
+            }),
+          JobStatusLabel(
+            label: model.status.label,
+          ),
+          AppPopMenu(
+            onSelected: (val) {
               controller.company = model;
-              if (value == 0) {
+              if (val == 'View Company') {
                 Get.to(() => CompanyPage(), arguments: model);
-              } else if (value == 1) {
+              }
+              if (val == 'Edit Company') {
                 Get.to(() => const AddCompanyPage());
-              } else if (value == 2) {
+              } else if (val == 2) {
                 _showReactivateDialog();
               }
             },
-            elevation: 2,
-            shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide:
-                    const BorderSide(color: AppColors.medium_2, width: 0)),
-            child: const Icon(Icons.more_vert),
-            itemBuilder: (context) => [
-              if(model.status == CompanyStatus.active)
-                  PopupMenuItem(
-                    child: SizedBox(
-                      width: 200,
-                      height: 50,
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.check,
-                            color: AppColors.orange,
-                          ),
-                          SizedBox(width: 10),
-                          Text("View Company",
-                              style: TextStyle(
-                                color: AppColors.icon,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                              )),
-                        ],
-                      ),
-                    ),
-                    value: 0,
-                  ),
-              if(model.status == CompanyStatus.active)
-                  PopupMenuItem(
-                    child: SizedBox(
-                      width: 200,
-                      height: 60,
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.edit,
-                            color: AppColors.orange,
-                          ),
-                          SizedBox(width: 10),
-                          Text("Edit Company",
-                              style: TextStyle(
-                                color: AppColors.icon,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                              )),
-                        ],
-                      ),
-                    ),
-                    value: 1,
-                  ),
-              if(model.status == CompanyStatus.cancel)
-              PopupMenuItem(
-                child: SizedBox(
-                  width: 200,
-                  height: 60,
-                  child: Row(
-                    children: const [
-                      Icon(
-                        Icons.edit,
-                        color: AppColors.orange,
-                      ),
-                      SizedBox(width: 10),
-                      Text("Reactivate Company",
-                          style: TextStyle(
-                            color: AppColors.icon,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                          )),
-                    ],
+            button: const [
+              Icon(Icons.more_vert, color: AppColors.secondary_30)
+            ],
+            items: const [
+              PopMenuItem(
+                label: 'View Company',
+                icon: MdiIcons.arrowTopRight,
+              ),
+              PopMenuItem(
+                label: 'Edit Company',
+                icon: Icons.edit,
+              ),
+            ],
+          ),
+          const SizedBox(width: 16)
+        ],
+      ),
+    );
+  }
+
+  Widget _companyAvatar(
+    CompanyModel model, {
+    IconData icon = Icons.home_work,
+    Color colorIcon = AppColors.secondary_50,
+  }) {
+    return model.avatar == null
+        ? appIcon(icon, color: colorIcon)
+        : _cachedNetworkImage(model.avatar!.toString());
+  }
+
+  Widget _cachedNetworkImage(String url, {double size = 32}) =>
+      CachedNetworkImage(
+          width: size,
+          height: size * 0.75,
+          imageUrl: url,
+          imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                value: 2,
               ),
-                ]),
-        const SizedBox(width: 24),
-      ]),
-    );
-  }
-
-  Widget _companyAvatar(CompanyModel model) {
-    return Container(
-      width: 32,
-      height: 32,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          border: Border.all(color: AppColors.dark_2),
-          borderRadius: BorderRadius.circular(8),
-          color: AppColors.lightest),
-      child: model.avatar == null
-          ? appIcon(Icons.home_work)
-          : _cachedNetworkImage(model.avatar!.toString()),
-    );
-  }
-
-  Widget _cachedNetworkImage(String url) => CachedNetworkImage(
-      imageUrl: url,
-      imageBuilder: (context, imageProvider) => Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
+          placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 1,
+                ),
               ),
-            ),
-          ),
-      placeholder: (context, url) => const Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 1,
-            ),
-          ),
-      errorWidget: (context, url, error) {
-        return Container();
-      });
+          errorWidget: (context, url, error) {
+            return Container();
+          });
 
   // TODO: Don't remove this: Reactivate Dialog
   _showReactivateDialog() {
-    String _desc = 'To reactivate *Old Cancelled Company*, please email us *{color:orange}help@evosus.com* and we’ll get back to you as soon as possible';
+    String _desc =
+        'To reactivate *Old Cancelled Company*, please email us *{color:orange}help@evosus.com* and we’ll get back to you as soon as possible';
     Dialog errorDialog = Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)), //this right here
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.0)), //this right here
       child: Container(
         width: 360.0,
         padding: const EdgeInsets.all(24),
@@ -227,7 +189,9 @@ class MyAccountPage extends GetWidget<CompanyController> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Reactivate Company', style: AppStyles.headerAppBar.copyWith(color: AppColors.secondary_30)),
+            Text('Reactivate Company',
+                style: AppStyles.headerAppBar
+                    .copyWith(color: AppColors.secondary_30)),
             const SizedBox(height: 24),
             SimpleRichText(
               _desc,
@@ -240,13 +204,21 @@ class MyAccountPage extends GetWidget<CompanyController> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppButton(label: 'Cancel', primary: false, onPressed: () {
-                    Get.back();
-                  },),
+                  AppButton(
+                    label: 'Cancel',
+                    primary: false,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
                   const SizedBox(width: 16),
-                  AppButton(label: 'Got it', colorBg: AppColors.orange ,onPressed: () {
-                    Get.back();
-                  },),
+                  AppButton(
+                    label: 'Got it',
+                    colorBg: AppColors.orange,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
                 ],
               ),
             )
@@ -261,6 +233,84 @@ class MyAccountPage extends GetWidget<CompanyController> {
       builder: (BuildContext context) {
         return errorDialog;
       },
+    );
+  }
+}
+
+class BorderBox extends StatelessWidget {
+  final Widget? child;
+  final Color? colorBg;
+  final Color? colorBorder;
+  final double height;
+  final double widthBorder;
+  const BorderBox({
+    Key? key,
+    required this.child,
+    this.height = 60,
+    this.widthBorder = 7,
+    this.colorBg = AppColors.secondary_99,
+    this.colorBorder = AppColors.secondary_80,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+                padding: EdgeInsets.only(left: 14),
+                color: colorBg,
+                child: child),
+          ),
+          Container(
+            width: widthBorder,
+            height: height,
+            decoration: BoxDecoration(color: colorBorder),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class JobStatusLabel extends StatelessWidget {
+  final String label;
+  const JobStatusLabel({Key? key, required this.label}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    Color _color = AppColors.secondary_90;
+    Color _colorText = AppColors.secondary_50;
+
+    switch (label.toLowerCase()) {
+      case 'active':
+        _color = AppColors.success_lt;
+        _colorText = AppColors.secondary_50;
+        break;
+      case 'cancelled':
+        _color = AppColors.error_50;
+        _colorText = AppColors.secondary_80;
+        break;
+      default:
+        _color = AppColors.secondary_90;
+        _colorText = AppColors.secondary_50;
+    }
+
+    return Container(
+      width: 140,
+      child: Row(
+        children: [
+          SizedBox(width: 24),
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: _color),
+          ),
+          const SizedBox(width: 8),
+          Text(label, style: AppStyles.labelRegular.copyWith(color: _colorText))
+        ],
+      ),
     );
   }
 }

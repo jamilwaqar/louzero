@@ -59,24 +59,27 @@ class _AccountSetupState extends State<AccountSetup> {
       hasKeyboard: true,
       child: Column(
         children: [
-          Expanded(
-              flex: 0,
-              child: AppStepProgress(
-                stepItems: AccountSetupModel.stepItems,
-                selected: _step,
-              )),
-          const SizedBox(height: 32),
-          Expanded(
+          Container(
+            color: Colors.transparent,
+            child: AppStepProgress(
+              stepItems: AccountSetupModel.stepItems,
+              selected: _step,
+            ),
+          ),
+          SizedBox(
+            height: 32,
+          ),
+          Container(
+            color: Colors.transparent,
+            height: 1200, // Hacky...to update
             child: PageView(
               controller: _pageController,
               // physics: const NeverScrollableScrollPhysics(),
               children: [
-                _scrollView(
-                  AccountSetupCompany(
-                    onChange: _saveFormInput,
-                    companyModel: _baseController.activeCompany,
-                    isFromAccountSetup: true,
-                  ),
+                AccountSetupCompany(
+                  onChange: _saveFormInput,
+                  companyModel: _baseController.activeCompany,
+                  isFromAccountSetup: true,
                 ),
                 _scrollView(customerCard()),
                 _scrollView(jobsCard()),
@@ -123,7 +126,7 @@ class _AccountSetupState extends State<AccountSetup> {
 
   _goToDashboard(context) {
     NavigationController().pop(context);
-    Get.to(()=> DashboardPage());
+    Get.to(() => DashboardPage());
   }
 
   Widget _scrollView(Widget child) {

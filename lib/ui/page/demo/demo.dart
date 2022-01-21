@@ -31,6 +31,9 @@ class Demo extends StatelessWidget {
             _buttonStyles(),
             _formTextInput(),
             _loadingSpinner(),
+            SizedBox(
+              height: 148,
+            ),
           ],
         ),
       ),
