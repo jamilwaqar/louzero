@@ -104,6 +104,7 @@ class CompanyPage extends GetWidget<CompanyController> {
       key: _tagStateKey,
       itemCount: items.length,
       alignment: WrapAlignment.start,
+      columns: 3,
       spacing: 4,
       runSpacing: 8,
       textField: null,
