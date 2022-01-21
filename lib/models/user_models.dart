@@ -8,7 +8,7 @@ class UserModel {
 
   Uri? avatar;
   @JsonKey(defaultValue: '')   String email = '';
-  @JsonKey(ignore: true)       String? objectId;
+  String? objectId;
   @JsonKey(defaultValue: '')   String firstname = '';
   @JsonKey(defaultValue: '')   String lastname = '';
   @JsonKey(defaultValue: '')   String phone = '';

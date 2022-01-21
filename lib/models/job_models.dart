@@ -126,7 +126,7 @@ class ScheduleModel {
     required this.startTime,
     required this.endTime,
     this.note,
-    this.objectId,
+    required this.objectId,
     required this.personnelName,
     this.personnelAvatar,
     required this.personnelId,
@@ -134,7 +134,7 @@ class ScheduleModel {
     this.complete = false,
   });
 
-  String? objectId;
+  String objectId;
   int startTime;
   int endTime;
   String? note;
@@ -145,7 +145,7 @@ class ScheduleModel {
   Uri? personnelAvatar;
   DateTime get start => DateTime.fromMillisecondsSinceEpoch(startTime);
   DateTime get end => DateTime.fromMillisecondsSinceEpoch(endTime);
-  String get startEndTime => '${start.time}-${end.time}';
+  String get startEndTime => '${start.time} - ${end.time}';
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
       _$ScheduleModelFromJson(json);

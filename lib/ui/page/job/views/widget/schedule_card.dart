@@ -11,7 +11,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
-class ScheduleCard extends StatelessWidget{
+class ScheduleCard extends StatelessWidget {
   ScheduleCard({
     Key? key,
     required this.jobModel,
@@ -29,7 +29,7 @@ class ScheduleCard extends StatelessWidget{
     final monthName = DateFormat.MMM().format(parseDate);
     final day = DateFormat.d().format(parseDate);
 
-    return Column(
+    return Obx(()=> Column(
       children: [
         Container(
             margin: const EdgeInsets.only(top: 8, bottom: 8),
@@ -148,7 +148,6 @@ class ScheduleCard extends StatelessWidget{
                                         )
                                     ),
                                   )
-
                                 ],
                               ),
                               const SizedBox(height: 16,),
@@ -160,7 +159,7 @@ class ScheduleCard extends StatelessWidget{
                                 children: [
                                   Row(
                                     children: [
-                                      AppAvatar(size: 20, url: schedule.personnelAvatar, placeHolder: AppPlaceHolder.user),
+                                      AppAvatar(size: 40, url: schedule.personnelAvatar, placeHolder: AppPlaceHolder.user),
                                       const SizedBox(width: 8,),
                                       Text(schedule.personnelName, style: const TextStyle(
                                         fontFamily: 'Lato',
@@ -210,6 +209,6 @@ class ScheduleCard extends StatelessWidget{
         ) : const SizedBox(),
         const SizedBox(height: 8,),
       ],
-    );
+    ));
   }
 }

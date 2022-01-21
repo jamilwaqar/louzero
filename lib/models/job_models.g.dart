@@ -98,6 +98,7 @@ ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
       startTime: json['startTime'] as int,
       endTime: json['endTime'] as int,
       note: json['note'] as String?,
+      objectId: json['objectId'] as String,
       personnelName: json['personnelName'] as String,
       personnelAvatar: json['personnelAvatar'] == null
           ? null
@@ -109,6 +110,7 @@ ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ScheduleModelToJson(ScheduleModel instance) =>
     <String, dynamic>{
+      'objectId': instance.objectId,
       'startTime': instance.startTime,
       'endTime': instance.endTime,
       'note': instance.note,

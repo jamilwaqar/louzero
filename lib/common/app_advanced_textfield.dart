@@ -54,7 +54,7 @@ class AppAdvancedTextField extends StatelessWidget{
                   builder: (BuildContext context) {
                     return _OptionsDialog(
                       options: items!,
-                      onChange: (value){onChange!(value);}
+                      onChange: (value) {onChange!(value);}
                     );
                   });
             }

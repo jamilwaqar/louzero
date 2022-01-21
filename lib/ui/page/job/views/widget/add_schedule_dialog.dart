@@ -13,10 +13,12 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/job_models.dart';
+import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/widget/buttons/text_button.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class AddScheduleDialog extends GetWidget<JobController> {
 
@@ -35,6 +37,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
   late final TextEditingController _noteController = TextEditingController(text: schedule?.note);
   late final TextEditingController _startTimeController = TextEditingController(text: schedule?.start.time);
   late final TextEditingController _endTimeController = TextEditingController(text: schedule?.end.time);
+  late final List<UserModel>companyUsers = controller.baseController.activeCountryUsers;
 
   final _isAnyTimeOfVisit = false.obs;
   final _selectedDate = DateTime.now().obs;
@@ -49,7 +52,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
       radius: 24,
       children: [
         RowSplit(
-            left: const Text("Add New Schedule", style: AppStyles.headerRegular),
+            left: Text(schedule != null ? 'Edit Schedule' : 'Add New Schedule', style: AppStyles.headerRegular),
             right: AppIconButton(
               colorBg: Colors.transparent,
               onTap: onClose,
@@ -59,7 +62,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
           controller: _personnelController,
           label: 'Personnel',
           isDropdown: true,
-          items: const ["User 1", "User 2", "User 3"],
+          items: companyUsers.map((e) => e.fullName).toList(),
           leadingImage: leadingImage?.toString(),
           leftPadding: _personnelController.text.isNotEmpty ? 50 : 15,
           showClearIcon: _personnelController.text.isNotEmpty,
@@ -150,9 +153,19 @@ class AddScheduleDialog extends GetWidget<JobController> {
               onPressed: () {
                 int start = _convertMilliseconds(_startTimeController.text);
                 int end = _convertMilliseconds(_endTimeController.text);
-                // ScheduleModel module = ScheduleModel(startTime: start, endTime: end, personnelName: _personnelController.text, personnelId: '', personnelAvatar: );
-
-                controller.updateJobModel(jobModel);
+                UserModel selectedUser = companyUsers.firstWhere((user) => user.fullName == _personnelController.text);
+                ScheduleModel newSchedule = ScheduleModel(
+                  objectId: schedule?.objectId ?? const Uuid().v4(),
+                    startTime: start,
+                    endTime: end,
+                    personnelName: selectedUser.fullName,
+                    personnelId: selectedUser.objectId!,
+                    personnelAvatar: selectedUser.avatar);
+                if (schedule != null) {
+                  jobModel.scheduleModels.removeWhere((e) => e.objectId == schedule!.objectId);
+                }
+                jobModel.scheduleModels.add(newSchedule);
+                controller.save(jobModel);
               },
             ),
             const SizedBox(width: 32,),
@@ -169,8 +182,12 @@ class AddScheduleDialog extends GetWidget<JobController> {
   }
 
   int _convertMilliseconds(String date) {
-    int hr = date.split(':')[0] as int;
-    int min = date.split(':')[1] as int;
+    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '');
+    List<String>ar = filter.split(':');
+    bool pm = date.toLowerCase().contains('pm');
+    int hr =  int.parse(ar[0]);
+    if (pm) hr += 12;
+    int min = int.parse(ar[1]);
     DateTime dateTime = _selectedDate.value;
     DateTime start = DateTime(dateTime.year, dateTime.month, dateTime.day, hr, min);
     return start.millisecondsSinceEpoch;
