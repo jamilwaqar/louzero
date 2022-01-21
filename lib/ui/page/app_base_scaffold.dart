@@ -94,7 +94,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                   child: Scaffold(
                     key: _key,
                     drawer: _authController.loggedIn.value ? const SideMenuView() : null,
-                    appBar: widget.logoOnly ? AppBaseAppBarBrand() : null,
+                    appBar: widget.logoOnly ? const AppBaseAppBarBrand() : null,
                     body: widget.logoOnly
                         ? Container(
                       color: AppColors.secondary_99,
@@ -277,7 +277,7 @@ class AppBaseUserMenu extends StatelessWidget {
             icon: Icons.person_rounded,
             onTap: () {
               Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-                  Get.to(() => MyAccountPage(),
+                  Get.to(() => const MyAccountPage(),
                       binding: CompanyBinding()));
             },
           ),

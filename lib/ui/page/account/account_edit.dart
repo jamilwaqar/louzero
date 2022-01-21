@@ -353,7 +353,7 @@ class AccountEdit extends GetWidget<AuthController> {
               label: 'Old Password',
               mb: 24,
               controller: _oldPasswordController,
-              key: ValueKey('currentPassword'),
+              key: const ValueKey('currentPassword'),
             ),
             AppTextField(
                 label: 'New Password',

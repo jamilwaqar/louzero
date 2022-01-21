@@ -21,6 +21,10 @@ JobModel _$JobModelFromJson(Map<String, dynamic> json) => JobModel(
               ?.map((e) => BillingLineModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           []
+      ..scheduleModels = (json['scheduleModels'] as List<dynamic>?)
+              ?.map((e) => ScheduleModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          []
       ..note = json['note'] as String?;
 
 Map<String, dynamic> _$JobModelToJson(JobModel instance) {
@@ -42,6 +46,7 @@ Map<String, dynamic> _$JobModelToJson(JobModel instance) {
   val['description'] = instance.description;
   val['customerId'] = instance.customerId;
   val['billingLineModels'] = instance.billingLineModels;
+  val['scheduleModels'] = instance.scheduleModels;
   val['note'] = instance.note;
   return val;
 }
@@ -87,3 +92,31 @@ Map<String, dynamic> _$BillingLineModelToJson(BillingLineModel instance) {
   val['inventoryId'] = instance.inventoryId;
   return val;
 }
+
+ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
+    ScheduleModel(
+      startTime: json['startTime'] as int,
+      endTime: json['endTime'] as int,
+      note: json['note'] as String?,
+      objectId: json['objectId'] as String,
+      personnelName: json['personnelName'] as String,
+      personnelAvatar: json['personnelAvatar'] == null
+          ? null
+          : Uri.parse(json['personnelAvatar'] as String),
+      personnelId: json['personnelId'] as String,
+      anyTimeVisit: json['anyTimeVisit'] as bool? ?? false,
+      complete: json['complete'] as bool? ?? false,
+    );
+
+Map<String, dynamic> _$ScheduleModelToJson(ScheduleModel instance) =>
+    <String, dynamic>{
+      'objectId': instance.objectId,
+      'startTime': instance.startTime,
+      'endTime': instance.endTime,
+      'note': instance.note,
+      'personnelId': instance.personnelId,
+      'anyTimeVisit': instance.anyTimeVisit,
+      'complete': instance.complete,
+      'personnelName': instance.personnelName,
+      'personnelAvatar': instance.personnelAvatar?.toString(),
+    };

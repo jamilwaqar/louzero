@@ -15,6 +15,8 @@ class JobController extends GetxController {
     Map<String, dynamic> data = model.toJson();
     data['billingLineModels'] =
         model.billingLineModels.map((e) => e.toJson()).toList();
+    data['scheduleModels'] =
+        model.scheduleModels.map((e) => e.toJson()).toList();
     if (data['objectId'] == null) {
       data.remove('objectId');
     }
@@ -49,5 +51,16 @@ class JobController extends GetxController {
     models.removeWhere((e) => e.objectId == model.objectId);
     models.insert(index, model);
     baseController.jobs = models;
+  }
+
+  int convertMilliseconds(String date, DateTime dateTime) {
+    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '');
+    List<String>ar = filter.split(':');
+    bool pm = date.toLowerCase().contains('pm');
+    int hr =  int.parse(ar[0]);
+    if (pm) hr += 12;
+    int min = int.parse(ar[1]);
+    DateTime start = DateTime(dateTime.year, dateTime.month, dateTime.day, hr, min);
+    return start.millisecondsSinceEpoch;
   }
 }

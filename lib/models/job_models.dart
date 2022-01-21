@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:louzero/controller/extension/extensions.dart';
 import 'package:uuid/uuid.dart';
 part 'job_models.g.dart';
 
@@ -34,12 +35,16 @@ class JobModel {
   String? customerId;
   @JsonKey(defaultValue: [])
   List<BillingLineModel> billingLineModels = [];
+  @JsonKey(defaultValue: [])
+  List<ScheduleModel> scheduleModels = [];
   String? note;
 
   factory JobModel.fromMap(Map map) {
     List billingLineModels = map.remove('billingLineModels');
     map['billingLineModels'] =
         billingLineModels.map((e) => Map<String, dynamic>.from(e)).toList();
+    List scheduleModels = map.remove('scheduleModels') ?? [];
+    map['scheduleModels'] = scheduleModels.map((e) => Map<String, dynamic>.from(e)).toList();
     Map<String, dynamic> json = Map<String, dynamic>.from(map);
     return JobModel.fromJson(json);
   }
@@ -113,4 +118,37 @@ class BillingLineModel {
       _$BillingLineModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$BillingLineModelToJson(this);
+}
+
+@JsonSerializable()
+class ScheduleModel {
+  ScheduleModel({
+    required this.startTime,
+    required this.endTime,
+    this.note,
+    required this.objectId,
+    required this.personnelName,
+    this.personnelAvatar,
+    required this.personnelId,
+    this.anyTimeVisit = false,
+    this.complete = false,
+  });
+
+  String objectId;
+  int startTime;
+  int endTime;
+  String? note;
+  String personnelId;
+  bool anyTimeVisit;
+  bool complete;
+  String personnelName;
+  Uri? personnelAvatar;
+  DateTime get start => DateTime.fromMillisecondsSinceEpoch(startTime);
+  DateTime get end => DateTime.fromMillisecondsSinceEpoch(endTime);
+  String get startEndTime => '${start.time} - ${end.time}';
+
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ScheduleModelToJson(this);
 }
