@@ -65,7 +65,7 @@ class CompanyPage extends GetWidget<CompanyController> {
             // RIGHT COLUMN
             Column(
               children: [
-                Ui.headingSM('Contact Information', icon: Icons.favorite),
+                Ui.headingSM('Contact Information', icon: Icons.home_work),
                 Ui.block(
                   children: [
                     Ui.text(model.address!.fullAddress),

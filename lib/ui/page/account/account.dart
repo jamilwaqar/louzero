@@ -103,7 +103,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
             ),
           ),
           if (index != controller.selectedCompany && status != 'cancelled')
-            Buttons.outline_sm('Switch to Company',
+            Buttons.outlineSM('Switch to Company',
                 icon: MdiIcons.swapHorizontal, onPressed: () {
               controller.selectedCompany = index;
             }),

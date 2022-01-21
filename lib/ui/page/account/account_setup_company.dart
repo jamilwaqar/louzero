@@ -320,7 +320,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                 ),
                 Buttons.outline(
                   "Transfer Ownership",
-                  icon: MdiIcons.star,
+                  icon: MdiIcons.swapHorizontal,
                   colorBg: Colors.white,
                 ),
               ],

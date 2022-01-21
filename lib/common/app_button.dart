@@ -286,7 +286,7 @@ abstract class Buttons {
     );
   }
 
-  static Widget outline_sm(String label,
+  static Widget outlineSM(String label,
       {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
     return AppButtonGradient(
       label: label,
@@ -299,20 +299,6 @@ abstract class Buttons {
       height: 30,
       fontSize: 12,
       iconSize: 18,
-    );
-  }
-
-  static Widget outlinee(String label,
-      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
-    return AppButtonGradient(
-      expanded: expanded,
-      label: label,
-      onPressed: onPressed,
-      colorBg: Colors.transparent,
-      colorBd: AppColors.secondary_70,
-      colorText: AppColors.secondary_20,
-      iconLeading: icon,
-      colorIconLeading: AppColors.orange,
     );
   }
 
