@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
-class AppAdvancedTextField extends StatelessWidget{
+class AppAdvancedTextField extends StatelessWidget {
   const AppAdvancedTextField({
     Key? key,
     this.controller,
@@ -16,7 +16,7 @@ class AppAdvancedTextField extends StatelessWidget{
     this.rightIconColor,
     this.items,
     this.showClearIcon = false,
-    this.isDropdown  = false,
+    this.isDropdown = false,
     this.leadingImage,
     this.autofocus,
     this.onClear,
@@ -45,112 +45,121 @@ class AppAdvancedTextField extends StatelessWidget{
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        AppTextField(
-          onTap: (){
-            if(isDropdown == true) {
+        GestureDetector(
+          onTap: () {
+            if (isDropdown == true) {
               showDialog(
                   useRootNavigator: true,
                   context: context,
                   barrierDismissible: true,
                   builder: (BuildContext context) {
                     return _OptionsDialog(
-                      options: items!,
-                      onChange: (value){onChange!(value);}
-                    );
+                        options: items!,
+                        onChange: (value) {
+                          onChange!(value);
+                        });
                   });
-            }
-            else{
-              if(onTap != null) {
+            } else {
+              if (onTap != null) {
                 onTap!();
               }
             }
           },
-          isReadOnly: onTap != null,
-          leftPadding: leftPadding,
-          rightPadding: rightPadding,
-          label: label,
-          controller: controller,
-          isUnderlined: isUnderlined,
+          child: AppTextField(
+            label: label,
+            controller: controller,
+            enabled: false,
+          ),
+          // isReadOnly: onTap != null,
+          // leftPadding: leftPadding,
+          // rightPadding: rightPadding,
+          // label: label,
+          // controller: controller,
+          // isUnderlined: isUnderlined,
         ),
         leadingImage != null
-            ?
-        Positioned(
-            left: 0.0,
-            top: 10.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Image.network(
-                leadingImage!,
-                height: 40.0,
-                width: 40.0,
-              ),
-            )
-        )
+            ? Positioned(
+                left: 0.0,
+                top: 10.0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.network(
+                    leadingImage!,
+                    height: 40.0,
+                    width: 40.0,
+                  ),
+                ))
             : const SizedBox(),
         isDropdown == true
-            ?
-        const Positioned(
-          right: 10.0,
-          top: 15.0,
-          child: SizedBox(
-            height: 40.0,
-            width: 40.0,
-            child: Icon(Icons.arrow_drop_down, color: AppColors.secondary_40,),
-          ),
-        ) : const SizedBox(),
+            ? const Positioned(
+                right: 10.0,
+                top: 15.0,
+                child: SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: Icon(
+                    Icons.arrow_drop_down,
+                    color: AppColors.secondary_40,
+                  ),
+                ),
+              )
+            : const SizedBox(),
         leftIcon != null
-            ?
-        Positioned(
-          left: 0.0,
-          top: 15.0,
-          child: SizedBox(
-            height: 40.0,
-            width: 40.0,
-            child: Icon(leftIcon, color: leftIconColor ?? AppColors.secondary_40,),
-          ),
-        ) : const SizedBox(),
+            ? Positioned(
+                left: 0.0,
+                top: 15.0,
+                child: SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: Icon(
+                    leftIcon,
+                    color: leftIconColor ?? AppColors.secondary_40,
+                  ),
+                ),
+              )
+            : const SizedBox(),
         rightIcon != null
-            ?
-        Positioned(
-          right: 10.0,
-          top: 12.0,
-          child: SizedBox(
-            height: 40.0,
-            width: 40.0,
-            child: Icon(rightIcon, color: rightIconColor ?? AppColors.secondary_40,),
-          ),
-        ) : const SizedBox(),
+            ? Positioned(
+                right: 10.0,
+                top: 12.0,
+                child: SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: Icon(
+                    rightIcon,
+                    color: rightIconColor ?? AppColors.secondary_40,
+                  ),
+                ),
+              )
+            : const SizedBox(),
         showClearIcon == true
-            ?
-        Positioned(
-          right: 55.0,
-          top: 26.0,
-          child: CircleAvatar(
-            backgroundColor: AppColors.secondary_40,
-            radius: 10,
-            child: IconButton(
-              iconSize: 16,
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.clear),
-              color: Colors.white,
-              onPressed: () {
-                onClear!();
-              },
-            ),
-          ),
-        ) : const SizedBox(),
+            ? Positioned(
+                right: 55.0,
+                top: 26.0,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.secondary_40,
+                  radius: 10,
+                  child: IconButton(
+                    iconSize: 16,
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(Icons.clear),
+                    color: Colors.white,
+                    onPressed: () {
+                      onClear!();
+                    },
+                  ),
+                ),
+              )
+            : const SizedBox(),
       ],
     );
   }
 }
 
-class _OptionsDialog extends StatelessWidget{
+class _OptionsDialog extends StatelessWidget {
   @override
-  _OptionsDialog({
-    Key? key,
-    required this.options,
-    required this.onChange
-  }) : super(key: key);
+  _OptionsDialog({Key? key, required this.options, required this.onChange})
+      : super(key: key);
 
   List options;
   Function onChange;
@@ -158,7 +167,8 @@ class _OptionsDialog extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
         content: Container(
           padding: const EdgeInsets.all(16),
           width: 300.0,
@@ -168,15 +178,13 @@ class _OptionsDialog extends StatelessWidget{
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 title: Text(options[index]),
-                onTap: (){
+                onTap: () {
                   Navigator.of(context).pop();
                   onChange(options[index]);
                 },
               );
             },
           ),
-        )
-    );
+        ));
   }
-
 }
