@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/layout.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/company_models.dart';
@@ -118,22 +119,30 @@ class MyAccountPage extends GetWidget<CompanyController> {
               }
               if (val == 'Edit Company') {
                 Get.to(() => const AddCompanyPage());
-              } else if (val == 2) {
+              }
+              if (val == 'Reactivate Company') {
                 _showReactivateDialog();
               }
             },
             button: const [
               Icon(Icons.more_vert, color: AppColors.secondary_30)
             ],
-            items: const [
-              PopMenuItem(
-                label: 'View Company',
-                icon: MdiIcons.arrowTopRight,
-              ),
-              PopMenuItem(
-                label: 'Edit Company',
-                icon: Icons.edit,
-              ),
+            items: [
+              if (model.status == CompanyStatus.active)
+                const PopMenuItem(
+                  label: 'View Company',
+                  icon: MdiIcons.arrowTopRight,
+                ),
+              if (model.status == CompanyStatus.active)
+                const PopMenuItem(
+                  label: 'Edit Company',
+                  icon: Icons.edit,
+                ),
+              if (model.status == CompanyStatus.cancel)
+                const PopMenuItem(
+                  label: 'Reactivate Company',
+                  icon: Icons.edit,
+                ),
             ],
           ),
           const SizedBox(width: 16)
@@ -177,8 +186,13 @@ class MyAccountPage extends GetWidget<CompanyController> {
 
   // TODO: Don't remove this: Reactivate Dialog
   _showReactivateDialog() {
-    String _desc =
-        'To reactivate *Old Cancelled Company*, please email us *{color:orange}help@evosus.com* and we’ll get back to you as soon as possible';
+    String _start = 'To reactivate *Old Cancelled Company*, please email us ';
+    String _link = 'help@evosus.com ';
+    String _end = 'and we’ll get back to you as soon as possible.';
+    TextStyle _textStyle = AppStyles.labelRegular.copyWith(height: 1.65);
+    TextStyle _linkStyle = AppStyles.labelRegular
+        .copyWith(height: 1.65, color: AppColors.primary_50);
+
     Dialog errorDialog = Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24.0)), //this right here
@@ -189,36 +203,29 @@ class MyAccountPage extends GetWidget<CompanyController> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Reactivate Company',
-                style: AppStyles.headerAppBar
-                    .copyWith(color: AppColors.secondary_30)),
-            const SizedBox(height: 24),
-            SimpleRichText(
-              _desc,
-              style: TextStyles.titleS,
+            Text('Reactivate Company', style: AppStyles.headlineMedium),
+            SizedBox(height: 8),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(text: _start, style: _textStyle),
+                  TextSpan(text: _link, style: _linkStyle),
+                  TextSpan(text: _end, style: _textStyle)
+                ],
+                style: AppStyles.labelRegular.copyWith(height: 1.65),
+              ),
             ),
             const SizedBox(height: 24),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
+            RowSplit(
+              right: Row(
                 children: [
-                  AppButton(
-                    label: 'Cancel',
-                    primary: false,
-                    onPressed: () {
-                      Get.back();
-                    },
-                  ),
+                  Buttons.text('Cancel', onPressed: () {
+                    Get.back();
+                  }),
                   const SizedBox(width: 16),
-                  AppButton(
-                    label: 'Got it',
-                    colorBg: AppColors.orange,
-                    onPressed: () {
-                      Get.back();
-                    },
-                  ),
+                  Buttons.primary('Got It', onPressed: () {
+                    Get.back();
+                  })
                 ],
               ),
             )
