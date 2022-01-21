@@ -12,7 +12,7 @@ import 'base_controller.dart';
 
 class CompanyController extends GetxController {
   final _companyModel = CompanyModel().obs;
-
+  final _authController = Get.find<AuthController>();
   RxBool isEditing = false.obs;
   void toggleEdit(bool val) {
     isEditing = RxBool(val);
@@ -43,8 +43,13 @@ class CompanyController extends GetxController {
       required bool isEdit,
       bool isActiveCompany = false}) async {
     NavigationController().loading();
+    String currentUserId = _authController.user.objectId!;
+    if (!isEdit && !companyModel.users.contains(currentUserId)) {
+      companyModel.users.add(currentUserId);
+    }
     Map<String, dynamic> data = companyModel.toJson();
     data['address'] = addressModel.toJson();
+
     var res = await APIManager.save(BLPath.company, data);
     if (res is Map) {
       final newModel = CompanyModel.fromMap(res);
@@ -54,9 +59,9 @@ class CompanyController extends GetxController {
         companies.add(newModel);
       }
       if (isActiveCompany) {
-        Get.find<AuthController>().user.activeCompanyId = res['objectId'];
+        _authController.user.activeCompanyId = res['objectId'];
         Get.find<BaseController>().activeCompany = newModel;
-        await Get.find<AuthController>().updateUser();
+        await _authController.updateUser();
       }
     }
     update();
