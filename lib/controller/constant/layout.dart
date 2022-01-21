@@ -4,10 +4,12 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/utils.dart';
 
 abstract class Ui {
-  static Widget text(String label, {Color color = AppColors.secondary_20}) {
+  static Widget text(String label,
+      {Color color = AppColors.secondary_20, bool link = false}) {
+    Color _color = link ? AppColors.primary_30 : color;
     return Text(
       label,
-      style: AppStyles.labelRegular.copyWith(height: 1.65, color: color),
+      style: AppStyles.labelRegular.copyWith(height: 1.65, color: _color),
     );
   }
 

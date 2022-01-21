@@ -21,18 +21,22 @@ class AppDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: mt,
-        bottom: mb,
-        left: ml,
-        right: mr,
-      ),
-      child: Divider(
-        color: color,
-        thickness: size,
-        height: size,
-      ),
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.only(
+            top: mt,
+            bottom: mb,
+            left: ml,
+            right: mr,
+          ),
+          child: Divider(
+            color: color,
+            thickness: size,
+            height: size,
+          ),
+        ),
+      ],
     );
   }
 }
