@@ -118,7 +118,6 @@ class ScheduleCard extends StatelessWidget {
                                     child: Align(
                                         alignment: Alignment.topRight,
                                         child: AppPopMenu(
-                                          buttonAlignment: MainAxisAlignment.end,
                                           button: const [
                                             SizedBox(
                                               child: Icon(Icons.more_vert, color: AppColors.secondary_60),
