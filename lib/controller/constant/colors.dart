@@ -16,7 +16,29 @@ abstract class AppColors {
   static const Color light_3 = Color(0xFFBABDC5);
   static const Color light_4 = Color(0xFFE2E2E3);
 
+  static const LinearGradient grad_success = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [
+      Color(0xFF59C1B7),
+      Color(0xFF67D397),
+    ],
+  );
+
+  static const LinearGradient grad_primary = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [
+      Color(0xFFEC5B2A),
+      Color(0xFFEB794B),
+    ],
+  );
+
   static const Color orange = Color(0xFFEC6A3A);
+  static const Color success = Color(0xFF008484);
+  static const Color success_lt = Color(0xFF60CAA8);
+  static const Color errorText = Color(0xFFB3261E);
+  static const Color errorTint = Color(0xFFFCEEEE);
   static const Color appBar = Color(0xFF263842);
   static const Color accent_1 = Color(0xFF65D19D);
   static const Color primary_1 = Color(0xFFE77C33);
@@ -74,6 +96,12 @@ abstract class AppStyles {
     fontWeight: FontWeight.w700,
     color: AppColors.secondary_20,
   );
+  static const headlineMedium = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: AppColors.secondary_30,
+  );
   static const headerSmallCaps = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 16,
@@ -115,7 +143,12 @@ abstract class AppStyles {
     ),
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(color: AppColors.orange),
-      borderRadius: BorderRadius.all(Radius.circular(0)),
+    ),
+    errorBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: AppColors.errorText),
+    ),
+    focusedErrorBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: AppColors.errorText),
     ),
   );
 }

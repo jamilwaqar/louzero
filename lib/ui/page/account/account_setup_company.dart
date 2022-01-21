@@ -6,18 +6,21 @@ import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card.dart';
 import 'package:louzero/common/app_checkbox.dart';
 import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_input_text.dart';
-import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_multiselect.dart';
+import 'package:louzero/common/app_textfield.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/common/utility/address_list.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
+import 'package:louzero/controller/constant/layout.dart';
 import 'package:louzero/controller/constant/list_state_names.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/models.dart';
+import 'package:louzero/ui/widget/time_picker.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 List<SelectItem> industries = const [
   SelectItem(id: '23', label: 'Residential', value: 'res'),
@@ -65,6 +68,9 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _stateController = TextEditingController();
   final _suiteController = TextEditingController();
   final _zipController = TextEditingController();
+  final _invoiceHeaderController = TextEditingController();
+  final _idStartNumberController = TextEditingController();
+  final _startTimeController = TextEditingController();
 
   Country _selectCountry = AppDefaultValue.country;
   late bool _isEdit;
@@ -79,6 +85,11 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
   @override
   void initState() {
+    String mockDataInvoicHeader =
+        "Thumbtack Pool Cleaner \n 1234 Street St., Vancouver, Washington 98607 \n www.thumbtackpoolcleaners.com \n\n info@thumbtackpoolcleaners.com \n 1 (360) 936-7594 ";
+
+    _invoiceHeaderController.text = mockDataInvoicHeader;
+
     _isEdit =
         widget.companyModel != null && widget.companyModel!.objectId != null;
     _isActiveCompany = widget.isFromAccountSetup;
@@ -89,7 +100,6 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       _phoneController.text = _companyModel.phone;
       _emailController.text = _companyModel.email;
       _webController.text = _companyModel.website;
-
       _countryController.text = _addressModel.country;
       _streetController.text = _addressModel.street;
       _cityController.text = _addressModel.city;
@@ -123,31 +133,54 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           children: [
             AppCard(
               children: [
-                const AppTextHeader(
-                  'Company Details',
-                  alignLeft: true,
-                  icon: Icons.home_work_sharp,
-                  size: 24,
-                ),
-                Row(
-                  children: [
-                    expand(_companyName()),
-                    gapX(24),
-                    expand(_phone())
-                  ],
-                ),
-                Row(
-                  children: [
-                    expand(_email()),
-                    gapX(24),
-                    expand(_website()),
-                  ],
-                ),
+                Ui.headingLG('Company Details', MdiIcons.homeCity),
+                if (_isActiveCompany)
+                  FlexRow(
+                    flex: [2, 2],
+                    children: [
+                      Column(
+                        children: [
+                          _companyName(),
+                          _website(),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          _email(),
+                          _phone(),
+                        ],
+                      )
+                    ],
+                  ),
+                if (!_isActiveCompany)
+                  FlexRow(
+                    flex: [2, 3],
+                    children: [
+                      Column(
+                        children: [
+                          AppNetworkImage(uri: _companyModel.avatar),
+                          SizedBox(height: 16),
+                          Buttons.outline('Update Logo', onPressed: () {
+                            //Upload Logo
+                          }),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          _companyName(),
+                          _website(),
+                          _email(),
+                          _phone()
+                        ],
+                      )
+                    ],
+                  ),
                 const AppDivider(
                   mt: 16,
                   mb: 24,
                   color: AppColors.light_2,
                 ),
+                Ui.headingLG('Industries', MdiIcons.domain, mb: 16),
                 _tags(),
               ],
             ),
@@ -159,12 +192,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const AppTextHeader(
-                          'Company Address',
-                          alignLeft: true,
-                          icon: Icons.location_on,
-                          size: 24,
-                        ),
+                        Ui.headingLG('Company Address', MdiIcons.domain),
                         _country(),
                         _street(),
                         _suite(),
@@ -192,35 +220,132 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                         }),
                   ],
                 ),
-                const SizedBox(height: 24),
-                AppCheckbox(
-                  label: 'Active Company',
-                  checked: _isActiveCompany,
-                  onChanged: (val) {
-                    setState(() {
-                      _isActiveCompany = val ?? true;
-                    });
-                  },
-                ),
+                if (!_isActiveCompany) const SizedBox(height: 24),
+                if (!_isActiveCompany)
+                  AppCheckbox(
+                    label: 'Active Company',
+                    checked: _isActiveCompany,
+                    onChanged: (val) {
+                      setState(() {
+                        _isActiveCompany = val ?? true;
+                      });
+                    },
+                  ),
               ],
             ),
+            // Don't show in initial sigup steps flow:
+            if (!_isActiveCompany) ..._fullEditForm(),
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 24, bottom: 128),
-                  child: Buttons.submit(
-                    'Save & Continue',
-                    onPressed: _submit,
-                  ),
-                ),
+                SizedBox(width: 32),
+                Wrap(
+                  children: [
+                    Buttons.primary(
+                      'Save & Continue',
+                      onPressed: _submit,
+                    ),
+                    Buttons.text(
+                      'Cancel',
+                      onPressed: () {},
+                    ),
+                  ],
+                )
               ],
             ),
+            SizedBox(height: 200)
           ],
         ));
   }
 
+  List<Widget> _fullEditForm() {
+    return [
+      AppCard(
+        children: [
+          Ui.headingLG('Invoice Header', MdiIcons.briefcase, mb: 16),
+          SizedBox(
+            height: 200,
+            child: AppTextField(
+              multiline: true,
+              mb: 0,
+              expands: true,
+              height: 200,
+              controller: _invoiceHeaderController,
+              label: 'Invoice Header',
+            ),
+          ),
+        ],
+      ),
+      AppCard(
+        children: [
+          Ui.headingLG('Job Settings', MdiIcons.clipboardText),
+          FlexRow(
+            children: [
+              AppTextField(
+                label: 'ID Starting Number',
+                controller: _idStartNumberController,
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return NZTimePicker(onChange: (val) {
+                          _startTimeController.text = val;
+                        });
+                      });
+                },
+                child: AppTextField(
+                  label: 'Schedule start Time',
+                  controller: _startTimeController,
+                  iconEnd: MdiIcons.clockOutline,
+                  enabled: false,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 32, right: 32, top: 8),
+        child: Row(
+          children: [
+            Wrap(
+              runAlignment: WrapAlignment.start,
+              spacing: 10,
+              children: [
+                Buttons.outline(
+                  "Cancel Company",
+                  icon: MdiIcons.cancel,
+                  colorBg: Colors.white,
+                ),
+                Buttons.outline(
+                  "Transfer Ownership",
+                  icon: MdiIcons.swapHorizontal,
+                  colorBg: Colors.white,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      AppDivider(size: 2, ml: 32, mr: 32, mb: 24, mt: 24)
+    ];
+  }
+
   Widget expand(Widget child, [flex = 1]) {
     return Expanded(child: child, flex: flex);
+  }
+
+  Widget _cardHeader(String label, IconData icon,
+      {VoidCallback? ontap, double mb = 24}) {
+    return AppHeaderIcon(
+      label.toUpperCase(),
+      iconStart: icon,
+      onTap: ontap,
+      mb: mb,
+      style: AppStyles.headerRegular
+          .copyWith(color: AppColors.secondary_30, fontSize: 20),
+    );
   }
 
   void _submit() async {
@@ -258,7 +383,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     }
   }
 
-  _phone() => AppInputText(
+  _phone() => AppTextField(
         controller: _phoneController,
         required: true,
         label: 'Phone Number',
@@ -269,7 +394,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _companyName() => AppInputText(
+  _companyName() => AppTextField(
         controller: _companyNameController,
         required: true,
         label: 'Company Name',
@@ -279,7 +404,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _website() => AppInputText(
+  _website() => AppTextField(
         controller: _webController,
         label: 'Website',
         onSaved: (val) {
@@ -287,7 +412,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _email() => AppInputText(
+  _email() => AppTextField(
         controller: _emailController,
         label: 'Email Address',
         required: true,
@@ -295,12 +420,11 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           _companyModel.email = val ?? '';
         },
       );
-  _tags() => AppMultiSelect(
-        width: 448,
+  _tags({bool showLabel = false}) => AppMultiSelect(
         initialItems: _initialIndustries,
+        showLabel: showLabel,
         items: industries,
         onChange: (items) {
-          inspect(items);
           _initialIndustries = items;
           _companyModel.industries = items.map((e) => e.label).toList();
         },
@@ -313,7 +437,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             _countryController.text = country.name;
           });
         }),
-        child: AppInputText(
+        child: AppTextField(
           label: 'Country',
           enabled: false,
           controller: _countryController,
@@ -323,7 +447,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         ),
       );
 
-  _street() => AppInputText(
+  _street() => AppTextField(
         label: 'Street',
         controller: _streetController,
         onSaved: (val) {
@@ -333,7 +457,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           _baseController.searchAddress(val, _selectCountry.countryCode);
         },
       );
-  _suite() => AppInputText(
+  _suite() => AppTextField(
         controller: _suiteController,
         label: 'Suite',
         onSaved: (val) {
@@ -341,7 +465,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _city() => AppInputText(
+  _city() => AppTextField(
         label: 'City',
         controller: _cityController,
         onSaved: (val) {
@@ -349,7 +473,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
         },
       );
 
-  _state() => AppInputText(
+  _state() => AppTextField(
         label: 'State',
         controller: _stateController,
         options: listStateNames,
@@ -357,7 +481,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           _addressModel.state = val ?? '';
         },
       );
-  _zip() => AppInputText(
+  _zip() => AppTextField(
         controller: _zipController,
         label: 'Zip',
         onSaved: (val) {
