@@ -18,6 +18,7 @@ class AppTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
   final void Function(String?)? onSaved;
+  final void Function()? onTap;
   final List<String>? options;
   final double mb;
   final IconData? iconStart;
@@ -34,6 +35,7 @@ class AppTextField extends StatefulWidget {
     this.validator,
     this.onChanged,
     this.onSaved,
+    this.onTap,
     this.options,
     this.autofocus = false,
     this.multiline = false,
@@ -138,6 +140,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Widget _input() {
     return TextFormField(
+      onTap: widget.onTap,
       enableIMEPersonalizedLearning: false,
       enabled: widget.enabled,
       initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
@@ -150,7 +153,9 @@ class _AppTextFieldState extends State<AppTextField> {
       keyboardType:
           widget.multiline ? TextInputType.multiline : widget.keyboardType,
       onChanged: (val) {
-        widget.onChanged;
+        if (widget.onChanged != null) {
+          widget.onChanged!(val);
+        }
         if (widget.validator != null && !_hasError()) {
           setState(() {
             _status = Icon(Icons.check, color: AppColors.success);
@@ -166,19 +171,23 @@ class _AppTextFieldState extends State<AppTextField> {
       // minLines: 1,
       maxLines: widget.multiline || widget.expands ? null : widget.maxLines,
       decoration: AppStyles.inputDefault.copyWith(
-          labelText: widget.label,
-          suffixIcon: getIcon(),
-          alignLabelWithHint: widget.expands,
-          labelStyle: AppStyles.labelBold.copyWith(
-              height: 1.5,
-              fontSize: 16,
-              color: AppColors.secondary_40,
-              fontWeight: FontWeight.w700),
-          fillColor: _color,
-          isDense: true,
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: _borderColor),
-          )),
+        labelText: widget.label,
+        suffixIcon: getIcon(),
+        alignLabelWithHint: widget.expands,
+        labelStyle: AppStyles.labelBold.copyWith(
+            height: 1.5,
+            fontSize: 16,
+            color: AppColors.secondary_40,
+            fontWeight: FontWeight.w700),
+        fillColor: _color,
+        isDense: true,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: _borderColor),
+        ),
+        disabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: _borderColor),
+        ),
+      ),
     );
   }
 
