@@ -52,4 +52,15 @@ class JobController extends GetxController {
     models.insert(index, model);
     baseController.jobs = models;
   }
+
+  int convertMilliseconds(String date, DateTime dateTime) {
+    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '');
+    List<String>ar = filter.split(':');
+    bool pm = date.toLowerCase().contains('pm');
+    int hr =  int.parse(ar[0]);
+    if (pm) hr += 12;
+    int min = int.parse(ar[1]);
+    DateTime start = DateTime(dateTime.year, dateTime.month, dateTime.day, hr, min);
+    return start.millisecondsSinceEpoch;
+  }
 }

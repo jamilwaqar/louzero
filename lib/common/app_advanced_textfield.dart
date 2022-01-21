@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
+
+import 'app_avatar.dart';
 
 class AppAdvancedTextField extends StatelessWidget{
   const AppAdvancedTextField({
@@ -32,7 +35,7 @@ class AppAdvancedTextField extends StatelessWidget{
   final Color? leftIconColor;
   final Color? rightIconColor;
   final List? items;
-  final String? leadingImage;
+  final Uri? leadingImage;
   final bool? showClearIcon;
   final bool? isDropdown;
   final bool? autofocus;
@@ -76,14 +79,7 @@ class AppAdvancedTextField extends StatelessWidget{
         Positioned(
             left: 0.0,
             top: 10.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Image.network(
-                leadingImage!,
-                height: 40.0,
-                width: 40.0,
-              ),
-            )
+            child: AppAvatar(size: 40, url: leadingImage, placeHolder: AppPlaceHolder.user),
         )
             : const SizedBox(),
         isDropdown == true

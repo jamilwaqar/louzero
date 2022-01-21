@@ -11,6 +11,7 @@ import 'package:louzero/common/utility/flex_row.dart';
 import 'package:louzero/common/utility/row_split.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/models/user_models.dart';
@@ -21,6 +22,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:uuid/uuid.dart';
 
 class AddScheduleDialog extends GetWidget<JobController> {
+  final JobModel jobModel;
+  final Function() onClose;
+  final ScheduleModel? schedule;
 
   AddScheduleDialog({
     Key? key,
@@ -29,23 +33,19 @@ class AddScheduleDialog extends GetWidget<JobController> {
     this.schedule,
   }) : super(key: key);
 
-  final JobModel jobModel;
-  final Function() onClose;
-  final ScheduleModel? schedule;
-
-  late final TextEditingController _personnelController = TextEditingController(text: schedule?.personnelName);
-  late final TextEditingController _noteController = TextEditingController(text: schedule?.note);
-  late final TextEditingController _startTimeController = TextEditingController(text: schedule?.start.time);
-  late final TextEditingController _endTimeController = TextEditingController(text: schedule?.end.time);
-  late final List<UserModel>companyUsers = controller.baseController.activeCountryUsers;
+  late final bool _isEdit = schedule != null;
+  late final _user = Get.find<AuthController>().user;
+  late final _personnelController = TextEditingController(text: _isEdit ? schedule!.personnelName : _user.fullName);
+  late final _noteController = TextEditingController(text: _isEdit ? schedule!.note : jobModel.description);
+  late final _startTimeController = TextEditingController(text: schedule?.start.time);
+  late final _endTimeController = TextEditingController(text: schedule?.end.time);
+  late final companyUsers = controller.baseController.activeCountryUsers;
 
   final _isAnyTimeOfVisit = false.obs;
   final _selectedDate = DateTime.now().obs;
 
   @override
   Widget build(BuildContext context) {
-    final leadingImage = schedule?.personnelAvatar;
-
     return AppCard(
       ml: 0,
       mr: 0,
@@ -63,7 +63,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
           label: 'Personnel',
           isDropdown: true,
           items: companyUsers.map((e) => e.fullName).toList(),
-          leadingImage: leadingImage?.toString(),
+          leadingImage: _isEdit ? schedule?.personnelAvatar : _user.avatar,
           leftPadding: _personnelController.text.isNotEmpty ? 50 : 15,
           showClearIcon: _personnelController.text.isNotEmpty,
           onChange: (value) {
@@ -150,9 +150,9 @@ class AddScheduleDialog extends GetWidget<JobController> {
           children: [
             AppButton(
               label: "Save Appointment",
-              onPressed: () {
-                int start = _convertMilliseconds(_startTimeController.text);
-                int end = _convertMilliseconds(_endTimeController.text);
+              onPressed: () async {
+                int start = controller.convertMilliseconds(_startTimeController.text, _selectedDate.value);
+                int end = controller.convertMilliseconds(_endTimeController.text, _selectedDate.value);
                 UserModel selectedUser = companyUsers.firstWhere((user) => user.fullName == _personnelController.text);
                 ScheduleModel newSchedule = ScheduleModel(
                   objectId: schedule?.objectId ?? const Uuid().v4(),
@@ -160,12 +160,16 @@ class AddScheduleDialog extends GetWidget<JobController> {
                     endTime: end,
                     personnelName: selectedUser.fullName,
                     personnelId: selectedUser.objectId!,
+                    note: _noteController.text,
+                    complete: schedule?.complete ?? false,
+                    anyTimeVisit: _isAnyTimeOfVisit.value,
                     personnelAvatar: selectedUser.avatar);
                 if (schedule != null) {
                   jobModel.scheduleModels.removeWhere((e) => e.objectId == schedule!.objectId);
                 }
                 jobModel.scheduleModels.add(newSchedule);
-                controller.save(jobModel);
+                await controller.save(jobModel);
+                onClose();
               },
             ),
             const SizedBox(width: 32,),
@@ -179,17 +183,5 @@ class AddScheduleDialog extends GetWidget<JobController> {
         )
       ],
     );
-  }
-
-  int _convertMilliseconds(String date) {
-    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '');
-    List<String>ar = filter.split(':');
-    bool pm = date.toLowerCase().contains('pm');
-    int hr =  int.parse(ar[0]);
-    if (pm) hr += 12;
-    int min = int.parse(ar[1]);
-    DateTime dateTime = _selectedDate.value;
-    DateTime start = DateTime(dateTime.year, dateTime.month, dateTime.day, hr, min);
-    return start.millisecondsSinceEpoch;
   }
 }
