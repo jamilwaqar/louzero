@@ -208,7 +208,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   List<Widget> _addressWidget(bool isService) {
     return [
-      Ui.headingLG('Service Address', MdiIcons.mapMarker),
       AppTextField(
           controller:
               isService ? _serviceCountryController : _billCountryController,
@@ -265,16 +264,22 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   Widget _billingAddress() {
     return AppCard(
+      pb: _sameAsService ? 0 : 24,
       children: [
-        Ui.headingLG('Billing Address', MdiIcons.mapMarker),
-        NZSwitch(
-            isOn: _sameAsService,
-            label: "Same as Service Address",
-            onChanged: (val) {
-              setState(() {
-                _sameAsService = val;
-              });
-            }),
+        RowSplit(
+            left: Row(
+              children: [
+                Ui.headingLG('Billing Address', MdiIcons.mapMarker),
+              ],
+            ),
+            right: NZSwitch(
+                isOn: _sameAsService,
+                label: "Same as Service Address",
+                onChanged: (val) {
+                  setState(() {
+                    _sameAsService = val;
+                  });
+                })),
         if (!_sameAsService) ..._addressWidget(false),
       ],
     );
@@ -283,7 +288,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Widget _customerContact(int index) {
     return AppCard(
       children: [
-        Ui.headingLG('Custom Contact', MdiIcons.contacts),
+        Ui.headingLG('Customer Contact', MdiIcons.contacts),
         const SizedBox(height: 24),
         _contactTypeRow(index),
         FlexRow(

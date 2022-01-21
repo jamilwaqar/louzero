@@ -175,7 +175,7 @@ class _AppTextFieldState extends State<AppTextField> {
         suffixIcon: getIcon(),
         alignLabelWithHint: widget.expands,
         labelStyle: AppStyles.labelBold.copyWith(
-            height: 1.5,
+            height: 1,
             fontSize: 16,
             color: AppColors.secondary_40,
             fontWeight: FontWeight.w700),
