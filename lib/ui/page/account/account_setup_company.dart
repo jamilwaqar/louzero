@@ -134,27 +134,47 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             AppCard(
               children: [
                 Ui.headingLG('Company Details', MdiIcons.homeCity),
-                FlexRow(
-                  flex: [2, 3],
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                            height: 400,
-                            width: double.infinity,
-                            color: Colors.black12)
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        _companyName(),
-                        _website(),
-                        _email(),
-                        _phone()
-                      ],
-                    )
-                  ],
-                ),
+                if (_isActiveCompany)
+                  FlexRow(
+                    flex: [2, 2],
+                    children: [
+                      Column(
+                        children: [
+                          _companyName(),
+                          _website(),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          _email(),
+                          _phone(),
+                        ],
+                      )
+                    ],
+                  ),
+                if (!_isActiveCompany)
+                  FlexRow(
+                    flex: [2, 3],
+                    children: [
+                      Column(
+                        children: [
+                          AppNetworkImage(uri: _companyModel.avatar),
+                          SizedBox(height: 16),
+                          Buttons.outline('Update Logo', onPressed: () {
+                            //Upload Logo
+                          }),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          _companyName(),
+                          _website(),
+                          _email(),
+                          _phone()
+                        ],
+                      )
+                    ],
+                  ),
                 const AppDivider(
                   mt: 16,
                   mb: 24,
@@ -200,19 +220,21 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                         }),
                   ],
                 ),
-                const SizedBox(height: 24),
-                AppCheckbox(
-                  label: 'Active Company',
-                  checked: _isActiveCompany,
-                  onChanged: (val) {
-                    setState(() {
-                      _isActiveCompany = val ?? true;
-                    });
-                  },
-                ),
+                if (!_isActiveCompany) const SizedBox(height: 24),
+                if (!_isActiveCompany)
+                  AppCheckbox(
+                    label: 'Active Company',
+                    checked: _isActiveCompany,
+                    onChanged: (val) {
+                      setState(() {
+                        _isActiveCompany = val ?? true;
+                      });
+                    },
+                  ),
               ],
             ),
-            ..._fullEditForm(),
+            // Don't show in initial sigup steps flow:
+            if (!_isActiveCompany) ..._fullEditForm(),
             Row(
               children: [
                 SizedBox(width: 32),
