@@ -97,6 +97,12 @@ abstract class AppStyles {
     fontWeight: FontWeight.w700,
     color: AppColors.secondary_20,
   );
+  static const headlineMedium = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: AppColors.secondary_30,
+  );
   static const headerSmallCaps = TextStyle(
     fontFamily: 'Barlow',
     fontSize: 16,
