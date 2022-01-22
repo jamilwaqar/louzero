@@ -39,6 +39,7 @@ abstract class AppPlaceHolder {
 abstract class GSKey {
   static const String isAuthUser = "isAuthUser";
   static const String showGetStartedSiteProfile = "showGetStartedSiteProfile";
+  static const String fcToken = 'fcToken';
 }
 
 abstract class AppKey {
