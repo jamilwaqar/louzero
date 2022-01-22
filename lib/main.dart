@@ -1,3 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
@@ -12,8 +15,31 @@ import 'controller/api/api_manager.dart';
 import 'controller/get/base_controller.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
 
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
+  String? token = await messaging.getToken();
+  print('FCM token: $token');
   await GetStorage.init();
   await Backendless.initApp(
       applicationId: APIManager.applicationId,

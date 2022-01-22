@@ -45,6 +45,7 @@ dependencies:
   simple_rich_text: ^2.0.43
   intl: ^0.17.0
   google_maps_flutter_web: ^0.3.2+1
+  firebase_core: ^1.11.0
   firebase_messaging: ^11.2.5
 
 dev_dependencies:
