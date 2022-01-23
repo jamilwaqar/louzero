@@ -68,23 +68,28 @@ class _AppTextFieldState extends State<AppTextField> {
       _borderColor = AppColors.secondary_90;
     }
 
+    void _validate() {
+      if (widget.validator != null) {
+        if (!_hasError()) {
+          _validateMode = AutovalidateMode.disabled;
+          _status = Icon(Icons.check, color: AppColors.success);
+        } else {
+          _validateMode = AutovalidateMode.always;
+          _color = AppColors.errorTint;
+          _borderColor = AppColors.errorText;
+          _status =
+              Icon(MdiIcons.alertCircleOutline, color: AppColors.errorText);
+        }
+      }
+    }
+
     _textFieldFocus.addListener(() {
       if (!_textFieldFocus.hasFocus) {
         setState(() {
           _color = _hasValue() ? Colors.transparent : AppColors.secondary_99;
           _borderColor =
               _hasValue() ? AppColors.secondary_90 : Colors.transparent;
-
-          if (!_hasError()) {
-            _validateMode = AutovalidateMode.disabled;
-            _status = Icon(Icons.check, color: AppColors.success);
-          } else {
-            _validateMode = AutovalidateMode.always;
-            _color = AppColors.errorTint;
-            _borderColor = AppColors.errorText;
-            _status =
-                Icon(MdiIcons.alertCircleOutline, color: AppColors.errorText);
-          }
+          _validate();
         });
       } else {
         setState(() {
@@ -96,7 +101,7 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   void _setIcons() {
-    if (widget.iconEnd == null && _hasValue()) {
+    if (widget.validator != null && widget.iconEnd == null && _hasValue()) {
       setState(() {
         _status = Icon(Icons.check, color: AppColors.success);
       });
