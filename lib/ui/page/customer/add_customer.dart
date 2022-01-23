@@ -3,12 +3,8 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_add_button.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_drop_down.dart';
-import 'package:louzero/common/app_input_text.dart';
+import 'package:louzero/common/app_country_picker.dart';
 import 'package:louzero/common/common.dart';
-import 'package:louzero/common/utility/address_list.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
@@ -18,7 +14,6 @@ import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
-import 'package:louzero/controller/utils.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/widget/widget.dart';
@@ -142,6 +137,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Widget _body() {
     List<Widget> list = [
       const SizedBox(height: 32),
+      AppCountryPicker(),
+      Buttons.outline('Pick a Country.', onPressed: () {
+        // countryPicker(context, (country) {
+        //   print(country);
+        // });
+      }),
       _customerDetails(),
       _serviceAddress(),
       _billingAddress(),
