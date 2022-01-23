@@ -137,12 +137,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Widget _body() {
     List<Widget> list = [
       const SizedBox(height: 32),
-      AppCountryPicker(),
-      Buttons.outline('Pick a Country.', onPressed: () {
-        // countryPicker(context, (country) {
-        //   print(country);
-        // });
-      }),
       _customerDetails(),
       _serviceAddress(),
       _billingAddress(),
@@ -209,6 +203,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   List<Widget> _addressWidget(bool isService) {
     return [
+      AppCountryPicker(),
+      SizedBox(height: 48),
       AppTextField(
           controller:
               isService ? _serviceCountryController : _billCountryController,

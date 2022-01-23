@@ -1,60 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_divider.dart';
-import 'package:louzero/common/app_text_body.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
-
-// SeletItem Model
-class CountryItem {
-  final IconData flag;
-  final String label;
-  final String value;
-  const CountryItem(
-      {required this.label, required this.flag, required this.value});
-}
+import 'package:louzero/controller/constant/countries.dart';
 
 // MultiSelect Widget
 class AppCountryPicker extends StatefulWidget {
-  final List<CountryItem> items;
-  final List<CountryItem> initialItems;
-  final String label;
-  final double width;
-  final void Function(List<CountryItem>)? onChange;
+  final String label = 'Select Country';
+  final double width = 400;
+  final void Function(List<CountryCode>)? onChange;
 
   const AppCountryPicker({
     Key? key,
-    this.items = const [],
-    this.initialItems = const [],
-    this.label = 'Select Country',
-    this.width = 300,
     this.onChange,
   }) : super(key: key);
-
-  final List<CountryItem> _countries = const [
-    CountryItem(flag: Icons.favorite, label: 'United States', value: 'us'),
-    CountryItem(flag: Icons.favorite, label: 'Canada', value: 'ca'),
-    CountryItem(flag: Icons.favorite, label: 'France', value: 'fr'),
-  ];
 
   @override
   State<AppCountryPicker> createState() => _AppCountryPickerState();
 }
 
 class _AppCountryPickerState extends State<AppCountryPicker> {
-  List<CountryItem> selectedItems = [];
-
-  late List<CountryItem> items;
-
-  @override
-  void initState() {
-    super.initState();
-    items = widget._countries;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  final List<CountryCode> selectedItems = [];
+  final List<CountryCode> codes = CountryCodes.list;
 
   Future<void> openDialog() async {
     return showDialog<void>(
@@ -62,7 +28,8 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(32.0))),
+            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+          ),
           contentPadding: const EdgeInsets.only(top: 16),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +44,7 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ...items.map((item) {
+                    ...codes.map((item) {
                       return SelectTile(
                         isSelected: selectedItems.contains(item),
                         item: item,
@@ -91,7 +58,7 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                     SizedBox(
                       width: widget.width,
                     ),
-                    _doneButton(),
+                    _button(),
                   ],
                 ),
               );
@@ -102,17 +69,18 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
     );
   }
 
-  Widget _doneButton() => AppButton(
-        key: const Key('done'),
-        margin: const EdgeInsets.all(16),
-        wide: true,
-        label: "Done",
-        primary: true,
-        colorBg: AppColors.orange,
+  Widget _button() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Buttons.primary(
+        'Done',
         onPressed: () {
           Navigator.of(context).pop();
         },
-      );
+        expanded: true,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,26 +105,27 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                       if (selectedItems.isNotEmpty)
                         ...selectedItems.map((item) {
                           return SelectChip(
-                              label: item.label,
+                              label: item.name,
                               onDeleted: () {
                                 onRemoveItem(item);
                               });
                         }).toList(),
                       if (selectedItems.isEmpty)
-                        AppTextBody(widget.label,
-                            color: AppColors.dark_2,
-                            mb: 0,
-                            bold: true,
-                            size: 14),
+                        Text(widget.label,
+                            style: AppStyles.labelBold.copyWith(
+                                height: 1,
+                                fontSize: 16,
+                                color: AppColors.secondary_40))
                     ],
                   )
                 ],
               ),
               trailing: const Icon(Icons.arrow_drop_down),
               horizontalTitleGap: 0,
-              tileColor: AppColors.lightest,
+              tileColor: AppColors.secondary_99,
               shape: RoundedRectangleBorder(
-                side: const BorderSide(color: AppColors.light_3),
+                // side: const BorderSide(color: AppColors.light_3),
+
                 borderRadius: BorderRadius.circular(8.0),
               ),
               onTap: () {
@@ -166,19 +135,24 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
       ),
       onPressed: () {});
 
-  void onSelectItem(CountryItem item) {
-    final isSelected = selectedItems.contains(item);
-    setState(() {
-      selectedItems.clear();
-      selectedItems.add(item);
-      // isSelected ? selectedItems.remove(item) : selectedItems.add(item);
-    });
+  void onSelectItem(CountryCode item) {
+    if (selectedItems.contains(item)) {
+      setState(() {
+        selectedItems.remove(item);
+      });
+    } else {
+      setState(() {
+        selectedItems.clear();
+        selectedItems.add(item);
+      });
+    }
+
     if (widget.onChange != null) {
       widget.onChange!(selectedItems);
     }
   }
 
-  void onRemoveItem(CountryItem item) {
+  void onRemoveItem(CountryCode item) {
     final isSelected = selectedItems.contains(item);
     if (isSelected) {
       setState(() => selectedItems.remove(item));
@@ -195,29 +169,19 @@ class SelectChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      backgroundColor: AppColors.secondary_99,
-      shape:
-          const StadiumBorder(side: BorderSide(color: AppColors.secondary_70)),
-      labelPadding: const EdgeInsets.only(left: 14, right: 14),
-      label: Text(label,
-          style: const TextStyle(
-              fontWeight: FontWeight.w600, color: AppColors.dark_3)),
-      deleteIconColor: AppColors.medium_2,
-      deleteIcon: const Icon(
-        Icons.close,
-        size: 20,
-        color: AppColors.secondary_40,
-      ),
-      onDeleted: onDeleted ?? () {},
-    );
+    return Text(label,
+        style: AppStyles.labelBold.copyWith(
+          height: 1,
+          fontSize: 16,
+          color: AppColors.secondary_40,
+        ));
   }
 }
 
 class SelectTile extends StatelessWidget {
-  final CountryItem item;
+  final CountryCode item;
   final bool isSelected;
-  final ValueChanged<CountryItem> onSelectItem;
+  final ValueChanged<CountryCode> onSelectItem;
   final IconData? iconSelected;
   final IconData? iconUnselected;
 
@@ -244,7 +208,7 @@ class SelectTile extends StatelessWidget {
           ),
           title: Transform.translate(
             offset: const Offset(-16, 0),
-            child: Text(item.label, style: AppStyles.labelRegular),
+            child: Text(item.name, style: AppStyles.labelRegular),
           ),
           onTap: () => onSelectItem(item),
         ),
