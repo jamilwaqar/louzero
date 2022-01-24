@@ -31,7 +31,7 @@ abstract class BLPath {
 
 abstract class AppPlaceHolder {
   static const String user = "";
-  static const String customer = "";
+  static const String customer = 'icon-unknown';
   static const String company = 'icon-company-logo';
 }
 
@@ -39,6 +39,7 @@ abstract class AppPlaceHolder {
 abstract class GSKey {
   static const String isAuthUser = "isAuthUser";
   static const String showGetStartedSiteProfile = "showGetStartedSiteProfile";
+  static const String fcToken = 'fcToken';
 }
 
 abstract class AppKey {

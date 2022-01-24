@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/ui/page/app_base_scaffold.dart';
 
 import 'app_card.dart';
 
 class AppCardTabs extends StatelessWidget {
-  AppCardTabs({
+  const AppCardTabs({
     Key? key,
     required this.children,
     required this.length,
@@ -83,10 +84,17 @@ class AppTabPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 24, bottom: 3, left: 24, right: 24),
-      physics: const ClampingScrollPhysics(),
-      children: children,
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            physics: AppBasePhysics(),
+            padding:
+                const EdgeInsets.only(top: 24, bottom: 3, left: 24, right: 24),
+            children: children,
+          ),
+        ),
+      ],
     );
   }
 }

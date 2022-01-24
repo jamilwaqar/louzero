@@ -1,3 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:louzero/controller/notification_manager.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
@@ -12,8 +16,12 @@ import 'controller/api/api_manager.dart';
 import 'controller/get/base_controller.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
 
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  NotificationManager.init();
   await GetStorage.init();
   await Backendless.initApp(
       applicationId: APIManager.applicationId,

@@ -1,80 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:louzero/common/app_add_button.dart';
-import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_card_tabs.dart';
 import 'package:louzero/common/app_placeholder.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/views/widget/add_schedule_dialog.dart';
 import 'package:louzero/ui/page/job/views/widget/schedule_card.dart';
 
-class JobSchedule extends StatefulWidget{
-  const JobSchedule({Key? key}) : super(key: key);
+class JobSchedule extends GetWidget<JobController> {
 
-  @override
-  _JobScheduleState createState() => _JobScheduleState();
-}
+  JobSchedule(this.jobModel, {Key? key}) : super(key: key);
 
-class _JobScheduleState extends State<JobSchedule> {
-  late List schedules = [
-    {
-      "id": 1,
-      "personnel": {
-        "name": "Personnel Name",
-        "image": "https://semantic-ui.com/images/avatar/large/elliot.jpg",
-      },
-      "hoursToComplete": 2,
-      "note": "These are a few additional details about what needs to be done today. ",
-      "date": "2022-01-04 00:00:00.000Z",
-      "startTime": "1:33 PM",
-      "endTime": "2:33 PM",
-      "isAnytime": false,
-      "isCompleted": false
-    }
-  ];
-  late bool isAddScheduleOpen = false;
+  final JobModel jobModel;
+  late final List<ScheduleModel> _scheduleModels = jobModel.scheduleModels;
+  // late List schedules = [
+  //   {
+  //     "id": 1,
+  //     "personnel": {
+  //       "name": "Personnel Name",
+  //       "image": "https://semantic-ui.com/images/avatar/large/elliot.jpg",
+  //     },
+  //     "hoursToComplete": 2,
+  //     "note": "These are a few additional details about what needs to be done today. ",
+  //     "date": "2022-01-04 00:00:00.000Z",
+  //     "startTime": "1:33 PM",
+  //     "endTime": "2:33 PM",
+  //     "isAnytime": false,
+  //     "isCompleted": false
+  //   }
+  // ];
+  final _isAddScheduleOpen = false.obs;
 
   @override
   Widget build(BuildContext context) {
-    return AppTabPanel(
+    return Obx(()=> AppTabPanel(
       children: [
         const Text('Schedule', style: AppStyles.headerRegular),
-        if (schedules.isEmpty && !isAddScheduleOpen)
+        if (_scheduleModels.isEmpty && !_isAddScheduleOpen.value)
           const AppPlaceholder(
             title: 'No Appointments Yet',
             subtitle: "You haven't schedules any appointments for this job yet.",
           ),
         const SizedBox(height: 10,),
         Column(
-          children: schedules.map((schedule) =>
-              ScheduleCard(schedule: schedule)).toList(),
+          children: _scheduleModels.map((schedule) =>
+              ScheduleCard(schedule: schedule, jobModel: jobModel,)).toList(),
         ),
         Visibility(
-            visible: isAddScheduleOpen,
+            visible: _isAddScheduleOpen.value,
             child: AddScheduleDialog(
+              jobModel: jobModel,
               onClose: () {
-                setState(() {
-                  isAddScheduleOpen = false;
-                });
+                _isAddScheduleOpen.value = false;
               },
             )
         ),
         Visibility(
-            visible: !isAddScheduleOpen,
+            visible: !_isAddScheduleOpen.value,
             child: Align(
               alignment: Alignment.centerLeft,
               child: AppAddButton(
                 "Add to Schedule",
                 iconColor: AppColors.primary_1,
                 onPressed: () {
-                  setState(() {
-                    isAddScheduleOpen = true;
-                  });
+                  _isAddScheduleOpen.value = true;
                 },
               ),
             )
         ),
         const SizedBox(height: 32,),
       ],
-    );
+    ));
   }
 }

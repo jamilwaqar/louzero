@@ -41,6 +41,8 @@ extension DateTimeEx on DateTime {
 
   get weekDay => DateFormat('EEEE').format(this);
 
+  String get time => DateFormat('hh:mm a').format(this);
+
   String inDayHour({DateTime? other}) {
     other ??= DateTime.now();
     int day = difference(other).inDays;

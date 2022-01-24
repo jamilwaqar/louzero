@@ -1,7 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/constants.dart';
+
+import 'app_avatar.dart';
 
 class AppAdvancedTextField extends StatelessWidget {
   const AppAdvancedTextField({
@@ -33,7 +35,7 @@ class AppAdvancedTextField extends StatelessWidget {
   final Color? leftIconColor;
   final Color? rightIconColor;
   final List? items;
-  final String? leadingImage;
+  final Uri? leadingImage;
   final bool? showClearIcon;
   final bool? isDropdown;
   final bool? autofocus;
@@ -54,10 +56,9 @@ class AppAdvancedTextField extends StatelessWidget {
                   barrierDismissible: true,
                   builder: (BuildContext context) {
                     return _OptionsDialog(
-                        options: items!,
-                        onChange: (value) {
-                          onChange!(value);
-                        });
+                      options: items!,
+                      onChange: (value) {onChange!(value);}
+                    );
                   });
             } else {
               if (onTap != null) {
@@ -77,19 +78,12 @@ class AppAdvancedTextField extends StatelessWidget {
           // controller: controller,
           // isUnderlined: isUnderlined,
         ),
-        leadingImage != null
-            ? Positioned(
-                left: 0.0,
-                top: 10.0,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Image.network(
-                    leadingImage!,
-                    height: 40.0,
-                    width: 40.0,
-                  ),
-                ))
-            : const SizedBox(),
+        leadingImage != null ?
+        Positioned(
+            left: 0.0,
+            top: 10.0,
+            child: AppAvatar(size: 40, url: leadingImage, placeHolder: AppPlaceHolder.user),
+        ) : const SizedBox(),
         isDropdown == true
             ? const Positioned(
                 right: 10.0,

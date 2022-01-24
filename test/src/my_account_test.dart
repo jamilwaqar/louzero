@@ -24,7 +24,6 @@ void main() {
     expect(find.text(userModel.initials), findsOneWidget);
     expect(find.text(userModel.phone), findsOneWidget);
     expect(find.text(userModel.email), findsOneWidget);
-    expect(find.text(userModel.serviceAddress), findsOneWidget);
 
     /// My Companies
     expect(Get.find<CompanyController>().companies.length, 1);

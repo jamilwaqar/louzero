@@ -29,9 +29,9 @@ class JobsHome extends StatelessWidget {
 
   Widget _body() {
     List<Widget> list = [
-      AppCardTabs(
+      const AppCardTabs(
           radius: 24,
-          children: const [
+          children: [
             Icon(MdiIcons.cardAccountDetails,
                 size: 190, color: AppColors.orange),
             Icon(MdiIcons.calendar, size: 190, color: AppColors.orange),

@@ -14,9 +14,6 @@ class MockUserModel extends Mock implements UserModel {
 
   @override
   String get email => 'test@gmail.com';
-
-  @override
-  String get serviceAddress => '416 W 8th St, Los Angeles, CA 90014';
 }
 
 class MockCompanyModel extends Mock implements CompanyModel {

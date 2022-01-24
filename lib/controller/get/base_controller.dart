@@ -1,6 +1,7 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/api/api_service.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -8,6 +9,7 @@ import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
+import 'package:louzero/models/user_models.dart';
 
 class BaseController extends GetxController {
   final _authController = Get.put(AuthController(), permanent: true);
@@ -33,9 +35,19 @@ class BaseController extends GetxController {
   set siteProfileTemplates(List<CTSiteProfile> value) => _siteProfileTemplates.value = value;
 
   CompanyModel? get activeCompany => _activeCompany.value;
-
+  List<UserModel>activeCountryUsers = [];
   set activeCompany(CompanyModel? value) {
     _activeCompany.value = value;
+    _updateCompanyUsers();
+  }
+
+  _updateCompanyUsers() {
+    activeCountryUsers = [];
+    if (activeCompany == null) return;
+    activeCompany!.users.toList().forEach((id) async {
+      UserModel model = await APIManager.fetchUser(id);
+      activeCountryUsers.add(model);
+    });
   }
 
   bool get isLoading => _isLoading.value;

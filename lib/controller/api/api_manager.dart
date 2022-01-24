@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:backendless_sdk/backendless_sdk.dart';
+import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/models/user_models.dart';
 
 class APIManager {
   static const applicationId = "D8545E9B-1856-3BFE-FF33-600B71DE0300";
@@ -17,6 +19,15 @@ class APIManager {
       return response;
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  static Future<UserModel> fetchUser(String id) async {
+    try {
+      dynamic response = await Backendless.data.of(BLPath.user).findById(id);
+      return UserModel.fromMap(response);
+    } catch (e) {
+      throw e.toString();
     }
   }
 

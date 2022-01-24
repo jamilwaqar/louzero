@@ -116,11 +116,11 @@ class _JobsHomeState extends State<JobsHome> {
 
   Widget _tabs() {
     return AppCardTabs(
-        height: 1200,
+        height: 750,
         radius: 24,
         children: [
           _tabDetails(),
-          const JobSchedule(),
+          JobSchedule(widget.jobModel),
           _tabBilling(),
         ],
         length: 3,
