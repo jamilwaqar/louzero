@@ -45,7 +45,7 @@ class JobController extends GetxController {
     }
   }
 
-  updateJobModel(JobModel model) {
+  void updateJobModel(JobModel model) {
     List<JobModel> models = [...jobModels];
     int index = models.indexWhere((e) => e.objectId == model.objectId);
     models.removeWhere((e) => e.objectId == model.objectId);

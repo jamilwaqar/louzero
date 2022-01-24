@@ -35,7 +35,7 @@ class JobSchedule extends GetWidget<JobController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=> AppTabPanel(
+    return GetBuilder<JobController>(builder: (_)=> AppTabPanel(
       children: [
         const Text('Schedule', style: AppStyles.headerRegular),
         if (_scheduleModels.isEmpty && !_isAddScheduleOpen.value)
@@ -54,6 +54,7 @@ class JobSchedule extends GetWidget<JobController> {
               jobModel: jobModel,
               onClose: () {
                 _isAddScheduleOpen.value = false;
+                controller.update();
               },
             )
         ),
@@ -66,11 +67,12 @@ class JobSchedule extends GetWidget<JobController> {
                 iconColor: AppColors.primary_1,
                 onPressed: () {
                   _isAddScheduleOpen.value = true;
+                  controller.update();
                 },
               ),
             )
         ),
-        const SizedBox(height: 32,),
+        const SizedBox(height: 32),
       ],
     ));
   }

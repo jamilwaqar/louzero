@@ -17,7 +17,7 @@ class AppPopMenu extends StatelessWidget {
   final List<Widget> button;
   final Color colorIcon;
   final Function(dynamic)? onSelected;
-  AppPopMenu({
+  const AppPopMenu({
     Key? key,
     this.items = const [],
     this.button = const [],
