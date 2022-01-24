@@ -26,14 +26,19 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>LOUzero would like to play music while you are hiking.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>LOUzero would like to use camera to take pictures.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>LOUzero would like to get your location without any problems.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>LOUzero would like to use photo library to take pictures.</string>
-    <key>NSAppleMusicUsageDescription</key>
-    <string>LOUzero would like to play music while you are hiking.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
