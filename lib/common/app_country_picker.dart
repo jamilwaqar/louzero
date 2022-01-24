@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/countries.dart';
+import 'package:flag/flag.dart';
 
 // MultiSelect Widget
 class AppCountryPicker extends StatefulWidget {
@@ -45,9 +46,24 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ...codes.map((item) {
+                      Flag _flag = Flag.fromString('eu');
+                      if (Flag.flagsCode.contains(item.code.toLowerCase())) {
+                        _flag = Flag.fromString(
+                          item.code.toLowerCase(),
+                          fit: BoxFit.cover,
+                          flagSize: FlagSize.size_4x3,
+                          borderRadius: 1,
+                        );
+                      }
+
                       return SelectTile(
                         isSelected: selectedItems.contains(item),
                         item: item,
+                        iconFlag: Container(
+                          width: 48,
+                          height: 24,
+                          child: _flag,
+                        ),
                         onSelectItem: (item) {
                           setState(() {
                             onSelectItem(item);
@@ -184,12 +200,14 @@ class SelectTile extends StatelessWidget {
   final ValueChanged<CountryCode> onSelectItem;
   final IconData? iconSelected;
   final IconData? iconUnselected;
+  final Widget? iconFlag;
 
   const SelectTile({
     Key? key,
     required this.item,
     required this.isSelected,
     required this.onSelectItem,
+    this.iconFlag,
     this.iconSelected = Icons.check_box_sharp,
     this.iconUnselected = Icons.check_box_outline_blank,
   }) : super(key: key);
@@ -202,10 +220,11 @@ class SelectTile extends StatelessWidget {
           dense: true,
           contentPadding:
               const EdgeInsets.only(left: 32, right: 32, top: 0, bottom: 0),
-          leading: Icon(
-            isSelected ? iconSelected : iconUnselected,
-            color: isSelected ? AppColors.primary_60 : AppColors.dark_1,
-          ),
+          leading: iconFlag ??
+              Icon(
+                isSelected ? iconSelected : iconUnselected,
+                color: isSelected ? AppColors.primary_60 : AppColors.dark_1,
+              ),
           title: Transform.translate(
             offset: const Offset(-16, 0),
             child: Text(item.name, style: AppStyles.labelRegular),
