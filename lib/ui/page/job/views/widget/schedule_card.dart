@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_avatar.dart';
-import 'package:louzero/common/app_pop_menu.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/common.dart';
 import 'package:louzero/controller/constant/constants.dart';
@@ -22,6 +21,7 @@ class ScheduleCard extends GetWidget<JobController> {
   final ScheduleModel schedule;
 
   final _showScheduleDialog = false.obs;
+  late final _noteController = TextEditingController(text: schedule.note);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,8 @@ class ScheduleCard extends GetWidget<JobController> {
     final monthName = DateFormat.MMM().format(parseDate);
     final day = DateFormat.d().format(parseDate);
 
-    return GetBuilder<JobController>(builder: (_)=> Column(
+    return GetBuilder<JobController>(
+        builder: (_)=> Column(
       children: [
         Container(
             margin: const EdgeInsets.only(top: 8, bottom: 8),
@@ -128,9 +129,11 @@ class ScheduleCard extends GetWidget<JobController> {
                                         },
                                       ),
                                       PopMenuItem(
-                                        label: 'Manage Notes',
+                                        label: 'Edit Notes',
                                         icon: MdiIcons.fileDocumentOutline,
                                         onTap: () {
+                                          _showEditNoteDialog();
+                                          // _showScheduleDialog.value = true;
                                         },
                                       ),
                                       PopMenuItem(
@@ -207,5 +210,29 @@ class ScheduleCard extends GetWidget<JobController> {
         const SizedBox(height: 8,),
       ],
     ));
+  }
+
+  void _showEditNoteDialog() async {
+    // Get.back();
+    await Future.delayed(const Duration(milliseconds: 150));
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AppDialog(
+          title: 'Update Note',
+          body: AppTextField(
+            label: 'Note',
+            mb: 24,
+            multiline: true,
+            controller: _noteController,
+          ),
+          okayLabel: 'Update note',
+          onTapOkay: () {
+            schedule.note = _noteController.text;
+            controller.save(jobModel);
+          },
+        );
+      },
+    );
   }
 }
