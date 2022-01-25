@@ -47,11 +47,8 @@ dependencies:
   google_maps_flutter_web: ^0.3.2+1
   firebase_core: ^1.11.0
   firebase_messaging: ^11.2.5
-<<<<<<< HEAD
   flag: ^6.0.0
-=======
   font_awesome_flutter: ^9.2.0
->>>>>>> f9179cb5371db61ac06a4201a7ba5604cbe32121
 
 dev_dependencies:
   flutter_driver:
