@@ -43,7 +43,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
   late final companyUsers = controller.baseController.activeCountryUsers;
 
   late final _isAnyTimeOfVisit = (schedule?.anyTimeVisit ?? false).obs;
-  final _selectedDate = DateTime.now().obs;
+  late final _selectedDate = (schedule?.start ?? DateTime.now()).obs;
 
   @override
   Widget build(BuildContext context) {

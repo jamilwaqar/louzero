@@ -5,7 +5,6 @@ import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/customer_models.dart';
-import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/common/common.dart';
@@ -17,17 +16,16 @@ import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class JobsHome extends GetWidget<JobController> {
-  JobsHome(this.jobModel, {Key? key}) : super(key: key);
-  final JobModel jobModel;
+  JobsHome({Key? key}) : super(key: key);
 
   final _baseController = Get.find<BaseController>();
   late final _lineItemController = Get.find<LineItemController>()..lineItems.value = [
-    ... jobModel.billingLineModels
+    ... controller.jobModel!.billingLineModels
   ];
 
-  final addLineVisible = false.obs;
-  final inventoryIndex = 0.obs;
-  final miscLineItem = false.obs;
+  final _addLineVisible = false.obs;
+  final _inventoryIndex = 0.obs;
+  final _miscLineItem = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +34,12 @@ class JobsHome extends GetWidget<JobController> {
         return AppBaseScaffold(
           hasKeyboard: true,
           child: _body(),
-          subheader: jobModel.jobType,
+          subheader: controller.jobModel!.jobType,
           footerEnd: [
             AppPopMenu(
               button: [
                 Buttons.appBar(
-                  'Job Status: ${jobModel.status}',
+                  'Job Status: ${controller.jobModel!.status}',
                   icon: MdiIcons.calculator,
                 )
               ],
@@ -81,7 +79,7 @@ class JobsHome extends GetWidget<JobController> {
 
   Widget _body() {
     CustomerModel customerModel =
-        _baseController.customerModelById(jobModel.customerId!)!;
+        _baseController.customerModelById(controller.jobModel!.customerId!)!;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
@@ -107,7 +105,7 @@ class JobsHome extends GetWidget<JobController> {
         radius: 24,
         children: [
           _tabDetails(),
-          JobSchedule(jobModel),
+          JobSchedule(controller.jobModel!),
           _tabBilling(),
         ],
         length: 3,
@@ -116,7 +114,7 @@ class JobsHome extends GetWidget<JobController> {
 
   Widget _tabDetails() {
     DateTime updatedAt =
-        jobModel.updatedAt != null ? jobModel.updatedAt! : jobModel.createdAt;
+        controller.jobModel!.updatedAt != null ? controller.jobModel!.updatedAt! : controller.jobModel!.createdAt;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
       child: Column(
@@ -132,7 +130,7 @@ class JobsHome extends GetWidget<JobController> {
                     const Text('Job Description',
                         style: AppStyles.headerSmallCaps),
                     const SizedBox(height: 8),
-                    Text(jobModel.description,
+                    Text(controller.jobModel!.description,
                         style: AppStyles.labelRegular),
                   ],
                 ),
@@ -143,7 +141,7 @@ class JobsHome extends GetWidget<JobController> {
                 children: [
                   TextKeyVal(
                     "Job Id:",
-                    "#${jobModel.jobId}",
+                    "#${controller.jobModel!.jobId}",
                     keyStyle: AppStyles.headerSmallCaps,
                     valStyle:
                         AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
@@ -151,7 +149,7 @@ class JobsHome extends GetWidget<JobController> {
                   const SizedBox(height: 4),
                   TextKeyVal(
                     "Status:",
-                    jobModel.status,
+                    controller.jobModel!.status,
                     keyStyle: AppStyles.headerSmallCaps,
                     valStyle:
                         AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
@@ -272,7 +270,7 @@ class JobsHome extends GetWidget<JobController> {
                 const Text('Billing Line Items',
                     style: AppStyles.headerRegular),
                 if (_lineItemController.lineItems.isEmpty &&
-                    !addLineVisible.value)
+                    !_addLineVisible.value)
                   const AppPlaceholder(
                     title: 'No Line Items',
                     subtitle: "Add new line to get started.",
@@ -281,7 +279,7 @@ class JobsHome extends GetWidget<JobController> {
                   data: _lineItemController.lineItems,
                   onDelete: (id) async {
                     dynamic response = await _lineItemController
-                        .deleteLineItemById(id, jobModel.objectId!);
+                        .deleteLineItemById(id, controller.jobModel!.objectId!);
                     if (response is String) {
                       WarningMessageDialog.showDialog(Get.context!, response);
                     }
@@ -301,10 +299,10 @@ class JobsHome extends GetWidget<JobController> {
                   flex: const [12, 0, 7],
                   children: [
                     AppAddNote(
-                        initialText: jobModel.note ?? '',
+                        initialText: controller.jobModel!.note ?? '',
                         onChange: (value) {
-                          jobModel.note = value;
-                          controller.save(jobModel);
+                          controller.jobModel!.note = value;
+                          controller.save(controller.jobModel!);
                         }),
                     const SizedBox(width: 1),
                     AppBillingTotal(
@@ -330,17 +328,17 @@ class JobsHome extends GetWidget<JobController> {
           label: 'Inventory Line',
           icon: MdiIcons.clipboardText,
           onTap: () {
-            miscLineItem.value = false;
-            addLineVisible.value = true;
-            inventoryIndex.value = 0;
+            _miscLineItem.value = false;
+            _addLineVisible.value = true;
+            _inventoryIndex.value = 0;
           },
         ),
         PopMenuItem(
             label: 'Misc. Billing Line',
             icon: MdiIcons.currencyUsd,
             onTap: () {
-              miscLineItem.value = true;
-              addLineVisible.value = true;
+              _miscLineItem.value = true;
+              _addLineVisible.value = true;
             }),
       ],
     );
@@ -348,16 +346,16 @@ class JobsHome extends GetWidget<JobController> {
 
   Widget _addNewLine() {
     return Obx(()=> Visibility(
-      visible: addLineVisible.value,
+      visible: _addLineVisible.value,
       child: JobAddNewLine(
-        jobId: jobModel.objectId!,
-        selectedIndex: inventoryIndex.value,
-        isTextInput: miscLineItem.value,
+        jobId: controller.jobModel!.objectId!,
+        selectedIndex: _inventoryIndex.value,
+        isTextInput: _miscLineItem.value,
         onCreate: () {
-          addLineVisible.value = false;
+          _addLineVisible.value = false;
         },
         onCancel: () {
-          addLineVisible.value = false;
+          _addLineVisible.value = false;
         },
       ),
     ));

@@ -8,6 +8,10 @@ import 'base_controller.dart';
 class JobController extends GetxController {
   final baseController = Get.find<BaseController>();
 
+  final _jobModel = Rx<JobModel?>(null);
+  JobModel? get jobModel => _jobModel.value;
+  set jobModel(val) => _jobModel.value = val;
+
   List<JobModel> get jobModels => baseController.jobs;
 
   Future save(JobModel model, {IDataStore? store, showLoading = true}) async {
@@ -30,6 +34,9 @@ class JobController extends GetxController {
         List<JobModel> newList = [...baseController.jobs, newModel];
         baseController.jobs = newList;
       } else {
+        if (jobModel != null) {
+          jobModel = newModel;
+        }
         updateJobModel(newModel);
       }
       update();
