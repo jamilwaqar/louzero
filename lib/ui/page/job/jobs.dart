@@ -204,7 +204,6 @@ class _JobListPageState extends State<JobListPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('table items $tableItems');
     return AppBaseScaffold(
       subheader: 'All Jobs (dev in progress)',
       child: Container(
@@ -448,12 +447,7 @@ class _JobListPageState extends State<JobListPage> {
             ),
             AppDivider(),
             const SizedBox(height: 8,),
-            LZDataTable(
-              items: tableItems,
-              onSortTap: (category, isAsc) {
-                sortItems(category, isAsc);
-              },
-            )
+            JobTableBody(tableItems: tableItems,)
           ],
         ),
       ),
@@ -510,4 +504,22 @@ class DropDownMenu extends StatelessWidget {
     );
   }
 
+}
+
+class JobTableBody extends GetWidget<JobController> {
+  const JobTableBody({required this.tableItems, Key? key}) : super(key: key);
+  final List tableItems;
+
+  @override
+  Widget build(BuildContext context) {
+
+    print(controller.jobModels);
+    return LZDataTable(
+      items: tableItems,
+      models: controller.jobModels, //this is temporary will be removed later
+      onSortTap: (category, isAsc) {
+        // sortItems(category, isAsc);
+      },
+    );
+  }
 }

@@ -5,15 +5,22 @@ import 'package:intl/intl.dart';
 import 'package:louzero/common/app_chip.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/get/bindings/job_binding.dart';
+import 'package:louzero/models/job_models.dart';
+import 'package:louzero/ui/page/job/views/jobs_home.dart';
+import 'package:get/get.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 
 class LZDataTable extends StatefulWidget{
   const LZDataTable({
     Key? key,
     required this.items,
     required this.onSortTap,
+    required this.models
   }) : super(key: key);
 
   final List items;
+  final List models;
   final Function onSortTap;
 
   @override
@@ -137,80 +144,85 @@ class _LZDataTable extends State<LZDataTable> {
       ds = DateFormat('MMM, dd yyyy').format(date);
     }
 
-    return Container(
-        margin: const EdgeInsets.only(top: 4, bottom: 4),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5.0)
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 5,
-              height: 95,
-              decoration: BoxDecoration(
-                  color: Color(int.parse(color)),
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(5.0),
-                      bottomLeft: Radius.circular(5.0)
-                  )
+    return GestureDetector(
+      onTap: (){
+        Get.to(() => JobsHome(widget.models[0]));
+      },
+      child: Container(
+          margin: const EdgeInsets.only(top: 4, bottom: 4),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5.0)
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 5,
+                height: 95,
+                decoration: BoxDecoration(
+                    color: Color(int.parse(color)),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(5.0),
+                        bottomLeft: Radius.circular(5.0)
+                    )
+                ),
               ),
-            ),
-            const SizedBox(width: 10,),
-            Expanded(
-                flex: 1,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: FlexRow(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    flex: const [2, 7, 4, 3, 2, 1],
-                    children: [
-                      Text("#${item['id']}", style: AppStyles.labelRegular,),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(item['name'], style: AppStyles.labelBold,),
-                          const SizedBox(height: 8,),
-                          Text(item['address'], style: const TextStyle(
-                            fontFamily: 'Lato',
-                            fontSize: 14,
-                          ))
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          AppChip(
-                              text: item['type'],
-                              color: Color(int.parse(color))
-                          ),
-                        ],
-                      ),
-                      Text(ds, style: const TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 14,
-                      )),
-                      Text("\$${item['total']}", style: const TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 14,
-                      )),
-                      AppPopMenu(
-                          items: const [
-                            PopMenuItem(
-                              label: 'My Account',
-                              icon: Icons.person_rounded,
+              const SizedBox(width: 10,),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: FlexRow(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      flex: const [2, 7, 4, 3, 2, 1],
+                      children: [
+                        Text("#${item['id']}", style: AppStyles.labelRegular,),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(item['name'], style: AppStyles.labelBold,),
+                            const SizedBox(height: 8,),
+                            Text(item['address'], style: const TextStyle(
+                              fontFamily: 'Lato',
+                              fontSize: 14,
+                            ))
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            AppChip(
+                                text: item['type'],
+                                color: Color(int.parse(color))
                             ),
-                          ]
-                      )
-                    ],
-                  ),
-                )
-            )
-          ],
-        )
+                          ],
+                        ),
+                        Text(ds, style: const TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 14,
+                        )),
+                        Text("\$${item['total']}", style: const TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 14,
+                        )),
+                        AppPopMenu(
+                            items: const [
+                              PopMenuItem(
+                                label: 'My Account',
+                                icon: Icons.person_rounded,
+                              ),
+                            ]
+                        )
+                      ],
+                    ),
+                  )
+              )
+            ],
+          )
+      ),
     );
   }
 }

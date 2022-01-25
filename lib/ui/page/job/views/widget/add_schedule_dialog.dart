@@ -46,6 +46,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasPersonnelText = _personnelController.text.isNotEmpty;
     return AppCard(
       ml: 0,
       mr: 0,
@@ -63,9 +64,9 @@ class AddScheduleDialog extends GetWidget<JobController> {
           label: 'Personnel',
           isDropdown: true,
           items: companyUsers.map((e) => e.fullName).toList(),
-          leadingImage: _isEdit ? schedule?.personnelAvatar : _user.avatar,
-          leftPadding: _personnelController.text.isNotEmpty ? 50 : 15,
-          showClearIcon: _personnelController.text.isNotEmpty,
+          leadingImage: hasPersonnelText ? (_isEdit ? schedule?.personnelAvatar : _user.avatar) : null,
+          leftPadding: hasPersonnelText ? 50 : 15,
+          showClearIcon: hasPersonnelText,
           onChange: (value) {
             _personnelController.text = value;
           },
