@@ -17,6 +17,7 @@ import 'package:louzero/models/job_models.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/widget/buttons/text_button.dart';
 import 'package:louzero/ui/widget/calendar.dart';
+import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -41,8 +42,8 @@ class AddScheduleDialog extends GetWidget<JobController> {
   late final _endTimeController = TextEditingController(text: schedule?.end.time);
   late final companyUsers = controller.baseController.activeCountryUsers;
 
-  final _isAnyTimeOfVisit = false.obs;
-  final _selectedDate = DateTime.now().obs;
+  late final _isAnyTimeOfVisit = (schedule?.anyTimeVisit ?? false).obs;
+  late final _selectedDate = (schedule?.start ?? DateTime.now()).obs;
 
   @override
   Widget build(BuildContext context) {
@@ -102,36 +103,44 @@ class AddScheduleDialog extends GetWidget<JobController> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            AppAdvancedTextField(
-              controller: _startTimeController,
-              label: 'Start Time',
-              rightIcon: MdiIcons.clock,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return NZTimePicker(onChange: (time) {
-                      _startTimeController.text = time;
-                    });
-                  },
-                );
-              },
-            ),
-            AppAdvancedTextField(
-              controller: _endTimeController,
-              label: 'End Time',
-              rightIcon: MdiIcons.clock,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return NZTimePicker(onChange: (time) {
-                      _endTimeController.text = time;
-                    },);
-                  },
-                );
-              },
-            ),
+            Obx(()=> Opacity(
+              opacity: _isAnyTimeOfVisit.value ? 0.4 : 1,
+              child: AppAdvancedTextField(
+                controller: _startTimeController,
+                label: 'Start Time',
+                rightIcon: MdiIcons.clock,
+                onTap: () {
+                  if (_isAnyTimeOfVisit.value) return;
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return NZTimePicker(onChange: (time) {
+                        _startTimeController.text = time;
+                      });
+                    },
+                  );
+                },
+              ),
+            )),
+            Obx(()=> Opacity(
+              opacity: _isAnyTimeOfVisit.value ? 0.4 : 1,
+              child: AppAdvancedTextField(
+                controller: _endTimeController,
+                label: 'End Time',
+                rightIcon: MdiIcons.clock,
+                onTap: () {
+                  if (_isAnyTimeOfVisit.value) return;
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return NZTimePicker(onChange: (time) {
+                        _endTimeController.text = time;
+                      },);
+                    },
+                  );
+                },
+              ),
+            )),
             Container(
               margin: const EdgeInsets.only(top: 10),
               child: Obx(()=> AppCheckbox(
@@ -139,6 +148,10 @@ class AddScheduleDialog extends GetWidget<JobController> {
                 label: "Any time on day of visit",
                 onChanged: (value) {
                   _isAnyTimeOfVisit.value = value!;
+                  if (value) {
+                    _startTimeController.text = '12:00 AM';
+                    _endTimeController.text = '12:00 AM';
+                  }
                 },
               )),
             )
@@ -152,6 +165,10 @@ class AddScheduleDialog extends GetWidget<JobController> {
             AppButton(
               label: "Save Appointment",
               onPressed: () async {
+                if (_startTimeController.text.isEmpty && !_isAnyTimeOfVisit.value) {
+                  WarningMessageDialog.showDialog(Get.context!, 'Invalid Start time');
+                  return;
+                }
                 int start = controller.convertMilliseconds(_startTimeController.text, _selectedDate.value);
                 int end = controller.convertMilliseconds(_endTimeController.text, _selectedDate.value);
                 UserModel selectedUser = companyUsers.firstWhere((user) => user.fullName == _personnelController.text);

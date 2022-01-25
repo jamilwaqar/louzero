@@ -409,41 +409,41 @@ class _JobListPageState extends State<JobListPage> {
             ),
             const SizedBox(height: 24,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: const [
-                    Text('Booked Jobs ', style: TextStyle(
-                      fontFamily: 'Barlow',
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.secondary_20,
-                    )),
-                    Text('(97)', style: TextStyle(
-                      fontFamily: 'Barlow',
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.secondary_50,
-                    ),)
-                  ],
-                ),
-                Row(
-                  children: const [
-                    Text('Total: ', style: TextStyle(
-                      fontFamily: 'Barlow',
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.secondary_20,
-                    )),
-                    Text('\$78,302.00', style: TextStyle(
-                      fontFamily: 'Barlow',
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.secondary_50,
-                    ))
-                  ],
-                ),
-              ]
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: const [
+                      Text('Booked Jobs ', style: TextStyle(
+                        fontFamily: 'Barlow',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.secondary_20,
+                      )),
+                      Text('(97)', style: TextStyle(
+                        fontFamily: 'Barlow',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.secondary_50,
+                      ),)
+                    ],
+                  ),
+                  Row(
+                    children: const [
+                      Text('Total: ', style: TextStyle(
+                        fontFamily: 'Barlow',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.secondary_20,
+                      )),
+                      Text('\$78,302.00', style: TextStyle(
+                        fontFamily: 'Barlow',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.secondary_50,
+                      ))
+                    ],
+                  ),
+                ]
             ),
             AppDivider(),
             const SizedBox(height: 8,),
@@ -473,12 +473,12 @@ class _JobListPageState extends State<JobListPage> {
               borderRadius: BorderRadius.circular(10.0),
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0)
+                borderRadius: BorderRadius.circular(10.0)
             ),
           ),
         ),
         const Positioned(
-          right: 10,
+            right: 10,
             top: 5,
             child: Icon(Icons.search)
         )

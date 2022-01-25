@@ -8,6 +8,10 @@ import 'base_controller.dart';
 class JobController extends GetxController {
   final baseController = Get.find<BaseController>();
 
+  final _jobModel = Rx<JobModel?>(null);
+  JobModel? get jobModel => _jobModel.value;
+  set jobModel(val) => _jobModel.value = val;
+
   List<JobModel> get jobModels => baseController.jobs;
 
   Future save(JobModel model, {IDataStore? store, showLoading = true}) async {
@@ -30,6 +34,9 @@ class JobController extends GetxController {
         List<JobModel> newList = [...baseController.jobs, newModel];
         baseController.jobs = newList;
       } else {
+        if (jobModel != null) {
+          jobModel = newModel;
+        }
         updateJobModel(newModel);
       }
       update();
@@ -45,7 +52,7 @@ class JobController extends GetxController {
     }
   }
 
-  updateJobModel(JobModel model) {
+  void updateJobModel(JobModel model) {
     List<JobModel> models = [...jobModels];
     int index = models.indexWhere((e) => e.objectId == model.objectId);
     models.removeWhere((e) => e.objectId == model.objectId);
@@ -54,7 +61,7 @@ class JobController extends GetxController {
   }
 
   int convertMilliseconds(String date, DateTime dateTime) {
-    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '');
+    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '').replaceAll(' ', '');
     List<String>ar = filter.split(':');
     bool pm = date.toLowerCase().contains('pm');
     int hr =  int.parse(ar[0]);

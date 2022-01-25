@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-
 import 'app_card.dart';
 
 class AppCardTabs extends StatelessWidget {

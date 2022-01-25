@@ -7,6 +7,7 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/models/job_models.dart';
+import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/job_controller.dart';
@@ -146,7 +147,9 @@ class _LZDataTable extends State<LZDataTable> {
 
     return GestureDetector(
       onTap: (){
-        Get.to(() => JobsHome(widget.models[0]));
+        Get.find<JobController>().jobModel = widget.models[0];
+        Get.put(LineItemController());
+        Get.to(() => JobsHome());
       },
       child: Container(
           margin: const EdgeInsets.only(top: 4, bottom: 4),
