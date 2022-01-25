@@ -131,10 +131,7 @@ class ScheduleCard extends GetWidget<JobController> {
                                       PopMenuItem(
                                         label: 'Edit Notes',
                                         icon: MdiIcons.fileDocumentOutline,
-                                        onTap: () {
-                                          _showEditNoteDialog();
-                                          // _showScheduleDialog.value = true;
-                                        },
+                                        onTap: _showEditNoteDialog,
                                       ),
                                       PopMenuItem(
                                         label: 'Remove',
@@ -213,7 +210,6 @@ class ScheduleCard extends GetWidget<JobController> {
   }
 
   void _showEditNoteDialog() async {
-    // Get.back();
     await Future.delayed(const Duration(milliseconds: 150));
     showDialog(
       context: Get.context!,
@@ -226,7 +222,7 @@ class ScheduleCard extends GetWidget<JobController> {
             multiline: true,
             controller: _noteController,
           ),
-          okayLabel: 'Update note',
+          okayLabel: 'Update',
           onTapOkay: () {
             schedule.note = _noteController.text;
             controller.save(jobModel);
