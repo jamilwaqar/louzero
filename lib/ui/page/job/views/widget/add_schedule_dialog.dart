@@ -64,7 +64,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
           isDropdown: true,
           items: companyUsers.map((e) => e.fullName).toList(),
           leadingImage: _isEdit ? schedule?.personnelAvatar : _user.avatar,
-          leftPadding: _personnelController.text.isNotEmpty ? 50 : 15,
+          leftPadding: _isEdit && _personnelController.text.isNotEmpty ? 50 : 15,
           showClearIcon: _personnelController.text.isNotEmpty,
           onChange: (value) {
             _personnelController.text = value;
