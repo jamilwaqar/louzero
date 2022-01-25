@@ -95,7 +95,7 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
   @override
   Widget build(BuildContext context) {
     final bool isTransparent =  (widget.controller!.text.isNotEmpty && isUnderlined == true);
-print('is transparet ${widget.leadingImage}');
+print('widget.leadingImage ${widget.leadingImage}');
     return Stack(
       children: [
         TextField(
