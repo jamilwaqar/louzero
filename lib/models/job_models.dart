@@ -145,7 +145,10 @@ class ScheduleModel {
   Uri? personnelAvatar;
   DateTime get start => DateTime.fromMillisecondsSinceEpoch(startTime);
   DateTime get end => DateTime.fromMillisecondsSinceEpoch(endTime);
-  String get startEndTime => '${start.time} - ${end.time}';
+  String get startEndTime {
+    if (anyTimeVisit) return 'Any time today';
+    return '${start.time} - ${end.time}';
+  }
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
       _$ScheduleModelFromJson(json);

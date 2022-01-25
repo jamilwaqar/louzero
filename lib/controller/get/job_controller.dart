@@ -54,7 +54,7 @@ class JobController extends GetxController {
   }
 
   int convertMilliseconds(String date, DateTime dateTime) {
-    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '');
+    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '').replaceAll(' ', '');
     List<String>ar = filter.split(':');
     bool pm = date.toLowerCase().contains('pm');
     int hr =  int.parse(ar[0]);

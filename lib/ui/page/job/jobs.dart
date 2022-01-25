@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/models.dart';
+import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import '../app_base_scaffold.dart';
 import 'views/jobs_home.dart';
@@ -11,10 +12,10 @@ class JobListPage extends GetWidget<JobController> {
 
   @override
   Widget build(BuildContext context) {
-    return AppBaseScaffold(
+    return GetBuilder<JobController>(builder: (_)=> AppBaseScaffold(
       subheader: 'All Jobs (dev in progress)',
       child: _body(),
-    );
+    ));
   }
 
 
@@ -31,7 +32,10 @@ class JobListPage extends GetWidget<JobController> {
             count: 0,
             buttonTitleLeft: "",
             buttonTitleRight: "",
-            onPressed: ()=> Get.to(()=> JobsHome(controller.jobModels[index])),
+            onPressed: () {
+              Get.put(LineItemController());
+              Get.to(()=> JobsHome(controller.jobModels[index]));
+            },
             onPressedLeft: () {},
             onPressedRight: () {},
           );

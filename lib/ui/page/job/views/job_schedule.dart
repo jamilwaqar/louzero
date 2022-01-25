@@ -15,22 +15,6 @@ class JobSchedule extends GetWidget<JobController> {
 
   final JobModel jobModel;
   late final List<ScheduleModel> _scheduleModels = jobModel.scheduleModels;
-  // late List schedules = [
-  //   {
-  //     "id": 1,
-  //     "personnel": {
-  //       "name": "Personnel Name",
-  //       "image": "https://semantic-ui.com/images/avatar/large/elliot.jpg",
-  //     },
-  //     "hoursToComplete": 2,
-  //     "note": "These are a few additional details about what needs to be done today. ",
-  //     "date": "2022-01-04 00:00:00.000Z",
-  //     "startTime": "1:33 PM",
-  //     "endTime": "2:33 PM",
-  //     "isAnytime": false,
-  //     "isCompleted": false
-  //   }
-  // ];
   final _isAddScheduleOpen = false.obs;
 
   @override
