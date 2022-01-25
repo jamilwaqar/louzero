@@ -4,6 +4,7 @@ import 'package:louzero/common/app_pop_menu.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/common.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/views/widget/add_schedule_dialog.dart';
 import 'package:louzero/ui/widget/switch_button.dart';
@@ -11,7 +12,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
-class ScheduleCard extends StatelessWidget {
+class ScheduleCard extends GetWidget<JobController> {
   ScheduleCard({
     Key? key,
     required this.jobModel,
@@ -20,8 +21,7 @@ class ScheduleCard extends StatelessWidget {
   final JobModel jobModel;
   final ScheduleModel schedule;
 
-  late final isComplete = schedule.complete.obs;
-  final showScheduleDialog = false.obs;
+  final _showScheduleDialog = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ScheduleCard extends StatelessWidget {
     final monthName = DateFormat.MMM().format(parseDate);
     final day = DateFormat.d().format(parseDate);
 
-    return Obx(()=> Column(
+    return GetBuilder<JobController>(builder: (_)=> Column(
       children: [
         Container(
             margin: const EdgeInsets.only(top: 8, bottom: 8),
@@ -87,7 +87,6 @@ class ScheduleCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
-                                    flex: 5,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,39 +112,36 @@ class ScheduleCard extends StatelessWidget {
                                         ),
                                       ],
                                     ),),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Align(
-                                        alignment: Alignment.topRight,
-                                        child: AppPopMenu(
-                                          button: const [
-                                            SizedBox(
-                                              child: Icon(Icons.more_vert, color: AppColors.secondary_60),
-                                            ),
-                                          ],
-                                          items: [
-                                            PopMenuItem(
-                                              label: 'Edit Appointment',
-                                              icon: MdiIcons.pencil,
-                                              onTap: () {
-                                                showScheduleDialog.value = true;
-                                              },
-                                            ),
-                                            PopMenuItem(
-                                              label: 'Manage Notes',
-                                              icon: MdiIcons.fileDocumentOutline,
-                                              onTap: () {
-                                              },
-                                            ),
-                                            PopMenuItem(
-                                              label: 'Remove',
-                                              icon: MdiIcons.trashCanOutline,
-                                              onTap: () {
-                                              },
-                                            ),
-                                          ],
-                                        )
-                                    ),
+                                  AppPopMenu(
+                                    button: const [
+                                      SizedBox(
+                                        child: Icon(Icons.more_vert, color: AppColors.secondary_60),
+                                      ),
+                                    ],
+                                    items: [
+                                      PopMenuItem(
+                                        label: 'Edit Appointment',
+                                        icon: MdiIcons.pencil,
+                                        onTap: () {
+                                          _showScheduleDialog.value = true;
+                                          controller.update();
+                                        },
+                                      ),
+                                      PopMenuItem(
+                                        label: 'Manage Notes',
+                                        icon: MdiIcons.fileDocumentOutline,
+                                        onTap: () {
+                                        },
+                                      ),
+                                      PopMenuItem(
+                                        label: 'Remove',
+                                        icon: MdiIcons.trashCanOutline,
+                                        onTap: () {
+                                          jobModel.scheduleModels.removeWhere((e) => e.objectId == schedule.objectId);
+                                          controller.save(jobModel);
+                                        },
+                                      ),
+                                    ],
                                   )
                                 ],
                               ),
@@ -181,13 +177,14 @@ class ScheduleCard extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Obx(()=> NZSwitch(
-                                    isOn: isComplete.value,
+                                  NZSwitch(
+                                    isOn: schedule.complete,
                                     label: "Complete",
                                     onChanged: (bool value) {
-                                      isComplete.value = value;
+                                      schedule.complete = value;
+                                      controller.save(jobModel);
                                     },
-                                  ))
+                                  )
                                 ],
                               )
                             ],
@@ -198,12 +195,13 @@ class ScheduleCard extends StatelessWidget {
             )
         ),
         const SizedBox(height: 8,),
-        showScheduleDialog.value ?
+        _showScheduleDialog.value ?
         AddScheduleDialog(
           jobModel: jobModel,
           schedule: schedule,
           onClose: () {
-            showScheduleDialog.value = false;
+            _showScheduleDialog.value = false;
+            controller.update();
           },
         ) : const SizedBox(),
         const SizedBox(height: 8,),

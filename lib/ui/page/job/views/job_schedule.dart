@@ -15,27 +15,11 @@ class JobSchedule extends GetWidget<JobController> {
 
   final JobModel jobModel;
   late final List<ScheduleModel> _scheduleModels = jobModel.scheduleModels;
-  // late List schedules = [
-  //   {
-  //     "id": 1,
-  //     "personnel": {
-  //       "name": "Personnel Name",
-  //       "image": "https://semantic-ui.com/images/avatar/large/elliot.jpg",
-  //     },
-  //     "hoursToComplete": 2,
-  //     "note": "These are a few additional details about what needs to be done today. ",
-  //     "date": "2022-01-04 00:00:00.000Z",
-  //     "startTime": "1:33 PM",
-  //     "endTime": "2:33 PM",
-  //     "isAnytime": false,
-  //     "isCompleted": false
-  //   }
-  // ];
   final _isAddScheduleOpen = false.obs;
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=> AppTabPanel(
+    return GetBuilder<JobController>(builder: (_)=> AppTabPanel(
       children: [
         const Text('Schedule', style: AppStyles.headerRegular),
         if (_scheduleModels.isEmpty && !_isAddScheduleOpen.value)
@@ -54,6 +38,7 @@ class JobSchedule extends GetWidget<JobController> {
               jobModel: jobModel,
               onClose: () {
                 _isAddScheduleOpen.value = false;
+                controller.update();
               },
             )
         ),
@@ -66,11 +51,12 @@ class JobSchedule extends GetWidget<JobController> {
                 iconColor: AppColors.primary_1,
                 onPressed: () {
                   _isAddScheduleOpen.value = true;
+                  controller.update();
                 },
               ),
             )
         ),
-        const SizedBox(height: 32,),
+        const SizedBox(height: 32),
       ],
     ));
   }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/customer_models.dart';
-import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/common/common.dart';
@@ -16,56 +14,43 @@ import 'package:louzero/ui/page/job/views/job_schedule.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:collection/collection.dart';
 
-class JobsHome extends StatefulWidget {
-  const JobsHome(this.jobModel, {Key? key}) : super(key: key);
-  final JobModel jobModel;
-  @override
-  State<JobsHome> createState() => _JobsHomeState();
-}
+class JobsHome extends GetWidget<JobController> {
+  JobsHome({Key? key}) : super(key: key);
 
-class _JobsHomeState extends State<JobsHome> {
   final _baseController = Get.find<BaseController>();
-  final _lineItemController = Get.put(LineItemController());
-  final controller = Get.find<JobController>();
-  late final jobModel = widget.jobModel;
-  bool addLineVisible = false;
-  int inventoryIndex = 0;
-  bool miscLineItem = false;
+  late final _lineItemController = Get.find<LineItemController>()..lineItems.value = [
+    ... controller.jobModel!.billingLineModels
+  ];
 
-  @override
-  void initState() {
-    _lineItemController.lineItems.value = [
-      ...widget.jobModel.billingLineModels
-    ];
-    super.initState();
-  }
+  final _addLineVisible = false.obs;
+  final _inventoryIndex = 0.obs;
+  final _miscLineItem = false.obs;
 
   @override
   Widget build(BuildContext context) {
-    return AppBaseScaffold(
-      hasKeyboard: true,
-      child: GetBuilder<LineItemController>(
-        builder: (controller) {
-          return _body();
-        },
-      ),
-      subheader: jobModel.jobType,
-      footerEnd: [
-        AppPopMenu(
-          button: [
-            Buttons.appBar(
-              'Job Status: ${jobModel.status}',
-              icon: MdiIcons.calculator,
+    return GetBuilder<JobController>(
+      builder: (controller) {
+        return AppBaseScaffold(
+          hasKeyboard: true,
+          child: _body(),
+          subheader: controller.jobModel!.jobType,
+          footerEnd: [
+            AppPopMenu(
+              button: [
+                Buttons.appBar(
+                  'Job Status: ${controller.jobModel!.status}',
+                  icon: MdiIcons.calculator,
+                )
+              ],
+              items: const [
+                PopMenuItem(label: 'Scheduled', icon: MdiIcons.calendarBlank),
+                PopMenuItem(label: 'In Progress', icon: MdiIcons.progressClock)
+              ],
             )
           ],
-          items: const [
-            PopMenuItem(label: 'Scheduled', icon: MdiIcons.calendarBlank),
-            PopMenuItem(label: 'In Progress', icon: MdiIcons.progressClock)
-          ],
-        )
-      ],
+        );
+      },
     );
   }
 
@@ -94,7 +79,7 @@ class _JobsHomeState extends State<JobsHome> {
 
   Widget _body() {
     CustomerModel customerModel =
-        _baseController.customerModelById(widget.jobModel.customerId!)!;
+        _baseController.customerModelById(controller.jobModel!.customerId!)!;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
@@ -120,7 +105,7 @@ class _JobsHomeState extends State<JobsHome> {
         radius: 24,
         children: [
           _tabDetails(),
-          JobSchedule(widget.jobModel),
+          JobSchedule(controller.jobModel!),
           _tabBilling(),
         ],
         length: 3,
@@ -128,9 +113,8 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   Widget _tabDetails() {
-    JobModel jobModel = widget.jobModel;
     DateTime updatedAt =
-        jobModel.updatedAt != null ? jobModel.updatedAt! : jobModel.createdAt;
+        controller.jobModel!.updatedAt != null ? controller.jobModel!.updatedAt! : controller.jobModel!.createdAt;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
       child: Column(
@@ -146,7 +130,7 @@ class _JobsHomeState extends State<JobsHome> {
                     const Text('Job Description',
                         style: AppStyles.headerSmallCaps),
                     const SizedBox(height: 8),
-                    Text(widget.jobModel.description,
+                    Text(controller.jobModel!.description,
                         style: AppStyles.labelRegular),
                   ],
                 ),
@@ -157,7 +141,7 @@ class _JobsHomeState extends State<JobsHome> {
                 children: [
                   TextKeyVal(
                     "Job Id:",
-                    "#${widget.jobModel.jobId}",
+                    "#${controller.jobModel!.jobId}",
                     keyStyle: AppStyles.headerSmallCaps,
                     valStyle:
                         AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
@@ -165,7 +149,7 @@ class _JobsHomeState extends State<JobsHome> {
                   const SizedBox(height: 4),
                   TextKeyVal(
                     "Status:",
-                    widget.jobModel.status,
+                    controller.jobModel!.status,
                     keyStyle: AppStyles.headerSmallCaps,
                     valStyle:
                         AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
@@ -280,58 +264,55 @@ class _JobsHomeState extends State<JobsHome> {
   }
 
   Widget _tabBilling() {
-    return AppTabPanel(
-      children: [
-        const Text('Billing Line Items', style: AppStyles.headerRegular),
-        if (_lineItemController.lineItems.isEmpty && !addLineVisible)
-          const AppPlaceholder(
-            title: 'No Line Items',
-            subtitle: "Add new line to get started.",
-          ),
-        AppBillingLines(
-          data: _lineItemController.lineItems,
-          onDelete: (id) async {
-            dynamic response = await _lineItemController.deleteLineItemById(
-                id, widget.jobModel.objectId!);
-            if (response is String) {
-              WarningMessageDialog.showDialog(context, response);
-            }
-          },
-          onDuplicate: (id) {
-            _duplicateLineItem(id);
-          },
-          onEdit: (id) {
-            _editLineItem(id);
-          },
-          onReorder: _reorderLineItems,
-        ),
-        _addNewLine(),
-        _addItemButton(),
-        const AppDivider(),
-        FlexRow(
-          flex: const [12, 0, 7],
-          children: [
-            AppAddNote(
-                initialText: jobModel.note ?? '',
-                onChange: (value) {
-                  jobModel.note = value;
-                  controller.save(jobModel);
-                }),
-            const SizedBox(width: 1),
-            AppBillingTotal(
-              subtotal: _lineItemController.subTotal,
-              tax: 7.32,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _tabSchedule() {
-    return const AppTabPanel(children: [
-      Text('Job Schedule', style: AppStyles.headerRegular),
-    ]);
+    return GetBuilder<LineItemController>(
+        builder: (_) => AppTabPanel(
+              children: [
+                const Text('Billing Line Items',
+                    style: AppStyles.headerRegular),
+                if (_lineItemController.lineItems.isEmpty &&
+                    !_addLineVisible.value)
+                  const AppPlaceholder(
+                    title: 'No Line Items',
+                    subtitle: "Add new line to get started.",
+                  ),
+                AppBillingLines(
+                  data: _lineItemController.lineItems,
+                  onDelete: (id) async {
+                    dynamic response = await _lineItemController
+                        .deleteLineItemById(id, controller.jobModel!.objectId!);
+                    if (response is String) {
+                      WarningMessageDialog.showDialog(Get.context!, response);
+                    }
+                  },
+                  onDuplicate: (id) {
+                    _duplicateLineItem(id);
+                  },
+                  onEdit: (id) {
+                    _editLineItem(id);
+                  },
+                  onReorder: _reorderLineItems,
+                ),
+                _addNewLine(),
+                _addItemButton(),
+                const AppDivider(),
+                FlexRow(
+                  flex: const [12, 0, 7],
+                  children: [
+                    AppAddNote(
+                        initialText: controller.jobModel!.note ?? '',
+                        onChange: (value) {
+                          controller.jobModel!.note = value;
+                          controller.save(controller.jobModel!);
+                        }),
+                    const SizedBox(width: 1),
+                    AppBillingTotal(
+                      subtotal: _lineItemController.subTotal,
+                      tax: 7.32,
+                    ),
+                  ],
+                ),
+              ],
+            ));
   }
 
   Widget _addItemButton() {
@@ -347,44 +328,36 @@ class _JobsHomeState extends State<JobsHome> {
           label: 'Inventory Line',
           icon: MdiIcons.clipboardText,
           onTap: () {
-            setState(() {
-              miscLineItem = false;
-              addLineVisible = true;
-              inventoryIndex = 0;
-            });
+            _miscLineItem.value = false;
+            _addLineVisible.value = true;
+            _inventoryIndex.value = 0;
           },
         ),
         PopMenuItem(
             label: 'Misc. Billing Line',
             icon: MdiIcons.currencyUsd,
             onTap: () {
-              setState(() {
-                miscLineItem = true;
-                addLineVisible = true;
-              });
+              _miscLineItem.value = true;
+              _addLineVisible.value = true;
             }),
       ],
     );
   }
 
   Widget _addNewLine() {
-    return Visibility(
-      visible: addLineVisible,
+    return Obx(()=> Visibility(
+      visible: _addLineVisible.value,
       child: JobAddNewLine(
-        jobId: widget.jobModel.objectId!,
-        selectedIndex: inventoryIndex,
-        isTextInput: miscLineItem,
+        jobId: controller.jobModel!.objectId!,
+        selectedIndex: _inventoryIndex.value,
+        isTextInput: _miscLineItem.value,
         onCreate: () {
-          setState(() {
-            addLineVisible = false;
-          });
+          _addLineVisible.value = false;
         },
         onCancel: () {
-          setState(() {
-            addLineVisible = false;
-          });
+          _addLineVisible.value = false;
         },
       ),
-    );
+    ));
   }
 }
