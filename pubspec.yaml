@@ -47,6 +47,7 @@ dependencies:
   google_maps_flutter_web: ^0.3.2+1
   firebase_core: ^1.11.0
   firebase_messaging: ^11.2.5
+  font_awesome_flutter: ^9.2.0
 
 dev_dependencies:
   flutter_driver:

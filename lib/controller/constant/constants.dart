@@ -30,7 +30,7 @@ abstract class BLPath {
 }
 
 abstract class AppPlaceHolder {
-  static const String user = "";
+  static const String user = "icon-unknown";
   static const String customer = 'icon-unknown';
   static const String company = 'icon-company-logo';
 }

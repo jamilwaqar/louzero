@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class PopMenuItem {
   final String label;
   final IconData? icon;
   final VoidCallback? onTap;
+  final bool? hasDivider;
+  final bool? showIcon;
   const PopMenuItem({
     required this.label,
     this.icon,
+    this.hasDivider,
+    this.showIcon,
     this.onTap,
   });
 }
@@ -16,11 +21,13 @@ class AppPopMenu extends StatelessWidget {
   final List<PopMenuItem> items;
   final List<Widget> button;
   final Color colorIcon;
+  final Offset? offset;
   final Function(dynamic)? onSelected;
   const AppPopMenu({
     Key? key,
     this.items = const [],
     this.button = const [],
+    this.offset,
     this.colorIcon = AppColors.primary_60,
     this.onSelected,
   }) : super(key: key);
@@ -29,6 +36,7 @@ class AppPopMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
         onSelected: onSelected,
+        offset: offset ?? const Offset(0, 0),
         child: Row(children: [
           if (button.isEmpty) const Icon(Icons.more_vert),
           if (button.isNotEmpty) ...button
@@ -44,13 +52,15 @@ class AppPopMenu extends StatelessWidget {
   }
 
   PopupMenuItem popItem(String label,
-      {IconData icon = Icons.chevron_right, VoidCallback? onTap}) {
+      {IconData icon = Icons.chevron_right, VoidCallback? onTap, bool? hasDivider, bool? showIcon}) {
+    print('hasDivider $hasDivider');
     return PopupMenuItem(
         value: label,
         onTap: onTap,
         child: Row(
           children: [
-            Icon(icon, color: colorIcon),
+            hasDivider != null && hasDivider ? const Divider(thickness: 2, color: Colors.red,) : const SizedBox(),
+            showIcon != null && showIcon ? Icon(icon, color: colorIcon) : const SizedBox(),
             const SizedBox(width: 8),
             Text(label)
           ],
