@@ -3,16 +3,20 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/countries.dart';
 import 'package:flag/flag.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:collection/collection.dart';
 
 // MultiSelect Widget
 class AppCountryPicker extends StatefulWidget {
   final String label = 'Select Country';
   final double width = 400;
+  final String? defaultCountryCode;
   final void Function(List<CountryCode>)? onChange;
 
   const AppCountryPicker({
     Key? key,
     this.onChange,
+    this.defaultCountryCode,
   }) : super(key: key);
 
   @override
@@ -22,6 +26,20 @@ class AppCountryPicker extends StatefulWidget {
 class _AppCountryPickerState extends State<AppCountryPicker> {
   final List<CountryCode> selectedItems = [];
   final List<CountryCode> codes = CountryCodes.list;
+
+  @override
+  initState() {
+    super.initState();
+
+    if (widget.defaultCountryCode != null) {
+      CountryCode? _selected = codes.firstWhereOrNull((el) =>
+          el.code.toLowerCase() == widget.defaultCountryCode!.toLowerCase());
+
+      if (_selected != null) {
+        selectedItems.add(_selected);
+      }
+    }
+  }
 
   Future<void> openDialog() async {
     return showDialog<void>(
@@ -46,13 +64,15 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ...codes.map((item) {
-                      Flag _flag = Flag.fromString('eu');
+                      dynamic _flag;
                       if (Flag.flagsCode.contains(item.code.toLowerCase())) {
                         _flag = Flag.fromString(
                           item.code.toLowerCase(),
                           fit: BoxFit.cover,
-                          flagSize: FlagSize.size_4x3,
+                          flagSize: FlagSize.size_1x1,
                           borderRadius: 1,
+                          width: 32,
+                          height: 32,
                         );
                       }
 
@@ -60,9 +80,12 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                         isSelected: selectedItems.contains(item),
                         item: item,
                         iconFlag: Container(
-                          width: 48,
-                          height: 24,
-                          child: _flag,
+                          width: 32,
+                          height: 32,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(99),
+                            child: _flag,
+                          ),
                         ),
                         onSelectItem: (item) {
                           setState(() {
@@ -201,12 +224,14 @@ class SelectTile extends StatelessWidget {
   final IconData? iconSelected;
   final IconData? iconUnselected;
   final Widget? iconFlag;
+  final bool selected;
 
   const SelectTile({
     Key? key,
     required this.item,
     required this.isSelected,
     required this.onSelectItem,
+    this.selected = false,
     this.iconFlag,
     this.iconSelected = Icons.check_box_sharp,
     this.iconUnselected = Icons.check_box_outline_blank,
@@ -220,6 +245,9 @@ class SelectTile extends StatelessWidget {
           dense: true,
           contentPadding:
               const EdgeInsets.only(left: 32, right: 32, top: 0, bottom: 0),
+          trailing: isSelected
+              ? Icon(MdiIcons.checkBold, color: AppColors.primary_1)
+              : null,
           leading: iconFlag ??
               Icon(
                 isSelected ? iconSelected : iconUnselected,
@@ -227,7 +255,8 @@ class SelectTile extends StatelessWidget {
               ),
           title: Transform.translate(
             offset: const Offset(-16, 0),
-            child: Text(item.name, style: AppStyles.labelRegular),
+            child: Text(item.name,
+                style: AppStyles.labelBold.copyWith(fontSize: 16)),
           ),
           onTap: () => onSelectItem(item),
         ),

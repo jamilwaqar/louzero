@@ -203,19 +203,19 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   List<Widget> _addressWidget(bool isService) {
     return [
-      AppCountryPicker(),
+      AppCountryPicker(defaultCountryCode: 'us'),
       SizedBox(height: 48),
-      AppTextField(
-          controller:
-              isService ? _serviceCountryController : _billCountryController,
-          label: "Country",
-          enabled: false,
-          onTap: () => countryPicker(context, (country) {
-                _country = country;
-                setState(() {
-                  _serviceCountryController.text = country.name;
-                });
-              })),
+      // AppTextField(
+      //     controller:
+      //         isService ? _serviceCountryController : _billCountryController,
+      //     label: "Country",
+      //     enabled: false,
+      //     onTap: () => countryPicker(context, (country) {
+      //           _country = country;
+      //           setState(() {
+      //             _serviceCountryController.text = country.name;
+      //           });
+      //         })),
       FlexRow(
         children: [
           AppTextField(

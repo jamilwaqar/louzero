@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 
@@ -48,8 +47,8 @@ class AppAdvancedTextField extends StatefulWidget {
   final Function? onTap;
 
   _AppAdvancedTextFieldState createState() => _AppAdvancedTextFieldState();
-
 }
+
 class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
   final _textFieldFocus = FocusNode();
   Color _color = AppColors.secondary_99;
@@ -58,7 +57,7 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
 
   @override
   void initState() {
-    if(widget.controller != null) {
+    if (widget.controller != null) {
       setState(() {
         textController = widget.controller!;
       });
@@ -70,12 +69,11 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
           _color = Colors.transparent;
         });
       } else {
-        if(textController.text.isNotEmpty && isUnderlined == true) {
+        if (textController.text.isNotEmpty && isUnderlined == true) {
           setState(() {
             _color = Colors.transparent;
           });
-        }
-        else{
+        } else {
           setState(() {
             _color = AppColors.secondary_99;
           });
@@ -83,7 +81,7 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
       }
     });
 
-    if(textController.text.isNotEmpty && isUnderlined == true) {
+    if (textController.text.isNotEmpty && isUnderlined == true) {
       setState(() {
         _color = Colors.transparent;
       });
@@ -94,8 +92,9 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isTransparent =  (widget.controller!.text.isNotEmpty && isUnderlined == true);
-print('widget.leadingImage ${widget.leadingImage}');
+    final bool isTransparent =
+        (widget.controller!.text.isNotEmpty && isUnderlined == true);
+    print('widget.leadingImage ${widget.leadingImage}');
     return Stack(
       children: [
         TextField(
@@ -105,13 +104,15 @@ print('widget.leadingImage ${widget.leadingImage}');
           focusNode: _textFieldFocus,
           autofocus: widget.autofocus ?? false,
           controller: widget.controller!,
-          style: AppStyles.labelBold
-              .copyWith(height: 1.5, fontSize: 16, color: AppColors.secondary_20),
+          style: AppStyles.labelBold.copyWith(
+              height: 1.5, fontSize: 16, color: AppColors.secondary_20),
           minLines: 1,
-          onChanged: (value){widget.onTap != null ? widget.onChange!(value) : print('changed');},
+          onChanged: (value) {
+            widget.onTap != null ? widget.onChange!(value) : print('changed');
+          },
           maxLines: widget.multiline == null ? null : widget.maxLines,
           readOnly: widget.isDropdown == true,
-          onTap: (){
+          onTap: () {
             if (widget.isDropdown == true) {
               showDialog(
                   useRootNavigator: true,
@@ -120,8 +121,9 @@ print('widget.leadingImage ${widget.leadingImage}');
                   builder: (BuildContext context) {
                     return _OptionsDialog(
                         options: widget.items!,
-                        onChange: (value) {widget.onChange!(value);}
-                    );
+                        onChange: (value) {
+                          widget.onChange!(value);
+                        });
                   });
             } else {
               if (widget.onTap != null) {
@@ -135,16 +137,16 @@ print('widget.leadingImage ${widget.leadingImage}');
                 left: widget.leftPadding!,
                 right: widget.rightPadding!,
                 top: 10.0,
-                bottom: 10.0
-            ),
-            labelStyle:
-            const TextStyle(fontFamily: 'Lato', color: AppColors.secondary_40),
+                bottom: 10.0),
+            labelStyle: const TextStyle(
+                fontFamily: 'Lato', color: AppColors.secondary_40),
             fillColor: isTransparent ? Colors.transparent : _color,
             filled: true,
             labelText: widget.label,
             border: const UnderlineInputBorder(),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: isTransparent ? Colors.grey : Colors.transparent),
+              borderSide: BorderSide(
+                  color: isTransparent ? Colors.grey : Colors.transparent),
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
             focusedBorder: const UnderlineInputBorder(
@@ -153,72 +155,76 @@ print('widget.leadingImage ${widget.leadingImage}');
             ),
           ),
         ),
-        widget.leadingImage != null ?
-        Positioned(
-          left: 0.0,
-          top: 10.0,
-          child: AppAvatar(size: 40, url: widget.leadingImage, placeHolder: AppPlaceHolder.user),
-        ) : const SizedBox(),
+        widget.leadingImage != null
+            ? Positioned(
+                left: 0.0,
+                top: 10.0,
+                child: AppAvatar(
+                    size: 40,
+                    url: widget.leadingImage,
+                    placeHolder: AppPlaceHolder.user),
+              )
+            : const SizedBox(),
         widget.isDropdown == true
             ? const Positioned(
-          right: 10.0,
-          top: 15.0,
-          child: SizedBox(
-            height: 40.0,
-            width: 40.0,
-            child: Icon(
-              Icons.arrow_drop_down,
-              color: AppColors.secondary_40,
-            ),
-          ),
-        )
+                right: 10.0,
+                top: 15.0,
+                child: SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: Icon(
+                    Icons.arrow_drop_down,
+                    color: AppColors.secondary_40,
+                  ),
+                ),
+              )
             : const SizedBox(),
         widget.leftIcon != null
             ? Positioned(
-          left: 0.0,
-          top: 15.0,
-          child: SizedBox(
-            height: 40.0,
-            width: 40.0,
-            child: Icon(
-              widget.leftIcon,
-              color: widget.leftIconColor ?? AppColors.secondary_40,
-            ),
-          ),
-        )
+                left: 0.0,
+                top: 15.0,
+                child: SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: Icon(
+                    widget.leftIcon,
+                    color: widget.leftIconColor ?? AppColors.secondary_40,
+                  ),
+                ),
+              )
             : const SizedBox(),
         widget.rightIcon != null
             ? Positioned(
-          right: 10.0,
-          top: 12.0,
-          child: SizedBox(
-            height: 40.0,
-            width: 40.0,
-            child: Icon(
-              widget.rightIcon,
-              color: widget.rightIconColor ?? AppColors.secondary_40,
-            ),
-          ),
-        )
+                right: 10.0,
+                top: 12.0,
+                child: SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: Icon(
+                    widget.rightIcon,
+                    color: widget.rightIconColor ?? AppColors.secondary_40,
+                  ),
+                ),
+              )
             : const SizedBox(),
         widget.showClearIcon == true
             ? Positioned(
-          right: 55.0,
-          top: 26.0,
-          child: CircleAvatar(
-            backgroundColor: AppColors.secondary_40,
-            radius: 10,
-            child: IconButton(
-              iconSize: 16,
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.clear),
-              color: Colors.white,
-              onPressed: () {
-                widget.onClear!();
-              },
-            ),
-          ),
-        )
+                right: 55.0,
+                top: 26.0,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.secondary_40,
+                  radius: 10,
+                  child: IconButton(
+                    iconSize: 16,
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(Icons.clear),
+                    color: Colors.white,
+                    onPressed: () {
+                      widget.onClear!();
+                    },
+                  ),
+                ),
+              )
             : const SizedBox(),
       ],
     );
@@ -237,7 +243,7 @@ class _OptionsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
         content: Container(
           padding: const EdgeInsets.all(16),
           width: 300.0,
