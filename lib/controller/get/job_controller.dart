@@ -60,6 +60,15 @@ class JobController extends GetxController {
     baseController.jobs = models;
   }
 
+  ScheduleModel? scheduleById(String id) {
+    if (jobModel == null) return null;
+    try {
+      return jobModel!.scheduleModels.firstWhere((e) => e.objectId == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
   int convertMilliseconds(String date, DateTime dateTime) {
     String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '').replaceAll(' ', '');
     List<String>ar = filter.split(':');

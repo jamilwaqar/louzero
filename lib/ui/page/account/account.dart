@@ -182,7 +182,6 @@ class MyAccountPage extends GetWidget<CompanyController> {
             return Container();
           });
 
-  // TODO: Don't remove this: Reactivate Dialog
   _showReactivateDialog() {
     String _start = 'To reactivate *Old Cancelled Company*, please email us ';
     String _link = 'help@evosus.com ';
@@ -191,52 +190,24 @@ class MyAccountPage extends GetWidget<CompanyController> {
     TextStyle _linkStyle = AppStyles.labelRegular
         .copyWith(height: 1.65, color: AppColors.primary_50);
 
-    Dialog errorDialog = Dialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24.0)), //this right here
-      child: Container(
-        width: 360.0,
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('Reactivate Company', style: AppStyles.headlineMedium),
-            SizedBox(height: 8),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(text: _start, style: _textStyle),
-                  TextSpan(text: _link, style: _linkStyle),
-                  TextSpan(text: _end, style: _textStyle)
-                ],
-                style: AppStyles.labelRegular.copyWith(height: 1.65),
-              ),
-            ),
-            const SizedBox(height: 24),
-            RowSplit(
-              right: Row(
-                children: [
-                  Buttons.text('Cancel', onPressed: () {
-                    Get.back();
-                  }),
-                  const SizedBox(width: 16),
-                  Buttons.primary('Got It', onPressed: () {
-                    Get.back();
-                  })
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-
-    // show the dialog
     showDialog(
       context: Get.context!,
       builder: (BuildContext context) {
-        return errorDialog;
+        return AppDialog(
+          title: 'Reactivate Company',
+          body: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(text: _start, style: _textStyle),
+                TextSpan(text: _link, style: _linkStyle),
+                TextSpan(text: _end, style: _textStyle)
+              ],
+              style: AppStyles.labelRegular.copyWith(height: 1.65),
+            ),
+          ),
+          okayLabel: 'Got it',
+          onTapOkay: () {},
+        );
       },
     );
   }
