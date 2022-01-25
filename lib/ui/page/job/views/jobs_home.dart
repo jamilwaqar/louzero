@@ -105,7 +105,7 @@ class JobsHome extends GetWidget<JobController> {
         radius: 24,
         children: [
           _tabDetails(),
-          JobSchedule(controller.jobModel!),
+          JobSchedule(),
           _tabBilling(),
         ],
         length: 3,
