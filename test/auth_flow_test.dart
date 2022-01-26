@@ -15,6 +15,11 @@ class MockBackendlessAuth extends Mock implements BackendlessUserService {
   }
 
   @override
+  Future<bool?>isValidLogin() {
+    return Future.value(true);
+  }
+
+  @override
   Future<BackendlessUser?>login(String email, String password, [bool stayLoggedIn = false]) {
     return Future.value(_mockUser);
   }
@@ -37,14 +42,14 @@ class MockBackendlessAuth extends Mock implements BackendlessUserService {
 
 
 void main() {
+
   final MockBackendlessAuth mockBackendlessAuth = MockBackendlessAuth();
+  Get.put(AuthController(mockBackendlessAuth));
   final AuthAPI auth = AuthAPI(auth: mockBackendlessAuth);
   const String email = "mark@gmail.com";
   const String password = "123456";
 
-  setUp(() {
-    Get.put(AuthController());
-  });
+  setUp(() {});
   tearDown(() {});
 
   test("completion occurs", () async {
@@ -67,7 +72,7 @@ void main() {
     expect(await auth.login(email, password), response);
   });
 
-  test("login as guest", () async {
+  test("login_test as guest", () async {
     final response = await mockBackendlessAuth.loginAsGuest();
     expect(await auth.loginGuest(), response);
   });

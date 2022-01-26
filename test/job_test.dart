@@ -23,9 +23,8 @@ class MockBackendlessData extends Mock implements IDataStore {
 }
 
 void main() {
-
   setUp(() {
-    Get.put(AuthController());
+    Get.put(AuthController(Backendless.userService));
     Get.put(BaseController());
     Get.put(JobController())
       .jobModel = _jobModel;

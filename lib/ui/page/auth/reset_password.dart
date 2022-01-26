@@ -92,7 +92,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   height: 14,
                 ),
                 AppTextHelpLink(
-                    label: 'Never mind, go back to ',
+                    label: 'Never mind, go back to',
                     linkText: 'Sign In',
                     onPressed: _onSignIn),
               ],
