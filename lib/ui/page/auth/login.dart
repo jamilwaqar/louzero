@@ -12,6 +12,7 @@ import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
+import 'package:louzero/controller/constant/validators.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
@@ -48,18 +49,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  bool _validEmail(String email) {
-    bool valid = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(email);
-    return valid;
-  }
-
-  bool _validPassword(String pass) {
-    bool valid = pass.length >= 6;
-    return valid;
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
@@ -92,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (val != null && val.isEmpty) {
                         return 'Email is required';
                       }
-                      if (_validEmail(val!)) {
+                      if (Valid.Email(val!)) {
                         return null;
                       } else {
                         return 'Enter Valid Email';
@@ -104,10 +93,10 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     label: 'Password',
                     validator: (val) {
-                      if (val != null && val.isEmpty) {
+                      if (Valid.isRequired(val)) {
                         return 'Password is required';
                       }
-                      if (_validPassword(val!)) {
+                      if (Valid.Password(val!)) {
                         return null;
                       } else {
                         return 'Password must be at least six characters';
@@ -135,11 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                   Buttons.primary('Sign In',
                       onPressed: _onSignIn, expanded: true),
                   const AppTextDivider(),
-                  AppButton(
-                      onPressed: _onGoogleSignIn,
-                      label: 'Sign In with Google',
-                      primary: false,
-                      wide: true),
+                  Buttons.outline('Sign In with Google',
+                      onPressed: _onGoogleSignIn, expanded: true),
                 ],
               ),
             ),
