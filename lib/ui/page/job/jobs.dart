@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_segment_item.dart';
 import 'package:louzero/common/app_segmented_control.dart';
+import 'package:louzero/common/app_simple_dropdown.dart';
+import 'package:louzero/common/app_simple_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/models.dart';
-import 'package:louzero/ui/widget/datatable.dart';
+import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
+import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../app_base_scaffold.dart';
@@ -22,10 +25,11 @@ class _JobListPageState extends State<JobListPage> {
   TextEditingController _searchText = TextEditingController();
   String _selectedType = "";
   String _selectedDuration = "";
+  bool isDetailsPopupVisible = false;
   List items = [
     {
       "id" : '8519',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Repair",
       "scheduled" : "1642696479",
@@ -33,7 +37,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8518',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Repair",
       "scheduled" : "",
@@ -41,7 +45,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8517',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Service",
       "scheduled" : "",
@@ -49,7 +53,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8516',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Repair",
       "scheduled" : "1642696479",
@@ -57,7 +61,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8515',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Pool Opening",
       "scheduled" : "1642696479",
@@ -65,7 +69,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8514',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Spa Opening",
       "scheduled" : "1642696479",
@@ -88,7 +92,7 @@ class _JobListPageState extends State<JobListPage> {
       List updatedItems = currentItems.where((i) {
         final searchText = text.toString().toLowerCase();
         return i['type'].toString().toLowerCase().contains(searchText) ||
-            i['name'].toString().toLowerCase().contains(searchText) ||
+            i['customer'].toString().toLowerCase().contains(searchText) ||
             i['address'].toString().toLowerCase().contains(searchText);
       }).toList();
       setState(() {
@@ -105,13 +109,26 @@ class _JobListPageState extends State<JobListPage> {
 
   void sortByType() {
     List currentItems = items;
-    List updatedItems = currentItems.where((i) => i['type'] == _selectedType).toList();
+    List updatedItems = currentItems.where((i) => i['type'].toString().toLowerCase() == _selectedType.toString().toLowerCase()).toList();
     setState(() {
-      tableItems = [...updatedItems];
+      if(_selectedType.isNotEmpty) {
+        tableItems = [...updatedItems];
+      }
+      else{
+        tableItems = [...items];
+      }
     });
   }
 
   void sortByDuration() {
+    print('_selectedDuration $_selectedDuration');
+    if(_selectedDuration.isEmpty) {
+      setState(() {
+        tableItems = items;
+      });
+      return;
+    }
+
     List currentItems = items;
     List updatedItems = [];
     DateTime now = DateTime.now();
@@ -183,9 +200,6 @@ class _JobListPageState extends State<JobListPage> {
   }
 
   void sortItems(category, isASC) {
-    if(category == "Customer") {
-      category = "name";
-    }
     List currentItems = tableItems;
     currentItems.sort((a, b) {
       return a[category.toString().toLowerCase()].compareTo(b[category.toString().toLowerCase()]);
@@ -198,262 +212,156 @@ class _JobListPageState extends State<JobListPage> {
       else{
         tableItems = currentItems;
       }
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      subheader: 'All Jobs (dev in progress)',
-      child: Container(
-        padding: const EdgeInsets.only(left: 32, right: 32),
-        child: Column(
-          children: [
-            const SizedBox(height: 32,),
-            AppSegmentedControl(
-              fromMax: true,
-              isStretch: true,
-              backgroundColor: AppColors.secondary_95,
-              children: const {
-                1: AppSegmentItem(
-                  text: 'Estimate (99)',
-                  icon: MdiIcons.calculator,
-                ),
-                2: AppSegmentItem(
-                  text: 'Booked (97)',
-                  icon: MdiIcons.calendar,
-                ),
-                3: AppSegmentItem(
-                  text: 'Invoiced',
-                  icon: MdiIcons.currencyUsd,
-                ),
-                4: AppSegmentItem(
-                  text: 'Canceled',
-                  icon: MdiIcons.cancel,
-                ),
-              },
-              onValueChanged: (int value) {
-                print(value);
-              },
-            ),
-            const SizedBox(height: 16,),
-            Row(
+      subheader: 'All Jobs',
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(left: 32, right: 32),
+            child: Column(
               children: [
-                SizedBox(
-                  width: 300,
-                  height: 35,
-                  child:  _searchBox(),
-                ),
-                const SizedBox(width: 16,),
-                AppPopMenu(
-                    offset: const Offset(0, 40),
-                    button: [
-                      AppButton(
-                        radius: 10,
-                        borderColor: AppColors.secondary_90,
-                        colorBg: Colors.transparent,
-                        colorText: AppColors.secondary_30,
-                        label: _selectedType.toString().isNotEmpty ? _selectedType :  "Job Type",
-                        isMenu: true,
-                      )
-                    ],
-                    items: [
-                      PopMenuItem(
-                        label: 'Repair',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedType = 'Repair';
-                          });
-                          sortByType();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'Service',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedType = 'Service';
-                          });
-                          sortByType();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'Pool Opening',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedType = 'Pool Opening';
-                          });
-                          sortByType();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'Spa Opening',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedType = 'Spa Opening';
-                          });
-                          sortByType();
-                        },
-                      ),
-                    ]
-                ),
-                const SizedBox(width: 8,),
-                AppPopMenu(
-                    offset: const Offset(0, 40),
-                    button: [
-                      AppButton(
-                        radius: 10,
-                        borderColor: AppColors.secondary_90,
-                        colorBg: Colors.transparent,
-                        colorText: AppColors.secondary_30,
-                        label: _selectedDuration.toString().isNotEmpty ? _selectedDuration : "Duration",
-                        isMenu: true,
-                      )
-                    ],
-                    items: [
-                      PopMenuItem(
-                        label: 'Yesterday',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedDuration = 'Yesterday';
-                          });
-                          sortByDuration();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'Today',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedDuration = 'Today';
-                          });
-                          sortByDuration();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'Tomorrow',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedDuration = 'Tomorrow';
-                          });
-                          sortByDuration();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'This Week',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedDuration = 'This Week';
-                          });
-                          sortByDuration();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'Next Week',
-                        showIcon: false,
-                        onTap: () {
-                          setState(() {
-                            _selectedDuration = 'Next Week';
-                          });
-                          sortByDuration();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'Not Scheduled',
-                        showIcon: false,
-                        hasDivider: true,
-                        onTap: () {
-                          setState(() {
-                            _selectedDuration = 'Not Scheduled';
-                          });
-                          sortByDuration();
-                        },
-                      ),
-                      PopMenuItem(
-                        label: 'Custom Range',
-                        showIcon: false,
-                        hasDivider: true,
-                        onTap: () {
-                          setState(() {
-                            _selectedDuration = 'Custom Range';
-                          });
-                          sortByDuration();
-                        },
-                      ),
-                    ]
-                ),
-                const SizedBox(width: 8,),
-                AppButton(
-                  radius: 10,
-                  borderColor: AppColors.secondary_90,
-                  colorBg: Colors.transparent,
-                  colorText: AppColors.secondary_30,
-                  label: "Reset",
-                  onPressed: () {
-                    setState(() {
-                      tableItems = items;
-                      _selectedType = "";
-                      _selectedDuration = "";
-                      _searchText.text = "";
-                    });
+                const SizedBox(height: 32,),
+                AppSegmentedControl(
+                  fromMax: true,
+                  isStretch: true,
+                  backgroundColor: AppColors.secondary_95,
+                  children: const {
+                    1: AppSegmentItem(
+                      text: 'Estimate (99)',
+                      icon: MdiIcons.calculator,
+                    ),
+                    2: AppSegmentItem(
+                      text: 'Booked (97)',
+                      icon: MdiIcons.calendar,
+                    ),
+                    3: AppSegmentItem(
+                      text: 'Invoiced',
+                      icon: MdiIcons.currencyUsd,
+                    ),
+                    4: AppSegmentItem(
+                      text: 'Canceled',
+                      icon: MdiIcons.cancel,
+                    ),
                   },
+                  onValueChanged: (int value) {
+                    print(value);
+                  },
+                ),
+                const SizedBox(height: 16,),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 300,
+                      height: 35,
+                      child:  _searchBox(),
+                    ),
+                    const SizedBox(width: 16,),
+                    AppSimpleDropDown(
+                        label: "Job Type",
+                        onSelected: (value) {
+                          print('select typed $value');
+                          setState(() {
+                            _selectedType = value;
+                          });
+                          sortByType();
+                        },
+                        items: const ['Repair', 'Service', 'Pool Opening', 'Spa Opening']
+                    ),
+                    const SizedBox(width: 8,),
+                    AppSimpleDropDown(
+                        label: "Duration",
+                        backgroundColor: Colors.white,
+                        onSelected: (value) {
+                          setState(() {
+                            _selectedDuration = value;
+                          });
+                          sortByDuration();
+                        },
+                        dividerPosition: const [4, 5],
+                        items: const ['Yesterday', 'Today', 'Tomorrow', 'This Week', 'Next Week', 'Custom Range']
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24,),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: const [
+                          Text('Booked Jobs ', style: TextStyle(
+                            fontFamily: 'Barlow',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.secondary_20,
+                          )),
+                          Text('(97)', style: TextStyle(
+                            fontFamily: 'Barlow',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.secondary_50,
+                          ),)
+                        ],
+                      ),
+                      Row(
+                        children: const [
+                          Text('Total: ', style: TextStyle(
+                            fontFamily: 'Barlow',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.secondary_20,
+                          )),
+                          Text('\$78,302.00', style: TextStyle(
+                            fontFamily: 'Barlow',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.secondary_50,
+                          ))
+                        ],
+                      ),
+                    ]
+                ),
+                const AppDivider(),
+                const SizedBox(height: 8,),
+                JobDataTable(
+                    items: tableItems, //replace items with jobmodels from controller
+                    models: Get.find<JobController>().jobModels, //this is temporary will be removed later
+                    onSortTap: (category, isAsc) {
+                      sortItems(category, isAsc);
+                    },
+                    onMoreButtonTap: () {
+                      setState(() {
+                        isDetailsPopupVisible = true;
+                      });
+                    }
                 )
               ],
             ),
-            const SizedBox(height: 24,),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: const [
-                      Text('Booked Jobs ', style: TextStyle(
-                        fontFamily: 'Barlow',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.secondary_20,
-                      )),
-                      Text('(97)', style: TextStyle(
-                        fontFamily: 'Barlow',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.secondary_50,
-                      ),)
-                    ],
-                  ),
-                  Row(
-                    children: const [
-                      Text('Total: ', style: TextStyle(
-                        fontFamily: 'Barlow',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.secondary_20,
-                      )),
-                      Text('\$78,302.00', style: TextStyle(
-                        fontFamily: 'Barlow',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.secondary_50,
-                      ))
-                    ],
-                  ),
-                ]
-            ),
-            AppDivider(),
-            const SizedBox(height: 8,),
-            JobTableBody(tableItems: tableItems,)
-          ],
-        ),
+          ),
+          isDetailsPopupVisible ?
+          Positioned(
+              height: MediaQuery.of(context).size.height - 210,
+              width: 370,
+              right: 20,
+              top: 20,
+              child: JobDetailsPopup(
+                onPopupClose: () {
+                  setState(() {
+                    isDetailsPopupVisible = false;
+                  });
+                },
+              )
+          )
+              :
+          const SizedBox()
+        ],
       ),
     );
   }
-
 
   Widget _searchBox() {
     return Stack(
@@ -469,10 +377,15 @@ class _JobListPageState extends State<JobListPage> {
             focusColor: Colors.orange,
             contentPadding: const EdgeInsets.only(top: 0.0, bottom: 0, left: 8.0),
             focusedBorder:OutlineInputBorder(
-              borderSide: const BorderSide(color: AppColors.orange, width: 1.0),
+              borderSide: const BorderSide(color: AppColors.secondary_90, width: 1.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: AppColors.secondary_90, width: 1.0),
               borderRadius: BorderRadius.circular(10.0),
             ),
             border: OutlineInputBorder(
+                borderSide: const BorderSide(color: AppColors.secondary_90, width: 1.0),
                 borderRadius: BorderRadius.circular(10.0)
             ),
           ),
@@ -483,43 +396,6 @@ class _JobListPageState extends State<JobListPage> {
             child: Icon(Icons.search)
         )
       ],
-    );
-  }
-}
-
-class DropDownMenu extends StatelessWidget {
-  const DropDownMenu({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-      offset: const Offset(0, 40),
-      onSelected: (result) { },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-        const PopupMenuItem(
-          value: 1,
-          child: Text('Working a lot harder'),
-        ),
-      ],
-    );
-  }
-
-}
-
-class JobTableBody extends GetWidget<JobController> {
-  const JobTableBody({required this.tableItems, Key? key}) : super(key: key);
-  final List tableItems;
-
-  @override
-  Widget build(BuildContext context) {
-
-    print(controller.jobModels);
-    return LZDataTable(
-      items: tableItems,
-      models: controller.jobModels, //this is temporary will be removed later
-      onSortTap: (category, isAsc) {
-        // sortItems(category, isAsc);
-      },
     );
   }
 }
