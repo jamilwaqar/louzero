@@ -10,6 +10,7 @@ import 'package:louzero/common/app_text_divider.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
 import 'package:louzero/common/app_text_link.dart';
+import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
@@ -29,12 +30,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final formGlobalKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     if (kDebugMode) {
-      _emailController.text = "josh.webdev@gmail.com";
-      _passwordController.text = "!1QAwsEDrf";
+      // _emailController.text = "josh.webdev@gmail.com";
+      // _passwordController.text = "!1QAwsEDrf";
     }
     super.initState();
   }
@@ -44,6 +46,18 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  bool _validEmail(String email) {
+    bool valid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+    return valid;
+  }
+
+  bool _validPassword(String pass) {
+    bool valid = pass.length >= 6;
+    return valid;
   }
 
   @override
@@ -56,51 +70,78 @@ class _LoginPageState extends State<LoginPage> {
             height: 128,
           ),
           AppCardCenter(
-            child: Column(
-              children: [
-                const AppTextHeader('Sign in to LOUzero'),
-                AppTextHelpLink(
-                  label: 'New to LOUzero? ',
-                  linkText: 'Create an Account',
-                  onPressed: _onCreateAccount,
-                ),
-                AppInputText(
-                  mt: 40,
-                  controller: _emailController,
-                  label: 'Email Address',
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                AppInputText(
-                  controller: _passwordController,
-                  label: 'Password',
-                  password: true,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AppTextLink(
-                      "Remember this device",
-                      onPressed: _onRememberDevice,
-                    ),
-                    AppTextLink(
-                      "Forgot Password?",
-                      fontWeight: FontWeight.w600,
-                      textDecoration: TextDecoration.underline,
-                      onPressed: _onResetPassword,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 22,
-                ),
-                AppButton(onPressed: _onSignIn, label: 'Sign In', wide: true),
-                const AppTextDivider(),
-                AppButton(
-                    onPressed: _onGoogleSignIn,
-                    label: 'Sign In with Google',
-                    primary: false,
-                    wide: true),
-              ],
+            child: Form(
+              key: formGlobalKey,
+              child: Column(
+                children: [
+                  const AppTextHeader('Sign in to LOUzero'),
+                  AppTextHelpLink(
+                    label: 'New to LOUzero? ',
+                    linkText: 'Create an Account',
+                    onPressed: _onCreateAccount,
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  AppTextField(
+                    required: true,
+                    controller: _emailController,
+                    label: 'Email Address',
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (val) {
+                      if (val != null && val.isEmpty) {
+                        return 'Email is required';
+                      }
+                      if (_validEmail(val!)) {
+                        return null;
+                      } else {
+                        return 'Enter Valid Email';
+                      }
+                    },
+                  ),
+                  AppTextField(
+                    password: true,
+                    controller: _passwordController,
+                    label: 'Password',
+                    validator: (val) {
+                      if (val != null && val.isEmpty) {
+                        return 'Password is required';
+                      }
+                      if (_validPassword(val!)) {
+                        return null;
+                      } else {
+                        return 'Password must be at least six characters';
+                      }
+                    },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppTextLink(
+                        "Remember this device",
+                        onPressed: _onRememberDevice,
+                      ),
+                      AppTextLink(
+                        "Forgot Password?",
+                        fontWeight: FontWeight.w600,
+                        textDecoration: TextDecoration.underline,
+                        onPressed: _onResetPassword,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 22,
+                  ),
+                  Buttons.primary('Sign In',
+                      onPressed: _onSignIn, expanded: true),
+                  const AppTextDivider(),
+                  AppButton(
+                      onPressed: _onGoogleSignIn,
+                      label: 'Sign In with Google',
+                      primary: false,
+                      wide: true),
+                ],
+              ),
             ),
           ),
           AppTextLink(
@@ -130,28 +171,30 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onCreateAccount() {
-    Get.to(()=> const SignUpPage());
+    Get.to(() => const SignUpPage());
   }
 
   void _onAcceptInvite() {
-    Get.to(()=> const AcceptInvitePage());
+    Get.to(() => const AcceptInvitePage());
   }
 
   void _onSignIn() async {
-    NavigationController().loading();
-    var res = await AuthAPI(auth: Backendless.userService)
-        .login(_emailController.text, _passwordController.text);
-    NavigationController().loading(isLoading: false);
-    if (res is String) {
-      WarningMessageDialog.showDialog(context, res);
-    } else {
-      Get.find<AuthController>().loggedIn.value = true;
+    if (formGlobalKey.currentState!.validate()) {
+      NavigationController().loading();
+      var res = await AuthAPI(auth: Backendless.userService)
+          .login(_emailController.text, _passwordController.text);
+      NavigationController().loading(isLoading: false);
+      if (res is String) {
+        WarningMessageDialog.showDialog(context, res);
+      } else {
+        Get.find<AuthController>().loggedIn.value = true;
+      }
     }
   }
 
   void _onRememberDevice() {}
   void _onResetPassword() {
-    Get.to(()=> const ResetPasswordPage());
+    Get.to(() => const ResetPasswordPage());
   }
 
   void _onGoogleSignIn() {}
