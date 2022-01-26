@@ -7,9 +7,11 @@ import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
+import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/constant/validators.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/user_models.dart';
@@ -29,6 +31,7 @@ class AcceptInvitePage extends StatefulWidget {
 class _AcceptInvitePageState extends State<AcceptInvitePage> {
   bool _onEditing = true;
   final _emailController = TextEditingController();
+  final formGlobalKey = GlobalKey<FormState>();
   String? _code;
   InviteModel? _inviteModel;
   bool _noInviteModel = false;
@@ -52,50 +55,68 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AppCardCenter(
-            child: Column(
-              children: [
-                const AppTextHeader(
-                  'Accept Invitation',
-                ),
-                const AppTextBody(
-                  'Enter your email address and invitation code below.',
-                  mb: 40,
-                ),
-                AppInputText(
-                  key: const ValueKey('Email Address'),
-                  controller: _emailController,
-                  label: 'Email',
-                  keyboardType: TextInputType.emailAddress,
-                  autofocus: true,
-                ),
-                VerificationCode(
-                  textStyle: const TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.darkest,
+            child: Form(
+              key: formGlobalKey,
+              child: Column(
+                children: [
+                  const AppTextHeader(
+                    'Accept Invitation',
                   ),
-                  keyboardType: TextInputType.number,
-                  underlineColor: AppColors.darkest,
-                  fillColor: AppColors.darkest,
-                  length: 6,
-                  onCompleted: (String value) {
-                    setState(() {
-                      _code = value;
-                    });
-                  },
-                  onEditing: (bool value) {
-                    setState(() {
-                      _onEditing = value;
-                    });
-                    if (!_onEditing) FocusScope.of(context).unfocus();
-                  },
-                ),
-                const SizedBox(height: 40),
-                AppButton(
-                  label: 'Continue',
-                  onPressed: _acceptInvitation,
-                ),
-              ],
+                  const AppTextBody(
+                    'Enter your email address and invitation code below.',
+                    mb: 40,
+                  ),
+                  AppTextField(
+                    key: const ValueKey('Email Address'),
+                    controller: _emailController,
+                    label: 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                    autofocus: true,
+                    required: true,
+                    validator: (val) {
+                      if (val != null && val.isEmpty) {
+                        return 'Email is required';
+                      }
+                      if (Valid.Email(val!)) {
+                        return null;
+                      } else {
+                        return 'Enter Valid Email';
+                      }
+                    },
+                  ),
+                  VerificationCode(
+                    textStyle: const TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkest,
+                    ),
+                    keyboardType: TextInputType.number,
+                    underlineColor: AppColors.darkest,
+                    fillColor: AppColors.darkest,
+                    length: 6,
+                    onCompleted: (String value) {
+                      setState(() {
+                        _code = value;
+                      });
+                    },
+                    onEditing: (bool value) {
+                      setState(() {
+                        _onEditing = value;
+                      });
+                      if (!_onEditing) FocusScope.of(context).unfocus();
+                    },
+                  ),
+                  const SizedBox(height: 40),
+                  AppButton(
+                    label: 'Continue',
+                    onPressed: () {
+                      if (formGlobalKey.currentState!.validate()) {
+                        _acceptInvitation();
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           AppTextHelpLink(
@@ -110,6 +131,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
 
   void _acceptInvitation() async {
     String email = _emailController.text;
+
     if (!GetUtils.isEmail(email)) {
       WarningMessageDialog.showDialog(context, "Invalid Email!");
       return;
@@ -160,7 +182,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
     List<InviteModel> list = [];
     try {
       var response =
-      await Backendless.data.of(BLPath.invites).find(queryBuilder);
+          await Backendless.data.of(BLPath.invites).find(queryBuilder);
       if (response == null || response.isEmpty) {
         _noInviteModel = true;
         WarningMessageDialog.showDialog(context, "Something wrong!");

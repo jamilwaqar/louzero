@@ -6,12 +6,10 @@ class PopMenuItem {
   final String label;
   final IconData? icon;
   final VoidCallback? onTap;
-  final bool? hasDivider;
   final bool? showIcon;
   const PopMenuItem({
     required this.label,
     this.icon,
-    this.hasDivider,
     this.showIcon,
     this.onTap,
   });
@@ -52,15 +50,13 @@ class AppPopMenu extends StatelessWidget {
   }
 
   PopupMenuItem popItem(String label,
-      {IconData icon = Icons.chevron_right, VoidCallback? onTap, bool? hasDivider, bool? showIcon}) {
-    print('hasDivider $hasDivider');
+      {IconData icon = Icons.chevron_right, VoidCallback? onTap, bool? showIcon}) {
     return PopupMenuItem(
         value: label,
         onTap: onTap,
         child: Row(
           children: [
-            hasDivider != null && hasDivider ? const Divider(thickness: 2, color: Colors.red,) : const SizedBox(),
-            showIcon != null && showIcon ? Icon(icon, color: colorIcon) : const SizedBox(),
+            Icon(icon, color: colorIcon),
             const SizedBox(width: 8),
             Text(label)
           ],

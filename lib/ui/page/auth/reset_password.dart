@@ -8,7 +8,9 @@ import 'package:louzero/common/app_input_text.dart';
 import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/common/app_text_header.dart';
 import 'package:louzero/common/app_text_help_link.dart';
+import 'package:louzero/common/app_textfield.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
+import 'package:louzero/controller/constant/validators.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 
@@ -21,11 +23,12 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final _emailController = TextEditingController();
+  final formGlobalKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     if (kDebugMode) {
-      _emailController.text = "mark.austen@singlemindconsulting.com";
+      // _emailController.text = "mark.austen@singlemindconsulting.com";
     }
     super.initState();
   }
@@ -45,35 +48,55 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       logoOnly: true,
       child: Center(
         child: AppCardCenter(
-          child: Column(
-            children: [
-              const AppTextHeader(
-                title,
-              ),
-              const AppTextBody(
-                body,
-                px: 24,
-                mb: 32,
-              ),
-              AppInputText(
-                key: const ValueKey('Email Address'),
-                controller: _emailController,
-                label: "Your Email",
-                keyboardType: TextInputType.emailAddress,
-              ),
-              AppButton(
-                label: 'Email Reset Instructions',
-                onPressed: _onResetPassword,
-                wide: true,
-              ),
-              const SizedBox(
-                height: 14,
-              ),
-              AppTextHelpLink(
-                  label: 'Never mind, go back to',
-                  linkText: 'Sign In',
-                  onPressed: _onSignIn),
-            ],
+          child: Form(
+            key: formGlobalKey,
+            child: Column(
+              children: [
+                const AppTextHeader(
+                  title,
+                ),
+                const AppTextBody(
+                  body,
+                  px: 24,
+                  mb: 32,
+                ),
+                AppTextField(
+                  controller: _emailController,
+                  key: const ValueKey('Email Address'),
+                  label: "Email",
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (val) {
+                    if (val != null && val.isEmpty) {
+                      return 'Email is required';
+                    }
+                    if (Valid.Email(val!)) {
+                      return null;
+                    } else {
+                      return 'Enter Valid Email';
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                Buttons.submit(
+                  'Email Reset Instructions',
+                  onPressed: () {
+                    if (formGlobalKey.currentState!.validate()) {
+                      _onResetPassword();
+                    }
+                  },
+                  expanded: true,
+                ),
+                const SizedBox(
+                  height: 14,
+                ),
+                AppTextHelpLink(
+                    label: 'Never mind, go back to ',
+                    linkText: 'Sign In',
+                    onPressed: _onSignIn),
+              ],
+            ),
           ),
         ),
       ),

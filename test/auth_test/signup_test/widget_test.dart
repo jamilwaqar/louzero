@@ -13,7 +13,7 @@ void main() {
     expect(find.text('Already using LOUzero?'), findsOneWidget);
     expect(find.text('Sign Up with Google'), findsOneWidget);
     expect(find.text('Enter your email to create a new account'), findsOneWidget);
-    expect(find.text('Your Email'), findsOneWidget);
+    expect(find.text('Email'), findsOneWidget);
     expect(find.text('Continue'), findsOneWidget);
     expect(find.text('HAVE AN INVITATION CODE?'), findsOneWidget);
   });

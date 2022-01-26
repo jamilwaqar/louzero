@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_simple_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/customer_models.dart';
@@ -246,6 +247,9 @@ class Demo extends StatelessWidget {
           Buttons.text('Cancel', expanded: true),
           Buttons.primary('Update Account', expanded: true),
         ],
+      ),
+      AppSimpleDropDown(
+          label: 'Duration', onSelected: (value){print('valued $value');}, items: ['biodiesel sustainable', 'Two', 'Three'], dividerPosition: [1]
       )
     ]);
   }
