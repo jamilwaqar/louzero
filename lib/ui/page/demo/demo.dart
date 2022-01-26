@@ -42,7 +42,7 @@ class Demo extends StatelessWidget {
 
   // MOCK DATA (TABS)
   final List<Widget> tabItems = [
-    AppTabPanel(
+    Column(
       children: [
         const AppTextHeader('Basic Info',
             alignLeft: true, icon: Icons.airplane_ticket, size: 24),
@@ -89,10 +89,10 @@ class Demo extends StatelessWidget {
         )
       ],
     ),
-    const AppTabPanel(
+    Column(
       children: [Icon(Icons.location_pin, size: 150, color: AppColors.orange)],
     ),
-    const AppTabPanel(
+    Column(
       children: [Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)],
     ),
   ];
@@ -385,12 +385,12 @@ class Demo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-    Text(label.toUpperCase(),
-        style: AppStyles.headerRegular.copyWith(
-            color: AppColors.secondary_30,
-            fontSize: 24,
-            letterSpacing: .5)),
-    const AppDivider(mt: 16, mb: 24)
+        Text(label.toUpperCase(),
+            style: AppStyles.headerRegular.copyWith(
+                color: AppColors.secondary_30,
+                fontSize: 24,
+                letterSpacing: .5)),
+        const AppDivider(mt: 16, mb: 24)
       ],
     );
   }
