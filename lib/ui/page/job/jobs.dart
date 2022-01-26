@@ -121,6 +121,14 @@ class _JobListPageState extends State<JobListPage> {
   }
 
   void sortByDuration() {
+    print('_selectedDuration $_selectedDuration');
+    if(_selectedDuration.isEmpty) {
+      setState(() {
+        tableItems = items;
+      });
+      return;
+    }
+
     List currentItems = items;
     List updatedItems = [];
     DateTime now = DateTime.now();
@@ -270,7 +278,7 @@ class _JobListPageState extends State<JobListPage> {
                         backgroundColor: Colors.white,
                         onSelected: (value) {
                           setState(() {
-                            _selectedDuration = 'Yesterday';
+                            _selectedDuration = value;
                           });
                           sortByDuration();
                         },
