@@ -13,25 +13,25 @@ import 'package:get/get.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
 
-class LZDataTable extends StatefulWidget{
-  const LZDataTable({
+class JobDataTable extends StatefulWidget{
+  const JobDataTable({
     Key? key,
     required this.items,
     required this.onSortTap,
     required this.models,
-    this.onRowActionTap
+    this.onMoreButtonTap
   }) : super(key: key);
 
   final List items;
-  final List models;
+  final List<JobModel> models;
   final Function onSortTap;
-  final Function? onRowActionTap;
+  final Function? onMoreButtonTap;
 
   @override
-  _LZDataTable createState() => _LZDataTable();
+  _JobDataTable createState() => _JobDataTable();
 }
 
-class _LZDataTable extends State<LZDataTable> {
+class _JobDataTable extends State<JobDataTable> {
   bool isASC = true;
   String category = "id";
   final colors = {
@@ -48,7 +48,6 @@ class _LZDataTable extends State<LZDataTable> {
 
   @override
   Widget build(BuildContext context) {
-    print('items $widget.items');
     return SizedBox(
       child: Stack(
         children: [
@@ -225,7 +224,7 @@ class _LZDataTable extends State<LZDataTable> {
                             colorBg: Colors.transparent,
                             onTap: () {
                               Get.find<JobController>().jobModel = widget.models[0];
-                              widget.onRowActionTap!();
+                              widget.onMoreButtonTap!();
                             }
                         ),
                       ],

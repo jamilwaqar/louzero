@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_segment_item.dart';
 import 'package:louzero/common/app_segmented_control.dart';
+import 'package:louzero/common/app_simple_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/models.dart';
+import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
 import 'package:louzero/ui/widget/datatable.dart';
 import 'package:louzero/ui/widget/widget.dart';
@@ -107,9 +109,14 @@ class _JobListPageState extends State<JobListPage> {
 
   void sortByType() {
     List currentItems = items;
-    List updatedItems = currentItems.where((i) => i['type'] == _selectedType).toList();
+    List updatedItems = currentItems.where((i) => i['type'].toString().toLowerCase() == _selectedType.toString().toLowerCase()).toList();
     setState(() {
-      tableItems = [...updatedItems];
+      if(_selectedType.isNotEmpty) {
+        tableItems = [...updatedItems];
+      }
+      else{
+        tableItems = [...items];
+      }
     });
   }
 
@@ -200,14 +207,13 @@ class _JobListPageState extends State<JobListPage> {
       else{
         tableItems = currentItems;
       }
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      subheader: 'All Jobs (dev in progress)',
+      subheader: 'All Jobs',
       child: Stack(
         children: [
           Container(
@@ -250,165 +256,30 @@ class _JobListPageState extends State<JobListPage> {
                       child:  _searchBox(),
                     ),
                     const SizedBox(width: 16,),
-                    AppPopMenu(
-                        offset: const Offset(0, 40),
-                        button: [
-                          AppButton(
-                            radius: 10,
-                            borderColor: AppColors.secondary_90,
-                            colorBg: Colors.transparent,
-                            colorText: AppColors.secondary_30,
-                            label: _selectedType.toString().isNotEmpty ? _selectedType :  "Job Type",
-                            isMenu: true,
-                          )
-                        ],
-                        items: [
-                          PopMenuItem(
-                            label: 'Repair',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedType = 'Repair';
-                              });
-                              sortByType();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'Service',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedType = 'Service';
-                              });
-                              sortByType();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'Pool Opening',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedType = 'Pool Opening';
-                              });
-                              sortByType();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'Spa Opening',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedType = 'Spa Opening';
-                              });
-                              sortByType();
-                            },
-                          ),
-                        ]
+                    AppSimpleDropDown(
+                        label: "Job Type",
+                        onSelected: (value) {
+                          print('select typed $value');
+                          setState(() {
+                            _selectedType = value;
+                          });
+                          sortByType();
+                        },
+                        items: const ['Repair', 'Service', 'Pool Opening', 'Spa Opening']
                     ),
                     const SizedBox(width: 8,),
-                    AppPopMenu(
-                        offset: const Offset(0, 40),
-                        button: [
-                          AppButton(
-                            radius: 10,
-                            borderColor: AppColors.secondary_90,
-                            colorBg: Colors.transparent,
-                            colorText: AppColors.secondary_30,
-                            label: _selectedDuration.toString().isNotEmpty ? _selectedDuration : "Duration",
-                            isMenu: true,
-                          )
-                        ],
-                        items: [
-                          PopMenuItem(
-                            label: 'Yesterday',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedDuration = 'Yesterday';
-                              });
-                              sortByDuration();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'Today',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedDuration = 'Today';
-                              });
-                              sortByDuration();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'Tomorrow',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedDuration = 'Tomorrow';
-                              });
-                              sortByDuration();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'This Week',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedDuration = 'This Week';
-                              });
-                              sortByDuration();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'Next Week',
-                            showIcon: false,
-                            onTap: () {
-                              setState(() {
-                                _selectedDuration = 'Next Week';
-                              });
-                              sortByDuration();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'Not Scheduled',
-                            showIcon: false,
-                            hasDivider: true,
-                            onTap: () {
-                              setState(() {
-                                _selectedDuration = 'Not Scheduled';
-                              });
-                              sortByDuration();
-                            },
-                          ),
-                          PopMenuItem(
-                            label: 'Custom Range',
-                            showIcon: false,
-                            hasDivider: true,
-                            onTap: () {
-                              setState(() {
-                                _selectedDuration = 'Custom Range';
-                              });
-                              sortByDuration();
-                            },
-                          ),
-                        ]
+                    AppSimpleDropDown(
+                        label: "Duration",
+                        backgroundColor: Colors.white,
+                        onSelected: (value) {
+                          setState(() {
+                            _selectedDuration = 'Yesterday';
+                          });
+                          sortByDuration();
+                        },
+                        dividerPosition: const [4, 5],
+                        items: const ['Yesterday', 'Today', 'Tomorrow', 'This Week', 'Next Week', 'Custom Range']
                     ),
-                    const SizedBox(width: 8,),
-                    AppButton(
-                      radius: 10,
-                      borderColor: AppColors.secondary_90,
-                      colorBg: Colors.transparent,
-                      colorText: AppColors.secondary_30,
-                      label: "Reset",
-                      onPressed: () {
-                        setState(() {
-                          tableItems = items;
-                          _selectedType = "";
-                          _selectedDuration = "";
-                          _searchText.text = "";
-                        });
-                      },
-                    )
                   ],
                 ),
                 const SizedBox(height: 24,),
@@ -449,15 +320,19 @@ class _JobListPageState extends State<JobListPage> {
                       ),
                     ]
                 ),
-                AppDivider(),
+                const AppDivider(),
                 const SizedBox(height: 8,),
-                JobTableBody(
-                  tableItems: tableItems,
-                  onRowActionTap: () {
-                    setState(() {
-                      isDetailsPopupVisible = true;
-                    });
-                  },
+                JobDataTable(
+                    items: tableItems, //replace items with jobmodels from controller
+                    models: Get.find<JobController>().jobModels, //this is temporary will be removed later
+                    onSortTap: (category, isAsc) {
+                      // sortItems(category, isAsc);
+                    },
+                    onMoreButtonTap: () {
+                      setState(() {
+                        isDetailsPopupVisible = true;
+                      });
+                    }
                 )
               ],
             ),
@@ -477,12 +352,11 @@ class _JobListPageState extends State<JobListPage> {
               )
           )
               :
-              SizedBox()
+          const SizedBox()
         ],
       ),
     );
   }
-
 
   Widget _searchBox() {
     return Stack(
@@ -498,10 +372,15 @@ class _JobListPageState extends State<JobListPage> {
             focusColor: Colors.orange,
             contentPadding: const EdgeInsets.only(top: 0.0, bottom: 0, left: 8.0),
             focusedBorder:OutlineInputBorder(
-              borderSide: const BorderSide(color: AppColors.orange, width: 1.0),
+              borderSide: const BorderSide(color: AppColors.secondary_90, width: 1.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: AppColors.secondary_90, width: 1.0),
               borderRadius: BorderRadius.circular(10.0),
             ),
             border: OutlineInputBorder(
+                borderSide: const BorderSide(color: AppColors.secondary_90, width: 1.0),
                 borderRadius: BorderRadius.circular(10.0)
             ),
           ),
@@ -512,47 +391,6 @@ class _JobListPageState extends State<JobListPage> {
             child: Icon(Icons.search)
         )
       ],
-    );
-  }
-}
-
-class DropDownMenu extends StatelessWidget {
-  const DropDownMenu({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-      offset: const Offset(0, 40),
-      onSelected: (result) { },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-        const PopupMenuItem(
-          value: 1,
-          child: Text('Working a lot harder'),
-        ),
-      ],
-    );
-  }
-
-}
-
-class JobTableBody extends GetWidget<JobController> {
-  const JobTableBody({required this.tableItems, required this.onRowActionTap, Key? key}) : super(key: key);
-  final List tableItems;
-  final Function onRowActionTap;
-
-  @override
-  Widget build(BuildContext context) {
-
-    print(controller.jobModels);
-    return LZDataTable(
-      items: tableItems,
-      models: controller.jobModels, //this is temporary will be removed later
-      onSortTap: (category, isAsc) {
-        // sortItems(category, isAsc);
-      },
-      onRowActionTap: () {
-        onRowActionTap();
-      }
     );
   }
 }

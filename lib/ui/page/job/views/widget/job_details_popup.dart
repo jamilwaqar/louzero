@@ -31,7 +31,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
 
     return Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.secondary_100,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
