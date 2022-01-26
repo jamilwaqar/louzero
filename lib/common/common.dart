@@ -46,5 +46,6 @@ export 'app_text_header.dart';
 export 'app_text_help_link.dart';
 export 'app_text_link.dart';
 export 'app_textfield.dart';
+export 'app_dialog.dart';
 export 'transitions/transitions.dart';
 export 'utility/utility.dart';

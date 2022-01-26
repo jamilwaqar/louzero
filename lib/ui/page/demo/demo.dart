@@ -8,6 +8,7 @@ import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:get/get.dart';
 
 class Demo extends StatelessWidget {
   Demo({Key? key}) : super(key: key);
@@ -23,9 +24,11 @@ class Demo extends StatelessWidget {
               height: 48,
             ),
             _calendar(),
+            _tabsExample(),
             _segmentControls(),
             _timePicker(context),
             _addNote(),
+            _appConfirmDialog(),
             _contactCard(),
             _contactInfoLine(),
             _buttonStyles(),
@@ -40,62 +43,34 @@ class Demo extends StatelessWidget {
     );
   }
 
-  // MOCK DATA (TABS)
-  final List<Widget> tabItems = [
-    AppTabPanel(
-      children: [
-        const AppTextHeader('Basic Info',
-            alignLeft: true, icon: Icons.airplane_ticket, size: 24),
-        FlexRow(
-          flex: const [2, 2],
-          children: const [
-            AppTextField(
-              label: 'First',
-              initialValue: 'Brad',
-            ),
-            AppTextField(
-              label: 'Last',
-              initialValue: 'Smith',
-            ),
-            AppTextField(
-              label: 'Alias',
-              initialValue: 'The Closer',
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        FlexRow(
-          flex: const [2],
-          children: [
-            Column(
-              children: const [
-                AppTextBody(
-                  'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                  bold: true,
-                  mb: 16,
-                ),
-                AppTextBody(
-                  'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-                )
-              ],
-            ),
-            const AppTextBody(
-              'What if you want to call it from a stateless widget? Well, that’s possible too. Use a stateful widget as a your root widget that you can provide a callback function too to execute your startup logic. See example below.',
-              pl: 8,
-            ),
-          ],
-        )
-      ],
-    ),
-    const AppTabPanel(
-      children: [Icon(Icons.location_pin, size: 150, color: AppColors.orange)],
-    ),
-    const AppTabPanel(
-      children: [Icon(Icons.loupe_sharp, size: 150, color: AppColors.orange)],
-    ),
-  ];
+  Widget _tabsExample() {
+    return AppCardTabs(
+        mt: 0,
+        mb: 16,
+        mx: 24,
+        children: [
+          Container(
+            height: 200,
+            width: double.infinity,
+            color: Colors.blue,
+            child: Icon(MdiIcons.star, size: 90, color: Colors.white),
+          ),
+          Container(
+            height: 400,
+            width: double.infinity,
+            color: Colors.amber,
+            child: Icon(MdiIcons.star, size: 90, color: Colors.white),
+          ),
+          Container(
+            height: 300,
+            width: double.infinity,
+            color: Colors.purple,
+            child: Icon(MdiIcons.star, size: 90, color: Colors.white),
+          )
+        ],
+        length: 3,
+        tabNames: ['One', 'Two', 'Three']);
+  }
 
   Widget _buttonStyles() {
     return AppCard(
@@ -202,6 +177,27 @@ class Demo extends StatelessWidget {
         child: const AppAddNote(
           initialText: "Simple quick note widget.",
         ));
+  }
+
+  Widget _appConfirmDialog() {
+    return _demoCenterCard('Confirm Dialog Widget',
+        child: AppButton(label: 'Open Dialog', onPressed: () {
+          showDialog(
+            context: Get.context!,
+            builder: (BuildContext context) {
+              return AppDialog(
+                title: 'App Dialog',
+                body: const AppTextBody(
+                 'App Dialog'
+                ),
+                okayLabel: 'Got it',
+                onTapOkay: () {
+
+                },
+              );
+            },
+          );
+        },));
   }
 
   Widget _formTextInput() {
@@ -385,12 +381,12 @@ class Demo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-    Text(label.toUpperCase(),
-        style: AppStyles.headerRegular.copyWith(
-            color: AppColors.secondary_30,
-            fontSize: 24,
-            letterSpacing: .5)),
-    const AppDivider(mt: 16, mb: 24)
+        Text(label.toUpperCase(),
+            style: AppStyles.headerRegular.copyWith(
+                color: AppColors.secondary_30,
+                fontSize: 24,
+                letterSpacing: .5)),
+        const AppDivider(mt: 16, mb: 24)
       ],
     );
   }
