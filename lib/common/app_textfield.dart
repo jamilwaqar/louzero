@@ -12,6 +12,7 @@ class AppTextField extends StatefulWidget {
   final int maxLines;
   final bool multiline;
   final bool required;
+  final bool password;
   final bool enabled;
   final bool expands;
   final TextInputType keyboardType;
@@ -31,6 +32,7 @@ class AppTextField extends StatefulWidget {
     this.initialValue = '',
     this.height = 48,
     this.required = false,
+    this.password = false,
     this.keyboardType = TextInputType.text,
     this.validator,
     this.onChanged,
@@ -155,6 +157,7 @@ class _AppTextFieldState extends State<AppTextField> {
       validator: widget.validator,
       autovalidateMode: _validateMode,
       onSaved: widget.onSaved,
+      obscureText: widget.password,
       keyboardType:
           widget.multiline ? TextInputType.multiline : widget.keyboardType,
       onChanged: (val) {
