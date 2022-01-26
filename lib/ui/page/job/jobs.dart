@@ -10,7 +10,6 @@ import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
-import 'package:louzero/ui/widget/datatable.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../app_base_scaffold.dart';
@@ -30,7 +29,7 @@ class _JobListPageState extends State<JobListPage> {
   List items = [
     {
       "id" : '8519',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Repair",
       "scheduled" : "1642696479",
@@ -38,7 +37,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8518',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Repair",
       "scheduled" : "",
@@ -46,7 +45,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8517',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Service",
       "scheduled" : "",
@@ -54,7 +53,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8516',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Repair",
       "scheduled" : "1642696479",
@@ -62,7 +61,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8515',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Pool Opening",
       "scheduled" : "1642696479",
@@ -70,7 +69,7 @@ class _JobListPageState extends State<JobListPage> {
     },
     {
       "id" : '8514',
-      "name" : "Archwood House",
+      "customer" : "Archwood House",
       "address" : "3486 Archwood Ave., Vancouver, WA 98665",
       "type" : "Spa Opening",
       "scheduled" : "1642696479",
@@ -93,7 +92,7 @@ class _JobListPageState extends State<JobListPage> {
       List updatedItems = currentItems.where((i) {
         final searchText = text.toString().toLowerCase();
         return i['type'].toString().toLowerCase().contains(searchText) ||
-            i['name'].toString().toLowerCase().contains(searchText) ||
+            i['customer'].toString().toLowerCase().contains(searchText) ||
             i['address'].toString().toLowerCase().contains(searchText);
       }).toList();
       setState(() {
@@ -193,9 +192,6 @@ class _JobListPageState extends State<JobListPage> {
   }
 
   void sortItems(category, isASC) {
-    if(category == "Customer") {
-      category = "name";
-    }
     List currentItems = tableItems;
     currentItems.sort((a, b) {
       return a[category.toString().toLowerCase()].compareTo(b[category.toString().toLowerCase()]);
@@ -327,7 +323,7 @@ class _JobListPageState extends State<JobListPage> {
                     items: tableItems, //replace items with jobmodels from controller
                     models: Get.find<JobController>().jobModels, //this is temporary will be removed later
                     onSortTap: (category, isAsc) {
-                      // sortItems(category, isAsc);
+                      sortItems(category, isAsc);
                     },
                     onMoreButtonTap: () {
                       setState(() {

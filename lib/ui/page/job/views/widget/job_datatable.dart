@@ -94,13 +94,7 @@ class _JobDataTable extends State<JobDataTable> {
   }
 
   Widget _headerButtons(text) {
-    bool isActive = false;
-    if(text.toString().toLowerCase() == 'customer') {
-      isActive = category.toString().toLowerCase() == "name";
-    }
-    else{
-      isActive = category.toString().toLowerCase() == text.toString().toLowerCase();
-    }
+    bool isActive = category.toString().toLowerCase() == text.toString().toLowerCase();
 
 
     return GestureDetector(
@@ -192,7 +186,7 @@ class _JobDataTable extends State<JobDataTable> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(item['name'], style: AppStyles.labelBold,),
+                            Text(item['customer'], style: AppStyles.labelBold,),
                             const SizedBox(height: 8,),
                             Text(item['address'], style: const TextStyle(
                               fontFamily: 'Lato',
