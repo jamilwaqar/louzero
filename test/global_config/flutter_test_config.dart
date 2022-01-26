@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 
-const pixelRatio = 1.6;
+const pixelRatio = 2.0;
 const screenSize = Size(1620 * pixelRatio, 2160 * pixelRatio);
 
 Widget makeTestableWidget({required Widget child, required WidgetTester tester}) {

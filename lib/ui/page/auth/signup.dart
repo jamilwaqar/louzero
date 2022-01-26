@@ -28,13 +28,11 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
   @override
   void initState() {
     if (kDebugMode) {
       _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "louzerouser_123";
     }
     super.initState();
   }
@@ -42,7 +40,6 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -51,14 +48,16 @@ class _SignUpPageState extends State<SignUpPage> {
     return AppBaseScaffold(
       logoOnly: true,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AppCardCenter(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const AppTextHeader('Create Account'),
                 AppTextHelpLink(
-                    label: 'Already using LOUzero? ',
+                    label: 'Already using LOUzero?',
                     linkText: 'Sign In here',
                     onPressed: _onSignIn),
                 const SizedBox(
@@ -70,8 +69,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   primary: false,
                 ),
                 const AppTextDivider(),
-                const AppTextBody('Enter your email to create a new account '),
+                const AppTextBody('Enter your email to create a new account'),
                 AppInputText(
+                  key: const ValueKey('Email Address'),
                   mt: 16,
                   controller: _emailController,
                   label: 'Your Email',

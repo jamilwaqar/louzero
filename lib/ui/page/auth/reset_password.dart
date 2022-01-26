@@ -40,7 +40,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     const title = "Can't Login?";
     const body =
-        "Not to worry. Enter the email address you use to sign in to LOUzero below and we'll send you instructions on how to set a new password. ";
+        "Not to worry. Enter the email address you use to sign in to LOUzero below and we'll send you instructions on how to set a new password.";
     return AppBaseScaffold(
       logoOnly: true,
       child: Center(
@@ -56,6 +56,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 mb: 32,
               ),
               AppInputText(
+                key: const ValueKey('Email Address'),
                 controller: _emailController,
                 label: "Your Email",
                 keyboardType: TextInputType.emailAddress,
@@ -69,7 +70,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 height: 14,
               ),
               AppTextHelpLink(
-                  label: 'Never mind, go back to ',
+                  label: 'Never mind, go back to',
                   linkText: 'Sign In',
                   onPressed: _onSignIn),
             ],
