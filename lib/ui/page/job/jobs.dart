@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:louzero/common/app_segment_item.dart';
 import 'package:louzero/common/app_segmented_control.dart';
 import 'package:louzero/common/app_simple_dropdown.dart';
+import 'package:louzero/common/app_simple_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/job_controller.dart';
