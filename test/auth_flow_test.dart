@@ -1,6 +1,8 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:mockito/mockito.dart';
 
 class MockUser extends Mock implements BackendlessUser {}
@@ -40,7 +42,9 @@ void main() {
   const String email = "mark@gmail.com";
   const String password = "123456";
 
-  setUp(() {});
+  setUp(() {
+    Get.put(AuthController());
+  });
   tearDown(() {});
 
   test("completion occurs", () async {

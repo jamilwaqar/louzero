@@ -8,6 +8,7 @@ import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:get/get.dart';
 
 class Demo extends StatelessWidget {
   Demo({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class Demo extends StatelessWidget {
             _segmentControls(),
             _timePicker(context),
             _addNote(),
+            _appConfirmDialog(),
             _contactCard(),
             _contactInfoLine(),
             _buttonStyles(),
@@ -175,6 +177,27 @@ class Demo extends StatelessWidget {
         child: const AppAddNote(
           initialText: "Simple quick note widget.",
         ));
+  }
+
+  Widget _appConfirmDialog() {
+    return _demoCenterCard('Confirm Dialog Widget',
+        child: AppButton(label: 'Open Dialog', onPressed: () {
+          showDialog(
+            context: Get.context!,
+            builder: (BuildContext context) {
+              return AppDialog(
+                title: 'App Dialog',
+                body: const AppTextBody(
+                 'App Dialog'
+                ),
+                okayLabel: 'Got it',
+                onTapOkay: () {
+
+                },
+              );
+            },
+          );
+        },));
   }
 
   Widget _formTextInput() {
