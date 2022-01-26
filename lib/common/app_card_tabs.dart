@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'app_card.dart';
 
 class AppCardTabs extends StatefulWidget {
@@ -73,7 +70,10 @@ class _AppCardTabsState extends State<AppCardTabs> {
             }).toList(),
           ),
         ),
-        widget.children[_selectedTab]
+        Padding(
+          padding: EdgeInsets.only(top: 16, bottom: 24, left: 24, right: 24),
+          child: widget.children[_selectedTab],
+        )
       ]),
     );
   }
