@@ -11,18 +11,21 @@ import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
 
 class LZDataTable extends StatefulWidget{
   const LZDataTable({
     Key? key,
     required this.items,
     required this.onSortTap,
-    required this.models
+    required this.models,
+    this.onRowActionTap
   }) : super(key: key);
 
   final List items;
   final List models;
   final Function onSortTap;
+  final Function? onRowActionTap;
 
   @override
   _LZDataTable createState() => _LZDataTable();
@@ -37,6 +40,7 @@ class _LZDataTable extends State<LZDataTable> {
     "Pool Opening" : "C52B54",
     "Spa Opening" : "C52B54"
   };
+  bool isPopupVisible = false;
 
   void sortItems() {
     widget.onSortTap(category, isASC);
@@ -45,21 +49,24 @@ class _LZDataTable extends State<LZDataTable> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: Column(
+      child: Stack(
         children: [
-          _tableHeader(),
-          const SizedBox(height: 20,),
-          SizedBox(
-            child: Column(
-              children: [
-                for (var rowItem in widget.items)
-                  _tableRow(rowItem)
-              ],
-            ),
-          )
-
+          Column(
+            children: [
+              _tableHeader(),
+              const SizedBox(height: 20,),
+              SizedBox(
+                child: Column(
+                  children: [
+                    for (var rowItem in widget.items)
+                      _tableRow(rowItem)
+                  ],
+                ),
+              )
+            ],
+          ),
         ],
-      ),
+      )
     );
   }
 
@@ -211,14 +218,15 @@ class _LZDataTable extends State<LZDataTable> {
                           fontFamily: 'Lato',
                           fontSize: 14,
                         )),
-                        AppPopMenu(
-                            items: const [
-                              PopMenuItem(
-                                label: 'My Account',
-                                icon: Icons.person_rounded,
-                              ),
-                            ]
-                        )
+                        AppIconButton(
+                            icon: Icons.more_vert,
+                            iconSize: 25,
+                            colorBg: Colors.transparent,
+                            onTap: () {
+                              Get.find<JobController>().jobModel = widget.models[0];
+                              widget.onRowActionTap!();
+                            }
+                        ),
                       ],
                     ),
                   )
