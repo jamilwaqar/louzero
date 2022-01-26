@@ -19,9 +19,8 @@ class JobsHome extends GetWidget<JobController> {
   JobsHome({Key? key}) : super(key: key);
 
   final _baseController = Get.find<BaseController>();
-  late final _lineItemController = Get.find<LineItemController>()..lineItems.value = [
-    ... controller.jobModel!.billingLineModels
-  ];
+  late final _lineItemController = Get.find<LineItemController>()
+    ..lineItems.value = [...controller.jobModel!.billingLineModels];
 
   final _addLineVisible = false.obs;
   final _inventoryIndex = 0.obs;
@@ -101,7 +100,6 @@ class JobsHome extends GetWidget<JobController> {
 
   Widget _tabs() {
     return AppCardTabs(
-        height: 750,
         radius: 24,
         children: [
           _tabDetails(),
@@ -113,84 +111,82 @@ class JobsHome extends GetWidget<JobController> {
   }
 
   Widget _tabDetails() {
-    DateTime updatedAt =
-        controller.jobModel!.updatedAt != null ? controller.jobModel!.updatedAt! : controller.jobModel!.createdAt;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Job Description',
-                        style: AppStyles.headerSmallCaps),
-                    const SizedBox(height: 8),
-                    Text(controller.jobModel!.description,
-                        style: AppStyles.labelRegular),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 90),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+    DateTime updatedAt = controller.jobModel!.updatedAt != null
+        ? controller.jobModel!.updatedAt!
+        : controller.jobModel!.createdAt;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextKeyVal(
-                    "Job Id:",
-                    "#${controller.jobModel!.jobId}",
-                    keyStyle: AppStyles.headerSmallCaps,
-                    valStyle:
-                        AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
-                  ),
-                  const SizedBox(height: 4),
-                  TextKeyVal(
-                    "Status:",
-                    controller.jobModel!.status,
-                    keyStyle: AppStyles.headerSmallCaps,
-                    valStyle:
-                        AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
-                  ),
+                  const Text('Job Description',
+                      style: AppStyles.headerSmallCaps),
                   const SizedBox(height: 8),
-                  const Text('Last Updated', style: AppStyles.labelRegular),
-                  const SizedBox(height: 8),
-                  Text(updatedAt.simpleDate, style: AppStyles.bodyMedium),
-                  const SizedBox(height: 8),
-                  Text('by ${Get.find<AuthController>().user.fullName}',
+                  Text(controller.jobModel!.description,
                       style: AppStyles.labelRegular),
-                  const SizedBox(height: 16),
-                  AppButton(
-                      label: 'View Job History',
-                      colorBg: AppColors.secondary_99,
-                      colorText: AppColors.secondary_20,
-                      onPressed: () {}),
                 ],
               ),
-            ],
-          ),
-          const AppDivider(
-            color: AppColors.secondary_95,
-          ),
-          Row(
-            children: [
-              _categoryItem(
-                  'Pictures',
-                  'Keep track of location photos, job photos, and more.',
-                  'icon-camera',
-                  3),
-              const SizedBox(width: 24),
-              _categoryItem(
-                  'Checklists',
-                  'Check off items that need to be completed for this job.',
-                  'icon-checklists',
-                  3),
-            ],
-          )
-        ],
-      ),
+            ),
+            const SizedBox(width: 90),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TextKeyVal(
+                  "Job Id:",
+                  "#${controller.jobModel!.jobId}",
+                  keyStyle: AppStyles.headerSmallCaps,
+                  valStyle:
+                      AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
+                ),
+                const SizedBox(height: 4),
+                TextKeyVal(
+                  "Status:",
+                  controller.jobModel!.status,
+                  keyStyle: AppStyles.headerSmallCaps,
+                  valStyle:
+                      AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),
+                ),
+                const SizedBox(height: 8),
+                const Text('Last Updated', style: AppStyles.labelRegular),
+                const SizedBox(height: 8),
+                Text(updatedAt.simpleDate, style: AppStyles.bodyMedium),
+                const SizedBox(height: 8),
+                Text('by ${Get.find<AuthController>().user.fullName}',
+                    style: AppStyles.labelRegular),
+                const SizedBox(height: 16),
+                AppButton(
+                    label: 'View Job History',
+                    colorBg: AppColors.secondary_99,
+                    colorText: AppColors.secondary_20,
+                    onPressed: () {}),
+              ],
+            ),
+          ],
+        ),
+        const AppDivider(
+          color: AppColors.secondary_95,
+        ),
+        Row(
+          children: [
+            _categoryItem(
+                'Pictures',
+                'Keep track of location photos, job photos, and more.',
+                'icon-camera',
+                3),
+            const SizedBox(width: 24),
+            _categoryItem(
+                'Checklists',
+                'Check off items that need to be completed for this job.',
+                'icon-checklists',
+                3),
+          ],
+        )
+      ],
     );
   }
 
@@ -265,7 +261,8 @@ class JobsHome extends GetWidget<JobController> {
 
   Widget _tabBilling() {
     return GetBuilder<LineItemController>(
-        builder: (_) => AppTabPanel(
+        builder: (_) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('Billing Line Items',
                     style: AppStyles.headerRegular),
@@ -345,19 +342,19 @@ class JobsHome extends GetWidget<JobController> {
   }
 
   Widget _addNewLine() {
-    return Obx(()=> Visibility(
-      visible: _addLineVisible.value,
-      child: JobAddNewLine(
-        jobId: controller.jobModel!.objectId!,
-        selectedIndex: _inventoryIndex.value,
-        isTextInput: _miscLineItem.value,
-        onCreate: () {
-          _addLineVisible.value = false;
-        },
-        onCancel: () {
-          _addLineVisible.value = false;
-        },
-      ),
-    ));
+    return Obx(() => Visibility(
+          visible: _addLineVisible.value,
+          child: JobAddNewLine(
+            jobId: controller.jobModel!.objectId!,
+            selectedIndex: _inventoryIndex.value,
+            isTextInput: _miscLineItem.value,
+            onCreate: () {
+              _addLineVisible.value = false;
+            },
+            onCancel: () {
+              _addLineVisible.value = false;
+            },
+          ),
+        ));
   }
 }
