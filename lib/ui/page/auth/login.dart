@@ -60,17 +60,19 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const AppTextHeader('Sign in to LOUzero'),
                 AppTextHelpLink(
-                  label: 'New to LOUzero? ',
+                  label: 'New to LOUzero?',
                   linkText: 'Create an Account',
                   onPressed: _onCreateAccount,
                 ),
                 AppInputText(
+                  key: const ValueKey('Email Address'),
                   mt: 40,
                   controller: _emailController,
                   label: 'Email Address',
                   keyboardType: TextInputType.emailAddress,
                 ),
                 AppInputText(
+                  key: const ValueKey('Password'),
                   controller: _passwordController,
                   label: 'Password',
                   password: true,
