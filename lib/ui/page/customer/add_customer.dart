@@ -140,6 +140,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Widget _body() {
     List<Widget> list = [
       const SizedBox(height: 32),
+      _overlayTest(),
       _customerDetails(),
       _serviceAddress(),
       _billingAddress(),
@@ -200,64 +201,131 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
   Widget _serviceAddress() {
     return AppCard(
-      children: _addressWidget(true),
+      clip: false,
+      children: [_addressWidget(true)],
     );
   }
 
-  List<Widget> _addressWidget(bool isService) {
-    return [
-      AppCountryPicker(
-        defaultCountryCode: 'us',
-        onChange: (val) {
-          print('Country Changed: $val');
+  Widget _overlayTest() {
+    return AppCard(children: [
+      Buttons.primary('Overlay Test', expanded: true, onPressed: () {
+        Overlay.of(context)?.insert(_addressOverlay());
+      }),
+    ]);
+  }
+
+  OverlayEntry _addressOverlay() {
+    RenderBox renderBox = context.findRenderObject()! as RenderBox;
+    var size = renderBox.size;
+    var offset = renderBox.localToGlobal(Offset.zero);
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        width: 400,
+        // top: offset.dy + size.height + 5.0,
+        // left: offset.dx,
+        // top: offset.dy + size.height + 5.0,
+        // width: size.width,
+        child: Material(
+          elevation: 4.0,
+          borderRadius: BorderRadius.circular(24),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            children: <Widget>[
+              Text('Option', style: AppStyles.labelBold),
+              Text('Option', style: AppStyles.labelBold),
+              Text('Option', style: AppStyles.labelBold),
+              Text('Option', style: AppStyles.labelBold),
+              Text('Option', style: AppStyles.labelBold),
+              Text('Option', style: AppStyles.labelBold),
+              Text('Option', style: AppStyles.labelBold),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _addressWidget(bool isService) {
+    return Stack(clipBehavior: Clip.none, children: [
+      Wrap(children: [
+        AppCountryPicker(
+          defaultCountryCode: 'us',
+          onChange: (val) {
+            print('Country Changed: $val');
+          },
+        ),
+        const SizedBox(height: 16),
+        FlexRow(
+          children: [
+            AppTextField(
+              controller:
+                  isService ? _serviceStreetController : _billStreetController,
+              label: "Street Address",
+              onChanged: (val) {
+                _baseController.searchAddress(val, _country.countryCode);
+              },
+            )
+          ],
+        ),
+        FlexRow(
+          children: [
+            AppTextField(
+              controller:
+                  isService ? _serviceAptController : _billAptController,
+              label: "Apt / Suite / Other",
+            ),
+          ],
+        ),
+        FlexRow(
+          children: [
+            AppTextField(
+                controller:
+                    isService ? _serviceCityController : _billCityController,
+                label: "City"),
+            AppTextField(
+                controller:
+                    isService ? _serviceStateController : _billStateController,
+                label: "State"),
+            AppTextField(
+                controller:
+                    isService ? _serviceZipController : _billZipController,
+                label: "Zip"),
+          ],
+        ),
+        Buttons.link(
+          "Enter Address Fields Manually",
+          onPressed: () {},
+        ),
+      ]),
+      AddressList(
+        left: 0,
+        right: 0,
+        top: 180,
+        onSelectedSearchedModel: (model) {
+          if (isService) {
+            _serviceSearchAddressModel = model;
+          } else {
+            _billSearchAddressModel = model;
+          }
+          if (isService) {
+            _serviceStreetController.text = model.street ?? '';
+            _serviceCityController.text = model.city ?? '';
+            _serviceStateController.text = model.state;
+          } else {
+            _billStreetController.text = model.street ?? '';
+            _billCityController.text = model.city ?? '';
+            _billStateController.text = model.state;
+          }
+          setState(() {});
         },
       ),
-      SizedBox(height: 16),
-      FlexRow(
-        children: [
-          AppTextField(
-            controller:
-                isService ? _serviceStreetController : _billStreetController,
-            label: "Street Address",
-            onChanged: (val) {
-              _baseController.searchAddress(val, _country.countryCode);
-            },
-          )
-        ],
-      ),
-      FlexRow(
-        children: [
-          AppTextField(
-            controller: isService ? _serviceAptController : _billAptController,
-            label: "Apt / Suite / Other",
-          ),
-        ],
-      ),
-      FlexRow(
-        children: [
-          AppTextField(
-              controller:
-                  isService ? _serviceCityController : _billCityController,
-              label: "City"),
-          AppTextField(
-              controller:
-                  isService ? _serviceStateController : _billStateController,
-              label: "State"),
-          AppTextField(
-              controller:
-                  isService ? _serviceZipController : _billZipController,
-              label: "Zip"),
-        ],
-      ),
-      Buttons.link(
-        "Enter Address Fields Manually",
-        onPressed: () {},
-      ),
-    ];
+    ]);
   }
 
   Widget _billingAddress() {
     return AppCard(
+      clip: false,
       pb: _sameAsService ? 0 : 24,
       children: [
         RowSplit(
@@ -274,7 +342,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                     _sameAsService = val;
                   });
                 })),
-        if (!_sameAsService) ..._addressWidget(false),
+        if (!_sameAsService) _addressWidget(false),
       ],
     );
   }
