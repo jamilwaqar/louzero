@@ -115,6 +115,13 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
       child: Buttons.primary(
         'Done',
         onPressed: () {
+          if (widget.onChange != null) {
+            if (selectedItems.isNotEmpty) {
+              widget.onChange!(selectedItems[0].code);
+            } else {
+              widget.onChange!('none');
+            }
+          }
           Navigator.of(context).pop();
         },
         expanded: true,

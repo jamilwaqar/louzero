@@ -208,6 +208,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     return [
       AppCountryPicker(
         defaultCountryCode: 'us',
+        onChange: (val) {
+          print('Country Changed: $val');
+        },
       ),
       SizedBox(height: 16),
       FlexRow(
