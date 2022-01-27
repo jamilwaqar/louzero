@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +7,6 @@ import 'package:louzero/common/app_country_picker.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/constant/countries.dart';
-import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/constant/layout.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
@@ -92,7 +88,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   late final List<List<CTContactType>> _contactTypes = [
     widget.model?.customerContacts.first.types ?? []
   ];
-  Country _country = AppDefaultValue.country;
+  final Country _country = AppDefaultValue.country;
   SearchAddressModel? _serviceSearchAddressModel;
   SearchAddressModel? _billSearchAddressModel;
   final BaseController _baseController = Get.find();
@@ -215,9 +211,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   OverlayEntry _addressOverlay() {
-    RenderBox renderBox = context.findRenderObject()! as RenderBox;
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
+    // RenderBox renderBox = context.findRenderObject()! as RenderBox;
+    // var size = renderBox.size;
+    // var offset = renderBox.localToGlobal(Offset.zero);
     return OverlayEntry(
       builder: (context) => Positioned(
         width: 400,
@@ -231,7 +227,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           child: ListView(
             padding: EdgeInsets.zero,
             shrinkWrap: true,
-            children: <Widget>[
+            children: const <Widget>[
               Text('Option', style: AppStyles.labelBold),
               Text('Option', style: AppStyles.labelBold),
               Text('Option', style: AppStyles.labelBold),
@@ -390,7 +386,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       decoration: BoxDecoration(
           color: AppColors.secondary_99,
           borderRadius: BorderRadius.circular(4)),
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       margin: EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
