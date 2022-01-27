@@ -61,13 +61,13 @@ void main() {
     expect(response, _mockUser);
   });
 
-  test("create account", () async {
+  test("create account_test", () async {
     var user = BackendlessUser();
     final response = await mockBackendlessAuth.register(user);
     expect(await auth.signup(email, password), response);
   });
 
-  test("sign in account", () async {
+  test("sign in account_test", () async {
     final response = await mockBackendlessAuth.login(email, password);
     expect(await auth.login(email, password), response);
   });

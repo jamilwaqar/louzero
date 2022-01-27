@@ -9,7 +9,6 @@ const screenSize = Size(1620 * pixelRatio, 2160 * pixelRatio);
 Widget makeTestableWidget({required Widget child, required WidgetTester tester}) {
   tester.binding.window.physicalSizeTestValue = screenSize;
   Get.put(BaseController());
-
   return GetMaterialApp(
     debugShowCheckedModeBanner: false,
     home: MediaQuery(
