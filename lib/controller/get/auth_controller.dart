@@ -10,9 +10,12 @@ import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
-
+  
+  AuthController(this.userService);
+  final BackendlessUserService userService;
+  
   bool get isAuthUser => GetStorage().read(GSKey.isAuthUser) ?? false;
-
+  
   final userModel = Rx<UserModel>(UserModel());
 
   UserModel get user => userModel.value;
@@ -25,13 +28,13 @@ class AuthController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    BackendlessUser? response = await Backendless.userService.getCurrentUser();
+    BackendlessUser? response = await userService.getCurrentUser();
     initUser(response);
-    loggedIn.value = (await Backendless.userService.isValidLogin()) ?? false;
+    loggedIn.value = (await userService.isValidLogin()) ?? false;
   }
 
   void initUser(BackendlessUser? user) {
-    if (user != null) {
+    if (user != null && user.properties != null) {
       userModel.value = UserModel.fromMap(Map<String, dynamic>.from(user.properties));
       userModel.value.objectId = user.getObjectId();
       GetStorage().write(GSKey.isAuthUser, true);
@@ -60,7 +63,7 @@ class AuthController extends GetxController {
   }
 
   Future updateUser() async {
-    BackendlessUser? backendUser = await Backendless.userService.getCurrentUser();
+    BackendlessUser? backendUser = await userService.getCurrentUser();
     if (backendUser == null) return;
     Map<String, dynamic> data = userModel.toJson();
     data['addressModel'] = user.addressModel?.toJson();
@@ -68,7 +71,7 @@ class AuthController extends GetxController {
       {... backendUser.properties, ... data}
     );
     try {
-      var res = await Backendless.userService.update(backendUser);
+      var res = await userService.update(backendUser);
       userModel.value = UserModel.fromMap(Map<String, dynamic>.from(res!.properties));
       return userModel;
     } catch (e) {
@@ -95,12 +98,12 @@ class AuthController extends GetxController {
 
     Get.back();
     NavigationController().loading();
-    BackendlessUser? user = await Backendless.userService.getCurrentUser();
+    BackendlessUser? user = await userService.getCurrentUser();
     if (user == null) {
       errorMsg = 'Something wrong!';
     } else {
       try {
-        user = await Backendless.userService.login(user.email, oldPassword);
+        user = await userService.login(user.email, oldPassword);
       } catch (e) {
         errorMsg = 'Your current password does not match. Please try again.';
       }

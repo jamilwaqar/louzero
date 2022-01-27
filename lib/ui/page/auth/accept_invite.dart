@@ -67,6 +67,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
                     mb: 40,
                   ),
                   AppTextField(
+                    key: const ValueKey('Email Address'),
                     controller: _emailController,
                     label: 'Email',
                     keyboardType: TextInputType.emailAddress,
@@ -119,7 +120,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
             ),
           ),
           AppTextHelpLink(
-            label: 'Go back to ',
+            label: 'Go back to',
             linkText: 'Login',
             onPressed: () => Get.back(),
           ),

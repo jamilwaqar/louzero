@@ -5,7 +5,7 @@ import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/company_controller.dart';
 import 'package:louzero/ui/page/account/account.dart';
-import 'mocks.dart';
+import '../src/mocks.dart';
 
 void main() {
 

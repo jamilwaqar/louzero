@@ -29,14 +29,12 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
   final formGlobalKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     if (kDebugMode) {
       // _emailController.text = "mark.austen@singlemindconsulting.com";
-      _passwordController.text = "louzerouser_123";
     }
     super.initState();
   }
@@ -44,7 +42,6 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -62,7 +59,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   const AppTextHeader('Create Account'),
                   AppTextHelpLink(
-                      label: 'Already using LOUzero? ',
+                      label: 'Already using LOUzero?',
                       linkText: 'Sign In here',
                       onPressed: _onSignIn),
                   const SizedBox(
@@ -72,11 +69,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       onPressed: _onGoogleSignUp, expanded: true),
                   const AppTextDivider(),
                   const Text(
-                    'Enter your email to create a new account ',
+                    'Enter your email to create a new account',
                     style: AppStyles.labelBold,
                   ),
                   const SizedBox(height: 16),
                   AppTextField(
+                    key: const ValueKey('Email Address'),
                     controller: _emailController,
                     label: 'Email',
                     keyboardType: TextInputType.emailAddress,
