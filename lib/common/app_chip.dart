@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:louzero/controller/constant/colors.dart';
 
 class AppChip extends StatelessWidget {
   const AppChip({
@@ -16,13 +15,13 @@ class AppChip extends StatelessWidget {
     return Chip(
       backgroundColor: color?.withOpacity(0.1) ?? Colors.red.withOpacity(0.15),
       labelPadding: const EdgeInsets.only(left: 16, right: 16),
-      label: Text(text, style: TextStyle(
-        fontFamily: 'Lato',
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: color ?? Colors.red,
-      )),
+      label: Text(text,
+          style: TextStyle(
+            fontFamily: 'Lato',
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: color ?? Colors.red,
+          )),
     );
   }
-
 }

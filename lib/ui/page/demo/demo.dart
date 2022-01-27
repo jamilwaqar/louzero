@@ -182,23 +182,22 @@ class Demo extends StatelessWidget {
 
   Widget _appConfirmDialog() {
     return _demoCenterCard('Confirm Dialog Widget',
-        child: AppButton(label: 'Open Dialog', onPressed: () {
-          showDialog(
-            context: Get.context!,
-            builder: (BuildContext context) {
-              return AppDialog(
-                title: 'App Dialog',
-                body: const AppTextBody(
-                 'App Dialog'
-                ),
-                okayLabel: 'Got it',
-                onTapOkay: () {
-
-                },
-              );
-            },
-          );
-        },));
+        child: AppButton(
+          label: 'Open Dialog',
+          onPressed: () {
+            showDialog(
+              context: Get.context!,
+              builder: (BuildContext context) {
+                return AppDialog(
+                  title: 'App Dialog',
+                  body: const AppTextBody('App Dialog'),
+                  okayLabel: 'Got it',
+                  onTapOkay: () {},
+                );
+              },
+            );
+          },
+        ));
   }
 
   Widget _formTextInput() {
@@ -225,6 +224,7 @@ class Demo extends StatelessWidget {
         initialValue:
             'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
       ),
+      SizedBox(height: 16),
       const AppMultiSelect(
         items: [
           SelectItem(id: '1', value: '', label: 'Cheese'),
@@ -249,8 +249,12 @@ class Demo extends StatelessWidget {
         ],
       ),
       AppSimpleDropDown(
-          label: 'Duration', onSelected: (value){print('valued $value');}, items: ['biodiesel sustainable', 'Two', 'Three'], dividerPosition: [1]
-      )
+          label: 'Duration',
+          onSelected: (value) {
+            print('valued $value');
+          },
+          items: ['biodiesel sustainable', 'Two', 'Three'],
+          dividerPosition: [1])
     ]);
   }
 

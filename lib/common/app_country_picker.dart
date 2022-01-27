@@ -11,7 +11,7 @@ class AppCountryPicker extends StatefulWidget {
   final String label = 'Select Country';
   final double width = 400;
   final String? defaultCountryCode;
-  final void Function(List<CountryCode>)? onChange;
+  final void Function(String)? onChange;
 
   const AppCountryPicker({
     Key? key,
@@ -25,7 +25,7 @@ class AppCountryPicker extends StatefulWidget {
 
 class _AppCountryPickerState extends State<AppCountryPicker> {
   final List<CountryCode> selectedItems = [];
-  final List<CountryCode> codes = CountryCodes.list;
+  final List<CountryCode> codes = CountryCodes.shortList;
 
   @override
   initState() {
@@ -43,6 +43,7 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
 
   Future<void> openDialog() async {
     return showDialog<void>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -124,7 +125,10 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [_selectButton()],
+      children: [
+        _selectButton(),
+        if (selectedItems.isNotEmpty) AppDivider(mt: 0, mb: 0),
+      ],
     );
   }
 
@@ -156,15 +160,16 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                                 fontSize: 16,
                                 color: AppColors.secondary_40))
                     ],
-                  )
+                  ),
                 ],
               ),
               trailing: const Icon(Icons.arrow_drop_down),
               horizontalTitleGap: 0,
-              tileColor: AppColors.secondary_99,
+              tileColor: selectedItems.isNotEmpty
+                  ? Colors.transparent
+                  : AppColors.secondary_99,
               shape: RoundedRectangleBorder(
                 // side: const BorderSide(color: AppColors.light_3),
-
                 borderRadius: BorderRadius.circular(8.0),
               ),
               onTap: () {
@@ -184,10 +189,6 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
         selectedItems.clear();
         selectedItems.add(item);
       });
-    }
-
-    if (widget.onChange != null) {
-      widget.onChange!(selectedItems);
     }
   }
 
@@ -243,8 +244,9 @@ class SelectTile extends StatelessWidget {
       children: [
         ListTile(
           dense: true,
+          tileColor: isSelected ? AppColors.secondary_99 : Colors.transparent,
           contentPadding:
-              const EdgeInsets.only(left: 32, right: 32, top: 0, bottom: 0),
+              const EdgeInsets.only(left: 32, right: 32, top: 8, bottom: 8),
           trailing: isSelected
               ? Icon(MdiIcons.checkBold, color: AppColors.primary_1)
               : null,
