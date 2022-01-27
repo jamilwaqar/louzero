@@ -5,6 +5,7 @@ import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:mockito/mockito.dart';
+import 'auth_flow_test.dart';
 import 'src/mocks.dart';
 
 
@@ -23,8 +24,9 @@ class MockBackendlessData extends Mock implements IDataStore {
 }
 
 void main() {
+  final MockBackendlessAuth mockBackendlessAuth = MockBackendlessAuth();
   setUp(() {
-    Get.put(AuthController(Backendless.userService));
+    Get.put(AuthController(mockBackendlessAuth));
     Get.put(BaseController());
     Get.put(JobController())
       .jobModel = _jobModel;

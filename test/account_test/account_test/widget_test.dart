@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
@@ -10,7 +11,6 @@ import '../../src/mocks.dart';
 void main() {
 
   testWidgets('My Account page', (WidgetTester tester) async {
-
     Get.put(BaseController());
     Get.put(CompanyController());
     final userModel = MockUserModel();
@@ -32,20 +32,24 @@ void main() {
     expect(find.text(company.name), findsOneWidget);
   });
 
-  // testWidgets('Edit Account page', (WidgetTester tester) async {
-  //   tester.binding.window.textScaleFactorTestValue = 0.6;
-  //   Get.put(BaseController());
-  //   Get.put(CompanyController());
-  //   final userModel = MockUserModel();
-  //   final company_test = MockCompanyModel();
-  //   Get.find<BaseController>().companies = [company_test];
-  //   await tester.pumpWidget(MaterialApp(home: EditAccountPage(userModel)));
-  //
-  //   /// Account Info
-  //   expect(find.text(userModel.fullName), findsWidgets);
-  //   expect(find.text(userModel.initials), findsOneWidget);
-  //   expect(find.text(userModel.phone), findsOneWidget);
-  //   expect(find.text(userModel.email), findsOneWidget);
-  //   expect(find.text(userModel.serviceAddress), findsNothing);
-  // });
+  testWidgets('Edit Account page', (WidgetTester tester) async {
+    Get.put(BaseController());
+    Get.put(CompanyController());
+    final userModel = MockUserModel();
+    Get.find<AuthController>().userModel.value = userModel;
+    final company = MockCompanyModel();
+    Get.find<BaseController>().companies = [company];
+
+    await tester.pumpWidget(
+        makeTestableWidget(child: const MyAccountPage(), tester: tester));
+    expect(find.text('Edit Account'), findsNothing);
+    expect(find.text('Update Account'), findsNothing);
+
+    Finder editBtn = find.byKey(const Key('AppIconButton'));
+    expect(editBtn, findsOneWidget);
+    await tester.tap(editBtn);
+    await tester.pump();
+    expect(find.text('Edit Account'), findsOneWidget);
+    expect(find.text('Update Account'), findsOneWidget);
+  });
 }
