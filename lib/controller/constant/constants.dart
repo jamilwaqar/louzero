@@ -1,4 +1,5 @@
 import 'package:country_picker/country_picker.dart';
+import 'package:louzero/controller/constant/countries.dart';
 
 abstract class Constant {
   static const String imgPrefixPath = 'assets/icons';
@@ -16,6 +17,7 @@ abstract class AppDefaultValue {
       displayName: "United States (US) [+1]",
       displayNameNoCountryCode: "United States (US)",
       e164Key: "1-US-0");
+  static final countryCode = CountryCode(code: "US", name: "United States");
 }
 
 /// Backendless Data Paths
