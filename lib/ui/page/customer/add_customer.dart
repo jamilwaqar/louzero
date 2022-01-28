@@ -106,7 +106,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         ..latitude = model.serviceAddress.latitude
         ..longitude = model.serviceAddress.longitude;
     }
-    if (mounted) _getAddressListYPosition();
+    Future.delayed(const Duration(milliseconds: 100)).then((value) => _getAddressListYPosition());
     super.initState();
   }
 
@@ -180,23 +180,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   void _getAddressListYPosition() {
-    if (_streetWidgetKey.currentContext?.findRenderObject() == null) {
-      _addressListY = 0;
-      return;
-    }
+    if (_streetWidgetKey.currentContext?.findRenderObject() == null) return;
     RenderBox box = _streetWidgetKey.currentContext!.findRenderObject() as RenderBox;
     Offset offset = box.localToGlobal(Offset.zero); //this is global position
     double y = offset.dy;
-    final Size size = box.size;
-    print('Size: ${size.width}, ${size.height}');
-    // _addressListY = y;
-
-    print('Offset: ${offset.dx}, ${offset.dy}');
-
-    print('Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
-    _addressListY = (offset.dy + size.height) / 2 + 250;
+    _addressListY = y - box.size.height - 40;
     print('_addressListY: $_addressListY');
-    setState(() {});
   }
 
   Widget _customerDetails() {
@@ -311,7 +300,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             label: "Street Address",
             onChanged: (val) {
               _baseController.searchAddress(val, _country.countryCode);
-              _getAddressListYPosition();
             },
           )
         ],
