@@ -48,81 +48,47 @@ class Demo extends StatelessWidget {
   }
 
   Widget _basicTabs() {
-    return Container(
-        color: AppColors.secondary_20,
-        margin: const EdgeInsets.only(top: 24, bottom: 24),
-        padding:
-            const EdgeInsets.only(top: 24, bottom: 64, left: 90, right: 90),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return _rowDark(
+        child: AppTabsBasic(
+          tabs: const ['Login', 'Sign Up'],
           children: [
-            Text('Login Tabs',
-                style: AppStyles.headerRegular
-                    .copyWith(color: AppColors.white, fontSize: 32)),
-            const SizedBox(height: 24),
-            AppTabsBasic(
-              tabs: const ['Login', 'Sign Up'],
-              children: [
-                _dummyForm(label: 'Login'),
-                _dummyForm(label: 'Sign Up'),
-              ],
-            ),
+            _dummyForm(label: 'Login'),
+            _dummyForm(label: 'Sign Up'),
           ],
-        ));
-  }
-
-  Widget _dummyForm({label = "Login"}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 64, left: 64, right: 64),
-      child: Column(
-        children: [
-          const AppTextField(
-            label: 'Email',
-          ),
-          const AppTextField(
-            label: 'Password',
-          ),
-          const SizedBox(height: 16),
-          FlexRow(
-            flex: const [2, 2],
-            children: [
-              Buttons.primary(label, expanded: true),
-              const SizedBox(),
-            ],
-          )
-        ],
-      ),
-    );
+        ),
+        label: 'Tabs for Login');
   }
 
   Widget _tabsExample() {
     const _icon = Icon(MdiIcons.star, size: 90, color: Colors.white);
-    return AppCardTabs(
-        mt: 0,
-        mb: 16,
-        mx: 24,
-        children: [
-          Container(
-            height: 200,
-            width: double.infinity,
-            color: Colors.blue,
-            child: _icon,
-          ),
-          Container(
-            height: 400,
-            width: double.infinity,
-            color: Colors.amber,
-            child: _icon,
-          ),
-          Container(
-            height: 300,
-            width: double.infinity,
-            color: Colors.purple,
-            child: _icon,
-          )
-        ],
-        length: 3,
-        tabNames: const ['One', 'Two', 'Three']);
+    return _rowLight(
+        child: AppCardTabs(
+            mt: 0,
+            mb: 16,
+            mx: 24,
+            children: [
+              Container(
+                height: 200,
+                width: double.infinity,
+                color: Colors.blue,
+                child: _icon,
+              ),
+              Container(
+                height: 400,
+                width: double.infinity,
+                color: Colors.amber,
+                child: _icon,
+              ),
+              Container(
+                height: 300,
+                width: double.infinity,
+                color: Colors.purple,
+                child: _icon,
+              )
+            ],
+            length: 3,
+            tabNames: const ['One', 'Two', 'Three']),
+        label: 'Card Tabs');
   }
 
   Widget _buttonStyles() {
@@ -226,16 +192,18 @@ class Demo extends StatelessWidget {
   }
 
   Widget _addNote() {
-    return _demoCenterCard('Add Note Widget',
+    return _rowLight(
+        label: 'Add Note Widget',
         child: const AppAddNote(
           initialText: "Simple quick note widget.",
         ));
   }
 
   Widget _appConfirmDialog() {
-    return _demoCenterCard('Confirm Dialog Widget',
-        child: AppButton(
-          label: 'Open Dialog',
+    return _rowLight(
+        label: 'Confirm Dialog Widget',
+        child: Buttons.outline(
+          'Open Dialog',
           onPressed: () {
             showDialog(
               context: Get.context!,
@@ -355,76 +323,121 @@ class Demo extends StatelessWidget {
         const AppSpinner(),
       ]);
 
-  Widget _segmentControls() => AppCard(children: [
-        _heading('Segmented Control'),
-        AppSegmentedControl(
-          fromMax: true,
-          isStretch: true,
-          children: const {
-            1: AppSegmentItem(
-              text: 'Estimate (99)',
-              icon: MdiIcons.calculator,
-            ),
-            2: AppSegmentItem(
-              text: 'Booked (97)',
-              icon: MdiIcons.calendar,
-            ),
-            3: AppSegmentItem(
-              text: 'Invoiced',
-              icon: MdiIcons.currencyUsd,
-            ),
-            4: AppSegmentItem(
-              text: 'Canceled',
-              icon: MdiIcons.cancel,
-            ),
-          },
-          onValueChanged: (int value) {
-            print(value);
-          },
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        AppSegmentedToggle(
-            itemList: const ["%", "\$"],
-            onChange: (value) {
-              print('value has been changed $value');
-            })
-      ]);
+  Widget _segmentControls() => _rowDark(
+      label: 'Segmented Control',
+      child: AppSegmentedControl(
+        fromMax: true,
+        isStretch: true,
+        children: const {
+          1: AppSegmentItem(
+            text: 'Estimate (99)',
+            icon: MdiIcons.calculator,
+          ),
+          2: AppSegmentItem(
+            text: 'Booked (97)',
+            icon: MdiIcons.calendar,
+          ),
+          3: AppSegmentItem(
+            text: 'Invoiced',
+            icon: MdiIcons.currencyUsd,
+          ),
+          4: AppSegmentItem(
+            text: 'Canceled',
+            icon: MdiIcons.cancel,
+          ),
+        },
+        onValueChanged: (int value) {
+          print(value);
+        },
+      ));
 
-  Widget _calendar() => AppCard(children: [
-        _heading('Calendar'),
-        NZCalendar(
-          onDateSelected: (value) {
-            print('date has been changed $value');
-          },
-        )
-      ]);
+  Widget _calendar() => _rowLight(
+      label: 'Calendar',
+      child: NZCalendar(
+        onDateSelected: (value) {
+          print('date has been changed $value');
+        },
+      ));
 
-  Widget _timePicker(context) => AppCard(children: [
-        _heading('Time Picker'),
-        AppSegmentedToggle(
-            isVertical: true,
-            itemList: const ["AM", "PM"],
-            onChange: (value) {
-              print('value has been changed $value');
-            }),
-        LZTextButton(
-          "Open Time Picker",
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return NZTimePicker(
-                  onChange: (time) {
-                    print('the time is $time');
-                  },
-                );
+  Widget _timePicker(context) {
+    return _rowLight(
+      label: 'Time Picker',
+      child: Buttons.outline('Open Time Picker', onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return NZTimePicker(
+              onChange: (time) {
+                print('the time is $time');
               },
             );
           },
-        )
-      ]);
+        );
+      }),
+    );
+  }
+
+// DEMO LAYOUT UTILS
+  Widget _rowDark(
+      {required Widget child,
+      required String label,
+      double inset = 24,
+      Color textColor = AppColors.white,
+      Color color = AppColors.secondary_20}) {
+    return Container(
+        color: color,
+        // margin: const EdgeInsets.only(top: 24, bottom: 24),
+        padding:
+            EdgeInsets.only(top: 24, bottom: 64, left: inset, right: inset),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label.toUpperCase(),
+                style: AppStyles.headerRegular
+                    .copyWith(color: textColor, fontSize: 24)),
+            AppDivider(
+              color: textColor,
+              mt: 8,
+              size: 1,
+            ),
+            const SizedBox(height: 24),
+            child,
+          ],
+        ));
+  }
+
+  Widget _rowLight({required Widget child, required String label}) {
+    return _rowDark(
+      child: child,
+      label: label,
+      textColor: AppColors.secondary_30,
+      color: AppColors.white,
+    );
+  }
+
+  Widget _dummyForm({label = "Login"}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 64, left: 64, right: 64),
+      child: Column(
+        children: [
+          const AppTextField(
+            label: 'Email',
+          ),
+          const AppTextField(
+            label: 'Password',
+          ),
+          const SizedBox(height: 16),
+          FlexRow(
+            flex: const [2, 2],
+            children: [
+              Buttons.primary(label, expanded: true),
+              const SizedBox(),
+            ],
+          )
+        ],
+      ),
+    );
+  }
 
   Widget _heading(String label) {
     return Column(
