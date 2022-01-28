@@ -93,8 +93,11 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   SearchAddressModel? _billSearchAddressModel;
   final BaseController _baseController = Get.find();
   final controller = Get.find<CustomerController>();
-  final _streetWidgetKey = GlobalKey();
+  final _scaffoldKey = GlobalKey();
+  final _serviceStreetWidgetKey = GlobalKey();
+  final _billStreetWidgetKey = GlobalKey();
   double _addressListY = 600;
+  bool _serviceAddressMode = true;
 
   @override
   void initState() {
@@ -122,6 +125,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
+      key: _scaffoldKey,
       subheader: widget.model == null ? "Add New Customer" : "Edit Customer",
       child: _body(),
       footerEnd: [
@@ -157,13 +161,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             right: 40,
             top: _addressListY,
             onSelectedSearchedModel: (model) {
-              bool isService = true;
-              if (isService) {
+              if (_serviceAddressMode) {
                 _serviceSearchAddressModel = model;
               } else {
                 _billSearchAddressModel = model;
               }
-              if (isService) {
+              if (_serviceAddressMode) {
                 _serviceStreetController.text = model.street ?? '';
                 _serviceCityController.text = model.city ?? '';
                 _serviceStateController.text = model.state;
@@ -180,13 +183,33 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   void _getAddressListYPosition() {
-    if (_streetWidgetKey.currentContext?.findRenderObject() == null) return;
-    RenderBox box = _streetWidgetKey.currentContext!.findRenderObject() as RenderBox;
+    GlobalKey key = _serviceAddressMode ? _serviceStreetWidgetKey : _billStreetWidgetKey;
+    if (key.currentContext?.findRenderObject() == null) return;
+    RenderBox box = key.currentContext!.findRenderObject() as RenderBox;
     Offset offset = box.localToGlobal(Offset.zero); //this is global position
     double y = offset.dy;
     _addressListY = y - box.size.height - 40;
+    _addressListY = _getPositionBottomLeft(_scaffoldKey, _serviceStreetWidgetKey).dy;
     print('_addressListY: $_addressListY');
   }
+
+  Offset _getPositionBottomLeft(GlobalKey parentKey, GlobalKey childKey) {
+    final parentBox = parentKey.currentContext!.findRenderObject() as RenderBox;
+    final parentPosition = parentBox.localToGlobal(Offset.zero);
+    final parentHeight = parentBox.size.height;
+
+    final childBox = childKey.currentContext!.findRenderObject() as RenderBox;
+    final childPosition = childBox.localToGlobal(Offset.zero);
+    final childHeight = childBox.size.height;
+
+    final x = childPosition.dx - parentPosition.dx;
+    final y =
+    (childPosition.dy - parentPosition.dy)
+        .abs();
+    print('Offset: $y');
+    return Offset(x, y);
+  }
+
 
   Widget _customerDetails() {
     return AppCard(
@@ -293,13 +316,22 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       const SizedBox(height: 16),
       FlexRow(
         children: [
-          AppTextField(
-            key: _streetWidgetKey,
-            controller:
-                isService ? _serviceStreetController : _billStreetController,
-            label: "Street Address",
-            onChanged: (val) {
-              _baseController.searchAddress(val, _country.countryCode);
+          Focus(
+            child: AppTextField(
+              key: isService ? _serviceStreetWidgetKey : _billStreetWidgetKey,
+              controller:
+                  isService ? _serviceStreetController : _billStreetController,
+              label: "Street Address",
+              onChanged: (val) {
+                _baseController.searchAddress(val, _country.countryCode);
+              },
+            ),
+            onFocusChange: (hasFocus) {
+              if (hasFocus) {
+                _serviceAddressMode = isService;
+                _getAddressListYPosition();
+              }
+              print('hasFocus: $hasFocus');
             },
           )
         ],
