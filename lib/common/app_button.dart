@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/constant/layout.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -366,6 +367,14 @@ abstract class Buttons {
       colorText: AppColors.secondary_20,
       iconLeading: icon,
       colorIconLeading: AppColors.secondary_20,
+    );
+  }
+
+  static Widget link(String label,
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Ui.text(label, link: true),
     );
   }
 

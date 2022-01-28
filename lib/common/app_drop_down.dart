@@ -22,26 +22,26 @@ class AppDropDown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null) Text(label!, style: TextStyles.bodyL),
-        if (label != null)
-          const SizedBox(
-            height: 4,
-          ),
         Container(
-          height: 48,
+          height: 57,
+          alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.light_3, width: 1)),
+          // decoration: BoxDecoration(
+          //   borderRadius: BorderRadius.circular(0),
+          //    border: Border.all(color: AppColors.light_3, width: 1),
+          // ),
           child: FormField<String>(
             builder: (FormFieldState<String> state) {
               return InputDecorator(
                 decoration: InputDecoration(
-                  border: InputBorder.none,
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: AppColors.dark_3,
+                  labelText: label,
+                  labelStyle: AppStyles.labelBold.copyWith(
+                      height: 1,
+                      fontSize: 16,
+                      color: AppColors.secondary_40,
+                      fontWeight: FontWeight.w700),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.secondary_90),
                   ),
                   errorStyle:
                       const TextStyle(color: Colors.redAccent, fontSize: 16.0),
@@ -51,7 +51,7 @@ class AppDropDown extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: initValue,
-                    isDense: true,
+                    isDense: false,
                     onChanged: onChanged,
                     items: itemList.map((String value) {
                       return DropdownMenuItem<String>(

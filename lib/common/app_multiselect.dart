@@ -58,6 +58,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
 
   Future<void> openDialog() async {
     return showDialog<void>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -117,54 +118,68 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [_selectButton()],
+      children: [
+        _selectButton(),
+        if (selectedItems.isNotEmpty) AppDivider(mt: 0, mb: 0),
+      ],
     );
   }
 
   Widget _selectButton() => MaterialButton(
       key: const Key('select'),
       padding: const EdgeInsets.all(0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          if (selectedItems.isNotEmpty && widget.showLabel)
-            AppTextBody(widget.label,
-                color: AppColors.dark_2, mb: 8, bold: true, size: 14),
-          ListTile(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    spacing: 8,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (selectedItems.isNotEmpty)
-                        ...selectedItems.map((item) {
-                          return SelectChip(
-                              label: item.label,
-                              onDeleted: () {
-                                onRemoveItem(item);
-                              });
-                        }).toList(),
-                      if (selectedItems.isEmpty)
-                        AppTextBody(widget.label,
-                            color: AppColors.dark_2,
-                            mb: 0,
-                            bold: true,
-                            size: 14),
+                      Wrap(
+                        spacing: -4,
+                        children: [
+                          if (selectedItems.isNotEmpty)
+                            ...selectedItems.map((item) {
+                              return SelectChip(
+                                  label: item.label,
+                                  onDeleted: () {
+                                    onRemoveItem(item);
+                                  });
+                            }).toList(),
+                          if (selectedItems.isEmpty)
+                            AppTextBody(widget.label,
+                                color: AppColors.dark_2,
+                                mb: 0,
+                                bold: true,
+                                size: 14),
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
-              trailing: const Icon(Icons.arrow_drop_down),
-              horizontalTitleGap: 0,
-              tileColor: AppColors.lightest,
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(color: AppColors.light_3),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              onTap: () {
-                openDialog();
-              }),
+                  ),
+                  trailing: const Icon(Icons.arrow_drop_down),
+                  horizontalTitleGap: 0,
+                  tileColor: selectedItems.isNotEmpty
+                      ? Colors.transparent
+                      : AppColors.secondary_99,
+                  shape: RoundedRectangleBorder(
+                    // side: const BorderSide(color: AppColors.light_3),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  onTap: () {
+                    openDialog();
+                  }),
+            ],
+          ),
+          if (selectedItems.isNotEmpty && widget.showLabel)
+            Positioned(
+              top: -8,
+              left: 12,
+              child: Text(widget.label,
+                  style: AppStyles.labelRegular.copyWith(fontSize: 12)),
+            )
         ],
       ),
       onPressed: () {});
@@ -196,21 +211,28 @@ class SelectChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      backgroundColor: AppColors.secondary_99,
-      shape:
-          const StadiumBorder(side: BorderSide(color: AppColors.secondary_70)),
-      labelPadding: const EdgeInsets.only(left: 14, right: 14),
-      label: Text(label,
-          style: const TextStyle(
-              fontWeight: FontWeight.w600, color: AppColors.dark_3)),
-      deleteIconColor: AppColors.medium_2,
-      deleteIcon: const Icon(
-        Icons.close,
-        size: 20,
-        color: AppColors.secondary_40,
+    return Transform.scale(
+      scale: 0.9,
+      child: Chip(
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        backgroundColor: AppColors.secondary_99,
+        shape: const StadiumBorder(
+            side: BorderSide(color: AppColors.secondary_70)),
+        labelPadding: const EdgeInsets.only(
+          left: 14,
+          right: 14,
+        ),
+        label: Text(label,
+            style: const TextStyle(
+                fontWeight: FontWeight.w600, color: AppColors.dark_3)),
+        deleteIconColor: AppColors.medium_2,
+        deleteIcon: const Icon(
+          Icons.close,
+          size: 20,
+          color: AppColors.secondary_40,
+        ),
+        onDeleted: onDeleted ?? () {},
       ),
-      onDeleted: onDeleted ?? () {},
     );
   }
 }

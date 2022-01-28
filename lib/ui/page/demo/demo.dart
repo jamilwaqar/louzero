@@ -35,7 +35,7 @@ class Demo extends StatelessWidget {
             _buttonStyles(),
             _formTextInput(),
             _loadingSpinner(),
-            SizedBox(
+            const SizedBox(
               height: 148,
             ),
           ],
@@ -45,6 +45,7 @@ class Demo extends StatelessWidget {
   }
 
   Widget _tabsExample() {
+    const _icon = Icon(MdiIcons.star, size: 90, color: Colors.white);
     return AppCardTabs(
         mt: 0,
         mb: 16,
@@ -54,23 +55,23 @@ class Demo extends StatelessWidget {
             height: 200,
             width: double.infinity,
             color: Colors.blue,
-            child: Icon(MdiIcons.star, size: 90, color: Colors.white),
+            child: _icon,
           ),
           Container(
             height: 400,
             width: double.infinity,
             color: Colors.amber,
-            child: Icon(MdiIcons.star, size: 90, color: Colors.white),
+            child: _icon,
           ),
           Container(
             height: 300,
             width: double.infinity,
             color: Colors.purple,
-            child: Icon(MdiIcons.star, size: 90, color: Colors.white),
+            child: _icon,
           )
         ],
         length: 3,
-        tabNames: ['One', 'Two', 'Three']);
+        tabNames: const ['One', 'Two', 'Three']);
   }
 
   Widget _buttonStyles() {
@@ -182,23 +183,22 @@ class Demo extends StatelessWidget {
 
   Widget _appConfirmDialog() {
     return _demoCenterCard('Confirm Dialog Widget',
-        child: AppButton(label: 'Open Dialog', onPressed: () {
-          showDialog(
-            context: Get.context!,
-            builder: (BuildContext context) {
-              return AppDialog(
-                title: 'App Dialog',
-                body: const AppTextBody(
-                 'App Dialog'
-                ),
-                okayLabel: 'Got it',
-                onTapOkay: () {
-
-                },
-              );
-            },
-          );
-        },));
+        child: AppButton(
+          label: 'Open Dialog',
+          onPressed: () {
+            showDialog(
+              context: Get.context!,
+              builder: (BuildContext context) {
+                return AppDialog(
+                  title: 'App Dialog',
+                  body: const AppTextBody('App Dialog'),
+                  okayLabel: 'Got it',
+                  onTapOkay: () {},
+                );
+              },
+            );
+          },
+        ));
   }
 
   Widget _formTextInput() {
@@ -225,6 +225,7 @@ class Demo extends StatelessWidget {
         initialValue:
             'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
       ),
+      const SizedBox(height: 16),
       const AppMultiSelect(
         items: [
           SelectItem(id: '1', value: '', label: 'Cheese'),
@@ -249,8 +250,12 @@ class Demo extends StatelessWidget {
         ],
       ),
       AppSimpleDropDown(
-          label: 'Duration', onSelected: (value){print('valued $value');}, items: ['biodiesel sustainable', 'Two', 'Three'], dividerPosition: [1]
-      )
+          label: 'Duration',
+          onSelected: (value) {
+            print('valued $value');
+          },
+          items: const ['biodiesel sustainable', 'Two', 'Three'],
+          dividerPosition: const [1])
     ]);
   }
 
@@ -269,17 +274,6 @@ class Demo extends StatelessWidget {
           ),
         ),
       )
-    ]);
-  }
-
-  Widget _numberStepper() {
-    return const AppCard(children: [
-      Text(
-        'Number Stepper',
-        style: AppStyles.headerRegular,
-      ),
-      SizedBox(height: 24),
-      AppNumberStepper()
     ]);
   }
 

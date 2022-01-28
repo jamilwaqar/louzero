@@ -14,6 +14,7 @@ export 'app_circular.dart';
 export 'app_contact_info_line.dart';
 export 'app_cutomer_info.dart';
 export 'app_divider.dart';
+export 'app_divider_with_label.dart';
 export 'app_drop_down.dart';
 export 'app_dropdown_multiple.dart';
 export 'app_dropdown_search.dart';
