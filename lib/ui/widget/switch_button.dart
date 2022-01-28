@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:louzero/controller/utils.dart';
 
 class NZSwitch extends StatelessWidget {
   final bool isOn;
@@ -19,14 +18,16 @@ class NZSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FlutterSwitch(
           width: 48,
           height: 24,
-          activeIcon: appIcon(Icons.check_circle_outline),
-          inactiveIcon: appIcon(Icons.close),
-          activeColor: AppColors.medium_3,
+          inactiveColor: AppColors.secondary_90,
+          activeColor: AppColors.primary_80,
+          activeToggleColor: AppColors.orange,
+          inactiveToggleColor: AppColors.white,
           toggleSize: 22.0,
           value: isOn,
           // borderRadius: 30.0,
@@ -34,7 +35,11 @@ class NZSwitch extends StatelessWidget {
           onToggle: onChanged,
         ),
         const SizedBox(width: 8),
-        Text(label, style: TextStyles.bodyL,)
+        Text(
+          label,
+          style: AppStyles.labelRegular
+              .copyWith(fontSize: 16, fontWeight: FontWeight.w400, height: 1.3),
+        )
       ],
     );
   }

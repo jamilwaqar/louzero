@@ -34,7 +34,7 @@ abstract class AppColors {
     ],
   );
 
-  static const Color orange = Color(0xFFEC6A3A);
+  static const Color orange = Color(0xFFEC6939);
   static const Color success = Color(0xFF008484);
   static const Color success_lt = Color(0xFF60CAA8);
   static const Color errorText = Color(0xFFB3261E);
@@ -63,6 +63,7 @@ abstract class AppColors {
 
   static const Color icon = Color(0xFF323232);
   static const Color black = Colors.black;
+  static const Color white = Colors.white;
 
   static const Color oddItemColor = Color(0xFFF1F2F4);
   static const Color evenItemColor = Color(0xFFF8F9FB);
