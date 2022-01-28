@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class PopMenuItem {
@@ -50,7 +49,9 @@ class AppPopMenu extends StatelessWidget {
   }
 
   PopupMenuItem popItem(String label,
-      {IconData icon = Icons.chevron_right, VoidCallback? onTap, bool? showIcon}) {
+      {IconData icon = Icons.chevron_right,
+      VoidCallback? onTap,
+      bool? showIcon}) {
     return PopupMenuItem(
         value: label,
         onTap: onTap,

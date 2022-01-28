@@ -77,7 +77,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
                       if (val != null && val.isEmpty) {
                         return 'Email is required';
                       }
-                      if (Valid.Email(val!)) {
+                      if (Valid.email(val!)) {
                         return null;
                       } else {
                         return 'Enter Valid Email';

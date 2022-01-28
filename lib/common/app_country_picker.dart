@@ -77,9 +77,10 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                         );
                       }
 
-                      return SelectTile(
+                      return SelectCountryTile(
                         isSelected: selectedItems.contains(item),
                         item: item,
+                        // ignore: sized_box_for_whitespace
                         iconFlag: Container(
                           width: 32,
                           height: 32,
@@ -134,7 +135,7 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
     return Column(
       children: [
         _selectButton(),
-        if (selectedItems.isNotEmpty) AppDivider(mt: 0, mb: 0),
+        if (selectedItems.isNotEmpty) const AppDivider(mt: 0, mb: 0),
       ],
     );
   }
@@ -154,7 +155,7 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
                     children: [
                       if (selectedItems.isNotEmpty)
                         ...selectedItems.map((item) {
-                          return SelectChip(
+                          return SelectedCountry(
                               label: item.name,
                               onDeleted: () {
                                 onRemoveItem(item);
@@ -207,11 +208,11 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
   }
 }
 
-class SelectChip extends StatelessWidget {
+class SelectedCountry extends StatelessWidget {
   final VoidCallback? onDeleted;
   final String label;
 
-  const SelectChip({Key? key, this.onDeleted, this.label = 'Sample'})
+  const SelectedCountry({Key? key, this.onDeleted, this.label = 'Sample'})
       : super(key: key);
 
   @override
@@ -225,7 +226,7 @@ class SelectChip extends StatelessWidget {
   }
 }
 
-class SelectTile extends StatelessWidget {
+class SelectCountryTile extends StatelessWidget {
   final CountryCode item;
   final bool isSelected;
   final ValueChanged<CountryCode> onSelectItem;
@@ -234,7 +235,7 @@ class SelectTile extends StatelessWidget {
   final Widget? iconFlag;
   final bool selected;
 
-  const SelectTile({
+  const SelectCountryTile({
     Key? key,
     required this.item,
     required this.isSelected,
@@ -255,7 +256,7 @@ class SelectTile extends StatelessWidget {
           contentPadding:
               const EdgeInsets.only(left: 32, right: 32, top: 8, bottom: 8),
           trailing: isSelected
-              ? Icon(MdiIcons.checkBold, color: AppColors.primary_1)
+              ? const Icon(MdiIcons.checkBold, color: AppColors.primary_1)
               : null,
           leading: iconFlag ??
               Icon(

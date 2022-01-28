@@ -74,13 +74,13 @@ class _AppTextFieldState extends State<AppTextField> {
       if (widget.validator != null) {
         if (!_hasError()) {
           _validateMode = AutovalidateMode.disabled;
-          _status = Icon(Icons.check, color: AppColors.success);
+          _status = const Icon(Icons.check, color: AppColors.success);
         } else {
           _validateMode = AutovalidateMode.always;
           _color = AppColors.errorTint;
           _borderColor = AppColors.errorText;
-          _status =
-              Icon(MdiIcons.alertCircleOutline, color: AppColors.errorText);
+          _status = const Icon(MdiIcons.alertCircleOutline,
+              color: AppColors.errorText);
         }
       }
     }
@@ -105,7 +105,7 @@ class _AppTextFieldState extends State<AppTextField> {
   void _setIcons() {
     if (widget.validator != null && widget.iconEnd == null && _hasValue()) {
       setState(() {
-        _status = Icon(Icons.check, color: AppColors.success);
+        _status = const Icon(Icons.check, color: AppColors.success);
       });
     }
 
@@ -166,7 +166,7 @@ class _AppTextFieldState extends State<AppTextField> {
         }
         if (widget.validator != null && !_hasError()) {
           setState(() {
-            _status = Icon(Icons.check, color: AppColors.success);
+            _status = const Icon(Icons.check, color: AppColors.success);
           });
         }
       },
