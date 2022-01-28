@@ -260,4 +260,12 @@ abstract class CountryCodes {
     CountryCode(code: "ZM", name: "Zambia"),
     CountryCode(code: "ZW", name: "Zimbabwe")
   ];
+
+  static CountryCode? countryCodeByName(String countryName) {
+    try {
+      return list.firstWhere((country) => country.name == countryName);
+    } catch(e) {
+      return null;
+    }
+  }
 }
