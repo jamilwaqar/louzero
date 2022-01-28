@@ -58,6 +58,8 @@ class _AppTabsBasicState extends State<AppTabsBasic> {
               gap: 0,
               children: widget.tabs.asMap().entries.map((entry) {
                 return TabButton(
+                  isFirst: entry.key == 0,
+                  isLast: entry.key == widget.tabs.length - 1,
                   label: entry.value,
                   pageNumber: entry.key,
                   selectedPage: _selectedPage,
@@ -96,6 +98,8 @@ class _AppTabsBasicState extends State<AppTabsBasic> {
 class TabButton extends StatelessWidget {
   final String label;
   final bool selected;
+  final bool isLast;
+  final bool isFirst;
   final int selectedPage;
   final int pageNumber;
   final void Function()? onPressed;
@@ -105,6 +109,8 @@ class TabButton extends StatelessWidget {
     this.selected = false,
     this.selectedPage = 0,
     this.pageNumber = 0,
+    this.isLast = false,
+    this.isFirst = false,
     this.onPressed,
   }) : super(key: key);
 
@@ -112,27 +118,51 @@ class TabButton extends StatelessWidget {
   Widget build(BuildContext context) {
     bool _selected = selectedPage == pageNumber;
     Color _bg = _selected ? AppColors.white : AppColors.secondary_90;
+    Color _bg2 = _selected ? AppColors.secondary_90 : AppColors.white;
     double _ht = _selected ? 70 : 50;
     double _size = _selected ? 32 : 16;
+    bool _isOdd = pageNumber.floor().isOdd;
 
     return GestureDetector(
       onTap: onPressed,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.fastLinearToSlowEaseIn,
-        height: _ht,
-        alignment: const Alignment(0, 0),
-        decoration: BoxDecoration(
-          color: _bg,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
-          ),
+      child: Stack(children: [
+        _tab(
+          colorBg: _bg2,
+          height: _ht,
+          size: _size,
         ),
-        child: Text(label,
-            style:
-                AppStyles.headerRegular.copyWith(height: .9, fontSize: _size)),
+        _tab(
+            colorBg: _bg,
+            height: _ht,
+            size: _size,
+            radiusLeft: !_selected && !isFirst,
+            radiusRight: !_selected && !isLast),
+      ]),
+    );
+  }
+
+  Widget _tab(
+      {required double height,
+      required Color colorBg,
+      required double size,
+      bool radiusRight = false,
+      bool radiusLeft = false}) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.fastLinearToSlowEaseIn,
+      height: height,
+      alignment: const Alignment(0, 0),
+      decoration: BoxDecoration(
+        color: colorBg,
+        borderRadius: BorderRadius.only(
+          topLeft: const Radius.circular(16),
+          topRight: const Radius.circular(16),
+          bottomRight: Radius.circular(radiusRight ? 16 : 0),
+          bottomLeft: Radius.circular(radiusLeft ? 16 : 0),
+        ),
       ),
+      child: Text(label,
+          style: AppStyles.headerRegular.copyWith(height: .9, fontSize: size)),
     );
   }
 }

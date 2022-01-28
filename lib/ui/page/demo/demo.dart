@@ -6,7 +6,6 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/widget/buttons/text_button.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
@@ -23,31 +22,24 @@ class Demo extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 48,
-            ),
-            _calendar(),
-            _basicTabs(),
-            _tabsExample(),
-            _segmentControls(),
-            _timePicker(context),
-            _addNote(),
-            _appConfirmDialog(),
-            _contactCard(),
-            _contactInfoLine(),
-            _buttonStyles(),
-            _formTextInput(),
-            _loadingSpinner(),
-            const SizedBox(
-              height: 148,
-            ),
+            _calendar_(),
+            _tabsBasic_(),
+            _cardTabs_(),
+            _segmentControls_(),
+            _addNote_(),
+            _timePicker_(context),
+            _confirmDialog_(),
+            _contactCard_(),
+            _contactInfo_(),
+            _buttons_(),
+            _formInput_(),
           ],
         ),
       ),
     );
   }
 
-  Widget _basicTabs() {
+  Widget _tabsBasic_() {
     return _rowDark(
         child: AppTabsBasic(
           tabs: const ['Login', 'Sign Up'],
@@ -59,9 +51,13 @@ class Demo extends StatelessWidget {
         label: 'Tabs for Login');
   }
 
-  Widget _tabsExample() {
-    const _icon = Icon(MdiIcons.star, size: 90, color: Colors.white);
+  Widget _cardTabs_() {
+    const _icon = Icon(MdiIcons.star, size: 90, color: Colors.black26);
+    const _bg = Colors.black12;
+    const _fg = Colors.black26;
+
     return _rowLight(
+        // color: AppColors.secondary_90,
         child: AppCardTabs(
             mt: 0,
             mb: 16,
@@ -70,19 +66,19 @@ class Demo extends StatelessWidget {
               Container(
                 height: 200,
                 width: double.infinity,
-                color: Colors.blue,
+                color: _bg,
                 child: _icon,
               ),
               Container(
                 height: 400,
                 width: double.infinity,
-                color: Colors.amber,
+                color: _bg,
                 child: _icon,
               ),
               Container(
                 height: 300,
                 width: double.infinity,
-                color: Colors.purple,
+                color: _bg,
                 child: _icon,
               )
             ],
@@ -91,107 +87,115 @@ class Demo extends StatelessWidget {
         label: 'Card Tabs');
   }
 
-  Widget _buttonStyles() {
-    return AppCard(
-      children: [
-        _heading("Button Styles"),
-        const SizedBox(
-          height: 8,
-        ),
-        Text(
-            'Buttons accesed via static functions -> Buttons.flat("label"), Buttons.submit("label"). These are all fixed styles with minimal props for use.',
-            style: AppStyles.labelRegular.copyWith(height: 1.4)),
-        const SizedBox(height: 24),
-        Wrap(
-          spacing: 10,
-          runSpacing: 20,
-          children: [
-            Buttons.submit('Submit'),
-            Buttons.primary('Primary'),
-            Buttons.outline('Outline'),
-            Buttons.menu('Menu'),
-            Buttons.flat('Flat'),
-            Buttons.text('Text'),
-          ],
-        ),
-        const SizedBox(height: 24),
-        const Text("With Icons", style: AppStyles.headerRegular),
-        const SizedBox(height: 24),
-        Wrap(
-          spacing: 10,
-          runSpacing: 20,
-          children: [
-            Buttons.submit('Submit', icon: Icons.save),
-            Buttons.primary('Primary', icon: Icons.star),
-            Buttons.outline('Outline', icon: MdiIcons.accountCircle),
-            Buttons.menu('Menu', icon: Icons.settings),
-            Buttons.flat('Flat', icon: Icons.chevron_right),
-          ],
-        ),
-        const SizedBox(height: 24),
-        const Text("With Icons & Expanded", style: AppStyles.headerRegular),
-        const SizedBox(height: 24),
-        Wrap(
-          spacing: 10,
-          runSpacing: 20,
-          children: [
-            Buttons.submit('Submit', icon: Icons.save, expanded: true),
-            Buttons.primary('Primary', icon: Icons.star, expanded: true),
-            Buttons.outline('Outline',
-                icon: MdiIcons.accountCircle, expanded: true),
-            Buttons.menu('Menu', icon: Icons.settings, expanded: true),
-            Buttons.flat('Flat', icon: Icons.chevron_right, expanded: true),
-          ],
-        ),
-        const SizedBox(height: 24),
-        const Text("With Popup Action Menu", style: AppStyles.headerRegular),
-        const SizedBox(height: 24),
-        AppPopMenu(
-          button: [Buttons.outline('Quick Action Menu', icon: Icons.settings)],
-          items: const [
-            PopMenuItem(label: 'Action One', icon: Icons.settings),
-            PopMenuItem(
-                label: 'Action Two', icon: Icons.location_city_outlined),
-            PopMenuItem(
-                label: 'Action Three', icon: Icons.mail_outline_rounded),
-          ],
-        )
-      ],
+  Widget _buttons_() {
+    return _rowDark(
+      label: 'Button Styles',
+      child: AppCard(
+        mx: 0,
+        my: 0,
+        children: [
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+              'Buttons accesed via static functions -> Buttons.flat("label"), Buttons.submit("label"). These are all fixed styles with minimal props for use.',
+              style: AppStyles.labelRegular.copyWith(height: 1.4)),
+          const SizedBox(height: 24),
+          Wrap(
+            spacing: 10,
+            runSpacing: 20,
+            children: [
+              Buttons.submit('Submit'),
+              Buttons.primary('Primary'),
+              Buttons.outline('Outline'),
+              Buttons.menu('Menu'),
+              Buttons.flat('Flat'),
+              Buttons.text('Text'),
+            ],
+          ),
+          const SizedBox(height: 24),
+          const Text("With Icons", style: AppStyles.headerRegular),
+          const SizedBox(height: 24),
+          Wrap(
+            spacing: 10,
+            runSpacing: 20,
+            children: [
+              Buttons.submit('Submit', icon: Icons.save),
+              Buttons.primary('Primary', icon: Icons.star),
+              Buttons.outline('Outline', icon: MdiIcons.accountCircle),
+              Buttons.menu('Menu', icon: Icons.settings),
+              Buttons.flat('Flat', icon: Icons.chevron_right),
+            ],
+          ),
+          const SizedBox(height: 24),
+          const Text("With Icons & Expanded", style: AppStyles.headerRegular),
+          const SizedBox(height: 24),
+          Wrap(
+            spacing: 10,
+            runSpacing: 20,
+            children: [
+              Buttons.submit('Submit', icon: Icons.save, expanded: true),
+              Buttons.primary('Primary', icon: Icons.star, expanded: true),
+              Buttons.outline('Outline',
+                  icon: MdiIcons.accountCircle, expanded: true),
+              Buttons.menu('Menu', icon: Icons.settings, expanded: true),
+              Buttons.flat('Flat', icon: Icons.chevron_right, expanded: true),
+            ],
+          ),
+          const SizedBox(height: 24),
+          const Text("With Popup Action Menu", style: AppStyles.headerRegular),
+          const SizedBox(height: 24),
+          AppPopMenu(
+            button: [
+              Buttons.outline('Quick Action Menu', icon: Icons.settings)
+            ],
+            items: const [
+              PopMenuItem(label: 'Action One', icon: Icons.settings),
+              PopMenuItem(
+                  label: 'Action Two', icon: Icons.location_city_outlined),
+              PopMenuItem(
+                  label: 'Action Three', icon: Icons.mail_outline_rounded),
+            ],
+          )
+        ],
+      ),
     );
   }
 
-  Widget _contactInfoLine() {
-    return AppCard(
-      children: [
-        _heading("Contact Info Line"),
-        const SizedBox(height: 24),
-        const AppContactInfoLine(
-            label: "Phone",
-            text: '745-876-9876',
-            hint: 'Add your phone',
-            icon: Icons.phone),
-        const AppContactInfoLine(
-            label: "Email",
-            text: 'jacksparrow@skullisland.com',
+  Widget _contactInfo_() {
+    return _rowLight(
+      label: 'Contact Info Line',
+      child: Column(
+        children: const [
+          SizedBox(height: 24),
+          AppContactInfoLine(
+              label: "Phone",
+              text: '745-876-9876',
+              hint: 'Add your phone',
+              icon: Icons.phone),
+          AppContactInfoLine(
+              label: "Email",
+              text: 'jacksparrow@skullisland.com',
+              hint: 'Add your email',
+              icon: Icons.mail),
+          AppContactInfoLine(
+            label: "Service Address",
+            text: '123 Alphabet Street, Suite 400, Portland OR 97202',
             hint: 'Add your email',
-            icon: Icons.mail),
-        const AppContactInfoLine(
-          label: "Service Address",
-          text: '123 Alphabet Street, Suite 400, Portland OR 97202',
-          hint: 'Add your email',
-          icon: Icons.location_pin,
-        ),
-        const AppContactInfoLine(
-          label: "Super Power",
-          text: '',
-          hint: 'Add your Super Power',
-          icon: MdiIcons.lightningBolt,
-        )
-      ],
+            icon: Icons.location_pin,
+          ),
+          AppContactInfoLine(
+            label: "Super Power",
+            text: '',
+            hint: 'Add your Super Power',
+            icon: MdiIcons.lightningBolt,
+          )
+        ],
+      ),
     );
   }
 
-  Widget _addNote() {
+  Widget _addNote_() {
     return _rowLight(
         label: 'Add Note Widget',
         child: const AppAddNote(
@@ -199,7 +203,7 @@ class Demo extends StatelessWidget {
         ));
   }
 
-  Widget _appConfirmDialog() {
+  Widget _confirmDialog_() {
     return _rowLight(
         label: 'Confirm Dialog Widget',
         child: Buttons.outline(
@@ -220,110 +224,87 @@ class Demo extends StatelessWidget {
         ));
   }
 
-  Widget _formTextInput() {
-    return AppCard(children: [
-      _heading('Form Inputs'),
-      const SizedBox(
-        height: 24,
-      ),
-      FlexRow(
-        children: const [
-          AppTextField(
-            label: 'First Name',
-            initialValue: 'Tennessee',
-          ),
-          AppTextField(label: 'Last Name')
-        ],
-      ),
-      const SizedBox(
-        height: 16,
-      ),
-      const AppTextField(
-        label: 'Multi Line',
-        multiline: true,
-        initialValue:
-            'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
-      ),
-      const SizedBox(height: 16),
-      const AppMultiSelect(
-        items: [
-          SelectItem(id: '1', value: '', label: 'Cheese'),
-          SelectItem(id: '2', value: '', label: 'Mushrooms'),
-          SelectItem(id: '3', value: '', label: 'Jalepenos'),
-          SelectItem(id: '4', value: '', label: 'Tomatos'),
-          SelectItem(id: '4', value: '', label: 'Peperoni'),
-          SelectItem(id: '4', value: '', label: 'Cookie Dough'),
-          SelectItem(id: '4', value: '', label: 'Sausage'),
-          SelectItem(id: '5', value: '', label: 'Onions'),
-          SelectItem(id: '5', value: '', label: 'Garlic'),
-          SelectItem(id: '5', value: '', label: 'Gravel'),
-        ],
-      ),
-      const SizedBox(height: 24),
-      FlexRow(
-        flex: const [3, 1, 2],
-        children: [
-          Container(),
-          Buttons.text('Cancel', expanded: true),
-          Buttons.primary('Update Account', expanded: true),
-        ],
-      ),
-      AppSimpleDropDown(
-          label: 'Duration',
-          onSelected: (value) {
-            print('valued $value');
-          },
-          items: const ['biodiesel sustainable', 'Two', 'Three'],
-          dividerPosition: const [1])
-    ]);
-  }
-
-  Widget _demoCenterCard(String label, {Widget? child}) {
-    return AppCard(children: [
-      _heading(label),
-      Container(
-        color: AppColors.secondary_99,
-        padding: const EdgeInsets.all(40),
-        child: Center(
-          child: Container(
-            color: const Color(0xFFFFFFFF),
-            width: 400,
-            child: child,
-            padding: const EdgeInsets.all(16),
-          ),
+  Widget _formInput_() {
+    return _rowDark(
+      label: 'Form Inputs',
+      child: AppCard(mx: 0, my: 0, children: [
+        const SizedBox(
+          height: 24,
         ),
-      )
-    ]);
-  }
-
-  Widget _contactCard() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 0),
-      child: ContactCard(
-        title: 'Contact Card Demo',
-        contact: CustomerContact(
-            firstName: 'Joe',
-            lastName: 'Somebody',
-            email: 'joe@somesite.com',
-            phone: '(510) 843-4356',
-            role: 'Owner'),
-        address: AddressModel(
-            country: 'US',
-            street: '123 Alphabet Street',
-            city: 'Portland',
-            state: 'OR',
-            zip: '97202'),
-      ),
+        FlexRow(
+          children: const [
+            AppTextField(
+              label: 'First Name',
+              initialValue: 'Tennessee',
+            ),
+            AppTextField(label: 'Last Name')
+          ],
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        const AppTextField(
+          label: 'Multi Line',
+          multiline: true,
+          initialValue:
+              'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
+        ),
+        const SizedBox(height: 16),
+        const AppMultiSelect(
+          items: [
+            SelectItem(id: '1', value: '', label: 'Cheese'),
+            SelectItem(id: '2', value: '', label: 'Mushrooms'),
+            SelectItem(id: '3', value: '', label: 'Jalepenos'),
+            SelectItem(id: '4', value: '', label: 'Tomatos'),
+            SelectItem(id: '4', value: '', label: 'Peperoni'),
+            SelectItem(id: '4', value: '', label: 'Cookie Dough'),
+            SelectItem(id: '4', value: '', label: 'Sausage'),
+            SelectItem(id: '5', value: '', label: 'Onions'),
+            SelectItem(id: '5', value: '', label: 'Garlic'),
+            SelectItem(id: '5', value: '', label: 'Gravel'),
+          ],
+        ),
+        const SizedBox(height: 24),
+        FlexRow(
+          flex: const [3, 1, 2],
+          children: [
+            Container(),
+            Buttons.text('Cancel', expanded: true),
+            Buttons.primary('Update Account', expanded: true),
+          ],
+        ),
+        AppSimpleDropDown(
+            label: 'Duration',
+            onSelected: (value) {
+              print('valued $value');
+            },
+            items: const ['biodiesel sustainable', 'Two', 'Three'],
+            dividerPosition: const [1])
+      ]),
     );
   }
 
-  Widget _loadingSpinner() => AppCard(pb: 48, children: [
-        _heading("Loading Spinner"),
-        const SizedBox(height: 24),
-        const AppSpinner(),
-      ]);
+  Widget _contactCard_() {
+    return _rowDark(
+        label: 'Contact Card',
+        child: ContactCard(
+          title: 'Contact Card Demo',
+          contact: CustomerContact(
+              firstName: 'Joe',
+              lastName: 'Somebody',
+              email: 'joe@somesite.com',
+              phone: '(510) 843-4356',
+              role: 'Owner'),
+          address: AddressModel(
+              country: 'US',
+              street: '123 Alphabet Street',
+              city: 'Portland',
+              state: 'OR',
+              zip: '97202'),
+        ));
+  }
 
-  Widget _segmentControls() => _rowDark(
+  Widget _segmentControls_() => _rowDark(
       label: 'Segmented Control',
       child: AppSegmentedControl(
         fromMax: true,
@@ -351,18 +332,25 @@ class Demo extends StatelessWidget {
         },
       ));
 
-  Widget _calendar() => _rowLight(
+  Widget _calendar_() => _rowLight(
       label: 'Calendar',
-      child: NZCalendar(
-        onDateSelected: (value) {
-          print('date has been changed $value');
-        },
+      child: AppCard(
+        mx: 0,
+        my: 0,
+        children: [
+          NZCalendar(
+            onDateSelected: (value) {
+              print('date has been changed $value');
+            },
+          )
+        ],
       ));
 
-  Widget _timePicker(context) {
-    return _rowLight(
+  Widget _timePicker_(context) {
+    return _rowDark(
       label: 'Time Picker',
-      child: Buttons.outline('Open Time Picker', onPressed: () {
+      child: Buttons.outline('Open Time Picker', colorBg: AppColors.white,
+          onPressed: () {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -379,39 +367,37 @@ class Demo extends StatelessWidget {
 
 // DEMO LAYOUT UTILS
   Widget _rowDark(
-      {required Widget child,
-      required String label,
+      {required String label,
+      required Widget child,
       double inset = 24,
-      Color textColor = AppColors.white,
-      Color color = AppColors.secondary_20}) {
+      Color textColor = AppColors.secondary_99,
+      Color color = AppColors.secondary_30}) {
     return Container(
-        color: color,
-        // margin: const EdgeInsets.only(top: 24, bottom: 24),
-        padding:
-            EdgeInsets.only(top: 24, bottom: 64, left: inset, right: inset),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label.toUpperCase(),
-                style: AppStyles.headerRegular
-                    .copyWith(color: textColor, fontSize: 24)),
-            AppDivider(
-              color: textColor,
-              mt: 8,
-              size: 1,
-            ),
-            const SizedBox(height: 24),
-            child,
-          ],
-        ));
+      width: double.infinity,
+      padding: EdgeInsets.only(top: 32, left: 16, right: 16, bottom: 48),
+      decoration: BoxDecoration(color: color),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label.toUpperCase(),
+              style: AppStyles.headerRegular
+                  .copyWith(color: textColor, fontSize: 24)),
+          AppDivider(color: textColor.withAlpha(80), mt: 16, mb: 40),
+          child
+        ],
+      ),
+    );
   }
 
-  Widget _rowLight({required Widget child, required String label}) {
+  Widget _rowLight(
+      {required Widget child,
+      required String label,
+      Color color = AppColors.secondary_95}) {
     return _rowDark(
       child: child,
       label: label,
-      textColor: AppColors.secondary_30,
-      color: AppColors.white,
+      textColor: AppColors.secondary_60,
+      color: color,
     );
   }
 
