@@ -1,12 +1,11 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
-import 'package:country_picker/country_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/app_country_picker.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/constant/countries.dart';
 import 'package:louzero/controller/constant/layout.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/base_controller.dart';
@@ -88,12 +87,16 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   late final List<List<CTContactType>> _contactTypes = [
     widget.model?.customerContacts.first.types ?? []
   ];
-  final Country _country = AppDefaultValue.country;
+
+  late CountryCode _country = widget.model?.serviceAddress != null
+      ? CountryCodes.countryCodeByName(widget.model!.serviceAddress.country) ??
+          AppDefaultValue.countryCode
+      : AppDefaultValue.countryCode;
+
   SearchAddressModel? _serviceSearchAddressModel;
   SearchAddressModel? _billSearchAddressModel;
   final BaseController _baseController = Get.find();
   final controller = Get.find<CustomerController>();
-  final _scaffoldKey = GlobalKey();
   final _serviceStreetWidgetKey = GlobalKey();
   final _billStreetWidgetKey = GlobalKey();
   double _addressListY = 600;
@@ -109,7 +112,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         ..latitude = model.serviceAddress.latitude
         ..longitude = model.serviceAddress.longitude;
     }
-    Future.delayed(const Duration(milliseconds: 100)).then((value) => _getAddressListYPosition());
+    Future.delayed(const Duration(milliseconds: 100))
+        .then((value) => _addressListPosition());
     super.initState();
   }
 
@@ -125,7 +129,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
-      key: _scaffoldKey,
       subheader: widget.model == null ? "Add New Customer" : "Edit Customer",
       child: _body(),
       footerEnd: [
@@ -157,9 +160,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         Column(children: list),
         if (_baseController.searchedAddresses.value.isNotEmpty)
           AddressList(
-            left: 40,
-            right: 40,
-            top: _addressListY,
+            left: 50,
+            right: 50,
+            top: _addressListY + (_serviceAddressMode ? 0 : 420),
             onSelectedSearchedModel: (model) {
               if (_serviceAddressMode) {
                 _serviceSearchAddressModel = model;
@@ -182,34 +185,14 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     ));
   }
 
-  void _getAddressListYPosition() {
+  void _addressListPosition() {
     GlobalKey key = _serviceAddressMode ? _serviceStreetWidgetKey : _billStreetWidgetKey;
     if (key.currentContext?.findRenderObject() == null) return;
     RenderBox box = key.currentContext!.findRenderObject() as RenderBox;
-    Offset offset = box.localToGlobal(Offset.zero); //this is global position
+    Offset offset = box.localToGlobal(Offset.zero);
     double y = offset.dy;
-    _addressListY = y - box.size.height - 40;
-    _addressListY = _getPositionBottomLeft(_scaffoldKey, _serviceStreetWidgetKey).dy;
-    print('_addressListY: $_addressListY');
+    _addressListY = y - box.size.height - 30;
   }
-
-  Offset _getPositionBottomLeft(GlobalKey parentKey, GlobalKey childKey) {
-    final parentBox = parentKey.currentContext!.findRenderObject() as RenderBox;
-    final parentPosition = parentBox.localToGlobal(Offset.zero);
-    final parentHeight = parentBox.size.height;
-
-    final childBox = childKey.currentContext!.findRenderObject() as RenderBox;
-    final childPosition = childBox.localToGlobal(Offset.zero);
-    final childHeight = childBox.size.height;
-
-    final x = childPosition.dx - parentPosition.dx;
-    final y =
-    (childPosition.dy - parentPosition.dy)
-        .abs();
-    print('Offset: $y');
-    return Offset(x, y);
-  }
-
 
   Widget _customerDetails() {
     return AppCard(
@@ -310,6 +293,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       AppCountryPicker(
         defaultCountryCode: 'us',
         onChange: (val) {
+          _country = val!;
           print('Country Changed: $val');
         },
       ),
@@ -323,15 +307,13 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   isService ? _serviceStreetController : _billStreetController,
               label: "Street Address",
               onChanged: (val) {
-                _baseController.searchAddress(val, _country.countryCode);
+                _baseController.searchAddress(val, _country.code);
               },
             ),
             onFocusChange: (hasFocus) {
               if (hasFocus) {
                 _serviceAddressMode = isService;
-                _getAddressListYPosition();
               }
-              print('hasFocus: $hasFocus');
             },
           )
         ],

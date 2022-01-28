@@ -11,7 +11,7 @@ class AppCountryPicker extends StatefulWidget {
   final String label = 'Select Country';
   final double width = 400;
   final String? defaultCountryCode;
-  final void Function(String)? onChange;
+  final void Function(CountryCode?)? onChange;
 
   const AppCountryPicker({
     Key? key,
@@ -117,9 +117,9 @@ class _AppCountryPickerState extends State<AppCountryPicker> {
         onPressed: () {
           if (widget.onChange != null) {
             if (selectedItems.isNotEmpty) {
-              widget.onChange!(selectedItems[0].code);
+              widget.onChange!(selectedItems[0]);
             } else {
-              widget.onChange!('none');
+              widget.onChange!(null);
             }
           }
           Navigator.of(context).pop();
