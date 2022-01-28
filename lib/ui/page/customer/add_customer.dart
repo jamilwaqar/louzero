@@ -93,6 +93,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   SearchAddressModel? _billSearchAddressModel;
   final BaseController _baseController = Get.find();
   final controller = Get.find<CustomerController>();
+  final _streetWidgetKey = GlobalKey();
+  double _addressListY = 600;
 
   @override
   void initState() {
@@ -104,6 +106,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         ..latitude = model.serviceAddress.latitude
         ..longitude = model.serviceAddress.longitude;
     }
+    if (mounted) _getAddressListYPosition();
     super.initState();
   }
 
@@ -143,9 +146,57 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       ..._customerContactList,
       _formButtons(),
     ];
-    return Column(
-      children: list,
-    );
+
+    return Obx(()=> Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Column(children: list),
+        if (_baseController.searchedAddresses.value.isNotEmpty)
+          AddressList(
+            left: 40,
+            right: 40,
+            top: _addressListY,
+            onSelectedSearchedModel: (model) {
+              bool isService = true;
+              if (isService) {
+                _serviceSearchAddressModel = model;
+              } else {
+                _billSearchAddressModel = model;
+              }
+              if (isService) {
+                _serviceStreetController.text = model.street ?? '';
+                _serviceCityController.text = model.city ?? '';
+                _serviceStateController.text = model.state;
+              } else {
+                _billStreetController.text = model.street ?? '';
+                _billCityController.text = model.city ?? '';
+                _billStateController.text = model.state;
+              }
+              setState(() {});
+            },
+          ),
+      ],
+    ));
+  }
+
+  void _getAddressListYPosition() {
+    if (_streetWidgetKey.currentContext?.findRenderObject() == null) {
+      _addressListY = 0;
+      return;
+    }
+    RenderBox box = _streetWidgetKey.currentContext!.findRenderObject() as RenderBox;
+    Offset offset = box.localToGlobal(Offset.zero); //this is global position
+    double y = offset.dy;
+    final Size size = box.size;
+    print('Size: ${size.width}, ${size.height}');
+    // _addressListY = y;
+
+    print('Offset: ${offset.dx}, ${offset.dy}');
+
+    print('Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
+    _addressListY = (offset.dy + size.height) / 2 + 250;
+    print('_addressListY: $_addressListY');
+    setState(() {});
   }
 
   Widget _customerDetails() {
@@ -243,78 +294,56 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   Widget _addressWidget(bool isService) {
-    return Stack(clipBehavior: Clip.none, children: [
-      Wrap(children: [
-        AppCountryPicker(
-          defaultCountryCode: 'us',
-          onChange: (val) {
-            print('Country Changed: $val');
-          },
-        ),
-        const SizedBox(height: 16),
-        FlexRow(
-          children: [
-            AppTextField(
-              controller:
-                  isService ? _serviceStreetController : _billStreetController,
-              label: "Street Address",
-              onChanged: (val) {
-                _baseController.searchAddress(val, _country.countryCode);
-              },
-            )
-          ],
-        ),
-        FlexRow(
-          children: [
-            AppTextField(
-              controller:
-                  isService ? _serviceAptController : _billAptController,
-              label: "Apt / Suite / Other",
-            ),
-          ],
-        ),
-        FlexRow(
-          children: [
-            AppTextField(
-                controller:
-                    isService ? _serviceCityController : _billCityController,
-                label: "City"),
-            AppTextField(
-                controller:
-                    isService ? _serviceStateController : _billStateController,
-                label: "State"),
-            AppTextField(
-                controller:
-                    isService ? _serviceZipController : _billZipController,
-                label: "Zip"),
-          ],
-        ),
-        Buttons.link(
-          "Enter Address Fields Manually",
-          onPressed: () {},
-        ),
-      ]),
-      AddressList(
-        left: 0,
-        right: 0,
-        top: 180,
-        onSelectedSearchedModel: (model) {
-          if (isService) {
-            _serviceSearchAddressModel = model;
-          } else {
-            _billSearchAddressModel = model;
-          }
-          if (isService) {
-            _serviceStreetController.text = model.street ?? '';
-            _serviceCityController.text = model.city ?? '';
-            _serviceStateController.text = model.state;
-          } else {
-            _billStreetController.text = model.street ?? '';
-            _billCityController.text = model.city ?? '';
-            _billStateController.text = model.state;
-          }
-          setState(() {});
+    return Wrap(children: [
+      AppCountryPicker(
+        defaultCountryCode: 'us',
+        onChange: (val) {
+          print('Country Changed: $val');
         },
+      ),
+      const SizedBox(height: 16),
+      FlexRow(
+        children: [
+          AppTextField(
+            key: _streetWidgetKey,
+            controller:
+                isService ? _serviceStreetController : _billStreetController,
+            label: "Street Address",
+            onChanged: (val) {
+              _baseController.searchAddress(val, _country.countryCode);
+              _getAddressListYPosition();
+            },
+          )
+        ],
+      ),
+      FlexRow(
+        children: [
+          AppTextField(
+            controller:
+                isService ? _serviceAptController : _billAptController,
+            label: "Apt / Suite / Other",
+          ),
+        ],
+      ),
+      FlexRow(
+        children: [
+          AppTextField(
+              controller:
+                  isService ? _serviceCityController : _billCityController,
+              label: "City"),
+          AppTextField(
+              controller:
+                  isService ? _serviceStateController : _billStateController,
+              label: "State"),
+          AppTextField(
+              controller:
+                  isService ? _serviceZipController : _billZipController,
+              label: "Zip"),
+        ],
+      ),
+      Buttons.link(
+        "Enter Address Fields Manually",
+        onPressed: () {},
       ),
     ]);
   }
