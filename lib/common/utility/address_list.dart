@@ -35,7 +35,7 @@ class AddressList extends GetWidget<BaseController> {
         top: top,
         child: Container(
           padding: const EdgeInsets.all(8),
-          height: 200,
+          height: 340,
           width: double.infinity,
           decoration: BoxDecoration(
             color: AppColors.light_1,
