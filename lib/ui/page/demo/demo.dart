@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_simple_dropdown.dart';
 import 'package:louzero/common/common.dart';
@@ -12,7 +14,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:get/get.dart';
 
 class Demo extends StatelessWidget {
-  Demo({Key? key}) : super(key: key);
+  const Demo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class Demo extends StatelessWidget {
               height: 48,
             ),
             _calendar(),
+            _basicTabs(),
             _tabsExample(),
             _segmentControls(),
             _timePicker(context),
@@ -40,6 +43,54 @@ class Demo extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _basicTabs() {
+    return Container(
+        color: AppColors.secondary_20,
+        margin: const EdgeInsets.only(top: 24, bottom: 24),
+        padding:
+            const EdgeInsets.only(top: 24, bottom: 64, left: 90, right: 90),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Login Tabs',
+                style: AppStyles.headerRegular
+                    .copyWith(color: AppColors.white, fontSize: 32)),
+            const SizedBox(height: 24),
+            AppTabsBasic(
+              tabs: const ['Login', 'Sign Up'],
+              children: [
+                _dummyForm(label: 'Login'),
+                _dummyForm(label: 'Sign Up'),
+              ],
+            ),
+          ],
+        ));
+  }
+
+  Widget _dummyForm({label = "Login"}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 64, left: 64, right: 64),
+      child: Column(
+        children: [
+          const AppTextField(
+            label: 'Email',
+          ),
+          const AppTextField(
+            label: 'Password',
+          ),
+          const SizedBox(height: 16),
+          FlexRow(
+            flex: const [2, 2],
+            children: [
+              Buttons.primary(label, expanded: true),
+              const SizedBox(),
+            ],
+          )
+        ],
       ),
     );
   }
