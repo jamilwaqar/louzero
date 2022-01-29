@@ -58,13 +58,16 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Container(
             width: 512,
-            child: AppTabsBasic(
-              contentHeight: 490,
-              children: [_loginForm(), _createAccount()],
-              tabs: [
-                'Login',
-                'Create Account',
-              ],
+            child: Form(
+              key: formGlobalKey,
+              child: AppTabsBasic(
+                contentHeight: 490,
+                children: [_loginForm(), _createAccount()],
+                tabs: [
+                  'Login',
+                  'Create Account',
+                ],
+              ),
             ),
           ),
           SizedBox(height: 24),
@@ -98,36 +101,33 @@ class _LoginPageState extends State<LoginPage> {
   Widget _createAccount() {
     return Padding(
       padding: const EdgeInsets.only(top: 48, left: 48, right: 48),
-      child: Form(
-        key: formGlobalKey,
-        child: Column(
-          children: [
-            Buttons.outline('Sign In with Google',
-                onPressed: _onGoogleSignIn, expanded: true),
-            const AppTextDivider(),
-            AppTextField(
-              required: true,
-              key: const ValueKey('Email Address'),
-              controller: _emailController,
-              label: 'Email Address',
-              keyboardType: TextInputType.emailAddress,
-              validator: (val) {
-                if (val != null && val.isEmpty) {
-                  return 'Email is required';
-                }
-                if (Valid.email(val!)) {
-                  return null;
-                } else {
-                  return 'Enter Valid Email';
-                }
-              },
-            ),
-            const SizedBox(
-              height: 22,
-            ),
-            Buttons.primary('Sign In', onPressed: _onSignIn, expanded: true),
-          ],
-        ),
+      child: Column(
+        children: [
+          Buttons.outline('Sign In with Google',
+              onPressed: _onGoogleSignIn, expanded: true),
+          const AppTextDivider(),
+          AppTextField(
+            required: true,
+            key: const ValueKey('Email Create Account'),
+            controller: _emailController,
+            label: 'Email Address',
+            keyboardType: TextInputType.emailAddress,
+            validator: (val) {
+              if (val != null && val.isEmpty) {
+                return 'Email is required';
+              }
+              if (Valid.email(val!)) {
+                return null;
+              } else {
+                return 'Enter Valid Email';
+              }
+            },
+          ),
+          const SizedBox(
+            height: 22,
+          ),
+          Buttons.primary('Sign In', onPressed: _onSignIn, expanded: true),
+        ],
       ),
     );
   }
@@ -135,67 +135,64 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginForm() {
     return Padding(
       padding: const EdgeInsets.only(top: 48, left: 48, right: 48),
-      child: Form(
-        key: formGlobalKey,
-        child: Column(
-          children: [
-            AppTextField(
-              required: true,
-              key: const ValueKey('Email Address'),
-              controller: _emailController,
-              label: 'Email Address',
-              keyboardType: TextInputType.emailAddress,
-              validator: (val) {
-                if (val != null && val.isEmpty) {
-                  return 'Email is required';
-                }
-                if (Valid.email(val!)) {
-                  return null;
-                } else {
-                  return 'Enter Valid Email';
-                }
-              },
-            ),
-            AppTextField(
-              password: true,
-              key: const ValueKey('Password'),
-              controller: _passwordController,
-              label: 'Password',
-              validator: (val) {
-                if (Valid.isRequired(val)) {
-                  return 'Password is required';
-                }
-                if (Valid.password(val!)) {
-                  return null;
-                } else {
-                  return 'Password must be at least six characters';
-                }
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppTextLink(
-                  "Remember this device",
-                  onPressed: _onRememberDevice,
-                ),
-                AppTextLink(
-                  "Forgot Password?",
-                  fontWeight: FontWeight.w600,
-                  textDecoration: TextDecoration.underline,
-                  onPressed: _onResetPassword,
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 22,
-            ),
-            Buttons.primary('Sign In', onPressed: _onSignIn, expanded: true),
-            const AppTextDivider(),
-            Buttons.outline('Sign In with Google',
-                onPressed: _onGoogleSignIn, expanded: true),
-          ],
-        ),
+      child: Column(
+        children: [
+          AppTextField(
+            required: true,
+            key: const ValueKey('Email Address'),
+            controller: _emailController,
+            label: 'Email Address',
+            keyboardType: TextInputType.emailAddress,
+            validator: (val) {
+              if (val != null && val.isEmpty) {
+                return 'Email is required';
+              }
+              if (Valid.email(val!)) {
+                return null;
+              } else {
+                return 'Enter Valid Email';
+              }
+            },
+          ),
+          AppTextField(
+            password: true,
+            key: const ValueKey('Password'),
+            controller: _passwordController,
+            label: 'Password',
+            validator: (val) {
+              if (Valid.isRequired(val)) {
+                return 'Password is required';
+              }
+              if (Valid.password(val!)) {
+                return null;
+              } else {
+                return 'Password must be at least six characters';
+              }
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AppTextLink(
+                "Remember this device",
+                onPressed: _onRememberDevice,
+              ),
+              AppTextLink(
+                "Forgot Password?",
+                fontWeight: FontWeight.w600,
+                textDecoration: TextDecoration.underline,
+                onPressed: _onResetPassword,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 22,
+          ),
+          Buttons.primary('Sign In', onPressed: _onSignIn, expanded: true),
+          const AppTextDivider(),
+          Buttons.outline('Sign In with Google',
+              onPressed: _onGoogleSignIn, expanded: true),
+        ],
       ),
     );
   }
