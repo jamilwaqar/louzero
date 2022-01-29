@@ -3,15 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card_center.dart';
-import 'package:louzero/common/app_input_text.dart';
-import 'package:louzero/common/app_text_divider.dart';
-import 'package:louzero/common/app_text_header.dart';
-import 'package:louzero/common/app_text_help_link.dart';
-import 'package:louzero/common/app_text_link.dart';
-import 'package:louzero/common/app_textfield.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
+import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/validators.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
@@ -35,10 +29,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    if (kDebugMode) {
-      _emailController.text = "josh.webdev@gmail.com";
-      _passwordController.text = "!1QAwsEDrf";
-    }
+    // if (kDebugMode) {
+    //   _emailController.text = "josh.webdev@gmail.com";
+    //   _passwordController.text = "!1QAwsEDrf";
+    // }
     super.initState();
   }
 
@@ -55,87 +49,30 @@ class _LoginPageState extends State<LoginPage> {
       logoOnly: true,
       child: Column(
         children: [
-          const SizedBox(
-            height: 128,
+          SizedBox(
+            height: 100,
           ),
-          AppCardCenter(
-            child: Form(
-              key: formGlobalKey,
-              child: Column(
-                children: [
-                  const AppTextHeader('Sign in to LOUzero'),
-                  AppTextHelpLink(
-                    label: 'New to LOUzero?',
-                    linkText: 'Create an Account',
-                    onPressed: _onCreateAccount,
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  AppTextField(
-                    required: true,
-                    key: const ValueKey('Email Address'),
-                    controller: _emailController,
-                    label: 'Email Address',
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (val) {
-                      if (val != null && val.isEmpty) {
-                        return 'Email is required';
-                      }
-                      if (Valid.email(val!)) {
-                        return null;
-                      } else {
-                        return 'Enter Valid Email';
-                      }
-                    },
-                  ),
-                  AppTextField(
-                    password: true,
-                    key: const ValueKey('Password'),
-                    controller: _passwordController,
-                    label: 'Password',
-                    validator: (val) {
-                      if (Valid.isRequired(val)) {
-                        return 'Password is required';
-                      }
-                      if (Valid.password(val!)) {
-                        return null;
-                      } else {
-                        return 'Password must be at least six characters';
-                      }
-                    },
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppTextLink(
-                        "Remember this device",
-                        onPressed: _onRememberDevice,
-                      ),
-                      AppTextLink(
-                        "Forgot Password?",
-                        fontWeight: FontWeight.w600,
-                        textDecoration: TextDecoration.underline,
-                        onPressed: _onResetPassword,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 22,
-                  ),
-                  Buttons.primary('Sign In',
-                      onPressed: _onSignIn, expanded: true),
-                  const AppTextDivider(),
-                  Buttons.outline('Sign In with Google',
-                      onPressed: _onGoogleSignIn, expanded: true),
-                ],
-              ),
+          Image.asset("assets/icons/general/logo_icon.png"),
+          SizedBox(
+            height: 56,
+          ),
+          Container(
+            width: 512,
+            child: AppTabsBasic(
+              contentHeight: 490,
+              children: [_loginForm(), _createAccount()],
+              tabs: [
+                'Login',
+                'Create Account',
+              ],
             ),
           ),
-          AppTextLink(
-            "HAVE AN INVITATION CODE?",
-            fontWeight: FontWeight.w700,
-            onPressed: () => Get.to(() => const AcceptInvitePage()),
+          SizedBox(height: 24),
+          GestureDetector(
+            child: Text("HAVE AN INVITATION CODE?",
+                style:
+                    AppStyles.labelBold.copyWith(color: AppColors.primary_70)),
+            onTap: () => Get.to(() => const AcceptInvitePage()),
           ),
           Expanded(
               child: Flex(
@@ -154,6 +91,111 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ))
         ],
+      ),
+    );
+  }
+
+  Widget _createAccount() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 48, left: 48, right: 48),
+      child: Form(
+        key: formGlobalKey,
+        child: Column(
+          children: [
+            Buttons.outline('Sign In with Google',
+                onPressed: _onGoogleSignIn, expanded: true),
+            const AppTextDivider(),
+            AppTextField(
+              required: true,
+              key: const ValueKey('Email Address'),
+              controller: _emailController,
+              label: 'Email Address',
+              keyboardType: TextInputType.emailAddress,
+              validator: (val) {
+                if (val != null && val.isEmpty) {
+                  return 'Email is required';
+                }
+                if (Valid.email(val!)) {
+                  return null;
+                } else {
+                  return 'Enter Valid Email';
+                }
+              },
+            ),
+            const SizedBox(
+              height: 22,
+            ),
+            Buttons.primary('Sign In', onPressed: _onSignIn, expanded: true),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _loginForm() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 48, left: 48, right: 48),
+      child: Form(
+        key: formGlobalKey,
+        child: Column(
+          children: [
+            AppTextField(
+              required: true,
+              key: const ValueKey('Email Address'),
+              controller: _emailController,
+              label: 'Email Address',
+              keyboardType: TextInputType.emailAddress,
+              validator: (val) {
+                if (val != null && val.isEmpty) {
+                  return 'Email is required';
+                }
+                if (Valid.email(val!)) {
+                  return null;
+                } else {
+                  return 'Enter Valid Email';
+                }
+              },
+            ),
+            AppTextField(
+              password: true,
+              key: const ValueKey('Password'),
+              controller: _passwordController,
+              label: 'Password',
+              validator: (val) {
+                if (Valid.isRequired(val)) {
+                  return 'Password is required';
+                }
+                if (Valid.password(val!)) {
+                  return null;
+                } else {
+                  return 'Password must be at least six characters';
+                }
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppTextLink(
+                  "Remember this device",
+                  onPressed: _onRememberDevice,
+                ),
+                AppTextLink(
+                  "Forgot Password?",
+                  fontWeight: FontWeight.w600,
+                  textDecoration: TextDecoration.underline,
+                  onPressed: _onResetPassword,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 22,
+            ),
+            Buttons.primary('Sign In', onPressed: _onSignIn, expanded: true),
+            const AppTextDivider(),
+            Buttons.outline('Sign In with Google',
+                onPressed: _onGoogleSignIn, expanded: true),
+          ],
+        ),
       ),
     );
   }
