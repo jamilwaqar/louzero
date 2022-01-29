@@ -51,6 +51,7 @@ class AppHeaderIcon extends StatelessWidget {
           ),
           if (icon != null)
             AppIconButton(
+              key: const Key('AppIconButton'),
               pl: 8,
               size: sizeIcon,
               iconSize: sizeIcon / 1.6,
