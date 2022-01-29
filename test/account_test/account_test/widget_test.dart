@@ -14,8 +14,7 @@ void main() {
     Get.put(BaseController());
     Get.put(CompanyController());
     Get.find<AuthController>().userModel.value = mockUserModel;
-    final company = MockCompanyModel();
-    Get.find<BaseController>().companies = [company];
+    Get.find<BaseController>().companies = [mockCompanyModel];
 
     await tester.pumpWidget(
         makeTestableWidget(child: const MyAccountPage(), tester: tester));
@@ -28,15 +27,14 @@ void main() {
 
     /// My Companies
     expect(Get.find<CompanyController>().companies.length, 1);
-    expect(find.text(company.name), findsOneWidget);
+    expect(find.text(mockCompanyModel.name), findsOneWidget);
   });
 
   testWidgets('Edit Account page', (WidgetTester tester) async {
     Get.put(BaseController());
     Get.put(CompanyController());
     Get.find<AuthController>().userModel.value = mockUserModel;
-    final company = MockCompanyModel();
-    Get.find<BaseController>().companies = [company];
+    Get.find<BaseController>().companies = [mockCompanyModel];
 
     await tester.pumpWidget(
         makeTestableWidget(child: const MyAccountPage(), tester: tester));

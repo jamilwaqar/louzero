@@ -12,8 +12,9 @@ final mockBLDataStore = MockBLDataStore();
 final mockUser = MockUser();
 final mockAddressModel = MockAddressModel();
 final mockJob = MockJobModel();
-final mockCustomer = MockCustomer();
+final mockCustomer = MockCustomerModel();
 final mockUserModel = MockUserModel();
+final mockCompanyModel = MockCompanyModel();
 
 class MockUserModel extends Mock implements UserModel {
   @override
@@ -99,7 +100,7 @@ class MockJobModel extends Mock implements JobModel {
   String get note => 'note';
 }
 
-class MockCustomer extends Mock implements CustomerModel {
+class MockCustomerModel extends Mock implements CustomerModel {
   @override
   String get objectId => const Uuid().v4();
 
