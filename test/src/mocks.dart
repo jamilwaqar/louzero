@@ -4,6 +4,16 @@ import 'package:louzero/models/job_models.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uuid/uuid.dart';
+import 'mock_backendless_data.dart';
+import 'mock_user_service.dart';
+
+final mockBLUserService = MockBackendlessUserService();
+final mockBLDataStore = MockBLDataStore();
+final mockUser = MockUser();
+final mockAddressModel = MockAddressModel();
+final mockJob = MockJobModel();
+final mockCustomer = MockCustomer();
+final mockUserModel = MockUserModel();
 
 class MockUserModel extends Mock implements UserModel {
   @override
@@ -87,4 +97,21 @@ class MockJobModel extends Mock implements JobModel {
 
   @override
   String get note => 'note';
+}
+
+class MockCustomer extends Mock implements CustomerModel {
+  @override
+  String get objectId => const Uuid().v4();
+
+  @override
+  String get companyName => 'companyName';
+
+  @override
+  String get type => 'Residential';
+
+  @override
+  AddressModel get serviceAddress => mockAddressModel;
+
+  @override
+  AddressModel get billingAddress => mockAddressModel;
 }

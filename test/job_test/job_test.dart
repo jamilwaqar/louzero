@@ -1,17 +1,13 @@
-import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
-import 'package:mockito/mockito.dart';
-import '../auth_test/auth_flow_test.dart';
+import '../src/mock_user_service.dart';
 import '../src/mocks.dart';
 
 
-final _jobModel = MockJobModel();
-
-class MockBackendlessData extends Mock implements IDataStore {
+/*class MockBackendlessData extends Mock implements IDataStore {
   @override
   Future save(entity) {
     Map<String, dynamic> data = _jobModel.toJson();
@@ -21,27 +17,27 @@ class MockBackendlessData extends Mock implements IDataStore {
         _jobModel.scheduleModels.map((e) => e.toJson()).toList();
     return Future.value(data);
   }
-}
+}*/
 
 void main() {
-  final MockBackendlessAuth mockBackendlessAuth = MockBackendlessAuth();
+  final MockBackendlessUserService mockBackendlessAuth = MockBackendlessUserService();
   setUp(() {
     Get.put(AuthController(mockBackendlessAuth));
     Get.put(BaseController());
     Get.put(JobController())
-      .jobModel = _jobModel;
+      .jobModel = mockJob;
   });
 
   tearDown(() {});
 
   test("All Jobs", () {
     final controller = Get.find<JobController>();
-    controller.baseController.jobs.add(_jobModel);
-    controller.save(_jobModel);
+    controller.baseController.jobs.add(mockJob);
+    controller.save(mockJob);
 
     expect(controller.jobModels.length, 1);
-    expect(controller.jobModels.first.objectId, _jobModel.objectId);
+    expect(controller.jobModels.first.objectId, mockJob.objectId);
     expect(Get.find<BaseController>().jobs.length, 1);
-    expect(Get.find<BaseController>().jobs.first.jobType, _jobModel.jobType);
+    expect(Get.find<BaseController>().jobs.first.jobType, mockJob.jobType);
   });
 }
