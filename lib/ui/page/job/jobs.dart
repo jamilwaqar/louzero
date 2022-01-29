@@ -1,5 +1,7 @@
+import 'package:delayed_widget/delayed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:louzero/common/app_segment_item.dart';
 import 'package:louzero/common/app_segmented_control.dart';
 import 'package:louzero/common/app_simple_dropdown.dart';
@@ -10,6 +12,7 @@ import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
+import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../app_base_scaffold.dart';
@@ -22,10 +25,14 @@ class JobListPage extends StatefulWidget {
   _JobListPageState createState() => _JobListPageState();
 }
 class _JobListPageState extends State<JobListPage> {
-  TextEditingController _searchText = TextEditingController();
+  final TextEditingController _searchText = TextEditingController();
   String _selectedType = "";
   String _selectedDuration = "";
   bool isDetailsPopupVisible = false;
+  bool showCustomDateRange = false;
+  DateTime? _startDate;
+  DateTime? _endDate;
+  int diffInDays = 0;
   List items = [
     {
       "id" : '8519',
@@ -121,10 +128,16 @@ class _JobListPageState extends State<JobListPage> {
   }
 
   void sortByDuration() {
-    print('_selectedDuration $_selectedDuration');
     if(_selectedDuration.isEmpty) {
       setState(() {
         tableItems = items;
+      });
+      return;
+    }
+
+    if(_selectedDuration == "Custom Range") {
+      setState(() {
+        showCustomDateRange = true;
       });
       return;
     }
@@ -139,8 +152,9 @@ class _JobListPageState extends State<JobListPage> {
           return false;
         }
 
-        return prevOfYesterday.millisecondsSinceEpoch > int.parse(i['scheduled']) &&
-            now.millisecondsSinceEpoch < int.parse(i['scheduled']);
+        var date = DateTime.fromMillisecondsSinceEpoch(int.parse(i['scheduled']) * 1000);
+        return prevOfYesterday.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
+            now.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
       }).toList();
     }
     else if(_selectedDuration == "Today") {
@@ -152,8 +166,9 @@ class _JobListPageState extends State<JobListPage> {
           return false;
         }
 
-        return yesterday.millisecondsSinceEpoch > int.parse(i['scheduled']) &&
-            tomorrow.millisecondsSinceEpoch < int.parse(i['scheduled']);
+        var date = DateTime.fromMillisecondsSinceEpoch(int.parse(i['scheduled']) * 1000);
+        return yesterday.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
+            tomorrow.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
       }).toList();
     }
     else if(_selectedDuration == "Tomorrow") {
@@ -163,8 +178,9 @@ class _JobListPageState extends State<JobListPage> {
           return false;
         }
 
-        return now.millisecondsSinceEpoch > int.parse(i['scheduled']) &&
-            nexOfTomorrow.millisecondsSinceEpoch < int.parse(i['scheduled']);
+        var date = DateTime.fromMillisecondsSinceEpoch(int.parse(i['scheduled']) * 1000);
+        return now.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
+            nexOfTomorrow.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
       }).toList();
     }
     else if(_selectedDuration == "This Week") {
@@ -175,8 +191,9 @@ class _JobListPageState extends State<JobListPage> {
           return false;
         }
 
-        return now.millisecondsSinceEpoch > int.parse(i['scheduled']) &&
-            endOfWeek.millisecondsSinceEpoch < int.parse(i['scheduled']);
+        var date = DateTime.fromMillisecondsSinceEpoch(int.parse(i['scheduled']) * 1000);
+        return now.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
+            endOfWeek.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
       }).toList();
 
     }
@@ -189,8 +206,9 @@ class _JobListPageState extends State<JobListPage> {
           return false;
         }
 
-        return startOfWeek.millisecondsSinceEpoch > int.parse(i['scheduled']) &&
-            endOfNextWeek.millisecondsSinceEpoch < int.parse(i['scheduled']);
+        var date = DateTime.fromMillisecondsSinceEpoch(int.parse(i['scheduled']) * 1000);
+        return startOfWeek.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
+            endOfNextWeek.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
       }).toList();
     }
 
@@ -212,6 +230,25 @@ class _JobListPageState extends State<JobListPage> {
       else{
         tableItems = currentItems;
       }
+    });
+  }
+
+  void sortByCustomRange() {
+    List currentItems = items;
+    List updatedItems = [];
+    DateTime prevOfStart = _startDate!.subtract(Duration(days:1));
+    DateTime nextOfEnd = _endDate!.add(Duration(days:1));
+    updatedItems = currentItems.where((i) {
+      if(i['scheduled'].toString().isEmpty) {
+        return false;
+      }
+      var date = DateTime.fromMillisecondsSinceEpoch(int.parse(i['scheduled']) * 1000);
+      return nextOfEnd.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
+          prevOfStart.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
+    }).toList();
+
+    setState(() {
+      tableItems = updatedItems;
     });
   }
 
@@ -264,7 +301,6 @@ class _JobListPageState extends State<JobListPage> {
                     AppSimpleDropDown(
                         label: "Job Type",
                         onSelected: (value) {
-                          print('select typed $value');
                           setState(() {
                             _selectedType = value;
                           });
@@ -276,9 +312,22 @@ class _JobListPageState extends State<JobListPage> {
                     AppSimpleDropDown(
                         label: "Duration",
                         backgroundColor: Colors.white,
+                        onClear: () {
+                          setState(() {
+                            showCustomDateRange = false;
+                            _selectedDuration = "";
+                            _endDate = null;
+                            _startDate = null;
+                            diffInDays = 0;
+                          });
+                        },
                         onSelected: (value) {
                           setState(() {
                             _selectedDuration = value;
+                            _endDate = null;
+                            _startDate = null;
+                            diffInDays = 0;
+                            showCustomDateRange = false;
                           });
                           sortByDuration();
                         },
@@ -342,6 +391,20 @@ class _JobListPageState extends State<JobListPage> {
               ],
             ),
           ),
+
+          showCustomDateRange ?
+              Positioned(
+                  right: 0,
+                  top: 140,
+                  width: MediaQuery.of(context).size.width,
+                  child: DelayedWidget(
+                    animation: DelayedAnimations.SLIDE_FROM_BOTTOM,
+                    child: _customDateRangeModel(),
+                  )
+              )
+          :
+              const SizedBox(),
+
           isDetailsPopupVisible ?
           Positioned(
               height: MediaQuery.of(context).size.height - 210,
@@ -398,4 +461,80 @@ class _JobListPageState extends State<JobListPage> {
       ],
     );
   }
+
+  Widget _customDateRangeModel() => AppCard(
+      children: [
+        const Text('Custom Date Range', style: AppStyles.headerRegular,),
+        const SizedBox(height: 16,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                const Text('From: ', style: AppStyles.labelBold,),
+                Text(_startDate != null ? DateFormat('MMM, dd yyyy').format(_startDate!) : "", style: AppStyles.labelRegular,),
+              ],
+            ),
+            Row(
+              children: [
+                const Text('To: ', style: AppStyles.labelBold,),
+                Text(_endDate != null ? DateFormat('MMM, dd yyyy').format(_endDate!) : "", style: AppStyles.labelRegular,),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 16,),
+        NZCalendar(
+          onDateSelected: (date){
+            print('date selected');
+          },
+          startDate: _startDate,
+          endDate: _endDate,
+          selectRange: true,
+          onRangeSelected: (start, end) {
+            setState(() {
+              _startDate = start;
+              _endDate = end;
+            });
+            diffInDays = DateTime.parse(end.toString()).difference(start).inDays;
+          },
+        ),
+        const SizedBox(height: 32,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("$diffInDays days selected", style: AppStyles.labelBold,),
+            Row(
+              children: [
+                LZTextButton(
+                  "Cancel",
+                  textColor: AppColors.secondary_20,
+                  fontWeight: FontWeight.w500,
+                  onPressed: () {
+                    setState(() {
+                      showCustomDateRange = false;
+                      if(_startDate == null && _endDate == null) {
+                        _selectedDuration = "";
+                        sortByDuration();
+                      }
+                    });
+                    print(_selectedDuration);
+                  },
+                ),
+                const SizedBox(width: 32,),
+                AppButton(
+                    label: "Apply",
+                    onPressed: () async {
+                      sortByCustomRange();
+                      setState(() {
+                        showCustomDateRange = false;
+                      });
+                    }
+                )
+              ],
+            )
+          ],
+        )
+      ]
+  );
 }

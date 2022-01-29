@@ -25,6 +25,7 @@ class Demo extends StatelessWidget {
               height: 48,
             ),
             _calendar(),
+            _calendarRange(),
             _tabsExample(),
             _segmentControls(),
             _timePicker(context),
@@ -344,11 +345,27 @@ class Demo extends StatelessWidget {
   Widget _calendar() => AppCard(children: [
         _heading('Calendar'),
         NZCalendar(
+          onRangeSelected: (start, end) {
+            print('date has been changed $start $end');
+          },
           onDateSelected: (value) {
             print('date has been changed $value');
           },
         )
       ]);
+
+  Widget _calendarRange() => AppCard(children: [
+    _heading('Calendar'),
+    NZCalendar(
+      selectRange: true,
+      onRangeSelected: (start, end) {
+        print('date has been changed $start $end');
+      },
+      onDateSelected: (value) {
+        print('date has been changed $value');
+      },
+    )
+  ]);
 
   Widget _timePicker(context) => AppCard(children: [
         _heading('Time Picker'),

@@ -9,6 +9,7 @@ class AppSimpleDropDown extends StatefulWidget{
   const AppSimpleDropDown({
     required this.label,
     required this.onSelected,
+    this.onClear,
     required this.items,
     this.backgroundColor,
     this.textColor,
@@ -29,6 +30,7 @@ class AppSimpleDropDown extends StatefulWidget{
   final Icon? icon;
   final double? height;
   final Function onSelected;
+  final Function? onClear;
   final bool? hasClearIcon;
   final List? dividerPosition; //accept array of index eg. [1, 2]
 
@@ -76,6 +78,9 @@ class _AppSimpleDropDownState extends State<AppSimpleDropDown> {
                             selectedItem = "";
                           });
                           widget.onSelected("");
+                          if(widget.onClear != null) {
+                            widget.onClear!();
+                          }
                         },
                         child: const Icon(MdiIcons.closeCircle, size: 18, color: Colors.grey,),
                       )
