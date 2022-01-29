@@ -324,9 +324,6 @@ class _JobListPageState extends State<JobListPage> {
                         onSelected: (value) {
                           setState(() {
                             _selectedDuration = value;
-                            _endDate = null;
-                            _startDate = null;
-                            diffInDays = 0;
                             showCustomDateRange = false;
                           });
                           sortByDuration();
