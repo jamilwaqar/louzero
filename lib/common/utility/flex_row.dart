@@ -7,12 +7,14 @@ class FlexRow extends StatelessWidget {
     this.flex = const <int>[],
     this.mt = 0,
     this.mb = 0,
+    this.gap = 16,
     this.crossAxisAlignment = CrossAxisAlignment.start,
     this.mainAxisAlignment = MainAxisAlignment.start,
   }) : super(key: key);
 
   final double mt;
   final double mb;
+  final double gap;
   final List<int> flex;
   final List<Widget> children;
   final List<Widget> items = [];
@@ -27,7 +29,7 @@ class FlexRow extends StatelessWidget {
 
         items.add(Expanded(flex: _flex, child: children[i]));
         if (i < children.length - 1) {
-          items.add(const SizedBox(width: 16));
+          items.add(SizedBox(width: gap));
         }
       }
     }
