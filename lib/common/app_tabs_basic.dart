@@ -122,7 +122,6 @@ class TabButton extends StatelessWidget {
     Color _bg2 = _selected ? AppColors.secondary_90 : AppColors.white;
     double _ht = _selected ? 70 : 50;
     double _size = _selected ? 32 : 16;
-    bool _isOdd = pageNumber.floor().isOdd;
 
     return GestureDetector(
       onTap: onPressed,
@@ -183,7 +182,7 @@ class TabButton extends StatelessWidget {
               fontSize: size,
               color: AppColors.secondary_40),
           curve: Curves.fastLinearToSlowEaseIn,
-          duration: Duration(milliseconds: 350),
+          duration: const Duration(milliseconds: 350),
         )
 
         // Text(
