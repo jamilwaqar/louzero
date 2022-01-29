@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 import 'mock_backendless_data.dart';
 import 'mock_user_service.dart';
 
-final mockBLUserService = MockBackendlessUserService();
+final mockBLUserService = MockBLUserService();
 final mockBLDataStore = MockBLDataStore();
 final mockUser = MockUser();
 final mockAddressModel = MockAddressModel();

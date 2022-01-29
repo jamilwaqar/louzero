@@ -20,7 +20,7 @@ import '../src/mocks.dart';
 }*/
 
 void main() {
-  final MockBackendlessUserService mockBackendlessAuth = MockBackendlessUserService();
+  final MockBLUserService mockBackendlessAuth = MockBLUserService();
   setUp(() {
     Get.put(AuthController(mockBackendlessAuth));
     Get.put(BaseController());

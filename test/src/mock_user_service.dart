@@ -5,7 +5,7 @@ import 'mocks.dart';
 
 class MockUser extends Mock implements BackendlessUser {}
 
-class MockBackendlessUserService extends Mock implements BackendlessUserService {
+class MockBLUserService extends Mock implements BackendlessUserService {
   @override
   Future<BackendlessUser?> getCurrentUser() {
     return Future.value(mockUser);
