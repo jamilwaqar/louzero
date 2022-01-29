@@ -160,36 +160,30 @@ class TabButton extends StatelessWidget {
       bool radiusRight = false,
       bool radiusLeft = false}) {
     return AnimatedContainer(
-        duration: const Duration(milliseconds: 700),
-        curve: Curves.fastLinearToSlowEaseIn,
-        height: height,
-        alignment: const Alignment(0, 0),
-        decoration: BoxDecoration(
-          color: colorBg,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(radiusTopLeft ? 16 : 0),
-            topRight: Radius.circular(radiusTopRight ? 16 : 0),
-            bottomRight: Radius.circular(radiusRight ? 16 : 0),
-            bottomLeft: Radius.circular(radiusLeft ? 16 : 0),
-          ),
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastLinearToSlowEaseIn,
+      height: height,
+      alignment: const Alignment(0, 0),
+      decoration: BoxDecoration(
+        color: colorBg,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(radiusTopLeft ? 16 : 0),
+          topRight: Radius.circular(radiusTopRight ? 16 : 0),
+          bottomRight: Radius.circular(radiusRight ? 16 : 0),
+          bottomLeft: Radius.circular(radiusLeft ? 16 : 0),
         ),
-        child: AnimatedDefaultTextStyle(
-          child: Text(label),
-          style: TextStyle(
-              fontFamily: 'Barlow',
-              fontWeight: FontWeight.w700,
-              height: .9,
-              fontSize: size,
-              color: AppColors.secondary_40),
-          curve: Curves.fastLinearToSlowEaseIn,
-          duration: const Duration(milliseconds: 350),
-        )
-
-        // Text(
-        //   label,
-        //   style: AppStyles.headerRegular.copyWith(
-        //       height: .9, fontSize: size, color: AppColors.secondary_40),
-        // ),
-        );
+      ),
+      child: AnimatedDefaultTextStyle(
+        child: Text(label),
+        style: TextStyle(
+            fontFamily: 'Barlow',
+            fontWeight: FontWeight.w700,
+            height: .9,
+            fontSize: size,
+            color: AppColors.secondary_40),
+        curve: Curves.fastLinearToSlowEaseIn,
+        duration: const Duration(milliseconds: 350),
+      ),
+    );
   }
 }
