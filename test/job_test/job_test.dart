@@ -5,8 +5,8 @@ import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:mockito/mockito.dart';
-import 'auth_flow_test.dart';
-import 'src/mocks.dart';
+import '../auth_test/auth_flow_test.dart';
+import '../src/mocks.dart';
 
 
 final _jobModel = MockJobModel();

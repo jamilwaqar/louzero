@@ -6,7 +6,7 @@ void main() {
     const email1 = 'test@gmail.com';
     const email2 = 'test.gmail.com';
 
-    expect(Valid.Email(email1), true);
-    expect(Valid.Email(email2), false);
+    expect(Valid.email(email1), true);
+    expect(Valid.email(email2), false);
   });
 }
