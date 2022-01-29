@@ -49,28 +49,28 @@ class _LoginPageState extends State<LoginPage> {
       logoOnly: true,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 100,
           ),
           Image.asset("assets/icons/general/logo_icon.png"),
-          SizedBox(
+          const SizedBox(
             height: 56,
           ),
-          Container(
+          SizedBox(
             width: 512,
             child: Form(
               key: formGlobalKey,
               child: AppTabsBasic(
                 contentHeight: 490,
                 children: [_loginForm(), _createAccount()],
-                tabs: [
+                tabs: const [
                   'Login',
                   'Create Account',
                 ],
               ),
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           GestureDetector(
             child: Text("HAVE AN INVITATION CODE?",
                 style:
@@ -103,8 +103,8 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.only(top: 48, left: 48, right: 48),
       child: Column(
         children: [
-          Buttons.outline('Sign In with Google',
-              onPressed: _onGoogleSignIn, expanded: true),
+          Buttons.loginOutline('Sign In with Google',
+              onPressed: _onGoogleSignIn),
           const AppTextDivider(),
           AppTextField(
             required: true,
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 22,
           ),
-          Buttons.primary('Sign In', onPressed: _onSignIn, expanded: true),
+          Buttons.loginPrimary('Sign In', onPressed: _onSignIn),
         ],
       ),
     );
@@ -188,10 +188,15 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 22,
           ),
-          Buttons.primary('Sign In', onPressed: _onSignIn, expanded: true),
+          Buttons.loginPrimary(
+            'Sign In',
+            onPressed: _onSignIn,
+          ),
           const AppTextDivider(),
-          Buttons.outline('Sign In with Google',
-              onPressed: _onGoogleSignIn, expanded: true),
+          Buttons.loginOutline(
+            'Sign In with Google',
+            onPressed: _onGoogleSignIn,
+          ),
         ],
       ),
     );
