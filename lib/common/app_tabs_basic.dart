@@ -127,6 +127,11 @@ class TabButton extends StatelessWidget {
       onTap: onPressed,
       child: Stack(children: [
         _tab(
+          radiusTopLeft: isFirst ||
+              isLast && _selected ||
+              !_selected && !isLast ||
+              !_selected && isFirst,
+          radiusTopRight: _selected && isFirst || isLast,
           colorBg: _bg2,
           height: _ht,
           size: _size,
@@ -135,6 +140,11 @@ class TabButton extends StatelessWidget {
             colorBg: _bg,
             height: _ht,
             size: _size,
+            radiusTopLeft: isFirst ||
+                isLast && _selected ||
+                !_selected && !isLast ||
+                !_selected && isFirst,
+            radiusTopRight: _selected && isFirst || isLast,
             radiusLeft: !_selected && !isFirst,
             radiusRight: !_selected && !isLast),
       ]),
@@ -145,6 +155,8 @@ class TabButton extends StatelessWidget {
       {required double height,
       required Color colorBg,
       required double size,
+      bool radiusTopRight = false,
+      bool radiusTopLeft = false,
       bool radiusRight = false,
       bool radiusLeft = false}) {
     return AnimatedContainer(
@@ -155,8 +167,8 @@ class TabButton extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorBg,
         borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(16),
-          topRight: const Radius.circular(16),
+          topLeft: Radius.circular(radiusTopLeft ? 16 : 0),
+          topRight: Radius.circular(radiusTopRight ? 16 : 0),
           bottomRight: Radius.circular(radiusRight ? 16 : 0),
           bottomLeft: Radius.circular(radiusLeft ? 16 : 0),
         ),
