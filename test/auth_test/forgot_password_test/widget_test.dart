@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import '../../global_config/flutter_test_config.dart';
@@ -19,7 +19,7 @@ void main() {
         makeTestableWidget(child: const ResetPasswordPage(), tester: tester));
 
     expect(find.text(email), findsNothing);
-    final emailText = find.byKey(const ValueKey('Email Address'));
+    final emailText = find.byKey(const Key('Email Address'));
     expect(emailText, findsOneWidget);
     await tester.enterText(emailText, email);
     expect(find.text(email), findsOneWidget);
