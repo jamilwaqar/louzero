@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (val != null && val.isEmpty) {
                         return 'Email is required';
                       }
-                      if (Valid.Email(val!)) {
+                      if (Valid.email(val!)) {
                         return null;
                       } else {
                         return 'Enter Valid Email';
@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (Valid.isRequired(val)) {
                         return 'Password is required';
                       }
-                      if (Valid.Password(val!)) {
+                      if (Valid.password(val!)) {
                         return null;
                       } else {
                         return 'Password must be at least six characters';

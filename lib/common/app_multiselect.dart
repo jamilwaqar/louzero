@@ -120,7 +120,7 @@ class _AppMultiSelectState extends State<AppMultiSelect> {
     return Column(
       children: [
         _selectButton(),
-        if (selectedItems.isNotEmpty) AppDivider(mt: 0, mb: 0),
+        if (selectedItems.isNotEmpty) const AppDivider(mt: 0, mb: 0),
       ],
     );
   }

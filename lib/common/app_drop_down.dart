@@ -40,7 +40,7 @@ class AppDropDown extends StatelessWidget {
                       fontSize: 16,
                       color: AppColors.secondary_40,
                       fontWeight: FontWeight.w700),
-                  enabledBorder: UnderlineInputBorder(
+                  enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(color: AppColors.secondary_90),
                   ),
                   errorStyle:

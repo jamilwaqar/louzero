@@ -261,7 +261,7 @@ class JobStatusLabel extends StatelessWidget {
 
     switch (label.toLowerCase()) {
       case 'active':
-        _color = AppColors.success_lt;
+        _color = AppColors.succesLt;
         _colorText = AppColors.secondary_50;
         break;
       case 'cancelled':

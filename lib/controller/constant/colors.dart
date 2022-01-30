@@ -16,7 +16,7 @@ abstract class AppColors {
   static const Color light_3 = Color(0xFFBABDC5);
   static const Color light_4 = Color(0xFFE2E2E3);
 
-  static const LinearGradient grad_success = LinearGradient(
+  static const LinearGradient gradSuccess = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     colors: [
@@ -25,7 +25,7 @@ abstract class AppColors {
     ],
   );
 
-  static const LinearGradient grad_primary = LinearGradient(
+  static const LinearGradient gradPrimary = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     colors: [
@@ -36,7 +36,7 @@ abstract class AppColors {
 
   static const Color orange = Color(0xFFEC6939);
   static const Color success = Color(0xFF008484);
-  static const Color success_lt = Color(0xFF60CAA8);
+  static const Color succesLt = Color(0xFF60CAA8);
   static const Color errorText = Color(0xFFB3261E);
   static const Color errorTint = Color(0xFFFCEEEE);
   static const Color appBar = Color(0xFF263842);

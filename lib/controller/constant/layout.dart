@@ -16,7 +16,7 @@ abstract class Ui {
   static Widget block({List<Widget> children = const []}) {
     return Row(
       children: [
-        SizedBox(width: 32),
+        const SizedBox(width: 32),
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

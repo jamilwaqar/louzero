@@ -62,14 +62,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
                 AppTextField(
                   controller: _emailController,
-                  key: const ValueKey('Email Address'),
+                  key: const Key('Email Address'),
                   label: "Email",
                   keyboardType: TextInputType.emailAddress,
                   validator: (val) {
                     if (val != null && val.isEmpty) {
                       return 'Email is required';
                     }
-                    if (Valid.Email(val!)) {
+                    if (Valid.email(val!)) {
                       return null;
                     } else {
                       return 'Enter Valid Email';
