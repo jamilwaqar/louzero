@@ -7,7 +7,7 @@ import 'package:louzero/models/customer_models.dart';
 import '../src/mocks.dart';
 
 void main() {
-  Get.put(BaseController(userService: mockBLUserService));
+  Get.put(BaseController());
 
   CustomerController controller = Get.put(CustomerController())
     ..customerModel = mockCustomer;

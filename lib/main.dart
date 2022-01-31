@@ -27,6 +27,7 @@ void main() async {
       androidApiKey: APIManager.androidApiKey,
       jsApiKey: APIManager.jsApiKey,
       iosApiKey: APIManager.iosApiKey);
+  Get.put(AuthController(Backendless.userService), permanent: true);
   Get.put(BaseController());
   runApp(const MyApp());
 }
