@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/auth/login.dart';
 import '../../global_config/flutter_test_config.dart';
+import '../../src/mocks.dart';
 
 void main() {
   const email = 'test@gmail.com';
   const password = '12345678';
-
+  Get.put(AuthController(mockBLUserService));
   testWidgets('Widgets in Login page', (WidgetTester tester) async {
     await tester.pumpWidget(
         makeTestableWidget(child: const LoginPage(), tester: tester));

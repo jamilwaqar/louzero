@@ -11,7 +11,8 @@ import '../../src/mocks.dart';
 void main() {
 
   testWidgets('My Account page', (WidgetTester tester) async {
-    Get.put(BaseController());
+    Get.put(BaseController(userService: mockBLUserService));
+    Get.put(AuthController(mockBLUserService),permanent: true);
     Get.put(CompanyController());
     Get.find<AuthController>().userModel.value = mockUserModel;
     Get.find<BaseController>().companies = [mockCompanyModel];
@@ -21,7 +22,7 @@ void main() {
 
     /// Account Info
     expect(find.text(mockUserModel.fullName), findsWidgets);
-    expect(find.text(mockUserModel.initials), findsOneWidget);
+    expect(find.text(mockUserModel.initials), findsWidgets);
     expect(find.text(mockUserModel.phone), findsOneWidget);
     expect(find.text(mockUserModel.email), findsOneWidget);
 
