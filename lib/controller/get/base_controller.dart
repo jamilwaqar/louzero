@@ -12,12 +12,8 @@ import 'package:louzero/models/job_models.dart';
 import 'package:louzero/models/user_models.dart';
 
 class BaseController extends GetxController {
-  final BackendlessUserService? userService;
-  BaseController({this.userService});
 
-  late final _authController = Get.put(
-      AuthController(userService ?? Backendless.userService),
-      permanent: true);
+  final _authController = Get.find<AuthController>();
 
   final _isLoading = false.obs;
   final _companies = Rx<List<CompanyModel>>([]);

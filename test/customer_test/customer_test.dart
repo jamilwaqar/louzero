@@ -23,7 +23,7 @@ class MockBackendlessData extends Mock implements IDataStore {
 final mockData = MockBackendlessData();
 
 void main() {
-  Get.put(BaseController(userService: mockBLUserService));
+  Get.put(BaseController());
 
   CustomerController controller = Get.put(CustomerController())
     ..customerModel = mockCustomerModel;

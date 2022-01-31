@@ -49,6 +49,7 @@ dependencies:
   firebase_messaging: ^11.2.5
   flag: ^6.0.0
   font_awesome_flutter: ^9.2.0
+  delayed_widget: ^1.1.1
 
 dev_dependencies:
   flutter_driver:

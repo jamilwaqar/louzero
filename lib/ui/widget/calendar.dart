@@ -13,10 +13,18 @@ class NZCalendar extends StatefulWidget{
   const NZCalendar({
     Key? key,
     required this.onDateSelected,
-    this.selectedDate
+    this.onRangeSelected,
+    this.selectedDate,
+    this.selectRange = false,
+    this.startDate,
+    this.endDate
   }) : super(key: key);
   final Function(DateTime) onDateSelected;
+  final Function(DateTime, DateTime)? onRangeSelected;
   final DateTime? selectedDate;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final bool selectRange;
 
   @override
   _NZCalendarState createState() => _NZCalendarState();
@@ -31,6 +39,8 @@ class _NZCalendarState extends State<NZCalendar> {
     equals: isSameDay,
     hashCode: getHashCode,
   );
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
   @override
   void initState() {
@@ -39,6 +49,13 @@ class _NZCalendarState extends State<NZCalendar> {
         _selectedDays.clear();
         _selectedDays.add(widget.selectedDate!);
       });
+    }
+    if(widget.selectRange) {
+      _rangeSelectionMode = RangeSelectionMode.toggledOn;
+    }
+    if(widget.startDate != null && widget.endDate != null) {
+      _rangeStart = widget.startDate;
+      _rangeEnd = widget.endDate;
     }
     super.initState();
   }
@@ -58,16 +75,13 @@ class _NZCalendarState extends State<NZCalendar> {
         _selectedDays.clear();
         _selectedDays.add(selectedDay);
       }
+      _rangeStart = null;
+      _rangeEnd = null;
       _focusedDay.value = focusedDay;
-      _rangeSelectionMode = RangeSelectionMode.toggledOff;
+      _rangeSelectionMode = widget.selectRange ? RangeSelectionMode.toggledOn : RangeSelectionMode.toggledOff;
     });
     widget.onDateSelected(selectedDay);
   }
-
-  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
-
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +115,27 @@ class _NZCalendarState extends State<NZCalendar> {
           headerVisible: false,
           daysOfWeekVisible: false,
           calendarFormat: _calendarFormat,
+          rangeStartDay: _rangeStart,
+          rangeEndDay: _rangeEnd,
           selectedDayPredicate: (day) => _selectedDays.contains(day),
           rangeSelectionMode: _rangeSelectionMode,
+          onRangeSelected: (start, end, focusedDay) {
+            if(widget.selectRange) {
+              setState(() {
+                _focusedDay.value = focusedDay;
+                _rangeStart = start;
+                _rangeEnd = end;
+                _rangeSelectionMode = RangeSelectionMode.toggledOn;
+              });
+
+              if(_rangeStart != null && _rangeEnd != null) {
+                widget.onRangeSelected!(_rangeStart!, _rangeEnd!);
+              }
+            }
+            else{
+              print('ddd');
+            }
+          },
           calendarStyle: CalendarStyle(
               isTodayHighlighted: false,
               cellMargin: const EdgeInsets.all(0.0),
@@ -124,7 +157,6 @@ class _NZCalendarState extends State<NZCalendar> {
               ),
           ),
           onDaySelected: _onDaySelected,
-          onRangeSelected: _onRangeSelected,
           onCalendarCreated: (controller) => _pageController = controller,
           onPageChanged: (focusedDay) => _focusedDay.value = focusedDay,
         ),
