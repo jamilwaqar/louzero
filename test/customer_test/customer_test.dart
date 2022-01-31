@@ -1,6 +1,7 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/models/company_models.dart';
@@ -23,6 +24,7 @@ class MockBackendlessData extends Mock implements IDataStore {
 final mockData = MockBackendlessData();
 
 void main() {
+  Get.put(AuthController(mockBLUserService));
   Get.put(BaseController());
 
   CustomerController controller = Get.put(CustomerController())

@@ -1,6 +1,7 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:mockito/mockito.dart';
@@ -22,7 +23,8 @@ final mockData = MockBackendlessData();
 
 void main() {
   setUp(() {
-    Get.put(BaseController(userService: mockBLUserService));
+    Get.put(AuthController(mockBLUserService));
+    Get.put(BaseController());
     Get.put(JobController())
       .jobModel = mockJobModel;
   });

@@ -54,8 +54,8 @@ class MockUserModel extends Mock implements UserModel {
   @override
   String get email => 'test@gmail.com';
 
-  // @override
-  // AddressModel get addressModel => MockAddressModel();
+  @override
+  AddressModel get addressModel => mockAddressModel;
 }
 
 class MockAddressModel extends Mock implements AddressModel {
