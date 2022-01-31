@@ -5,17 +5,18 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class AppSimpleDropDown extends StatefulWidget {
   const AppSimpleDropDown(
       {required this.label,
-      required this.onSelected,
-      required this.items,
-      this.backgroundColor,
-      this.textColor,
-      this.iconColor,
-      this.borderColor,
-      this.icon,
-      this.height,
-      this.hasClearIcon,
-      this.dividerPosition,
-      Key? key})
+        required this.onSelected,
+        this.onClear,
+        required this.items,
+        this.backgroundColor,
+        this.textColor,
+        this.iconColor,
+        this.borderColor,
+        this.icon,
+        this.height,
+        this.hasClearIcon,
+        this.dividerPosition,
+        Key? key})
       : super(key: key);
   final List items;
   final String label;
@@ -26,6 +27,7 @@ class AppSimpleDropDown extends StatefulWidget {
   final Icon? icon;
   final double? height;
   final Function onSelected;
+  final Function? onClear;
   final bool? hasClearIcon;
   final List? dividerPosition; //accept array of index eg. [1, 2]
 
@@ -71,18 +73,18 @@ class _AppSimpleDropDownState extends State<AppSimpleDropDown> {
                       ),
                       selectedItem.isNotEmpty
                           ? GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedItem = "";
-                                });
-                                widget.onSelected("");
-                              },
-                              child: const Icon(
-                                MdiIcons.closeCircle,
-                                size: 18,
-                                color: Colors.grey,
-                              ),
-                            )
+                        onTap: () {
+                          setState(() {
+                            selectedItem = "";
+                          });
+                          widget.onSelected("");
+                        },
+                        child: const Icon(
+                          MdiIcons.closeCircle,
+                          size: 18,
+                          color: Colors.grey,
+                        ),
+                      )
                           : const SizedBox(),
                       const Icon(
                         MdiIcons.menuDown,
@@ -97,14 +99,14 @@ class _AppSimpleDropDownState extends State<AppSimpleDropDown> {
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide:
-                    const BorderSide(color: AppColors.medium_2, width: 0)),
+                const BorderSide(color: AppColors.medium_2, width: 0)),
             itemBuilder: (BuildContext context) => widget.items.map((item) {
-                  var index = widget.items.indexOf(item);
-                  return popItem(item,
-                      hasDivider: widget.dividerPosition != null
-                          ? widget.dividerPosition?.contains(index)
-                          : false);
-                }).toList())
+              var index = widget.items.indexOf(item);
+              return popItem(item,
+                  hasDivider: widget.dividerPosition != null
+                      ? widget.dividerPosition?.contains(index)
+                      : false);
+            }).toList())
       ],
     );
   }
