@@ -1,6 +1,5 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
@@ -11,6 +10,7 @@ import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/accept_invite.dart';
+import 'package:louzero/ui/page/auth/auth_layout.dart';
 import 'package:louzero/ui/page/auth/reset_password.dart';
 import 'package:louzero/ui/page/auth/signup.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
@@ -26,13 +26,12 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final formGlobalKey = GlobalKey<FormState>();
+  bool _rememberDevice = false;
 
   @override
   void initState() {
-    // if (kDebugMode) {
-    //   _emailController.text = "josh.webdev@gmail.com";
-    //   _passwordController.text = "!1QAwsEDrf";
-    // }
+    _emailController.text = "josh.webdev@gmail.com";
+    _passwordController.text = "!1QAwsEDrf";
     super.initState();
   }
 
@@ -47,24 +46,17 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       logoOnly: true,
-      child: Column(
+      child: AuthLayout(
         children: [
-          const SizedBox(
-            height: 100,
-          ),
-          Image.asset("assets/icons/general/logo_icon.png"),
-          const SizedBox(
-            height: 56,
-          ),
           SizedBox(
             width: 512,
             child: Form(
               key: formGlobalKey,
               child: AppTabsBasic(
                 contentHeight: 490,
-                children: [_loginForm(), _createAccount()],
+                children: [_loginForm(), SignUpPage()],
                 tabs: const [
-                  'Login',
+                  'Sign In',
                   'Create Account',
                 ],
               ),
@@ -77,56 +69,6 @@ class _LoginPageState extends State<LoginPage> {
                     AppStyles.labelBold.copyWith(color: AppColors.primary_70)),
             onTap: () => Get.to(() => const AcceptInvitePage()),
           ),
-          Expanded(
-              child: Flex(
-            mainAxisAlignment: MainAxisAlignment.end,
-            direction: Axis.vertical,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  AppTextLink(
-                    'Accept Invite',
-                    onPressed: _onAcceptInvite,
-                  ),
-                ],
-              )
-            ],
-          ))
-        ],
-      ),
-    );
-  }
-
-  Widget _createAccount() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 48, left: 48, right: 48),
-      child: Column(
-        children: [
-          Buttons.loginOutline('Sign In with Google',
-              onPressed: _onGoogleSignIn),
-          const AppTextDivider(),
-          AppTextField(
-            required: true,
-            key: const ValueKey('Email Create Account'),
-            controller: _emailController,
-            label: 'Email Address',
-            keyboardType: TextInputType.emailAddress,
-            validator: (val) {
-              if (val != null && val.isEmpty) {
-                return 'Email is required';
-              }
-              if (Valid.email(val!)) {
-                return null;
-              } else {
-                return 'Enter Valid Email';
-              }
-            },
-          ),
-          const SizedBox(
-            height: 22,
-          ),
-          Buttons.loginPrimary('Sign In', onPressed: _onSignIn),
         ],
       ),
     );
@@ -170,21 +112,43 @@ class _LoginPageState extends State<LoginPage> {
               }
             },
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          SizedBox(
+            height: 8,
+          ),
+          FlexRow(
+            flex: [1, 0],
             children: [
-              AppTextLink(
-                "Remember this device",
-                onPressed: _onRememberDevice,
+              AppCheckbox(
+                label: 'Remember this device',
+                checked: _rememberDevice,
+                onChanged: (val) {
+                  _onRememberDevice();
+                },
               ),
-              AppTextLink(
-                "Forgot Password?",
-                fontWeight: FontWeight.w600,
-                textDecoration: TextDecoration.underline,
-                onPressed: _onResetPassword,
-              ),
+              GestureDetector(
+                onTap: _onResetPassword,
+                child: Text("Forgot Password?",
+                    style: AppStyles.labelBold
+                        .copyWith(color: AppColors.primary_50)),
+              )
             ],
           ),
+
+          // RowSplit(
+          //   left: AppCheckbox(
+          //     label: 'Remember this device',
+          //     checked: _rememberDevice,
+          //     onChanged: (val) {
+          //       setState(() {
+          //         _rememberDevice = !_rememberDevice;
+          //       });
+          //     },
+          //   ),
+          //   right: AppTextLink(
+          //     "Forgot Password?",
+          //     onPressed: _onResetPassword,
+          //   ),
+          // ),
           const SizedBox(
             height: 22,
           ),
@@ -206,10 +170,6 @@ class _LoginPageState extends State<LoginPage> {
     Get.to(() => const SignUpPage());
   }
 
-  void _onAcceptInvite() {
-    Get.to(() => const AcceptInvitePage());
-  }
-
   void _onSignIn() async {
     if (formGlobalKey.currentState!.validate()) {
       NavigationController().loading();
@@ -224,7 +184,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _onRememberDevice() {}
+  void _onRememberDevice() {
+    setState(() {
+      _rememberDevice = !_rememberDevice;
+    });
+  }
+
   void _onResetPassword() {
     Get.to(() => const ResetPasswordPage());
   }
