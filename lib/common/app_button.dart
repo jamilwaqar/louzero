@@ -372,6 +372,18 @@ abstract class Buttons {
     );
   }
 
+  static Widget submitPrimary(String label,
+      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+      expanded: expanded,
+      label: label,
+      onPressed: onPressed,
+      colorBg: AppColors.secondary_20,
+      iconLeading: icon,
+      height: 56,
+    );
+  }
+
   static Widget primary(String label,
       {bool expanded = false,
       VoidCallback? onPressed,
