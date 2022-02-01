@@ -46,6 +46,7 @@ class AppCardChartPie extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 var item = items[index];
                 return Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       Icons.circle,
@@ -53,8 +54,11 @@ class AppCardChartPie extends StatelessWidget {
                       size: 10,
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      item.title,
+                    SizedBox(
+                      width: 120,
+                      child: Text(
+                        item.title,
+                      ),
                     )
                   ],
                 );
