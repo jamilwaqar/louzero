@@ -16,6 +16,17 @@ final mockCustomer = MockCustomerModel();
 final mockUserModel = MockUserModel();
 final mockCompanyModel = MockCompanyModel();
 
+final Map<String, dynamic> addressJson = {
+  'street': '350 W 40th St',
+  'city': 'New York',
+  'state': 'New York',
+  'suite': '111',
+  'zip': '10018',
+  'country': 'United State',
+  'latitude': 40.7566193,
+  'longitude': -73.9932827
+};
+
 final mockAddressModel = AddressModel(
     country: mockAddress.country,
     street: mockAddress.street,
@@ -78,10 +89,10 @@ class MockAddressModel extends Mock implements AddressModel {
   String get zip => '10018';
 
   @override
-  double get latitude => 0.0;
+  double get latitude => 40.7566193;
 
   @override
-  double get longitude => 0.0;
+  double get longitude => -73.9932827;
 }
 
 class MockCompanyModel extends Mock implements CompanyModel {
