@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_text_link.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class AppTextHelpLink extends StatelessWidget {
@@ -55,7 +54,7 @@ class AppTextHelpLink extends StatelessWidget {
             center ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
           Text(label.trim(), style: _text),
-          if (split) Spacer(),
+          if (split) const Spacer(),
           GestureDetector(
             onTap: onPressed,
             child: Text(' ${linkText.trim()} ', style: _link),

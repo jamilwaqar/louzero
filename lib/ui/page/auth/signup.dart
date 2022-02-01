@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
-import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/constant/validators.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'accept_invite.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -52,8 +50,9 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Spacer(),
-            AppTextFieldLabel('Enter your email to create a new account.'),
+            const Spacer(),
+            const AppTextFieldLabel(
+                'Enter your email to create a new account.'),
             AppTextField(
               key: const ValueKey('Email Address'),
               controller: _emailController,
@@ -70,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 }
               },
             ),
-            Spacer(),
+            const Spacer(),
             const SizedBox(height: 22),
             Buttons.loginPrimary('Create Account', expanded: true,
                 onPressed: () {
@@ -93,10 +92,6 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void _onSignIn() {
-    NavigationController().pop(context);
-  }
-
   void _onSendVerificationCode() async {
     NavigationController().loading();
     var code = verificationCode();
@@ -111,6 +106,4 @@ class _SignUpPageState extends State<SignUpPage> {
       Get.to(() => VerifyPage(email: email, code: code));
     }
   }
-
-  void _onGoogleSignUp() {}
 }

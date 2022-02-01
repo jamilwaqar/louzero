@@ -58,14 +58,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       title,
                       style: AppStyles.headerLarge,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 24,
                     ),
                     Text(
                       body,
                       style: AppStyles.labelRegular.copyWith(height: 1.5),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     AppTextField(
@@ -84,7 +84,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         }
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 24,
                     ),
                     Buttons.loginPrimary(

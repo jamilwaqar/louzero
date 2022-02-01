@@ -46,7 +46,7 @@ class CompanyPage extends GetWidget<CompanyController> {
         const AppDivider(mb: 40),
         // AppDividerWithLabel(label:model.status.label, mb: 40),
         FlexRow(
-          flex: [2, 3],
+          flex: const [2, 3],
           children: [
             // LEFT COLUMN
             Column(
@@ -78,7 +78,7 @@ class CompanyPage extends GetWidget<CompanyController> {
                   ],
                 ),
                 Ui.headingSM('Industries', icon: MdiIcons.domain),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Ui.block(
                   children: [_industriesTag(model.industries)],
                 ),
@@ -117,7 +117,7 @@ class CompanyPage extends GetWidget<CompanyController> {
           textColor: AppColors.secondary_40,
           textActiveColor: AppColors.secondary_40,
           activeColor: AppColors.secondary_99,
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           border: Border.all(color: AppColors.secondary_40),
           elevation: 0,
         );

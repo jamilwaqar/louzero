@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               key: formGlobalKey,
               child: AppTabsBasic(
                 contentHeight: 490,
-                children: [_loginForm(), SignUpPage()],
+                children: [_loginForm(), const SignUpPage()],
                 tabs: const [
                   'Sign In',
                   'Create Account',
@@ -112,11 +112,11 @@ class _LoginPageState extends State<LoginPage> {
               }
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           FlexRow(
-            flex: [1, 0],
+            flex: const [1, 0],
             children: [
               AppCheckbox(
                 label: 'Remember this device',
@@ -164,10 +164,6 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
-  }
-
-  void _onCreateAccount() {
-    Get.to(() => const SignUpPage());
   }
 
   void _onSignIn() async {

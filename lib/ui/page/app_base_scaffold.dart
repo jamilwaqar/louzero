@@ -87,6 +87,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
           return _appBackground(
             child: Stack(
               children: [
+                _backgroundDecoration(),
                 GestureDetector(
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
@@ -121,6 +122,22 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
           );
         });
       },
+    );
+  }
+
+  Widget _backgroundDecoration() {
+    return Positioned(
+      bottom: 0,
+      height: MediaQuery.of(context).size.height / 1.55,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(40),
+              topLeft: Radius.circular(40),
+            ),
+            color: AppColors.white.withOpacity(.045)),
+      ),
     );
   }
 
