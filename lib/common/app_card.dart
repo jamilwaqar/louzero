@@ -20,6 +20,7 @@ class AppCard extends StatelessWidget {
     this.px,
     this.py,
     this.color = Colors.white,
+    this.maxWidth = double.infinity,
   }) : super(key: key);
   final List<Widget> children;
   final double radius;
@@ -37,6 +38,7 @@ class AppCard extends StatelessWidget {
   final double? mx;
   final double? my;
   final Color color;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,7 @@ class AppCard extends StatelessWidget {
       double elevation = 0,
       Color color = Colors.white}) {
     return Container(
-      width: double.infinity,
+      width: maxWidth,
       margin: margin,
       child: Card(
           color: color,
