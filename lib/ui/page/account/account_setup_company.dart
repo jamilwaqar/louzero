@@ -172,11 +172,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                           )
                         ],
                       ),
-                    const AppDivider(
-                      mt: 16,
-                      mb: 24,
-                      color: AppColors.light_2,
-                    ),
+                    SizedBox(height: 24),
                     Ui.headingLG('Industries', MdiIcons.domain, mb: 16),
                     _tags(),
                   ],
