@@ -7,6 +7,7 @@ class StepProgressItem {
   final String title;
   final String subtitle;
   final String label;
+
   StepProgressItem({
     required this.title,
     required this.subtitle,
@@ -15,10 +16,12 @@ class StepProgressItem {
 }
 
 class AppStepProgress extends StatelessWidget {
+  final bool hideTitles;
   AppStepProgress({
     Key? key,
     this.selected = 0,
     this.stepItems = const [],
+    this.hideTitles = true,
   }) : super(key: key);
 
   final _key = GlobalKey();
@@ -51,17 +54,23 @@ class AppStepProgress extends StatelessWidget {
       children: [
         Column(
           children: [
-            AppTextHeader(
-              title,
-              mt: 32,
-              mb: 8,
-            ),
-            AppTextBody(
-              subtitle,
-              mb: 32,
-              bold: true,
-              center: true,
-            ),
+            if (!hideTitles)
+              Column(
+                children: [
+                  Text(
+                    title,
+                    style: AppStyles.labelRegular
+                        .copyWith(color: AppColors.secondary_99, fontSize: 32),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    subtitle,
+                    style: AppStyles.labelRegular
+                        .copyWith(color: AppColors.secondary_99, fontSize: 18),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: children,
@@ -78,13 +87,17 @@ class _StepNumberDash extends StatelessWidget {
     Key? key,
     this.stepNumber = 0,
     this.stepSize = 40,
-    this.dashSize = 50,
+    this.dashSize = 70,
     this.endSize = 20,
     this.startSize = 20,
     this.selected = false,
     this.complete = false,
     this.firstStep = false,
     this.lastStep = false,
+    this.labelBlur = AppColors.secondary_90,
+    this.labelFocus = AppColors.secondary_99,
+    this.dashBlur = AppColors.secondary_30,
+    this.dashFocus = AppColors.orange,
     this.label = "",
   }) : super(key: key);
 
@@ -98,6 +111,10 @@ class _StepNumberDash extends StatelessWidget {
   final bool complete;
   final bool firstStep;
   final bool lastStep;
+  final Color labelFocus;
+  final Color labelBlur;
+  final Color dashFocus;
+  final Color dashBlur;
   final IconData icon = Icons.check;
 
   @override
@@ -113,12 +130,9 @@ class _StepNumberDash extends StatelessWidget {
                 _StepDash(
                   size: dashSize,
                   selected: selected || complete,
-                  color: firstStep
-                      ? Colors.black.withOpacity(0)
-                      : AppColors.medium_1,
-                  colorSelected: firstStep
-                      ? Colors.black.withOpacity(0)
-                      : AppColors.dark_2,
+                  color: firstStep ? Colors.black.withOpacity(0) : dashBlur,
+                  colorSelected:
+                      firstStep ? Colors.black.withOpacity(0) : dashFocus,
                 ),
                 _StepNumber(
                   stepNumber,
@@ -129,11 +143,9 @@ class _StepNumberDash extends StatelessWidget {
                 _StepDash(
                   size: dashSize,
                   selected: selected || complete,
-                  color: lastStep
-                      ? Colors.black.withOpacity(0)
-                      : AppColors.medium_1,
+                  color: lastStep ? Colors.black.withOpacity(0) : dashBlur,
                   colorSelected:
-                      lastStep ? Colors.black.withOpacity(0) : AppColors.dark_2,
+                      lastStep ? Colors.black.withOpacity(0) : dashFocus,
                 ),
               ],
             ),
@@ -143,11 +155,9 @@ class _StepNumberDash extends StatelessWidget {
             Text(label,
                 style: TextStyle(
                     fontSize: 16,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w600,
-                    color: selected || complete
-                        ? AppColors.black
-                        : AppColors.medium_1))
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.w700,
+                    color: selected || complete ? labelFocus : labelBlur))
           ],
         ),
       ],
@@ -161,12 +171,12 @@ class _StepNumber extends StatelessWidget {
     Key? key,
     this.size = 50,
     this.selected = false,
-    this.color = AppColors.lightest,
-    this.colorBorder = AppColors.medium_1,
-    this.colorText = AppColors.dark_2,
-    this.colorSelected = AppColors.lightest,
-    this.colorBorderSelected = AppColors.dark_2,
-    this.colorTextSelected = AppColors.black,
+    this.color = AppColors.secondary_10,
+    this.colorBorder = AppColors.secondary_30,
+    this.colorText = AppColors.white,
+    this.colorSelected = AppColors.orange,
+    this.colorBorderSelected = AppColors.orange,
+    this.colorTextSelected = AppColors.white,
     this.icon,
   }) : super(key: key);
   final bool selected;
@@ -186,18 +196,18 @@ class _StepNumber extends StatelessWidget {
         ? color
         : selected
             ? colorTextSelected
-            : colorText;
-    var bg = icon != null ? colorBorderSelected : color;
+            : AppColors.secondary_80;
+    var bg = selected || icon != null ? colorBorderSelected : color;
     var bd = selected || icon != null ? colorBorderSelected : colorBorder;
     return Column(
       children: [
         Container(
-          width: size,
-          height: size,
+          width: 56,
+          height: 56,
           decoration: BoxDecoration(
               color: bg,
               shape: BoxShape.circle,
-              border: Border.all(color: bd, width: 2)),
+              border: Border.all(color: bd, width: 4)),
           child: Center(
             child: icon != null
                 ? Icon(
@@ -206,7 +216,8 @@ class _StepNumber extends StatelessWidget {
                   )
                 : Text(
                     step.toString(),
-                    style: TextStyle(fontSize: size * 0.45, color: tx),
+                    style: AppStyles.headerRegular
+                        .copyWith(fontSize: 24, color: tx),
                   ),
           ),
         ),
@@ -220,7 +231,7 @@ class _StepDash extends StatelessWidget {
     Key? key,
     this.size = 50,
     this.color = AppColors.medium_1,
-    this.colorSelected = AppColors.dark_2,
+    this.colorSelected = AppColors.orange,
     this.selected = false,
   }) : super(key: key);
   final double size;
@@ -231,7 +242,7 @@ class _StepDash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 2,
+      height: 7,
       width: size,
       color: selected ? colorSelected : color,
     );
