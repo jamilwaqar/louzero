@@ -14,12 +14,9 @@ void main() {
     await tester.pumpWidget(
         makeTestableWidget(child: const SignUpPage(), tester: tester));
     expect(find.text('Create Account'), findsOneWidget);
-    expect(find.text('Already using LOUzero?'), findsOneWidget);
-    expect(find.text('Sign Up with Google'), findsOneWidget);
-    expect(find.text('Enter your email to create a new account'), findsOneWidget);
+    expect(find.text('Sign In with Google'), findsOneWidget);
+    expect(find.text('Enter your email to create a new account.'), findsOneWidget);
     expect(find.text('Email'), findsOneWidget);
-    expect(find.text('Continue'), findsOneWidget);
-    expect(find.text('HAVE AN INVITATION CODE?'), findsOneWidget);
   });
 
   testWidgets('Enter Email and Password', (WidgetTester tester) async {

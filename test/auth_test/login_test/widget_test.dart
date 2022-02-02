@@ -13,15 +13,12 @@ void main() {
   testWidgets('Widgets in Login page', (WidgetTester tester) async {
     await tester.pumpWidget(
         makeTestableWidget(child: const LoginPage(), tester: tester));
-    expect(find.text('Sign in to LOUzero'), findsOneWidget);
-    expect(find.text('New to LOUzero?'), findsOneWidget);
+    expect(find.text('Sign In'), findsWidgets);
     expect(find.text('Email Address'), findsOneWidget);
     expect(find.text('Password'), findsOneWidget);
     expect(find.text('Remember this device'), findsOneWidget);
     expect(find.text('Forgot Password?'), findsOneWidget);
-    expect(find.text('Sign In'), findsOneWidget);
     expect(find.text('HAVE AN INVITATION CODE?'), findsOneWidget);
-    expect(find.text('Accept Invite'), findsOneWidget);
   });
 
   testWidgets('Enter Email and Password', (WidgetTester tester) async {

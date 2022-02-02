@@ -52,6 +52,7 @@ class AppTextHelpLink extends StatelessWidget {
       child: Row(
         mainAxisAlignment:
             center ? MainAxisAlignment.center : MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(label.trim(), style: _text),
           if (split) const Spacer(),

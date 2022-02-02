@@ -14,7 +14,6 @@ void main() {
         makeTestableWidget(child: const ResetPasswordPage(), tester: tester));
     expect(find.text("Trouble logging in?"), findsOneWidget);
     expect(find.text('Email Reset Instructions'), findsOneWidget);
-    expect(find.text('Never mind, go back to'), findsOneWidget);
   });
 
   testWidgets('Enter Email and Password', (WidgetTester tester) async {

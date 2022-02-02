@@ -15,7 +15,7 @@ void main() {
     expect(find.text('Accept Invitation'), findsOneWidget);
     expect(find.text('Enter your email address and invitation code below.'), findsOneWidget);
     expect(find.text('Email'), findsOneWidget);
-    expect(find.text('Go back to'), findsOneWidget);
+    expect(find.text('Back to'), findsOneWidget);
   });
 
   testWidgets('Enter Email and Invitation Code', (WidgetTester tester) async {

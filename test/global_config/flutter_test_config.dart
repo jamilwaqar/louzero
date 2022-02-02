@@ -15,7 +15,7 @@ Widget makeTestableWidget({required Widget child, required WidgetTester tester})
       child: child,
       data: const MediaQueryData(
         size: screenSize,
-        textScaleFactor: 1.0
+        textScaleFactor: 0.8
       ),
     ),
     theme: ThemeData(
