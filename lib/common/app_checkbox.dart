@@ -31,7 +31,7 @@ class AppCheckbox extends StatelessWidget {
         children: [
           SizedBox(
             width: 24,
-            height: 16,
+            height: 18,
             child: Checkbox(
                 checkColor: Colors.white,
                 value: checked,
@@ -52,8 +52,8 @@ class AppCheckbox extends StatelessWidget {
                   }
                 },
                 child: Text(label!,
-                    style: AppStyles.labelBold
-                        .copyWith(height: 1, color: AppColors.secondary_20)),
+                    style: AppStyles.labelRegular
+                        .copyWith(height: 1.3, color: AppColors.secondary_30)),
               ),
             ),
         ],

@@ -2,17 +2,14 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card_center.dart';
-import 'package:louzero/common/app_checkbox.dart';
-import 'package:louzero/common/app_input_text.dart';
-import 'package:louzero/common/app_text_body.dart';
-import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/api/auth/auth_api.dart';
+import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/page/auth/auth_layout.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 
 class CompletePage extends StatefulWidget {
@@ -50,59 +47,61 @@ class _CompletePageState extends State<CompletePage> {
     var termsLabel = 'I have read and agreed to the Terms of Service';
     return AppBaseScaffold(
       logoOnly: true,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: AuthLayout(
         children: [
-          AppCardCenter(
-            child: Column(
-              children: [
-                const AppTextHeader('Complete Signup'),
-                const AppTextBody(
+          AppCard(
+            maxWidth: 512,
+            px: 48,
+            py: 48,
+            children: [
+              const Text('Complete Signup', style: AppStyles.headerLarge),
+              const SizedBox(height: 8),
+              const Text(
                   'Fill in your information below to finish the signup process.',
-                  mb: 20,
-                ),
-                AppInputText(
-                  controller: _firstNameController,
-                  label: 'First Name',
-                  keyboardType: TextInputType.name,
-                ),
-                AppInputText(
-                  controller: _lastNameController,
-                  label: 'Last Name',
-                  keyboardType: TextInputType.name,
-                ),
-                AppInputText(
-                  controller: _passwordController,
-                  label: 'Password (8 or more characters)',
-                  password: true,
-                ),
-                AppCheckbox(
-                  mb: 15,
-                  label: termsLabel,
-                  checked: _termsSelected,
-                  onChanged: (val) {
-                    setState(() {
-                      _termsSelected = val!;
-                    });
-                  },
-                ),
-                AppCheckbox(
-                  label: optInEmail,
-                  checked: _emailSelected,
-                  onChanged: (val) {
-                    setState(() {
-                      _emailSelected = val!;
-                    });
-                  },
-                ),
-                const SizedBox(height: 24),
-                AppButton(
-                  label: 'Create Account',
-                  onPressed: _completeSignup,
-                  wide: true,
-                ),
-              ],
-            ),
+                  style: AppStyles.labelRegular),
+              const SizedBox(height: 32),
+              AppTextField(
+                controller: _firstNameController,
+                label: 'First Name',
+                keyboardType: TextInputType.name,
+              ),
+              AppTextField(
+                controller: _lastNameController,
+                label: 'Last Name',
+                keyboardType: TextInputType.name,
+              ),
+              AppTextField(
+                controller: _passwordController,
+                label: 'Password (8 or more characters)',
+                password: true,
+              ),
+              const SizedBox(height: 32),
+              AppCheckbox(
+                mb: 15,
+                label: termsLabel,
+                checked: _termsSelected,
+                onChanged: (val) {
+                  setState(() {
+                    _termsSelected = val!;
+                  });
+                },
+              ),
+              AppCheckbox(
+                label: optInEmail,
+                checked: _emailSelected,
+                onChanged: (val) {
+                  setState(() {
+                    _emailSelected = val!;
+                  });
+                },
+              ),
+              const SizedBox(height: 24),
+              Buttons.loginPrimary(
+                'Create Account',
+                onPressed: _completeSignup,
+                expanded: true,
+              ),
+            ],
           ),
         ],
       ),

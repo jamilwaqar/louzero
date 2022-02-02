@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_button.dart';
-import 'package:louzero/common/app_card.dart';
-import 'package:louzero/common/app_input_inline_form.dart';
-import 'package:louzero/common/app_list_draggable.dart';
-import 'package:louzero/common/app_list_tile.dart';
-import 'package:louzero/common/app_step_progress.dart';
-import 'package:louzero/common/app_text_body.dart';
-import 'package:louzero/common/app_text_divider.dart';
-import 'package:louzero/common/app_text_header.dart';
+import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -57,6 +49,7 @@ class _AccountSetupState extends State<AccountSetup> {
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       hasKeyboard: true,
+      colorBg: Colors.transparent,
       child: Column(
         children: [
           Container(
@@ -70,7 +63,13 @@ class _AccountSetupState extends State<AccountSetup> {
             height: 32,
           ),
           Container(
-            color: Colors.transparent,
+            decoration: const BoxDecoration(
+                color: AppColors.secondary_99,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                )),
+            padding: const EdgeInsets.only(top: 32),
             height: 1200, // Hacky...to update
             child: PageView(
               controller: _pageController,

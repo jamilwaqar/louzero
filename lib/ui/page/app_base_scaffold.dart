@@ -22,16 +22,18 @@ class AppBaseScaffold extends StatefulWidget {
   final List<Widget>? footerStart;
   final List<Widget>? footerEnd;
   final String? subheader;
+  final Color? colorBg;
 
-  const AppBaseScaffold({
-    Key? key,
-    this.child,
-    this.footerStart,
-    this.footerEnd,
-    this.subheader,
-    this.hasKeyboard = false,
-    this.logoOnly = false,
-  }) : super(key: key);
+  const AppBaseScaffold(
+      {Key? key,
+      this.child,
+      this.footerStart,
+      this.footerEnd,
+      this.subheader,
+      this.hasKeyboard = false,
+      this.logoOnly = false,
+      this.colorBg})
+      : super(key: key);
 
   @override
   _AppBaseScaffoldState createState() => _AppBaseScaffoldState();
@@ -101,6 +103,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                     body: widget.logoOnly
                         ? widget.child
                         : AppBaseShell(
+                            colorBg: widget.colorBg ?? AppColors.secondary_99,
                             footerStart: _getHeader(),
                             footerEnd: widget.footerEnd,
                             actions: [
@@ -167,19 +170,21 @@ class AppBaseShell extends StatelessWidget {
   final List<Widget>? footerStart;
   final List<Widget>? footerEnd;
   final String? subheader;
+  final Color colorBg;
 
-  const AppBaseShell(
-      {Key? key,
-      this.child,
-      this.footerStart,
-      this.footerEnd,
-      this.subheader,
-      this.actions,
-      this.onMenuPress,
-      this.hasKeyboard = false,
-      this.logoOnly = false,
-      this.loggedIn = false})
-      : super(key: key);
+  const AppBaseShell({
+    Key? key,
+    this.child,
+    this.footerStart,
+    this.footerEnd,
+    this.subheader,
+    this.actions,
+    this.onMenuPress,
+    this.hasKeyboard = false,
+    this.logoOnly = false,
+    this.loggedIn = false,
+    this.colorBg = AppColors.secondary_99,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +215,7 @@ class AppBaseShell extends StatelessWidget {
               minHeight: MediaQuery.of(context).size.height,
               minWidth: double.infinity,
             ),
-            color: AppColors.secondary_99,
+            color: colorBg,
             // ignore: unnecessary_null_in_if_null_operators
             child: child ?? null,
           ),
