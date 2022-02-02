@@ -7,7 +7,7 @@ import 'app_avatar.dart';
 class AppAdvancedTextField extends StatefulWidget {
   const AppAdvancedTextField({
     Key? key,
-    this.controller,
+    required this.controller,
     required this.label,
     this.rightPadding = 15.0,
     this.leftPadding = 15.0,
@@ -27,7 +27,7 @@ class AppAdvancedTextField extends StatefulWidget {
     this.onTap,
   }) : super(key: key);
   final bool isUnderlined = true;
-  final TextEditingController? controller;
+  final TextEditingController controller;
   final String label;
   final double? leftPadding;
   final double? rightPadding;
@@ -46,23 +46,18 @@ class AppAdvancedTextField extends StatefulWidget {
   final Function? onChange;
   final Function? onTap;
 
+  @override
   _AppAdvancedTextFieldState createState() => _AppAdvancedTextFieldState();
 }
 
 class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
   final _textFieldFocus = FocusNode();
   Color _color = AppColors.secondary_99;
-  TextEditingController textController = TextEditingController();
+  late TextEditingController textController = widget.controller;
   final bool isUnderlined = true;
 
   @override
   void initState() {
-    if (widget.controller != null) {
-      setState(() {
-        textController = widget.controller!;
-      });
-    }
-
     _textFieldFocus.addListener(() {
       if (_textFieldFocus.hasFocus) {
         setState(() {
@@ -93,7 +88,7 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
   @override
   Widget build(BuildContext context) {
     final bool isTransparent =
-        (widget.controller!.text.isNotEmpty && isUnderlined == true);
+        (textController.text.isNotEmpty && isUnderlined == true);
     print('widget.leadingImage ${widget.leadingImage}');
     return Stack(
       children: [
@@ -103,7 +98,7 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
           cursorWidth: 2,
           focusNode: _textFieldFocus,
           autofocus: widget.autofocus ?? false,
-          controller: widget.controller!,
+          controller: textController,
           style: AppStyles.labelBold.copyWith(
               height: 1.5, fontSize: 16, color: AppColors.secondary_20),
           minLines: 1,
