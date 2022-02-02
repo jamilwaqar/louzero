@@ -133,22 +133,6 @@ class _LoginPageState extends State<LoginPage> {
               )
             ],
           ),
-
-          // RowSplit(
-          //   left: AppCheckbox(
-          //     label: 'Remember this device',
-          //     checked: _rememberDevice,
-          //     onChanged: (val) {
-          //       setState(() {
-          //         _rememberDevice = !_rememberDevice;
-          //       });
-          //     },
-          //   ),
-          //   right: AppTextLink(
-          //     "Forgot Password?",
-          //     onPressed: _onResetPassword,
-          //   ),
-          // ),
           const SizedBox(
             height: 22,
           ),
