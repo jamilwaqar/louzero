@@ -2,7 +2,6 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
-import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/constant/global_method.dart';
 import 'package:louzero/controller/constant/layout.dart';
@@ -253,7 +252,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     RenderBox box = _streetWidgetKey.currentContext!.findRenderObject() as RenderBox;
     Offset offset = box.localToGlobal(Offset.zero);
     double y = offset.dy;
-    _addressListY = y - box.size.height - 270;
+    _addressListY = y - box.size.height - 190;
   }
 
   List<Widget> _fullEditForm() {
