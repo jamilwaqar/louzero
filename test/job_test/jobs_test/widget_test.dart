@@ -7,6 +7,7 @@ import 'package:louzero/ui/page/job/jobs.dart';
 import '../../global_config/flutter_test_config.dart';
 import '../../src/mocks.dart';
 
+//TODO: Work in progress:
 void main() {
   Get.put(AuthController(mockBLUserService));
   Get.put(BaseController());
@@ -15,13 +16,6 @@ void main() {
     await tester.pumpWidget(
         makeTestableWidget(child: const JobListPage(), tester: tester));
     expect(find.text('All Jobs'), findsOneWidget);
-
-    // expect(find.text('Jobs'), findsOneWidget);
-    // expect(find.text('Add Job'), findsOneWidget);
-    // expect(find.text('Search Jobs'), findsOneWidget);
-    //
-    // expect(find.text('Customers'), findsOneWidget);
-    // expect(find.text('Add Customer'), findsOneWidget);
-    // expect(find.text('View All'), findsOneWidget);
+    expect(find.text('Canceled'), findsOneWidget);
   });
 }
