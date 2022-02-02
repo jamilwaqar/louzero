@@ -66,8 +66,7 @@ class CustomerController extends GetxController {
       data.remove('objectId');
     }
     try {
-      dynamic response =
-          await /*Backendless.data.of(BLPath.customer)*/ store.save(data);
+      dynamic response = await store.save(data);
       CustomerModel newModel = CustomerModel.fromMap(response);
       if (model.objectId == null) {
         List<CustomerModel> newList = [...baseController.customers, newModel];

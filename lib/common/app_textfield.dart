@@ -146,54 +146,56 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   Widget _input() {
-    return TextFormField(
-      onTap: widget.onTap,
-      enableIMEPersonalizedLearning: false,
-      enabled: widget.enabled,
-      initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
-      focusNode: _textFieldFocus,
-      autofocus: widget.autofocus,
-      controller: widget.controller,
-      validator: widget.validator,
-      autovalidateMode: _validateMode,
-      onSaved: widget.onSaved,
-      obscureText: widget.password,
-      keyboardType:
-          widget.multiline ? TextInputType.multiline : widget.keyboardType,
-      onChanged: (val) {
-        if (widget.onChanged != null) {
-          widget.onChanged!(val);
-        }
-        if (widget.validator != null && !_hasError()) {
-          setState(() {
-            _status = const Icon(Icons.check, color: AppColors.success);
-          });
-        }
-      },
-      style: AppStyles.labelBold.copyWith(
-          height: 1.5,
-          fontSize: 16,
-          color: AppColors.secondary_20,
-          fontWeight: FontWeight.w700),
-      expands: widget.expands,
-      // minLines: 1,
-      maxLines: widget.multiline || widget.expands ? null : widget.maxLines,
-      decoration: AppStyles.inputDefault.copyWith(
-        labelText: widget.label,
-        suffixIcon: getIcon(),
-        alignLabelWithHint: widget.expands,
-        labelStyle: AppStyles.labelBold.copyWith(
-            height: 1,
+    return Material(
+      child: TextFormField(
+        onTap: widget.onTap,
+        enableIMEPersonalizedLearning: false,
+        enabled: widget.enabled,
+        initialValue: widget.initialValue.isNotEmpty ? widget.initialValue : null,
+        focusNode: _textFieldFocus,
+        autofocus: widget.autofocus,
+        controller: widget.controller,
+        validator: widget.validator,
+        autovalidateMode: _validateMode,
+        onSaved: widget.onSaved,
+        obscureText: widget.password,
+        keyboardType:
+            widget.multiline ? TextInputType.multiline : widget.keyboardType,
+        onChanged: (val) {
+          if (widget.onChanged != null) {
+            widget.onChanged!(val);
+          }
+          if (widget.validator != null && !_hasError()) {
+            setState(() {
+              _status = const Icon(Icons.check, color: AppColors.success);
+            });
+          }
+        },
+        style: AppStyles.labelBold.copyWith(
+            height: 1.5,
             fontSize: 16,
-            color: AppColors.secondary_40,
+            color: AppColors.secondary_20,
             fontWeight: FontWeight.w700),
-        fillColor: _color,
-        isDense: true,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: _borderColor),
-        ),
-        disabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: _borderColor),
+        expands: widget.expands,
+        // minLines: 1,
+        maxLines: widget.multiline || widget.expands ? null : widget.maxLines,
+        decoration: AppStyles.inputDefault.copyWith(
+          labelText: widget.label,
+          suffixIcon: getIcon(),
+          alignLabelWithHint: widget.expands,
+          labelStyle: AppStyles.labelBold.copyWith(
+              height: 1,
+              fontSize: 16,
+              color: AppColors.secondary_40,
+              fontWeight: FontWeight.w700),
+          fillColor: _color,
+          isDense: true,
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: _borderColor),
+          ),
+          disabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: _borderColor),
+          ),
         ),
       ),
     );

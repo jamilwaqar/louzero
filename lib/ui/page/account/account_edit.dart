@@ -270,6 +270,7 @@ class AccountEdit extends GetWidget<AuthController> {
   Widget _addressEdit() {
     return GetBuilder<AuthController>(builder: (_) {
       return Stack(
+        clipBehavior: Clip.none,
         children: [
           ColumnWithIconPrefix(
             icon: Icons.location_pin,

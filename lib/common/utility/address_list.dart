@@ -26,7 +26,7 @@ class AddressList extends GetWidget<BaseController> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.searchedAddresses.value.isEmpty) {
-        return Container();
+        return const SizedBox();
       }
       return Positioned(
         left: left,
@@ -35,7 +35,9 @@ class AddressList extends GetWidget<BaseController> {
         top: top,
         child: Container(
           padding: const EdgeInsets.all(8),
-          height: 340,
+          constraints: const BoxConstraints(
+            maxHeight: 340
+          ),
           width: double.infinity,
           decoration: BoxDecoration(
             color: AppColors.light_1,

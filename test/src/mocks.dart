@@ -10,11 +10,47 @@ import 'mock_user_service.dart';
 final mockBLUserService = MockBLUserService();
 final mockBLDataStore = MockBLDataStore();
 final mockUser = MockUser();
-final mockAddressModel = MockAddressModel();
+final mockAddress = MockAddressModel();
 final mockJob = MockJobModel();
 final mockCustomer = MockCustomerModel();
 final mockUserModel = MockUserModel();
 final mockCompanyModel = MockCompanyModel();
+
+final Map<String, dynamic> addressJson = {
+  'street': '350 W 40th St',
+  'city': 'New York',
+  'state': 'New York',
+  'suite': '111',
+  'zip': '10018',
+  'country': 'United State',
+  'latitude': 40.7566193,
+  'longitude': -73.9932827
+};
+
+final mockAddressModel = AddressModel(
+    country: mockAddress.country,
+    street: mockAddress.street,
+    city: mockAddress.city,
+    state: mockAddress.state,
+    zip: mockAddress.zip)
+  ..suite = ''
+  ..latitude = 0
+  ..longitude = 0;
+
+final mockJobModel = JobModel(
+    jobId: 9999,
+    status: 'Estimate',
+    description: mockJob.description,
+    jobType: mockJob.jobType)
+  ..objectId = mockJob.objectId;
+
+final mockCustomerModel = CustomerModel(
+    companyName: mockCustomer.companyName,
+    type: mockCustomer.type,
+    serviceAddress: mockAddressModel,
+    billingAddress: mockAddressModel)
+  ..objectId = const Uuid().v4()
+  ..ownerId = const Uuid().v4();
 
 class MockUserModel extends Mock implements UserModel {
   @override
@@ -29,8 +65,8 @@ class MockUserModel extends Mock implements UserModel {
   @override
   String get email => 'test@gmail.com';
 
-  // @override
-  // AddressModel get addressModel => MockAddressModel();
+  @override
+  AddressModel get addressModel => mockAddressModel;
 }
 
 class MockAddressModel extends Mock implements AddressModel {
@@ -53,10 +89,10 @@ class MockAddressModel extends Mock implements AddressModel {
   String get zip => '10018';
 
   @override
-  double get latitude => 0.0;
+  double get latitude => 40.7566193;
 
   @override
-  double get longitude => 0.0;
+  double get longitude => -73.9932827;
 }
 
 class MockCompanyModel extends Mock implements CompanyModel {
@@ -111,8 +147,8 @@ class MockCustomerModel extends Mock implements CustomerModel {
   String get type => 'Residential';
 
   @override
-  AddressModel get serviceAddress => mockAddressModel;
+  AddressModel get serviceAddress => mockAddress;
 
   @override
-  AddressModel get billingAddress => mockAddressModel;
+  AddressModel get billingAddress => mockAddress;
 }

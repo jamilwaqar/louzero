@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/auth/accept_invite.dart';
 import '../../global_config/flutter_test_config.dart';
+import '../../src/mocks.dart';
 
 void main() {
   const email = 'test@gmail.com';
-
+  Get.put(AuthController(mockBLUserService));
   testWidgets('Widgets in AcceptInvite page', (WidgetTester tester) async {
     await tester.pumpWidget(
         makeTestableWidget(child: const AcceptInvitePage(), tester: tester));
     expect(find.text('Accept Invitation'), findsOneWidget);
     expect(find.text('Enter your email address and invitation code below.'), findsOneWidget);
     expect(find.text('Email'), findsOneWidget);
-    expect(find.text('Go back to'), findsOneWidget);
+    expect(find.text('Back to'), findsOneWidget);
   });
 
   testWidgets('Enter Email and Invitation Code', (WidgetTester tester) async {
