@@ -1,12 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_simple_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
-import 'package:louzero/ui/widget/buttons/text_button.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
@@ -55,10 +53,9 @@ class Demo extends StatelessWidget {
   Widget _cardTabs_() {
     const _icon = Icon(MdiIcons.star, size: 90, color: Colors.black26);
     const _bg = Colors.black12;
-    const _fg = Colors.black26;
 
     return _rowLight(
-      // color: AppColors.secondary_90,
+        // color: AppColors.secondary_90,
         child: AppCardTabs(
             mt: 0,
             mb: 16,
@@ -248,7 +245,7 @@ class Demo extends StatelessWidget {
           label: 'Multi Line',
           multiline: true,
           initialValue:
-          'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
+              'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
         ),
         const SizedBox(height: 16),
         const AppMultiSelect(
@@ -352,27 +349,26 @@ class Demo extends StatelessWidget {
       label: 'Time Picker',
       child: Buttons.outline('Open Time Picker', colorBg: AppColors.white,
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return NZTimePicker(
-                  onChange: (time) {
-                    print('the time is $time');
-                  },
-                );
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return NZTimePicker(
+              onChange: (time) {
+                print('the time is $time');
               },
             );
-          }),
+          },
+        );
+      }),
     );
   }
 
 // DEMO LAYOUT UTILS
   Widget _rowDark(
       {required String label,
-        required Widget child,
-        double inset = 24,
-        Color textColor = AppColors.secondary_99,
-        Color color = AppColors.secondary_30}) {
+      required Widget child,
+      Color textColor = AppColors.secondary_99,
+      Color color = AppColors.secondary_30}) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(top: 32, left: 16, right: 16, bottom: 48),
@@ -392,8 +388,8 @@ class Demo extends StatelessWidget {
 
   Widget _rowLight(
       {required Widget child,
-        required String label,
-        Color color = AppColors.secondary_95}) {
+      required String label,
+      Color color = AppColors.secondary_95}) {
     return _rowDark(
       child: child,
       label: label,
@@ -423,113 +419,6 @@ class Demo extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-
-  Widget _loadingSpinner() => AppCard(pb: 48, children: [
-    _heading("Loading Spinner"),
-    const SizedBox(height: 24),
-    const AppSpinner(),
-  ]);
-
-  Widget _segmentControls() => AppCard(children: [
-    _heading('Segmented Control'),
-    AppSegmentedControl(
-      fromMax: true,
-      isStretch: true,
-      children: const {
-        1: AppSegmentItem(
-          text: 'Estimate (99)',
-          icon: MdiIcons.calculator,
-        ),
-        2: AppSegmentItem(
-          text: 'Booked (97)',
-          icon: MdiIcons.calendar,
-        ),
-        3: AppSegmentItem(
-          text: 'Invoiced',
-          icon: MdiIcons.currencyUsd,
-        ),
-        4: AppSegmentItem(
-          text: 'Canceled',
-          icon: MdiIcons.cancel,
-        ),
-      },
-      onValueChanged: (int value) {
-        print(value);
-      },
-    ),
-    const SizedBox(
-      height: 20,
-    ),
-    AppSegmentedToggle(
-        itemList: const ["%", "\$"],
-        onChange: (value) {
-          print('value has been changed $value');
-        })
-  ]);
-
-  Widget _calendar() => AppCard(children: [
-    _heading('Calendar'),
-    NZCalendar(
-      onRangeSelected: (start, end) {
-        print('date has been changed $start $end');
-      },
-      onDateSelected: (value) {
-        print('date has been changed $value');
-      },
-    )
-  ]);
-
-  Widget _calendarRange() => AppCard(children: [
-    _heading('Calendar'),
-    NZCalendar(
-      selectRange: true,
-      onRangeSelected: (start, end) {
-        print('date has been changed $start $end');
-      },
-      onDateSelected: (value) {
-        print('date has been changed $value');
-      },
-    )
-  ]);
-
-  Widget _timePicker(context) => AppCard(children: [
-    _heading('Time Picker'),
-    AppSegmentedToggle(
-        isVertical: true,
-        itemList: const ["AM", "PM"],
-        onChange: (value) {
-          print('value has been changed $value');
-        }),
-    LZTextButton(
-      "Open Time Picker",
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return NZTimePicker(
-              onChange: (time) {
-                print('the time is $time');
-              },
-            );
-          },
-        );
-      },
-    )
-  ]);
-
-  Widget _heading(String label) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label.toUpperCase(),
-            style: AppStyles.headerRegular.copyWith(
-                color: AppColors.secondary_30,
-                fontSize: 24,
-                letterSpacing: .5)),
-        const AppDivider(mt: 16, mb: 24)
-      ],
     );
   }
 }

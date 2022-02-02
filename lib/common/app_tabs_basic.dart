@@ -81,6 +81,7 @@ class _AppTabsBasicState extends State<AppTabsBasic> {
             ),
           ),
           child: PageView(
+            restorationId: 'mypageviewid',
             controller: _pageController,
             onPageChanged: (int page) {
               setState(() {
@@ -121,12 +122,16 @@ class TabButton extends StatelessWidget {
     Color _bg2 = _selected ? AppColors.secondary_90 : AppColors.white;
     double _ht = _selected ? 70 : 50;
     double _size = _selected ? 32 : 16;
-    bool _isOdd = pageNumber.floor().isOdd;
 
     return GestureDetector(
       onTap: onPressed,
       child: Stack(children: [
         _tab(
+          radiusTopLeft: isFirst ||
+              isLast && _selected ||
+              !_selected && !isLast ||
+              !_selected && isFirst,
+          radiusTopRight: _selected && isFirst || isLast,
           colorBg: _bg2,
           height: _ht,
           size: _size,
@@ -135,6 +140,11 @@ class TabButton extends StatelessWidget {
             colorBg: _bg,
             height: _ht,
             size: _size,
+            radiusTopLeft: isFirst ||
+                isLast && _selected ||
+                !_selected && !isLast ||
+                !_selected && isFirst,
+            radiusTopRight: _selected && isFirst || isLast,
             radiusLeft: !_selected && !isFirst,
             radiusRight: !_selected && !isLast),
       ]),
@@ -145,24 +155,35 @@ class TabButton extends StatelessWidget {
       {required double height,
       required Color colorBg,
       required double size,
+      bool radiusTopRight = false,
+      bool radiusTopLeft = false,
       bool radiusRight = false,
       bool radiusLeft = false}) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 700),
       curve: Curves.fastLinearToSlowEaseIn,
       height: height,
       alignment: const Alignment(0, 0),
       decoration: BoxDecoration(
         color: colorBg,
         borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(16),
-          topRight: const Radius.circular(16),
+          topLeft: Radius.circular(radiusTopLeft ? 16 : 0),
+          topRight: Radius.circular(radiusTopRight ? 16 : 0),
           bottomRight: Radius.circular(radiusRight ? 16 : 0),
           bottomLeft: Radius.circular(radiusLeft ? 16 : 0),
         ),
       ),
-      child: Text(label,
-          style: AppStyles.headerRegular.copyWith(height: .9, fontSize: size)),
+      child: AnimatedDefaultTextStyle(
+        child: Text(label),
+        style: TextStyle(
+            fontFamily: 'Barlow',
+            fontWeight: FontWeight.w700,
+            height: .9,
+            fontSize: size,
+            color: AppColors.secondary_40),
+        curve: Curves.fastLinearToSlowEaseIn,
+        duration: const Duration(milliseconds: 350),
+      ),
     );
   }
 }

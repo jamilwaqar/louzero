@@ -117,8 +117,6 @@ class _CompletePageState extends State<CompletePage> {
       NavigationController().loading(isLoading: false);
       WarningMessageDialog.showDialog(context, res);
     } else {
-      var res = await AuthAPI(auth: Backendless.userService)
-          .login(widget.email, _passwordController.text);
       if (_authController.guestUserId != null) {
         await AuthAPI(auth: Backendless.userService).cleanupGuestUser();
       }
@@ -127,7 +125,7 @@ class _CompletePageState extends State<CompletePage> {
       _authController.user.firstname = _firstNameController.text;
       _authController.user.lastname = _lastNameController.text;
       await Get.find<AuthController>().updateUser();
-      Get.to(()=> const AccountSetup());
+      Get.to(() => const AccountSetup());
     }
   }
 }

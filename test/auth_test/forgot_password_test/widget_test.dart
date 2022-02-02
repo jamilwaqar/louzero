@@ -12,7 +12,7 @@ void main() {
   testWidgets('Widgets in ResetPassword page', (WidgetTester tester) async {
     await tester.pumpWidget(
         makeTestableWidget(child: const ResetPasswordPage(), tester: tester));
-    expect(find.text("Can't Login?"), findsOneWidget);
+    expect(find.text("Trouble logging in?"), findsOneWidget);
     expect(find.text('Email Reset Instructions'), findsOneWidget);
     expect(find.text('Never mind, go back to'), findsOneWidget);
   });

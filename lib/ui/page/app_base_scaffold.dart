@@ -87,30 +87,29 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
           return _appBackground(
             child: Stack(
               children: [
+                _backgroundDecoration(),
                 GestureDetector(
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
                   },
                   child: Scaffold(
                     key: _key,
-                    drawer: _authController.loggedIn.value ? const SideMenuView() : null,
-                    appBar: widget.logoOnly ? const AppBaseAppBarBrand() : null,
+                    drawer: _authController.loggedIn.value
+                        ? const SideMenuView()
+                        : null,
+                    appBar: null,
                     body: widget.logoOnly
-                        ? Container(
-                      color: AppColors.secondary_99,
-                      // ignore: unnecessary_null_in_if_null_operators
-                      child: widget.child ?? null,
-                    )
+                        ? widget.child
                         : AppBaseShell(
-                      footerStart: _getHeader(),
-                      footerEnd: widget.footerEnd,
-                      actions: [
-                        if (_authController.loggedIn.value)
-                          AppBaseUserMenu(onChange: _menuChange)
-                      ],
-                      onMenuPress: _toggleDrawer,
-                      child: widget.child,
-                    ),
+                            footerStart: _getHeader(),
+                            footerEnd: widget.footerEnd,
+                            actions: [
+                              if (_authController.loggedIn.value)
+                                AppBaseUserMenu(onChange: _menuChange)
+                            ],
+                            onMenuPress: _toggleDrawer,
+                            child: widget.child,
+                          ),
                     drawerScrimColor: Colors.black.withOpacity(0),
                     resizeToAvoidBottomInset: widget.hasKeyboard,
                     backgroundColor: Colors.transparent,
@@ -123,6 +122,22 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
           );
         });
       },
+    );
+  }
+
+  Widget _backgroundDecoration() {
+    return Positioned(
+      bottom: 0,
+      height: MediaQuery.of(context).size.height / 1.55,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(40),
+              topLeft: Radius.circular(40),
+            ),
+            color: AppColors.white.withOpacity(.045)),
+      ),
     );
   }
 
@@ -155,15 +170,15 @@ class AppBaseShell extends StatelessWidget {
 
   const AppBaseShell(
       {Key? key,
-        this.child,
-        this.footerStart,
-        this.footerEnd,
-        this.subheader,
-        this.actions,
-        this.onMenuPress,
-        this.hasKeyboard = false,
-        this.logoOnly = false,
-        this.loggedIn = false})
+      this.child,
+      this.footerStart,
+      this.footerEnd,
+      this.subheader,
+      this.actions,
+      this.onMenuPress,
+      this.hasKeyboard = false,
+      this.logoOnly = false,
+      this.loggedIn = false})
       : super(key: key);
 
   @override
@@ -205,36 +220,6 @@ class AppBaseShell extends StatelessWidget {
   }
 }
 
-// LOGGED OUT appbar - Just branding and logo without navigation links
-
-class AppBaseAppBarBrand extends StatefulWidget implements PreferredSizeWidget {
-  const AppBaseAppBarBrand({Key? key})
-      : preferredSize = const Size.fromHeight(kToolbarHeight),
-        super(key: key);
-
-  @override
-  final Size preferredSize;
-
-  @override
-  State<AppBaseAppBarBrand> createState() => _AppBaseAppBarBrandState();
-}
-
-class _AppBaseAppBarBrandState extends State<AppBaseAppBarBrand> {
-  @override
-  Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(100.0),
-      child: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Center(
-          child: Image.asset("assets/icons/general/logo_icon.png"),
-        ),
-      ),
-    );
-  }
-}
-
 // PHYSICS for NestedScrollView = removes fling and auto scroll (may need to remove on prod )
 
 class AppBasePhysics extends ClampingScrollPhysics {
@@ -251,7 +236,7 @@ class AppBasePhysics extends ClampingScrollPhysics {
 
   @override
   final SpringDescription spring =
-  SpringDescription.withDampingRatio(mass: 300, stiffness: 80);
+      SpringDescription.withDampingRatio(mass: 300, stiffness: 80);
 
   @override
   AppBasePhysics applyTo(ScrollPhysics? ancestor) {
