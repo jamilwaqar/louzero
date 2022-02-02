@@ -63,7 +63,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   final _invoiceHeaderController = TextEditingController();
   final _idStartNumberController = TextEditingController();
   final _startTimeController = TextEditingController();
-
+  final _streetWidgetKey = GlobalKey();
   Country _selectCountry = AppDefaultValue.country;
   late bool _isEdit;
   bool _isActiveCompany = false;
@@ -74,6 +74,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     industries[1],
     industries[4]
   ];
+  double _addressListY = 600;
 
   @override
   void initState() {
@@ -108,6 +109,8 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
       _companyModel.industries =
           _initialIndustries.map((e) => e.value).toList();
     }
+    Future.delayed(const Duration(milliseconds: 100))
+        .then((value) => _addressListPosition());
     super.initState();
   }
 
@@ -121,65 +124,64 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
-        child: Column(
+        child: Obx(()=> Stack(
           children: [
-            AppCard(
+            Column(
               children: [
-                Ui.headingLG('Company Details', MdiIcons.homeCity),
-                if (_isActiveCompany)
-                  FlexRow(
-                    flex: const [2, 2],
-                    children: [
-                      Column(
+                AppCard(
+                  children: [
+                    Ui.headingLG('Company Details', MdiIcons.homeCity),
+                    if (_isActiveCompany)
+                      FlexRow(
+                        flex: const [2, 2],
                         children: [
-                          _companyName(),
-                          _website(),
+                          Column(
+                            children: [
+                              _companyName(),
+                              _website(),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              _email(),
+                              _phone(),
+                            ],
+                          )
                         ],
                       ),
-                      Column(
+                    if (!_isActiveCompany)
+                      FlexRow(
+                        flex: const [2, 3],
                         children: [
-                          _email(),
-                          _phone(),
-                        ],
-                      )
-                    ],
-                  ),
-                if (!_isActiveCompany)
-                  FlexRow(
-                    flex: const [2, 3],
-                    children: [
-                      Column(
-                        children: [
-                          AppNetworkImage(uri: _companyModel.avatar),
-                          const SizedBox(height: 16),
-                          Buttons.outline('Update Logo', onPressed: () {
-                            //Upload Logo
-                          }),
+                          Column(
+                            children: [
+                              AppNetworkImage(uri: _companyModel.avatar),
+                              const SizedBox(height: 16),
+                              Buttons.outline('Update Logo', onPressed: () {
+                                //Upload Logo
+                              }),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              _companyName(),
+                              _website(),
+                              _email(),
+                              _phone()
+                            ],
+                          )
                         ],
                       ),
-                      Column(
-                        children: [
-                          _companyName(),
-                          _website(),
-                          _email(),
-                          _phone()
-                        ],
-                      )
-                    ],
-                  ),
-                const AppDivider(
-                  mt: 16,
-                  mb: 24,
-                  color: AppColors.light_2,
+                    const AppDivider(
+                      mt: 16,
+                      mb: 24,
+                      color: AppColors.light_2,
+                    ),
+                    Ui.headingLG('Industries', MdiIcons.domain, mb: 16),
+                    _tags(),
+                  ],
                 ),
-                Ui.headingLG('Industries', MdiIcons.domain, mb: 16),
-                _tags(),
-              ],
-            ),
-            AppCard(
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
+                AppCard(
                   children: [
                     Column(
                       mainAxisSize: MainAxisSize.min,
@@ -199,54 +201,63 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                         ),
                       ],
                     ),
-                    AddressList(
-                        left: 0,
-                        right: 0,
-                        top: 225,
-                        onSelectedSearchedModel: (val) {
-                          _searchAddressModel = val;
-                          _streetController.text = val.street ?? '';
-                          _cityController.text = val.city ?? '';
-                          _stateController.text = val.state;
-                          setState(() {});
-                        }),
+                    if (!_isActiveCompany) const SizedBox(height: 24),
+                    if (!_isActiveCompany)
+                      AppCheckbox(
+                        label: 'Active Company',
+                        checked: _isActiveCompany,
+                        onChanged: (val) {
+                          setState(() {
+                            _isActiveCompany = val ?? true;
+                          });
+                        },
+                      ),
                   ],
                 ),
-                if (!_isActiveCompany) const SizedBox(height: 24),
-                if (!_isActiveCompany)
-                  AppCheckbox(
-                    label: 'Active Company',
-                    checked: _isActiveCompany,
-                    onChanged: (val) {
-                      setState(() {
-                        _isActiveCompany = val ?? true;
-                      });
-                    },
-                  ),
-              ],
-            ),
-            // Don't show in initial sigup steps flow:
-            if (!_isActiveCompany) ..._fullEditForm(),
-            Row(
-              children: [
-                const SizedBox(width: 32),
-                Wrap(
+                // Don't show in initial sigup steps flow:
+                if (!_isActiveCompany) ..._fullEditForm(),
+                Row(
                   children: [
-                    Buttons.primary(
-                      'Save & Continue',
-                      onPressed: _submit,
-                    ),
-                    Buttons.text(
-                      'Cancel',
-                      onPressed: () {},
-                    ),
+                    const SizedBox(width: 32),
+                    Wrap(
+                      children: [
+                        Buttons.primary(
+                          'Save & Continue',
+                          onPressed: _submit,
+                        ),
+                        Buttons.text(
+                          'Cancel',
+                          onPressed: () {},
+                        ),
+                      ],
+                    )
                   ],
-                )
+                ),
+                const SizedBox(height: 200)
               ],
             ),
-            const SizedBox(height: 200)
+            if (_baseController.searchedAddresses.value.isNotEmpty)
+              AddressList(
+                  left: 50,
+                  right: 50,
+                  top: _addressListY,
+                  onSelectedSearchedModel: (val) {
+                    _searchAddressModel = val;
+                    _streetController.text = val.street ?? '';
+                    _cityController.text = val.city ?? '';
+                    _stateController.text = val.state;
+                    setState(() {});
+                  }),
           ],
-        ));
+        )));
+  }
+
+  void _addressListPosition() {
+    if (_streetWidgetKey.currentContext?.findRenderObject() == null) return;
+    RenderBox box = _streetWidgetKey.currentContext!.findRenderObject() as RenderBox;
+    Offset offset = box.localToGlobal(Offset.zero);
+    double y = offset.dy;
+    _addressListY = y - box.size.height - 270;
   }
 
   List<Widget> _fullEditForm() {
@@ -429,6 +440,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
 
   _street() => AppTextField(
         label: 'Street',
+        key: _streetWidgetKey,
         controller: _streetController,
         onSaved: (val) {
           _addressModel.street = val ?? '';
