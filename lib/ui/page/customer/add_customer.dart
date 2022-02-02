@@ -1,7 +1,6 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_country_picker.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/constants.dart';
@@ -154,39 +153,40 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       _formButtons(),
     ];
 
-    return Obx(()=> Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Column(children: list),
-        if (_baseController.searchedAddresses.value.isNotEmpty)
-          AddressList(
-            left: 50,
-            right: 50,
-            top: _addressListY + (_serviceAddressMode ? 0 : 420),
-            onSelectedSearchedModel: (model) {
-              if (_serviceAddressMode) {
-                _serviceSearchAddressModel = model;
-              } else {
-                _billSearchAddressModel = model;
-              }
-              if (_serviceAddressMode) {
-                _serviceStreetController.text = model.street ?? '';
-                _serviceCityController.text = model.city ?? '';
-                _serviceStateController.text = model.state;
-              } else {
-                _billStreetController.text = model.street ?? '';
-                _billCityController.text = model.city ?? '';
-                _billStateController.text = model.state;
-              }
-              setState(() {});
-            },
-          ),
-      ],
-    ));
+    return Obx(() => Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Column(children: list),
+            if (_baseController.searchedAddresses.value.isNotEmpty)
+              AddressList(
+                left: 50,
+                right: 50,
+                top: _addressListY + (_serviceAddressMode ? 0 : 420),
+                onSelectedSearchedModel: (model) {
+                  if (_serviceAddressMode) {
+                    _serviceSearchAddressModel = model;
+                  } else {
+                    _billSearchAddressModel = model;
+                  }
+                  if (_serviceAddressMode) {
+                    _serviceStreetController.text = model.street ?? '';
+                    _serviceCityController.text = model.city ?? '';
+                    _serviceStateController.text = model.state;
+                  } else {
+                    _billStreetController.text = model.street ?? '';
+                    _billCityController.text = model.city ?? '';
+                    _billStateController.text = model.state;
+                  }
+                  setState(() {});
+                },
+              ),
+          ],
+        ));
   }
 
   void _addressListPosition() {
-    GlobalKey key = _serviceAddressMode ? _serviceStreetWidgetKey : _billStreetWidgetKey;
+    GlobalKey key =
+        _serviceAddressMode ? _serviceStreetWidgetKey : _billStreetWidgetKey;
     if (key.currentContext?.findRenderObject() == null) return;
     RenderBox box = key.currentContext!.findRenderObject() as RenderBox;
     Offset offset = box.localToGlobal(Offset.zero);
@@ -321,8 +321,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       FlexRow(
         children: [
           AppTextField(
-            controller:
-                isService ? _serviceAptController : _billAptController,
+            controller: isService ? _serviceAptController : _billAptController,
             label: "Apt / Suite / Other",
           ),
         ],
@@ -418,7 +417,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           color: AppColors.secondary_99,
           borderRadius: BorderRadius.circular(4)),
       padding: const EdgeInsets.all(16),
-      margin: EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
           Wrap(

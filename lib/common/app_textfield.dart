@@ -207,3 +207,19 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 }
+
+class AppTextFieldLabel extends StatelessWidget {
+  final String label;
+  const AppTextFieldLabel(this.label, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, bottom: 10),
+      child: Text(
+        label,
+        style: AppStyles.labelRegular,
+      ),
+    );
+  }
+}

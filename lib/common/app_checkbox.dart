@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:louzero/common/app_text_body.dart';
 import 'package:louzero/controller/constant/colors.dart';
 
 class AppCheckbox extends StatelessWidget {
@@ -32,14 +31,17 @@ class AppCheckbox extends StatelessWidget {
         children: [
           SizedBox(
             width: 24,
-            height: 24,
+            height: 16,
             child: Checkbox(
                 checkColor: Colors.white,
                 value: checked,
-                activeColor: AppColors.dark_1,
+                activeColor: AppColors.primary_1,
                 onChanged: (val) {
                   onChanged != null ? onChanged!(val) : (val) {};
                 }),
+          ),
+          const SizedBox(
+            width: 8,
           ),
           if (label != null)
             Expanded(
@@ -49,10 +51,9 @@ class AppCheckbox extends StatelessWidget {
                     onChanged!(!checked);
                   }
                 },
-                child: AppTextBody(
-                  label!,
-                  pl: 10,
-                ),
+                child: Text(label!,
+                    style: AppStyles.labelBold
+                        .copyWith(height: 1, color: AppColors.secondary_20)),
               ),
             ),
         ],

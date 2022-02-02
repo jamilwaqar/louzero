@@ -128,7 +128,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                 Ui.headingLG('Company Details', MdiIcons.homeCity),
                 if (_isActiveCompany)
                   FlexRow(
-                    flex: [2, 2],
+                    flex: const [2, 2],
                     children: [
                       Column(
                         children: [
@@ -146,12 +146,12 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                   ),
                 if (!_isActiveCompany)
                   FlexRow(
-                    flex: [2, 3],
+                    flex: const [2, 3],
                     children: [
                       Column(
                         children: [
                           AppNetworkImage(uri: _companyModel.avatar),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Buttons.outline('Update Logo', onPressed: () {
                             //Upload Logo
                           }),
@@ -229,7 +229,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
             if (!_isActiveCompany) ..._fullEditForm(),
             Row(
               children: [
-                SizedBox(width: 32),
+                const SizedBox(width: 32),
                 Wrap(
                   children: [
                     Buttons.primary(
@@ -244,7 +244,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
                 )
               ],
             ),
-            SizedBox(height: 200)
+            const SizedBox(height: 200)
           ],
         ));
   }
@@ -320,24 +320,12 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
           ],
         ),
       ),
-      AppDivider(size: 2, ml: 32, mr: 32, mb: 24, mt: 24)
+      const AppDivider(size: 2, ml: 32, mr: 32, mb: 24, mt: 24)
     ];
   }
 
   Widget expand(Widget child, [flex = 1]) {
     return Expanded(child: child, flex: flex);
-  }
-
-  Widget _cardHeader(String label, IconData icon,
-      {VoidCallback? ontap, double mb = 24}) {
-    return AppHeaderIcon(
-      label.toUpperCase(),
-      iconStart: icon,
-      onTap: ontap,
-      mb: mb,
-      style: AppStyles.headerRegular
-          .copyWith(color: AppColors.secondary_30, fontSize: 20),
-    );
   }
 
   void _submit() async {

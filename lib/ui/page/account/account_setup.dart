@@ -66,7 +66,7 @@ class _AccountSetupState extends State<AccountSetup> {
               selected: _step,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           Container(

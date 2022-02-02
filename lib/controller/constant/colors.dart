@@ -43,8 +43,10 @@ abstract class AppColors {
   static const Color accent_1 = Color(0xFF65D19D);
   static const Color primary_1 = Color(0xFFE77C33);
   static const Color primary_30 = Color(0xFF86421A);
+  static const Color primary_40 = Color(0xFFAB5221);
   static const Color primary_50 = Color(0xFFCE6620);
   static const Color primary_60 = Color(0xFFE77C33);
+  static const Color primary_70 = Color(0xFFF39B53);
   static const Color primary_80 = Color(0xFFF6C096);
   static const Color primary_95 = Color(0xFFFDEFE6);
   static const Color secondary_20 = Color(0xFF37474F);
@@ -96,6 +98,12 @@ abstract class AppStyles {
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.secondary_20,
+  );
+  static const headerLarge = TextStyle(
+    fontFamily: 'Barlow',
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    color: AppColors.secondary_40,
   );
   static const headlineMedium = TextStyle(
     fontFamily: 'Barlow',

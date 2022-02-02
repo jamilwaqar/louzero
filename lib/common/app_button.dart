@@ -287,6 +287,31 @@ abstract class Buttons {
     );
   }
 
+  static Widget loginOutline(String label,
+      {bool expanded = true, VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+      expanded: expanded,
+      label: label,
+      onPressed: onPressed,
+      colorBg: Colors.transparent,
+      colorBd: AppColors.secondary_70,
+      colorText: AppColors.secondary_20,
+      iconLeading: icon,
+      colorIconLeading: AppColors.orange,
+      height: 56,
+    );
+  }
+
+  static Widget loginPrimary(String label,
+      {bool expanded = true, VoidCallback? onPressed, IconData? icon}) {
+    return AppButtonGradient(
+        expanded: expanded,
+        label: label,
+        onPressed: onPressed,
+        iconLeading: icon,
+        height: 56);
+  }
+
   static Widget outlineSM(String label,
       {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
     return AppButtonGradient(
@@ -347,14 +372,29 @@ abstract class Buttons {
     );
   }
 
-  static Widget primary(String label,
+  static Widget submitPrimary(String label,
       {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
     return AppButtonGradient(
       expanded: expanded,
       label: label,
       onPressed: onPressed,
+      colorBg: AppColors.secondary_20,
       iconLeading: icon,
+      height: 56,
     );
+  }
+
+  static Widget primary(String label,
+      {bool expanded = false,
+      VoidCallback? onPressed,
+      IconData? icon,
+      double height = 40}) {
+    return AppButtonGradient(
+        expanded: expanded,
+        label: label,
+        onPressed: onPressed,
+        iconLeading: icon,
+        height: height);
   }
 
   static Widget text(String label,

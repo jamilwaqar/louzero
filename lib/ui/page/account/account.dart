@@ -81,7 +81,7 @@ class MyAccountPage extends GetWidget<CompanyController> {
         children: [
           Container(
             width: 48,
-            alignment: Alignment(-1, 0),
+            alignment: const Alignment(-1, 0),
             child: _companyAvatar(model, colorIcon: _colorIcon),
           ),
           Expanded(
@@ -236,7 +236,7 @@ class BorderBox extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Container(
-                padding: EdgeInsets.only(left: 14),
+                padding: const EdgeInsets.only(left: 14),
                 color: colorBg,
                 child: child),
           ),
@@ -273,11 +273,11 @@ class JobStatusLabel extends StatelessWidget {
         _colorText = AppColors.secondary_50;
     }
 
-    return Container(
+    return SizedBox(
       width: 140,
       child: Row(
         children: [
-          SizedBox(width: 24),
+          const SizedBox(width: 24),
           Container(
             width: 10,
             height: 10,
