@@ -49,22 +49,19 @@ class _JobDataTable extends State<JobDataTable> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: Stack(
+      child: Column(
         children: [
-          Column(
-            children: [
-              _tableHeader(),
-              const SizedBox(height: 20,),
-              SizedBox(
-                child: Column(
-                  children: [
-                    for (var rowItem in widget.items)
-                      _tableRow(rowItem)
-                  ],
-                ),
-              )
-            ],
-          ),
+          _tableHeader(),
+          const SizedBox(height: 20,),
+          Flexible(
+            flex: 1,
+            child: ListView.builder(
+              itemCount: widget.items.length,
+                itemBuilder: (BuildContext context,int index){
+                  return  _tableRow(widget.items[index]);
+                }
+            ),
+          )
         ],
       )
     );
@@ -78,14 +75,13 @@ class _JobDataTable extends State<JobDataTable> {
               Expanded(
                   flex: 1,
                   child: FlexRow(
-                    flex: const [2, 7, 4, 3, 2, 1],
+                    flex: const [2, 7, 4, 3, 2],
                     children: [
                       _headerButtons('ID'),
                       _headerButtons('Customer'),
                       _headerButtons('Type'),
                       _headerButtons('Scheduled'),
                       _headerButtons('Total'),
-                      _headerButtons(''),
                     ],
                   ))
             ]
@@ -149,8 +145,8 @@ class _JobDataTable extends State<JobDataTable> {
     return GestureDetector(
       onTap: (){
         Get.find<JobController>().jobModel = widget.models[0];
-        Get.put(LineItemController());
-        Get.to(() => JobsHome());
+
+        widget.onMoreButtonTap!();
       },
       child: Container(
           margin: const EdgeInsets.only(top: 4, bottom: 4),
@@ -179,7 +175,7 @@ class _JobDataTable extends State<JobDataTable> {
                     child: FlexRow(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      flex: const [2, 7, 4, 3, 2, 1],
+                      flex: const [2, 7, 4, 3, 2],
                       children: [
                         Text("#${item['id']}", style: AppStyles.labelRegular,),
                         Column(
@@ -212,15 +208,15 @@ class _JobDataTable extends State<JobDataTable> {
                           fontFamily: 'Lato',
                           fontSize: 14,
                         )),
-                        AppIconButton(
-                            icon: Icons.more_vert,
-                            iconSize: 25,
-                            colorBg: Colors.transparent,
-                            onTap: () {
-                              Get.find<JobController>().jobModel = widget.models[0];
-                              widget.onMoreButtonTap!();
-                            }
-                        ),
+                        // AppIconButton(
+                        //     icon: Icons.more_vert,
+                        //     iconSize: 25,
+                        //     colorBg: Colors.transparent,
+                        //     onTap: () {
+                        //       Get.find<JobController>().jobModel = widget.models[0];
+                        //       widget.onMoreButtonTap!();
+                        //     }
+                        // ),
                       ],
                     ),
                   )
