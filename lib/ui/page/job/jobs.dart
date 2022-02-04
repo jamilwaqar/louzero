@@ -492,16 +492,18 @@ class _JobListPageState extends State<JobListPage> {
                 width: 370,
                 right: 20,
                 top: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    print('tapped on modal');
-                  },
-                  child: JobDetailsPopup(
-                    onPopupClose: () {
-                      setState(() {
-                        isDetailsPopupVisible = false;
-                      });
+                child: DelayedWidget(
+                  animation: DelayedAnimations.SLIDE_FROM_RIGHT,
+                  child: GestureDetector(
+                    onTap: () {
                     },
+                    child: JobDetailsPopup(
+                      onPopupClose: () {
+                        setState(() {
+                          isDetailsPopupVisible = false;
+                        });
+                      },
+                    ),
                   ),
                 )
             )
