@@ -48,7 +48,6 @@ class CompanyModel {
   String? ownerId;
   Uri? avatar;
   @JsonKey(defaultValue: '')   String website = '';
-  @JsonKey(defaultValue: [])   List<CompanyUserModel> users = [];
   @JsonKey(defaultValue: '')   String name = '';
   @JsonKey(defaultValue: '')   String phone = '';
   @JsonKey(defaultValue: '')   String email = '';
@@ -74,18 +73,24 @@ class CompanyModel {
 @JsonSerializable()
 class CompanyUserModel {
   CompanyUserModel({
+    required this.companyId,
     required this.userId,
+    required this.userName,
+    this.avatar,
     this.invited,
     this.accepted,
     required this.status,
-    required this.userRole,
+    required this.role,
   });
 
+  String companyId;
   String userId;
   int? invited;
   int? accepted;
+  String userName;
+  Uri? avatar;
   UserStatus status;
-  UserRole userRole;
+  UserRole role;
 
   factory CompanyUserModel.fromJson(Map<String, dynamic> json) =>
       _$CompanyUserModelFromJson(json);

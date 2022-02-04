@@ -19,7 +19,7 @@ class CompanyController extends GetxController {
     update();
   }
 
-  RxInt _selectedCompany = 1.obs;
+  final RxInt _selectedCompany = 1.obs;
 
   int get selectedCompany {
     return _selectedCompany.value;
@@ -44,13 +44,14 @@ class CompanyController extends GetxController {
       bool isActiveCompany = false}) async {
     NavigationController().loading();
     String currentUserId = _authController.user.objectId!;
-    if (!isEdit && !companyModel.users.map((e)=> e.userId).contains(currentUserId)) {
-      CompanyUserModel userModel = CompanyUserModel(
-          userId: currentUserId,
-          status: UserStatus.active,
-          userRole: UserRole.owner);
-      companyModel.users.add(userModel);
-    }
+    // if (!isEdit && !companyModel.users.map((e)=> e.userId).contains(currentUserId)) {
+    //   CompanyUserModel userModel = CompanyUserModel(
+    //     companyId: ,
+    //       userId: currentUserId,
+    //       status: UserStatus.active,
+    //       userRole: UserRole.owner);
+    //   companyModel.users.add(userModel);
+    // }
     Map<String, dynamic> data = companyModel.toJson();
     data['address'] = addressModel.toJson();
 
