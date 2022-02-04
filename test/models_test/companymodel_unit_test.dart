@@ -12,8 +12,6 @@ void main() {
   test("CompanyModel test", () {
     String objectId = const Uuid().v4();
     String ownerId = const Uuid().v4();
-    List<String> admins = [const Uuid().v4()];
-    List<String> users = [const Uuid().v4()];
     Map<String, dynamic> json = {
       'objectId': objectId,
       'ownerId': ownerId,
@@ -22,8 +20,6 @@ void main() {
       'email': 'test@gmail.com',
       'status': 'active',
       'industries': [],
-      'admins': admins,
-      'users': users,
       'address': addressJson
     };
 
@@ -33,8 +29,6 @@ void main() {
     expect(company.website, 'https://www.google.com/');
     expect(company.phone, '(714)1112222');
     expect(company.status, CompanyStatus.active);
-    expect(company.admins, admins);
-    expect(company.users, users);
     expect(company.email, 'test@gmail.com');
     expect(company.industries, isEmpty);
     expect(company.address, isNotNull);

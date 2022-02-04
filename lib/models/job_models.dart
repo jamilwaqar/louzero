@@ -89,7 +89,7 @@ class BillingLineModel {
   @JsonKey(defaultValue: false)
   bool addDiscount = false;
   String? discountDescription;
-
+  String? taxCodeName;
   @JsonKey(defaultValue: true)
   bool isPercentDiscount = true; /// % or $
   @JsonKey(defaultValue: 0.0)

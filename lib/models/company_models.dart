@@ -37,6 +37,9 @@ extension CompanyStatusEx on CompanyStatus {
   }
 }
 
+enum UserStatus { active, inactive, invited }
+enum UserRole { owner, admin, user }
+
 @JsonSerializable()
 class CompanyModel {
   CompanyModel();
@@ -45,8 +48,7 @@ class CompanyModel {
   String? ownerId;
   Uri? avatar;
   @JsonKey(defaultValue: '')   String website = '';
-  @JsonKey(defaultValue: [])   List<String> admins = [];
-  @JsonKey(defaultValue: [])   List<String> users = [];
+  @JsonKey(defaultValue: [])   List<CompanyUserModel> users = [];
   @JsonKey(defaultValue: '')   String name = '';
   @JsonKey(defaultValue: '')   String phone = '';
   @JsonKey(defaultValue: '')   String email = '';
@@ -67,6 +69,27 @@ class CompanyModel {
   }
 
   Map<String, dynamic> toJson() => _$CompanyModelToJson(this);
+}
+
+@JsonSerializable()
+class CompanyUserModel {
+  CompanyUserModel({
+    required this.userId,
+    this.invited,
+    this.accepted,
+    required this.status,
+    required this.userRole,
+  });
+
+  String userId;
+  int? invited;
+  int? accepted;
+  UserStatus status;
+  UserRole userRole;
+
+  factory CompanyUserModel.fromJson(Map<String, dynamic> json) =>
+      _$CompanyUserModelFromJson(json);
+  Map<String, dynamic> toJson() => _$CompanyUserModelToJson(this);
 }
 
 class ListItem {

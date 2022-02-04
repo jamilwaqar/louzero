@@ -11,10 +11,10 @@ CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel()
   ..ownerId = json['ownerId'] as String?
   ..avatar = json['avatar'] == null ? null : Uri.parse(json['avatar'] as String)
   ..website = json['website'] as String? ?? ''
-  ..admins =
-      (json['admins'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []
-  ..users =
-      (json['users'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []
+  ..users = (json['users'] as List<dynamic>?)
+          ?.map((e) => CompanyUserModel.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      []
   ..name = json['name'] as String? ?? ''
   ..phone = json['phone'] as String? ?? ''
   ..email = json['email'] as String? ?? ''
@@ -34,7 +34,6 @@ Map<String, dynamic> _$CompanyModelToJson(CompanyModel instance) =>
       'ownerId': instance.ownerId,
       'avatar': instance.avatar?.toString(),
       'website': instance.website,
-      'admins': instance.admins,
       'users': instance.users,
       'name': instance.name,
       'phone': instance.phone,
@@ -47,4 +46,34 @@ Map<String, dynamic> _$CompanyModelToJson(CompanyModel instance) =>
 const _$CompanyStatusEnumMap = {
   CompanyStatus.active: 'active',
   CompanyStatus.cancel: 'cancel',
+};
+
+CompanyUserModel _$CompanyUserModelFromJson(Map<String, dynamic> json) =>
+    CompanyUserModel(
+      userId: json['userId'] as String,
+      invited: json['invited'] as int?,
+      accepted: json['accepted'] as int?,
+      status: $enumDecode(_$UserStatusEnumMap, json['status']),
+      userRole: $enumDecode(_$UserRoleEnumMap, json['userRole']),
+    );
+
+Map<String, dynamic> _$CompanyUserModelToJson(CompanyUserModel instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
+      'invited': instance.invited,
+      'accepted': instance.accepted,
+      'status': _$UserStatusEnumMap[instance.status],
+      'userRole': _$UserRoleEnumMap[instance.userRole],
+    };
+
+const _$UserStatusEnumMap = {
+  UserStatus.active: 'active',
+  UserStatus.inactive: 'inactive',
+  UserStatus.invited: 'invited',
+};
+
+const _$UserRoleEnumMap = {
+  UserRole.owner: 'owner',
+  UserRole.admin: 'admin',
+  UserRole.user: 'user',
 };

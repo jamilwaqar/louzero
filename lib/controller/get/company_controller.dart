@@ -44,8 +44,12 @@ class CompanyController extends GetxController {
       bool isActiveCompany = false}) async {
     NavigationController().loading();
     String currentUserId = _authController.user.objectId!;
-    if (!isEdit && !companyModel.users.contains(currentUserId)) {
-      companyModel.users.add(currentUserId);
+    if (!isEdit && !companyModel.users.map((e)=> e.userId).contains(currentUserId)) {
+      CompanyUserModel userModel = CompanyUserModel(
+          userId: currentUserId,
+          status: UserStatus.active,
+          userRole: UserRole.owner);
+      companyModel.users.add(userModel);
     }
     Map<String, dynamic> data = companyModel.toJson();
     data['address'] = addressModel.toJson();

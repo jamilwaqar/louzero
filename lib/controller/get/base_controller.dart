@@ -45,8 +45,8 @@ class BaseController extends GetxController {
   _updateCompanyUsers() {
     activeCountryUsers = [];
     if (activeCompany == null) return;
-    activeCompany!.users.toList().forEach((id) async {
-      UserModel model = await APIManager.fetchUser(id);
+    activeCompany!.users.toList().forEach((e) async {
+      UserModel model = await APIManager.fetchUser(e.userId);
       activeCountryUsers.add(model);
     });
   }
