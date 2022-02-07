@@ -43,15 +43,9 @@ class CompanyController extends GetxController {
       required bool isEdit,
       bool isActiveCompany = false}) async {
     NavigationController().loading();
-    // String currentUserId = _authController.user.objectId!;
-    // if (!isEdit && !companyModel.users.map((e)=> e.userId).contains(currentUserId)) {
-    //   CompanyUserModel userModel = CompanyUserModel(
-    //     companyId: ,
-    //       userId: currentUserId,
-    //       status: UserStatus.active,
-    //       userRole: UserRole.owner);
-    //   companyModel.users.add(userModel);
-    // }
+    if (!isEdit) {
+      await createCompanyUser();
+    }
     Map<String, dynamic> data = companyModel.toJson();
     data['address'] = addressModel.toJson();
 
@@ -71,6 +65,19 @@ class CompanyController extends GetxController {
     }
     update();
     NavigationController().loading(isLoading: false);
+  }
+
+  Future createCompanyUser() async {
+    String currentUserId = _authController.user.objectId!;
+    final baseController = Get.find<BaseController>();
+    if (baseController.activeCompanyUsers.map((e)=> e.userId).contains(currentUserId)) {
+      CompanyUserModel userModel = CompanyUserModel(
+        companyId: baseController.activeCompany!.objectId!,
+          userId: currentUserId,
+          status: UserStatus.active,
+          role: UserRole.owner, userName: '');
+
+    }
   }
 
   void deleteCompany(String objectId) async {

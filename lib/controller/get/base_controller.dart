@@ -35,16 +35,19 @@ class BaseController extends GetxController {
   set siteProfileTemplates(List<CTSiteProfile> value) => _siteProfileTemplates.value = value;
 
   CompanyModel? get activeCompany => _activeCompany.value;
-  List<CompanyUserModel>activeCountryUsers = [];
+  List<CompanyUserModel>activeCompanyUsers = [];
   set activeCompany(CompanyModel? value) {
     _activeCompany.value = value;
     _updateCompanyUsers();
   }
 
-  _updateCompanyUsers() {
-    activeCountryUsers = [];
+  _updateCompanyUsers() async {
+    activeCompanyUsers = [];
     if (activeCompany == null) return;
-    _fetchCompanyUsers(activeCompany!.objectId!);
+    dynamic res = await _fetchCompanyUsers(activeCompany!.objectId!);
+    if (res is List<CompanyUserModel>) {
+      activeCompanyUsers = res;
+    }
   }
 
   bool get isLoading => _isLoading.value;
@@ -134,8 +137,8 @@ class BaseController extends GetxController {
       var response = await Backendless.data
           .of(BLPath.companyUser)
           .find(queryBuilder);
-      list = List<Map<String, dynamic>>.from(response!)
-          .map((e) => CompanyUserModel.fromJson(e))
+      list = List<Map>.from(response!)
+          .map((e) => CompanyUserModel.fromJson(Map<String, dynamic>.from(e)))
           .toList();
       return list;
     } catch (e) {
@@ -147,7 +150,7 @@ class BaseController extends GetxController {
 
   Future _fetchCustomers() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${_authController.user.objectId}'";
+      ..whereClause = "ownerId = '${_authController.user.objectId}'"..pageSize = 100;
     try {
       var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
       List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();

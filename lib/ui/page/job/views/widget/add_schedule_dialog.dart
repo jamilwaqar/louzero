@@ -41,7 +41,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
   late final _noteController = TextEditingController(text: _isEdit ? schedule!.note : jobModel.description);
   late final _startTimeController = TextEditingController(text: schedule?.start.time);
   late final _endTimeController = TextEditingController(text: schedule?.end.time);
-  late final companyUsers = controller.baseController.activeCountryUsers;
+  late final companyUsers = controller.baseController.activeCompanyUsers;
 
   late final _isAnyTimeOfVisit = (schedule?.anyTimeVisit ?? false).obs;
   late final _selectedDate = (schedule?.start ?? DateTime.now()).obs;
