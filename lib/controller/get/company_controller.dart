@@ -43,7 +43,7 @@ class CompanyController extends GetxController {
       required bool isEdit,
       bool isActiveCompany = false}) async {
     NavigationController().loading();
-    String currentUserId = _authController.user.objectId!;
+    // String currentUserId = _authController.user.objectId!;
     // if (!isEdit && !companyModel.users.map((e)=> e.userId).contains(currentUserId)) {
     //   CompanyUserModel userModel = CompanyUserModel(
     //     companyId: ,
