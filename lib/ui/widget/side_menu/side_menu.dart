@@ -23,7 +23,7 @@ class SideMenuView extends StatefulWidget {
 
 class _SideMenuViewState extends State<SideMenuView> {
   final _authController = Get.find<AuthController>();
-  
+
   @override
   Widget build(BuildContext context) {
     // _sideMenuKey.currentState?.open();
@@ -135,14 +135,6 @@ class _SideMenuViewState extends State<SideMenuView> {
                   Get.to(() => const SettingsPage());
                 },
               ),
-              AppNavButton(
-                title: "Demo",
-                icon: Icons.star_border_outlined,
-                onPressed: () {
-                  _pop();
-                  Get.to(() => Demo());
-                },
-              ),
             ],
           ),
         ),
@@ -172,7 +164,11 @@ class _SideMenuViewState extends State<SideMenuView> {
   Widget _profile() {
     return Column(
       children: [
-        AppAvatar(url: _authController.user.avatar, text: _authController.user.initials, size: 96, backgroundColor: AppColors.medium_2),
+        AppAvatar(
+            url: _authController.user.avatar,
+            text: _authController.user.initials,
+            size: 96,
+            backgroundColor: AppColors.medium_2),
         const SizedBox(height: 8),
         Text(_authController.user.fullName, style: AppStyles.headerRegular),
         const SizedBox(height: 8),
