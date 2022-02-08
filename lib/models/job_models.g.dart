@@ -66,7 +66,7 @@ BillingLineModel _$BillingLineModelFromJson(Map<String, dynamic> json) =>
       discountAmount: (json['discountAmount'] as num?)?.toDouble() ?? 0.0,
       discountDescription: json['discountDescription'] as String?,
       inventoryId: json['inventoryId'] as String?,
-    );
+    )..taxCodeName = json['taxCodeName'] as String?;
 
 Map<String, dynamic> _$BillingLineModelToJson(BillingLineModel instance) {
   final val = <String, dynamic>{};
@@ -87,6 +87,7 @@ Map<String, dynamic> _$BillingLineModelToJson(BillingLineModel instance) {
   val['taxable'] = instance.taxable;
   val['addDiscount'] = instance.addDiscount;
   val['discountDescription'] = instance.discountDescription;
+  val['taxCodeName'] = instance.taxCodeName;
   val['isPercentDiscount'] = instance.isPercentDiscount;
   val['discountAmount'] = instance.discountAmount;
   val['inventoryId'] = instance.inventoryId;

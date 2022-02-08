@@ -13,6 +13,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/widget/buttons/text_button.dart';
@@ -40,7 +41,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
   late final _noteController = TextEditingController(text: _isEdit ? schedule!.note : jobModel.description);
   late final _startTimeController = TextEditingController(text: schedule?.start.time);
   late final _endTimeController = TextEditingController(text: schedule?.end.time);
-  late final companyUsers = controller.baseController.activeCountryUsers;
+  late final companyUsers = controller.baseController.activeCompanyUsers;
 
   late final _isAnyTimeOfVisit = (schedule?.anyTimeVisit ?? false).obs;
   late final _selectedDate = (schedule?.start ?? DateTime.now()).obs;
@@ -64,7 +65,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
           controller: _personnelController,
           label: 'Personnel',
           isDropdown: true,
-          items: companyUsers.map((e) => e.fullName).toList(),
+          items: companyUsers.map((e) => e.userName).toList(),
           leadingImage: hasPersonnelText ? (_isEdit ? schedule?.personnelAvatar : _user.avatar) : null,
           leftPadding: hasPersonnelText ? 50 : 15,
           showClearIcon: hasPersonnelText,
@@ -171,13 +172,13 @@ class AddScheduleDialog extends GetWidget<JobController> {
                 }
                 int start = controller.convertMilliseconds(_startTimeController.text, _selectedDate.value);
                 int end = controller.convertMilliseconds(_endTimeController.text, _selectedDate.value);
-                UserModel selectedUser = companyUsers.firstWhere((user) => user.fullName == _personnelController.text);
+                CompanyUserModel selectedUser = companyUsers.firstWhere((user) => user.userName == _personnelController.text);
                 ScheduleModel newSchedule = ScheduleModel(
                   objectId: schedule?.objectId ?? const Uuid().v4(),
                     startTime: start,
                     endTime: end,
-                    personnelName: selectedUser.fullName,
-                    personnelId: selectedUser.objectId!,
+                    personnelName: selectedUser.userName,
+                    personnelId: selectedUser.userId,
                     note: _noteController.text,
                     complete: schedule?.complete ?? false,
                     anyTimeVisit: _isAnyTimeOfVisit.value,

@@ -28,6 +28,7 @@ abstract class BLPath {
   static const String siteProfileTemplate = "SiteProfileTemplate";
   static const String invites = "Invites";
   static const String company = "Company";
+  static const String companyUser = "CompanyUser";
   static const String job = "Job";
 }
 

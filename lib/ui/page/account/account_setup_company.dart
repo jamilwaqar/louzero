@@ -110,6 +110,7 @@ class _AccountSetupCompanyState extends State<AccountSetupCompany> {
     }
     Future.delayed(const Duration(milliseconds: 100))
         .then((value) => _addressListPosition());
+    Get.put(CompanyController());
     super.initState();
   }
 

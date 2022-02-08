@@ -18,6 +18,7 @@ class CustomerModel {
   String? parentAccountName;
   AddressModel serviceAddress;
   AddressModel billingAddress;
+  String? taxCodeName;
   @JsonKey(defaultValue: true) bool billAddressSame = true;
 
   @JsonKey(defaultValue: [])

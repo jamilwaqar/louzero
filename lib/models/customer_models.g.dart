@@ -18,6 +18,7 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       ..objectId = json['objectId'] as String?
       ..ownerId = json['ownerId'] as String?
       ..parentAccountName = json['parentAccountName'] as String?
+      ..taxCodeName = json['taxCodeName'] as String?
       ..billAddressSame = json['billAddressSame'] as bool? ?? true
       ..customerContacts = (json['customerContacts'] as List<dynamic>?)
               ?.map((e) => CustomerContact.fromJson(e as Map<String, dynamic>))
@@ -45,6 +46,7 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) {
   val['parentAccountName'] = instance.parentAccountName;
   val['serviceAddress'] = instance.serviceAddress;
   val['billingAddress'] = instance.billingAddress;
+  val['taxCodeName'] = instance.taxCodeName;
   val['billAddressSame'] = instance.billAddressSame;
   val['customerContacts'] = instance.customerContacts;
   val['siteProfiles'] = instance.siteProfiles;

@@ -1,7 +1,7 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/api/api_service.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
@@ -9,7 +9,6 @@ import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
-import 'package:louzero/models/user_models.dart';
 
 class BaseController extends GetxController {
 
@@ -36,19 +35,19 @@ class BaseController extends GetxController {
   set siteProfileTemplates(List<CTSiteProfile> value) => _siteProfileTemplates.value = value;
 
   CompanyModel? get activeCompany => _activeCompany.value;
-  List<UserModel>activeCountryUsers = [];
+  List<CompanyUserModel>activeCompanyUsers = [];
   set activeCompany(CompanyModel? value) {
     _activeCompany.value = value;
     _updateCompanyUsers();
   }
 
-  _updateCompanyUsers() {
-    activeCountryUsers = [];
+  _updateCompanyUsers() async {
+    activeCompanyUsers = [];
     if (activeCompany == null) return;
-    activeCompany!.users.toList().forEach((id) async {
-      UserModel model = await APIManager.fetchUser(id);
-      activeCountryUsers.add(model);
-    });
+    dynamic res = await _fetchCompanyUsers(activeCompany!.objectId!);
+    if (res is List<CompanyUserModel>) {
+      activeCompanyUsers = res;
+    }
   }
 
   bool get isLoading => _isLoading.value;
@@ -66,7 +65,9 @@ class BaseController extends GetxController {
             .firstWhere(
                 (com) => com.objectId == _authController.user.activeCompanyId);
       } catch (e) {
-        print(e.toString());
+        if (kDebugMode) {
+          print(e.toString());
+        }
       }
       companies = companyList as List<CompanyModel>;
       activeCompany = companyModel;
@@ -103,7 +104,9 @@ class BaseController extends GetxController {
           .toList();
       return list;
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
   }
 
@@ -120,13 +123,34 @@ class BaseController extends GetxController {
           .toList();
       return list;
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future _fetchCompanyUsers(String companyId) async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "companyId = '$companyId'";
+    List<CompanyUserModel> list = [];
+    try {
+      var response = await Backendless.data
+          .of(BLPath.companyUser)
+          .find(queryBuilder);
+      list = List<Map>.from(response!)
+          .map((e) => CompanyUserModel.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+      return list;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
   }
 
   Future _fetchCustomers() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${_authController.user.objectId}'";
+      ..whereClause = "ownerId = '${_authController.user.objectId}'"..pageSize = 100;
     try {
       var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
       List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();

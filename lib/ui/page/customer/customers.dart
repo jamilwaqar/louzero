@@ -61,7 +61,7 @@ class CustomerListPage extends GetWidget<CustomerController> {
                           Column(
                             children: [
                               AppTextBody(
-                                model.customerContacts.first.fullName,
+                                model.companyName,
                                 color: AppColors.darkest,
                                 bold: true,
                               ),

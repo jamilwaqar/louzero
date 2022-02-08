@@ -5,11 +5,11 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
+import 'package:louzero/models/company_models.dart';
 import 'package:louzero/ui/page/account/account_setup_company.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/dashboard/dashboard.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'models/company_model.dart';
 
 class AccountSetup extends StatefulWidget {
   const AccountSetup({Key? key}) : super(key: key);
