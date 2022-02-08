@@ -8,6 +8,8 @@ import 'package:louzero/common/app_icon_button.dart';
 import 'package:louzero/common/utility/flex_row.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
+import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class JobDetailsPopup extends GetWidget<JobController>{
@@ -24,6 +26,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
   @override
   Widget build(BuildContext context) {
     final currentJob = controller.jobModel;
+    print('current job $currentJob');
     int statusColor = 0xFF4087E8;
     if(currentJob?.jobType != null && colors[currentJob?.jobType] != null) {
       statusColor = int.parse("0xFF${colors[currentJob?.jobType]}");
@@ -34,7 +37,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
           color: AppColors.secondary_100,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
-            BoxShadow(
+            const BoxShadow(
               offset: Offset(2, 2),
               blurRadius: 12,
               color: Color.fromRGBO(0, 0, 0, 0.16),
@@ -222,7 +225,10 @@ class JobDetailsPopup extends GetWidget<JobController>{
                         icon: MdiIcons.arrowTopRight,
                         colorIcon: AppColors.orange,
                         label: 'View Job Profile',
-                        onPressed: (){},
+                        onPressed: (){
+                          Get.put(LineItemController());
+                          Get.to(() => JobsHome());
+                        },
                       ),
                       const SizedBox(height: 8,),
                       AppButton(

@@ -23,6 +23,8 @@ class AppBaseScaffold extends StatefulWidget {
   final List<Widget>? footerEnd;
   final String? subheader;
   final Color? colorBg;
+  final Function? onBodyTap;
+  final Function? onAppbarVisibiltyChange;
 
   const AppBaseScaffold(
       {Key? key,
@@ -32,7 +34,10 @@ class AppBaseScaffold extends StatefulWidget {
       this.subheader,
       this.hasKeyboard = false,
       this.logoOnly = false,
-      this.colorBg})
+      this.colorBg,
+        this.onBodyTap,
+        this.onAppbarVisibiltyChange
+      })
       : super(key: key);
 
   @override
@@ -48,6 +53,20 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
     await AuthAPI(auth: Backendless.userService).logout();
     NavigationController().popToFirst(context);
     _authController.loggedIn.value = false;
+  }
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(_scrollListener);
+    super.initState();
+  }
+
+  _scrollListener() {
+    if(widget.onAppbarVisibiltyChange != null) {
+      //return isVisible = true
+      widget.onAppbarVisibiltyChange!(_scrollController.offset != _scrollController.position.maxScrollExtent);
+    }
   }
 
   void _toggleDrawer() {
@@ -93,6 +112,9 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                 GestureDetector(
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
+                    if(widget.onBodyTap != null) {
+                      widget.onBodyTap!();
+                    }
                   },
                   child: Scaffold(
                     key: _key,
@@ -103,6 +125,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
                     body: widget.logoOnly
                         ? widget.child
                         : AppBaseShell(
+                      scrollController: _scrollController,
                             colorBg: widget.colorBg ?? AppColors.secondary_99,
                             footerStart: _getHeader(),
                             footerEnd: widget.footerEnd,
@@ -171,6 +194,7 @@ class AppBaseShell extends StatelessWidget {
   final List<Widget>? footerEnd;
   final String? subheader;
   final Color colorBg;
+  final ScrollController? scrollController;
 
   const AppBaseShell({
     Key? key,
@@ -184,11 +208,13 @@ class AppBaseShell extends StatelessWidget {
     this.logoOnly = false,
     this.loggedIn = false,
     this.colorBg = AppColors.secondary_99,
+    this.scrollController
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
+      controller: scrollController ?? ScrollController(),
       physics: AppBasePhysics(),
       floatHeaderSlivers: true,
       headerSliverBuilder: (context, innerBoxIsScrolled) => [

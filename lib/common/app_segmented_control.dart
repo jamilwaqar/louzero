@@ -22,6 +22,7 @@ class AppSegmentedControl<T> extends StatefulWidget {
     this.isStretch = false,
     this.fromMax = false,
     this.clipBehavior = Clip.none,
+    this.onTap
   })  : assert(children.length != 0),
         super(key: key);
   final BoxDecoration? decoration;
@@ -40,6 +41,7 @@ class AppSegmentedControl<T> extends StatefulWidget {
   final T? initialValue;
   final bool fromMax;
   final Clip clipBehavior;
+  final Function? onTap;
 
   @override
   _AppSegmentedControlState<T> createState() => _AppSegmentedControlState();
@@ -111,6 +113,9 @@ class _AppSegmentedControlState<T> extends State<AppSegmentedControl<T>> {
       borderRadius: BorderRadius.circular(widget.radius),
       onTap: () {
         _onTapItem(item);
+        if(widget.onTap != null) {
+          widget.onTap!();
+        }
       },
       child: Center(
         child: Container(
