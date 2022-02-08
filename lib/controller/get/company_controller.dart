@@ -89,7 +89,7 @@ class CompanyController extends GetxController {
   }
 
   void uploadAvatar() async {
-    File? file = await CameraOption().showCameraOptions(Get.context!);
+    File? file = await CameraOption().showCameraOptions(Get.context!, isAvatar: false);
     if (file != null) {
       NavigationController().loading();
       String? response =

@@ -40,7 +40,8 @@ dependencies:
   expandable:
   flutter_tagging: ^3.0.0
   flutter_tags: 1.0.0-nullsafety.1
-  image_pickers: ^2.0.0+2
+#  image_pickers: ^2.0.0+2
+  image_picker: ^0.8.4+7
   table_calendar: ^3.0.3
   simple_rich_text: ^2.0.43
   intl: ^0.17.0
@@ -50,6 +51,7 @@ dependencies:
   flag: ^6.0.0
   font_awesome_flutter: ^9.2.0
   delayed_widget: ^1.1.1
+  image_cropper: ^1.4.1
 
 dev_dependencies:
   flutter_driver:
