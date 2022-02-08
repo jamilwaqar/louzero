@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:image_pickers/image_pickers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -63,7 +62,7 @@ class CameraOption {
               toolbarTitle: 'Cropper',
               toolbarColor: Colors.deepOrange,
               toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
+              initAspectRatio: CropAspectRatioPreset.ratio4x3,
               lockAspectRatio: false),
           iosUiSettings: const IOSUiSettings(
             minimumAspectRatio: 1.0,
@@ -75,9 +74,6 @@ class CameraOption {
 
   Future<File?> _getImage(context, {bool isPhoto = true}) async {
     try {
-      // List<Media> medias = await ImagePickers.pickerPaths();
-      // File file = File(medias.first.path!);
-      // return file;
       final ImagePicker _picker = ImagePicker();
       final XFile? image = await _picker.pickImage(source: isPhoto? ImageSource.gallery : ImageSource.camera);
       return File(image!.path);

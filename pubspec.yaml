@@ -40,7 +40,6 @@ dependencies:
   expandable:
   flutter_tagging: ^3.0.0
   flutter_tags: 1.0.0-nullsafety.1
-#  image_pickers: ^2.0.0+2
   image_picker: ^0.8.4+7
   table_calendar: ^3.0.3
   simple_rich_text: ^2.0.43
