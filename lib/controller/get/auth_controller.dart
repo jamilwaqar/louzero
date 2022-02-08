@@ -42,7 +42,7 @@ class AuthController extends GetxController {
   }
 
   Future uploadAccountAvatar() async {
-    File? file = await CameraOption().showCameraOptions(Get.context!);
+    File? file = await CameraOption().showCameraOptions(Get.context!, isAvatar: true);
     if (file != null) {
       NavigationController().loading();
       String? response =

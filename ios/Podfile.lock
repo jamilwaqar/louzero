@@ -1,19 +1,4 @@
 PODS:
-  - AFNetworking (4.0.1):
-    - AFNetworking/NSURLSession (= 4.0.1)
-    - AFNetworking/Reachability (= 4.0.1)
-    - AFNetworking/Security (= 4.0.1)
-    - AFNetworking/Serialization (= 4.0.1)
-    - AFNetworking/UIKit (= 4.0.1)
-  - AFNetworking/NSURLSession (4.0.1):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/Reachability (4.0.1)
-  - AFNetworking/Security (4.0.1)
-  - AFNetworking/Serialization (4.0.1)
-  - AFNetworking/UIKit (4.0.1):
-    - AFNetworking/NSURLSession
   - backendless_sdk (0.0.1):
     - BackendlessSwift (= 6.4.1)
     - Flutter
@@ -89,10 +74,11 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
-  - image_pickers (0.0.1):
-    - AFNetworking
+  - image_cropper (0.0.4):
     - Flutter
-    - ZLPhotoBrowser-objc (= 1.0.4)
+    - TOCropViewController (~> 2.6.0)
+  - image_picker (0.0.1):
+    - Flutter
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -103,19 +89,15 @@ PODS:
   - "permission_handler (5.1.0+2)":
     - Flutter
   - PromisesObjC (2.0.0)
-  - SDWebImage (5.12.2):
-    - SDWebImage/Core (= 5.12.2)
-  - SDWebImage/Core (5.12.2)
   - Socket.IO-Client-Swift (16.0.1):
     - Starscream (~> 4.0)
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
   - Starscream (4.0.4)
+  - TOCropViewController (2.6.1)
   - url_launcher_ios (0.0.1):
     - Flutter
-  - ZLPhotoBrowser-objc (1.0.4):
-    - SDWebImage
 
 DEPENDENCIES:
   - backendless_sdk (from `.symlinks/plugins/backendless_sdk/ios`)
@@ -124,7 +106,8 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
-  - image_pickers (from `.symlinks/plugins/image_pickers/ios`)
+  - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -132,7 +115,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AFNetworking
     - BackendlessSwift
     - Firebase
     - FirebaseCore
@@ -145,10 +127,9 @@ SPEC REPOS:
     - GoogleUtilities
     - nanopb
     - PromisesObjC
-    - SDWebImage
     - Socket.IO-Client-Swift
     - Starscream
-    - ZLPhotoBrowser-objc
+    - TOCropViewController
 
 EXTERNAL SOURCES:
   backendless_sdk:
@@ -163,8 +144,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
-  image_pickers:
-    :path: ".symlinks/plugins/image_pickers/ios"
+  image_cropper:
+    :path: ".symlinks/plugins/image_cropper/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler:
@@ -175,7 +158,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   backendless_sdk: 23f02a2afbc999842b93d27ee7c10a5b49f2edb6
   BackendlessSwift: 1ec74d3ea9de1ed9e5291e23e322b51b0bf9ee41
   Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
@@ -192,17 +174,17 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleMaps: 025272d5876d3b32604e5c080dc25eaf68764693
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
-  image_pickers: 5e6ec7083f9363d014c0fb061f1b9cd97bb5e451
+  image_cropper: f1668dd8d2cad2d357955caad15a40547856edcb
+  image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
-  SDWebImage: 240e5c12b592fb1268c1d03b8c90d90e8c2ffe82
   Socket.IO-Client-Swift: c116d6dc9fd6be9c259bacfe143f8725bce7d79e
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
+  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   url_launcher_ios: 02f1989d4e14e998335b02b67a7590fa34f971af
-  ZLPhotoBrowser-objc: c7657d3bc85ae231884e058d0e3638f619164736
 
 PODFILE CHECKSUM: 3c715ac414244a7aeb9a095ae27b89c88ac4d581
 

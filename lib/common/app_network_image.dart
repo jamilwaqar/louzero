@@ -10,7 +10,7 @@ class AppNetworkImage extends StatelessWidget {
   const AppNetworkImage({
     this.uri,
     this.width = 198,
-    this.height = 136,
+    this.height = 148,
     this.radius = 8,
     Key? key,
   }) : super(key: key);
