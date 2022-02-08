@@ -362,12 +362,15 @@ abstract class Buttons {
   }
 
   static Widget submit(String label,
-      {bool expanded = false, VoidCallback? onPressed, IconData? icon}) {
+      {bool expanded = false,
+      VoidCallback? onPressed,
+      IconData? icon,
+      Color? colorBg}) {
     return AppButtonGradient(
       expanded: expanded,
       label: label,
       onPressed: onPressed,
-      colorBg: AppColors.secondary_20,
+      colorBg: colorBg,
       iconLeading: icon,
     );
   }
