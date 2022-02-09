@@ -50,6 +50,7 @@ class CameraOption {
     if (file != null) {
       File? croppedFile = await ImageCropper.cropImage(
           sourcePath: file.path,
+          aspectRatio: isAvatar ? const CropAspectRatio(ratioX: 1, ratioY: 1) : const CropAspectRatio(ratioX: 4, ratioY: 3)
           cropStyle: isAvatar ? CropStyle.circle : CropStyle.rectangle,
           aspectRatioPresets: [
             CropAspectRatioPreset.square,
@@ -58,14 +59,15 @@ class CameraOption {
             CropAspectRatioPreset.ratio4x3,
             CropAspectRatioPreset.ratio16x9
           ],
-          androidUiSettings: const AndroidUiSettings(
+          androidUiSettings: AndroidUiSettings(
               toolbarTitle: 'Cropper',
               toolbarColor: Colors.deepOrange,
               toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.ratio4x3,
-              lockAspectRatio: false),
-          iosUiSettings: const IOSUiSettings(
-            minimumAspectRatio: 1.0,
+              lockAspectRatio: !isAvatar,
+              initAspectRatio: CropAspectRatioPreset.ratio4x3),
+          iosUiSettings: IOSUiSettings(
+            aspectRatioLockDimensionSwapEnabled: true,
+            aspectRatioLockEnabled: !isAvatar,
           ));
       return croppedFile;
     }
