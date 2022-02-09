@@ -17,14 +17,6 @@ JobModel _$JobModelFromJson(Map<String, dynamic> json) => JobModel(
       ..ownerId = json['ownerId'] as String?
       ..created = json['created'] as int?
       ..updated = json['updated'] as int?
-      ..billingLineModels = (json['billingLineModels'] as List<dynamic>?)
-              ?.map((e) => BillingLineModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          []
-      ..scheduleModels = (json['scheduleModels'] as List<dynamic>?)
-              ?.map((e) => ScheduleModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          []
       ..note = json['note'] as String?;
 
 Map<String, dynamic> _$JobModelToJson(JobModel instance) {
@@ -45,8 +37,6 @@ Map<String, dynamic> _$JobModelToJson(JobModel instance) {
   val['jobId'] = instance.jobId;
   val['description'] = instance.description;
   val['customerId'] = instance.customerId;
-  val['billingLineModels'] = instance.billingLineModels;
-  val['scheduleModels'] = instance.scheduleModels;
   val['note'] = instance.note;
   return val;
 }
@@ -99,7 +89,7 @@ ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
       startTime: json['startTime'] as int,
       endTime: json['endTime'] as int,
       note: json['note'] as String?,
-      objectId: json['objectId'] as String,
+      jobId: json['jobId'] as String,
       personnelName: json['personnelName'] as String,
       personnelAvatar: json['personnelAvatar'] == null
           ? null
@@ -107,10 +97,11 @@ ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
       personnelId: json['personnelId'] as String,
       anyTimeVisit: json['anyTimeVisit'] as bool? ?? false,
       complete: json['complete'] as bool? ?? false,
-    );
+    )..objectId = json['objectId'] as String?;
 
 Map<String, dynamic> _$ScheduleModelToJson(ScheduleModel instance) =>
     <String, dynamic>{
+      'jobId': instance.jobId,
       'objectId': instance.objectId,
       'startTime': instance.startTime,
       'endTime': instance.endTime,

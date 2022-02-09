@@ -79,7 +79,7 @@ void main() {
       'billingLineModels': [billingJson]
     };
 
-    final job = JobModel.fromMap(json);
+    final job = JobModel.fromJson(json);
     expect(job.objectId, jobObjectId);
     expect(job.ownerId, ownerId);
     expect(job.description, 'Need to fix something important at this job. It’s pretty complex so be prepared for that complexity.');
@@ -87,12 +87,5 @@ void main() {
     expect(job.jobId, 9253);
     expect(job.jobType, 'Installation');
     expect(job.status, 'Estimate');
-    expect(job.scheduleModels, isNotNull);
-    expect(job.scheduleModels.length, 1);
-    expect(job.scheduleModels.first.startTime, 1643748083);
-    expect(job.scheduleModels.first.start, DateTime.fromMillisecondsSinceEpoch(1643748083));
-    expect(job.billingLineModels, isNotNull);
-    expect(job.billingLineModels.length, 1);
-    expect(job.billingLineModels.first.jobId, jobObjectId);
   });
 }

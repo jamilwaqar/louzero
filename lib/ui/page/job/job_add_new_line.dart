@@ -164,7 +164,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
       }
       BillingLineModel newItem = BillingLineModel(
         jobId: widget.jobId,
-        objectId: _isEdit ? lineModel!.objectId! : const Uuid().v4(),
+        objectId: _isEdit ? lineModel!.objectId! : null,
         quantity: count,
         price: price,
         description: description,
@@ -182,7 +182,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
         // print('enter description please');
       } else {
         if (widget.onCreate != null) {
-          await _controller.addLineItem(newItem);
+          await _controller.save(newItem);
           widget.onCreate!();
           _clearInputs();
         }

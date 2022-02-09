@@ -12,36 +12,36 @@ import 'package:louzero/common/utility/row_split.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
+import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/job_models.dart';
-import 'package:louzero/models/user_models.dart';
+import 'package:louzero/ui/page/job/controllers/schedule_controller.dart';
 import 'package:louzero/ui/widget/buttons/text_button.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:uuid/uuid.dart';
 
-class AddScheduleDialog extends GetWidget<JobController> {
-  final JobModel jobModel;
+class AddScheduleDialog extends GetWidget<ScheduleController> {
+
   final Function() onClose;
   final ScheduleModel? schedule;
 
   AddScheduleDialog({
     Key? key,
-    required this.jobModel,
     required this.onClose,
     this.schedule,
   }) : super(key: key);
 
   late final bool _isEdit = schedule != null;
   late final _user = Get.find<AuthController>().user;
+  final jobController = Get.find<JobController>();
   late final _personnelController = TextEditingController(text: _isEdit ? schedule!.personnelName : _user.fullName);
-  late final _noteController = TextEditingController(text: _isEdit ? schedule!.note : jobModel.description);
+  late final _noteController = TextEditingController(text: _isEdit ? schedule!.note : jobController.jobModel!.description);
   late final _startTimeController = TextEditingController(text: schedule?.start.time);
   late final _endTimeController = TextEditingController(text: schedule?.end.time);
-  late final companyUsers = controller.baseController.activeCompanyUsers;
+  late final companyUsers = Get.find<BaseController>().activeCompanyUsers;
 
   late final _isAnyTimeOfVisit = (schedule?.anyTimeVisit ?? false).obs;
   late final _selectedDate = (schedule?.start ?? DateTime.now()).obs;
@@ -174,7 +174,7 @@ class AddScheduleDialog extends GetWidget<JobController> {
                 int end = controller.convertMilliseconds(_endTimeController.text, _selectedDate.value);
                 CompanyUserModel selectedUser = companyUsers.firstWhere((user) => user.userName == _personnelController.text);
                 ScheduleModel newSchedule = ScheduleModel(
-                  objectId: schedule?.objectId ?? const Uuid().v4(),
+                  objectId: schedule?.objectId,
                     startTime: start,
                     endTime: end,
                     personnelName: selectedUser.userName,
@@ -182,12 +182,8 @@ class AddScheduleDialog extends GetWidget<JobController> {
                     note: _noteController.text,
                     complete: schedule?.complete ?? false,
                     anyTimeVisit: _isAnyTimeOfVisit.value,
-                    personnelAvatar: selectedUser.avatar);
-                if (schedule != null) {
-                  jobModel.scheduleModels.removeWhere((e) => e.objectId == schedule!.objectId);
-                }
-                jobModel.scheduleModels.add(newSchedule);
-                await controller.save(jobModel);
+                    personnelAvatar: selectedUser.avatar, jobId: jobController.jobModel!.objectId!);
+                await controller.save(newSchedule);
                 onClose();
               },
             ),

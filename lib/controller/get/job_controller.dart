@@ -1,6 +1,7 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/constant/constants.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'base_controller.dart';
@@ -10,26 +11,27 @@ class JobController extends GetxController {
 
   final _jobModel = Rx<JobModel?>(null);
   JobModel? get jobModel => _jobModel.value;
-  set jobModel(val) => _jobModel.value = val;
+  set jobModel(val) {
+    _jobModel.value = val;
+    if (val != null) {
+        _fetchSchedules().then((value) => scheduleModels.value = value);
+        _fetchBillingLines().then((value) => billingLineModels.value = value);
+    }
+  }
 
+  final RxList<ScheduleModel> scheduleModels= <ScheduleModel>[].obs;
+  final RxList<BillingLineModel> billingLineModels = <BillingLineModel>[].obs;
   List<JobModel> get jobModels => baseController.jobs;
 
   Future save(JobModel model, {IDataStore? store, showLoading = true}) async {
     store ??= Backendless.data.of(BLPath.job);
     Map<String, dynamic> data = model.toJson();
-    data['billingLineModels'] =
-        model.billingLineModels.map((e) => e.toJson()).toList();
-    data['scheduleModels'] =
-        model.scheduleModels.map((e) => e.toJson()).toList();
-    if (data['objectId'] == null) {
-      data.remove('objectId');
-    }
     if (showLoading) {
       NavigationController().loading();
     }
     try {
       dynamic response = await store.save(data);
-      JobModel newModel = JobModel.fromMap(response);
+      JobModel newModel = JobModel.fromJson(response);
       if (model.objectId == null) {
         List<JobModel> newList = [...baseController.jobs, newModel];
         baseController.jobs = newList;
@@ -60,23 +62,27 @@ class JobController extends GetxController {
     baseController.jobs = models;
   }
 
-  ScheduleModel? scheduleById(String id) {
-    if (jobModel == null) return null;
+  Future _fetchSchedules() async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "jobId = '${jobModel!.objectId!}'"..pageSize = 100;
     try {
-      return jobModel!.scheduleModels.firstWhere((e) => e.objectId == id);
+      var response = await Backendless.data.of(BLPath.schedule).find(queryBuilder);
+      List<ScheduleModel>list = List<Map>.from(response!).map((e) => ScheduleModel.fromJson(Map<String, dynamic>.from(e))).toList();
+      return list;
     } catch (e) {
-      return null;
+      return e.toString();
     }
   }
 
-  int convertMilliseconds(String date, DateTime dateTime) {
-    String filter = date.toLowerCase().replaceAll('am', '').replaceAll('pm', '').replaceAll(' ', '');
-    List<String>ar = filter.split(':');
-    bool pm = date.toLowerCase().contains('pm');
-    int hr =  int.parse(ar[0]);
-    if (pm) hr += 12;
-    int min = int.parse(ar[1]);
-    DateTime start = DateTime(dateTime.year, dateTime.month, dateTime.day, hr, min);
-    return start.millisecondsSinceEpoch;
+  Future _fetchBillingLines() async {
+    DataQueryBuilder queryBuilder = DataQueryBuilder()
+      ..whereClause = "jobId = '${jobModel!.objectId!}'"..pageSize = 100;
+    try {
+      var response = await Backendless.data.of(BLPath.billingLine).find(queryBuilder);
+      List<BillingLineModel>list = List<Map>.from(response!).map((e) => BillingLineModel.fromJson(Map<String, dynamic>.from(e))).toList();
+      return list;
+    } catch (e) {
+      return e.toString();
+    }
   }
 }
