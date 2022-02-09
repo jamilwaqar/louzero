@@ -182,7 +182,7 @@ class _JobAddNewLineState extends State<JobAddNewLine> {
         // print('enter description please');
       } else {
         if (widget.onCreate != null) {
-          await _controller.addLineItem(newItem);
+          await _controller.save(newItem);
           widget.onCreate!();
           _clearInputs();
         }

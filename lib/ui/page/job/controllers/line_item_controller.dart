@@ -19,7 +19,7 @@ class LineItemController extends GetxController {
     update();
   }
 
-  addLineItem(BillingLineModel item, {IDataStore? store, showLoading = true}) async {
+  save(BillingLineModel item, {IDataStore? store, showLoading = true}) async {
     try {
       store ??= Backendless.data.of(BLPath.billingLine);
       Map<String, dynamic> data = item.toJson();

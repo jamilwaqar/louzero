@@ -68,7 +68,7 @@ class JobsHome extends GetWidget<JobController> {
     });
 
     if (item != null) {
-      _lineItemController.addLineItem(item.clone());
+      _lineItemController.save(item.clone());
     }
   }
 
