@@ -9,6 +9,7 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
+import 'package:louzero/ui/page/job/controllers/schedule_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:louzero/ui/page/job/views/job_schedule.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
@@ -19,9 +20,8 @@ class JobsHome extends GetWidget<JobController> {
   JobsHome({Key? key}) : super(key: key);
 
   final _baseController = Get.find<BaseController>();
-  late final _lineItemController = Get.find<LineItemController>()
-    ..lineItems.value = [...controller.jobModel!.billingLineModels];
-
+  late final _lineItemController = Get.put(LineItemController());
+  late final _scheduleController = Get.put(ScheduleController());
   final _addLineVisible = false.obs;
   final _inventoryIndex = 0.obs;
   final _miscLineItem = false.obs;
@@ -276,7 +276,7 @@ class JobsHome extends GetWidget<JobController> {
                   data: _lineItemController.lineItems,
                   onDelete: (id) async {
                     dynamic response = await _lineItemController
-                        .deleteLineItemById(id, controller.jobModel!.objectId!);
+                        .delete(id);
                     if (response is String) {
                       WarningMessageDialog.showDialog(Get.context!, response);
                     }
