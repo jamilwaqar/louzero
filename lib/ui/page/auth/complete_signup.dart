@@ -12,33 +12,16 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/auth_layout.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 
-class CompletePage extends StatefulWidget {
+class CompleteSignupPage extends GetWidget<AuthController> {
   final String email;
-  const CompletePage(this.email, {Key? key}) : super(key: key);
+  CompleteSignupPage(this.email, {Key? key}) : super(key: key);
 
-  @override
-  _CompletePageState createState() => _CompletePageState();
-}
-
-class _CompletePageState extends State<CompletePage> {
-  final _authController = Get.find<AuthController>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _emailSelected = false;
-  bool _termsSelected = false;
+  final _emailSelected = false.obs;
+  final _termsSelected = false.obs;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,29 +59,33 @@ class _CompletePageState extends State<CompletePage> {
                 password: true,
               ),
               const SizedBox(height: 32),
-              AppCheckbox(
+              Obx(()=> AppCheckbox(
                 mb: 15,
                 label: termsLabel,
-                checked: _termsSelected,
+                checked: _termsSelected.value,
                 onChanged: (val) {
-                  setState(() {
-                    _termsSelected = val!;
-                  });
+                  _termsSelected.value = val!;
                 },
-              ),
-              AppCheckbox(
+              ),),
+              Obx(()=> AppCheckbox(
                 label: optInEmail,
-                checked: _emailSelected,
+                checked: _emailSelected.value,
                 onChanged: (val) {
-                  setState(() {
-                    _emailSelected = val!;
-                  });
+                   _emailSelected.value = val!;
                 },
-              ),
+              ),),
               const SizedBox(height: 24),
               Buttons.loginPrimary(
                 'Create Account',
-                onPressed: _completeSignup,
+                onPressed: () {
+                  //TODO: Add validation for password, names fields.
+
+                  controller.signUp(
+                      email: email,
+                      password: _passwordController.text,
+                      firstName: _firstNameController.text,
+                      lastName: _lastNameController.text);
+                },
                 expanded: true,
               ),
             ],
@@ -106,25 +93,5 @@ class _CompletePageState extends State<CompletePage> {
         ],
       ),
     );
-  }
-
-  void _completeSignup() async {
-    NavigationController().loading();
-    var res = await AuthAPI(auth: Backendless.userService)
-        .signup(widget.email, _passwordController.text);
-    if (res is String) {
-      NavigationController().loading(isLoading: false);
-      WarningMessageDialog.showDialog(context, res);
-    } else {
-      if (_authController.guestUserId != null) {
-        await AuthAPI(auth: Backendless.userService).cleanupGuestUser();
-      }
-      NavigationController().loading(isLoading: false);
-      Get.find<AuthController>().loggedIn.value = true;
-      _authController.user.firstname = _firstNameController.text;
-      _authController.user.lastname = _lastNameController.text;
-      await Get.find<AuthController>().updateUser();
-      Get.to(() => const AccountSetup());
-    }
   }
 }

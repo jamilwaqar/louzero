@@ -53,6 +53,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
     await AuthAPI(auth: Backendless.userService).logout();
     NavigationController().popToFirst(context);
     _authController.loggedIn.value = false;
+    Get.deleteAll();
   }
   final ScrollController _scrollController = ScrollController();
 

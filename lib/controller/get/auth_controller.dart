@@ -3,9 +3,11 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/controller/api/api_manager.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/user_models.dart';
+import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
 
@@ -76,6 +78,37 @@ class AuthController extends GetxController {
       return userModel;
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  Future signUp(
+      {required String email,
+      required String password,
+      required String firstName,
+      required String lastName,
+      bool invited = false,
+      showLoading = true}) async {
+    if (showLoading) NavigationController().loading();
+    var res = await AuthAPI(auth: userService)
+        .signup(email, password);
+    if (res is String) {
+      if (showLoading) {
+        NavigationController().loading(isLoading: false);
+        WarningMessageDialog.showDialog(Get.context!, res);
+      }
+    } else {
+      if (guestUserId != null) {
+        await AuthAPI(auth: userService).cleanupGuestUser();
+      } else {
+        await AuthAPI(auth: userService)
+            .login(email, password);
+      }
+      if (showLoading) NavigationController().loading(isLoading: false);
+      loggedIn.value = true;
+      user.firstname = firstName;
+      user.lastname = lastName;
+      await updateUser();
+      Get.to(() => const AccountSetup());
     }
   }
 
