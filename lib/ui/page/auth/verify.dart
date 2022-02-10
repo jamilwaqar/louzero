@@ -6,7 +6,7 @@ import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/auth_layout.dart';
-import 'package:louzero/ui/page/auth/complete.dart';
+import 'package:louzero/ui/page/auth/complete_signup.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 
@@ -137,7 +137,7 @@ class _VerifyPageState extends State<VerifyPage> {
       WarningMessageDialog.showDialog(context, msg);
       return;
     }
-    Get.to(() => CompletePage(widget.email));
+    Get.to(() => CompleteSignupPage(widget.email));
   }
 
   void _methodTBD() {}

@@ -38,6 +38,7 @@ class ContactCard extends StatelessWidget {
     return AppCardExpandable(
       title: AppHeaderIcon(
         title,
+        icon: Icons.edit,
         onTap: onClickIcon,
       ),
       subtitle: RowSplit(

@@ -10,7 +10,6 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/ui/page/demo/demo.dart';
-
 import 'customer.dart';
 
 class CustomerListPage extends GetWidget<CustomerController> {
@@ -78,43 +77,76 @@ class CustomerListPage extends GetWidget<CustomerController> {
                               Icon(Icons.control_point_rounded,
                                   size: 40, color: AppColors.orange),
                             ],
-                            items: [
-                              PopMenuItem(
-                                label: 'Edit',
-                                icon: Icons.edit,
-                                onTap: () {
-                                  Get.to(() => AddCustomerPage(model: model));
-                                },
-                              ),
-                              PopMenuItem(
-                                label: 'Delete',
-                                icon: Icons.delete,
-                                onTap: () async {
-                                  NavigationController().loading();
-                                  await controller.deleteCustomer(
-                                      model.objectId!,
-                                      Backendless.data.of(BLPath.customer));
-                                  NavigationController()
-                                      .loading(isLoading: false);
-                                },
-                              ),
-                              PopMenuItem(
-                                label: 'Invite',
-                                icon: Icons.mail_outline_rounded,
-                                onTap: () {
-                                  Get.to(() => Demo());
-                                  // Get.to(() => InviteCustomerPage(
-                                  //       email:
-                                  //           model.customerContacts.first.email,
-                                  //     ));
-                                },
-                              ),
-                            ],
+                              items:List.generate(CustomerPopMenu.values.length, (index) {
+                                final menu = CustomerPopMenu.values[index];
+                                return PopMenuItem(
+                                  label: menu.label,
+                                  icon: menu.icon,
+                                  onTap: menu.onTap(model),
+                                );
+                              }),
                           ),
                         ]),
                   )
                 ],
               );
             }));
+
+  }
+}
+
+enum CustomerPopMenu {
+  edit, delete, invite
+}
+
+extension CustomerPopMenuEx on CustomerPopMenu {
+  String get label {
+    switch(this) {
+      case CustomerPopMenu.edit:
+        return 'Edit';
+      case CustomerPopMenu.delete:
+        return 'Delete';
+      case CustomerPopMenu.invite:
+        return 'Invite';
+    }
+  }
+
+  IconData get icon {
+    switch(this) {
+      case CustomerPopMenu.edit:
+        return Icons.edit;
+      case CustomerPopMenu.delete:
+        return Icons.delete;
+      case CustomerPopMenu.invite:
+        return Icons.mail_outline_rounded;
+    }
+  }
+
+  VoidCallback onTap(CustomerModel model) {
+    const popMenuHideDuration = Duration(milliseconds: 100);
+    switch(this) {
+      case CustomerPopMenu.edit:
+        return () {
+          Future.delayed(popMenuHideDuration)
+              .then((value) => Get.to(
+                  () => AddCustomerPage(model: model)));
+        };
+      case CustomerPopMenu.delete:
+        return () async {
+          await Future.delayed(popMenuHideDuration);
+            NavigationController().loading();
+            await Get.find<CustomerController>().deleteCustomer(
+                model.objectId!,
+                Backendless.data.of(BLPath.customer));
+            NavigationController()
+                .loading(isLoading: false);
+        };
+      case CustomerPopMenu.invite:
+        return () {
+          Future.delayed(popMenuHideDuration)
+              .then((value) => Get.to(
+                  () => Demo()));
+        };
+    }
   }
 }
