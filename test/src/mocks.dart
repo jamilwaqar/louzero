@@ -27,6 +27,35 @@ final Map<String, dynamic> addressJson = {
   'longitude': -73.9932827
 };
 
+final jobObjectId = const Uuid().v4();
+
+Map<String, dynamic> billingJson = {
+  'objectId': const Uuid().v4(),
+  'jobId': jobObjectId,
+  'quantity': 4.0,
+  'price': 4.25,
+  'description': 'description',
+  'note': 'note',
+  'subtotal': 0,
+  'taxable': false,
+  'addDiscount': false,
+  'discountDescription': 'discountDescription',
+  'isPercentDiscount': true,
+  'discountAmount': 0.0,
+};
+
+Map<String, dynamic> scheduleJson = {
+  'objectId': const Uuid().v4(),
+  'jobId': jobObjectId,
+  'startTime': 1643748083,
+  'endTime': 1643748083,
+  'note': 'note',
+  'personnelId': 'personnelId',
+  'complete': true,
+  'personnelName': 'personnelName',
+  'anyTimeVisit': true,
+};
+
 final mockAddressModel = AddressModel(
     country: mockAddress.country,
     street: mockAddress.street,
@@ -105,7 +134,7 @@ class MockCompanyModel extends Mock implements CompanyModel {
 
 class MockJobModel extends Mock implements JobModel {
   @override
-  String get objectId => const Uuid().v4();
+  String get objectId => jobObjectId;
 
   @override
   String get ownerId => const Uuid().v4();
@@ -125,12 +154,6 @@ class MockJobModel extends Mock implements JobModel {
 
   @override
   String get customerId => const Uuid().v4();
-
-  @override
-  List<BillingLineModel> billingLineModels = [];
-
-  @override
-  List<ScheduleModel> scheduleModels = [];
 
   @override
   String get note => 'note';
