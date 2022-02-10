@@ -1,16 +1,11 @@
-import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
-import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
-import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/auth_layout.dart';
-import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 
 class CompleteSignupPage extends GetWidget<AuthController> {
   final String email;
@@ -21,7 +16,6 @@ class CompleteSignupPage extends GetWidget<AuthController> {
   final _passwordController = TextEditingController();
   final _emailSelected = false.obs;
   final _termsSelected = false.obs;
-
 
   @override
   Widget build(BuildContext context) {

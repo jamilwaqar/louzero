@@ -8,9 +8,9 @@ import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/account/account_setup.dart';
+import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
-
 import 'base_controller.dart';
 
 class AuthController extends GetxController {
@@ -80,6 +80,21 @@ class AuthController extends GetxController {
       return userModel;
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  Future sendVerification({required String email,
+    required int code,
+    showLoading = true}) async {
+    if (showLoading) NavigationController().loading();
+    var res = await AuthAPI(auth: userService)
+        .sendVerificationCode(email, code);
+    await Future.delayed(const Duration(seconds: 1));
+    if (showLoading) NavigationController().loading(isLoading: false);
+    if (res is String) {
+      WarningMessageDialog.showDialog(Get.context!, res);
+    } else {
+      Get.to(() => VerifyPage(email: email, code: code));
     }
   }
 

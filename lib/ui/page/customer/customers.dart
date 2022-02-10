@@ -10,7 +10,6 @@ import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/add_customer.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/ui/page/demo/demo.dart';
-
 import 'customer.dart';
 
 class CustomerListPage extends GetWidget<CustomerController> {

@@ -1,4 +1,5 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
@@ -145,7 +146,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   Widget _body() {
     List<Widget> list = [
       const SizedBox(height: 32),
-      _overlayTest(),
       _customerDetails(),
       _serviceAddress(),
       _billingAddress(),
@@ -248,45 +248,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     );
   }
 
-  Widget _overlayTest() {
-    return AppCard(children: [
-      Buttons.primary('Overlay Test', expanded: true, onPressed: () {
-        Overlay.of(context)?.insert(_addressOverlay());
-      }),
-    ]);
-  }
 
-  OverlayEntry _addressOverlay() {
-    // RenderBox renderBox = context.findRenderObject()! as RenderBox;
-    // var size = renderBox.size;
-    // var offset = renderBox.localToGlobal(Offset.zero);
-    return OverlayEntry(
-      builder: (context) => Positioned(
-        width: 400,
-        // top: offset.dy + size.height + 5.0,
-        // left: offset.dx,
-        // top: offset.dy + size.height + 5.0,
-        // width: size.width,
-        child: Material(
-          elevation: 4.0,
-          borderRadius: BorderRadius.circular(24),
-          child: ListView(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            children: const <Widget>[
-              Text('Option', style: AppStyles.labelBold),
-              Text('Option', style: AppStyles.labelBold),
-              Text('Option', style: AppStyles.labelBold),
-              Text('Option', style: AppStyles.labelBold),
-              Text('Option', style: AppStyles.labelBold),
-              Text('Option', style: AppStyles.labelBold),
-              Text('Option', style: AppStyles.labelBold),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _addressWidget(bool isService) {
     return Wrap(children: [
@@ -294,7 +256,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         defaultCountryCode: 'us',
         onChange: (val) {
           _country = val!;
-          print('Country Changed: $val');
+          if (kDebugMode) {
+            print('Country Changed: $val');
+          }
         },
       ),
       const SizedBox(height: 16),
