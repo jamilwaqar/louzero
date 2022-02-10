@@ -9,7 +9,6 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
    <application
         android:label="LOUzero"
-        android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

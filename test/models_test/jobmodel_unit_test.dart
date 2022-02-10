@@ -2,38 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:uuid/uuid.dart';
 
+import '../src/mocks.dart';
+
 void main() {
 
   setUp(() {});
 
   tearDown(() {});
-  final jobObjectId = const Uuid().v4();
-
-  Map<String, dynamic> billingJson = {
-    'objectId': const Uuid().v4(),
-    'jobId': jobObjectId,
-    'quantity': 4.0,
-    'price': 4.25,
-    'description': 'description',
-    'note': 'note',
-    'subtotal': 0,
-    'taxable': false,
-    'addDiscount': false,
-    'discountDescription': 'discountDescription',
-    'isPercentDiscount': true,
-    'discountAmount': 0.0,
-  };
-
-  Map<String, dynamic> scheduleJson = {
-    'objectId': const Uuid().v4(),
-    'startTime': 1643748083,
-    'endTime': 1643748083,
-    'note': 'note',
-    'personnelId': 'personnelId',
-    'complete': true,
-    'personnelName': 'personnelName',
-    'anyTimeVisit': true,
-  };
 
   test("BillingLineModel test", () {
     final billingLine = BillingLineModel.fromJson(billingJson);
