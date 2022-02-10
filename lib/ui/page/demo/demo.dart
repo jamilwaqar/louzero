@@ -34,7 +34,7 @@ class Demo extends StatelessWidget {
             _contactInfo_(),
             _buttons_(),
             _formInput_(),
-            _richTextEditor()
+            _richTextEditor(),
             _colorDropdown()
           ],
         ),
@@ -432,7 +432,8 @@ class Demo extends StatelessWidget {
         child: AppTextEditor(
           onChange: (content) {
             print('content has beenc chnage to: $content');
-          },
+          }));
+  }
 
   Widget _colorDropdown() {
     return _rowDark(
