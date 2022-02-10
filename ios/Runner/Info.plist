@@ -26,6 +26,10 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UISupportsDocumentBrowser</key>
+    <true/>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>LOUzero would like to play music while you are hiking.</string>
 	<key>NSCameraUsageDescription</key>

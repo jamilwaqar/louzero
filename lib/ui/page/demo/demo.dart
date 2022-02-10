@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_text_editor.dart';
 import 'package:louzero/common/app_color_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
@@ -33,6 +34,7 @@ class Demo extends StatelessWidget {
             _contactInfo_(),
             _buttons_(),
             _formInput_(),
+            _richTextEditor()
             _colorDropdown()
           ],
         ),
@@ -423,6 +425,14 @@ class Demo extends StatelessWidget {
       ),
     );
   }
+
+  Widget _richTextEditor() {
+    return _rowDark(
+        label: "Rich Text Editor",
+        child: AppTextEditor(
+          onChange: (content) {
+            print('content has beenc chnage to: $content');
+          },
 
   Widget _colorDropdown() {
     return _rowDark(
