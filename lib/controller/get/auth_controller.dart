@@ -11,6 +11,8 @@ import 'package:louzero/ui/page/account/account_setup.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
 
+import 'base_controller.dart';
+
 class AuthController extends GetxController {
   
   AuthController(this.userService);
@@ -152,5 +154,15 @@ class AuthController extends GetxController {
     await Backendless.data.of(BLPath.user).save(user.toJson());
     NavigationController().loading(isLoading: false);
     WarningMessageDialog.showDialog(Get.context!, 'Saved changes!');
+  }
+
+  void logout() async {
+    GetStorage().write(GSKey.isAuthUser, false);
+    await AuthAPI(auth: userService).logout();
+    loggedIn.value = false;
+    Get.deleteAll();
+    Get.put(AuthController(Backendless.userService), permanent: true);
+    Get.put(BaseController());
+    NavigationController().popToFirst(Get.context!);
   }
 }

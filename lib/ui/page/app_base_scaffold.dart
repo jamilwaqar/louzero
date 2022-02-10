@@ -1,12 +1,8 @@
-import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:louzero/common/common.dart';
-import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
@@ -24,7 +20,7 @@ class AppBaseScaffold extends StatefulWidget {
   final String? subheader;
   final Color? colorBg;
   final Function? onBodyTap;
-  final Function? onAppbarVisibiltyChange;
+  final Function? onAppbarVisibilityChange;
 
   const AppBaseScaffold(
       {Key? key,
@@ -36,7 +32,7 @@ class AppBaseScaffold extends StatefulWidget {
       this.logoOnly = false,
       this.colorBg,
         this.onBodyTap,
-        this.onAppbarVisibiltyChange
+        this.onAppbarVisibilityChange
       })
       : super(key: key);
 
@@ -48,13 +44,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
   final navigatorKey = GlobalKey<NavigatorState>();
   final _authController = Get.find<AuthController>();
-  void _logout(BuildContext context) async {
-    GetStorage().write(GSKey.isAuthUser, false);
-    await AuthAPI(auth: Backendless.userService).logout();
-    NavigationController().popToFirst(context);
-    _authController.loggedIn.value = false;
-    Get.deleteAll();
-  }
+
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -64,9 +54,9 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
   }
 
   _scrollListener() {
-    if(widget.onAppbarVisibiltyChange != null) {
+    if(widget.onAppbarVisibilityChange != null) {
       //return isVisible = true
-      widget.onAppbarVisibiltyChange!(_scrollController.offset != _scrollController.position.maxScrollExtent);
+      widget.onAppbarVisibilityChange!(_scrollController.offset != _scrollController.position.maxScrollExtent);
     }
   }
 
@@ -76,7 +66,7 @@ class _AppBaseScaffoldState extends State<AppBaseScaffold> {
 
   void _menuChange(String val) {
     if (val == 'logout') {
-      _logout(context);
+      _authController.logout();
     }
   }
 
