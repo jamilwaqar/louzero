@@ -9,6 +9,7 @@ import 'package:louzero/common/utility/flex_row.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
+import 'package:louzero/ui/page/job/controllers/schedule_controller.dart';
 import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -227,6 +228,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
                         label: 'View Job Profile',
                         onPressed: (){
                           Get.put(LineItemController());
+                          Get.put(ScheduleController());
                           Get.to(() => JobsHome());
                         },
                       ),

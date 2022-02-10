@@ -102,6 +102,9 @@ class BaseController extends GetxController {
       list = List<Map>.from(response!)
           .map((e) => CTSiteProfile.fromMap(e))
           .toList();
+      if (kDebugMode) {
+        print('Site Profile Templates: ${list.length}');
+      }
       return list;
     } catch (e) {
       if (kDebugMode) {
@@ -121,6 +124,9 @@ class BaseController extends GetxController {
       list = List<Map>.from(response!)
           .map((e) => CompanyModel.fromMap(e))
           .toList();
+      if (kDebugMode) {
+        print('Companies: ${list.length}');
+      }
       return list;
     } catch (e) {
       if (kDebugMode) {
@@ -140,6 +146,9 @@ class BaseController extends GetxController {
       list = List<Map>.from(response!)
           .map((e) => CompanyUserModel.fromJson(Map<String, dynamic>.from(e)))
           .toList();
+      if (kDebugMode) {
+        print('Company Users: ${list.length}');
+      }
       return list;
     } catch (e) {
       if (kDebugMode) {
@@ -154,6 +163,9 @@ class BaseController extends GetxController {
     try {
       var response = await Backendless.data.of(BLPath.customer).find(queryBuilder);
       List<CustomerModel>list = List<Map>.from(response!).map((e) => CustomerModel.fromMap(e)).toList();
+      if (kDebugMode) {
+        print('Customers: ${list.length}');
+      }
       return list;
     } catch (e) {
       return e.toString();
@@ -165,7 +177,10 @@ class BaseController extends GetxController {
       ..whereClause = "ownerId = '${_authController.user.objectId}'";
     try {
       var response = await Backendless.data.of(BLPath.job).find(queryBuilder);
-      List<JobModel>list = List<Map>.from(response!).map((e) => JobModel.fromMap(e)).toList();
+      List<JobModel>list = List<Map>.from(response!).map((e) => JobModel.fromJson(Map<String, dynamic>.from(e))).toList();
+      if (kDebugMode) {
+        print('Jobs: ${list.length}');
+      }
       return list;
     } catch (e) {
       return e.toString();

@@ -1,15 +1,16 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
+import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/models/inventory_item.dart';
-import 'package:uuid/uuid.dart';
 
 class LineItemController extends GetxController {
-  final Uuid uuid = const Uuid();
   final baseController = Get.find<BaseController>();
   final jobController = Get.find<JobController>();
-  RxList<BillingLineModel> lineItems = <BillingLineModel>[].obs;
+  late final RxList<BillingLineModel> lineItems = jobController.billingLineModels;
   final _editLineId = ''.obs;
   String get editLineId => _editLineId.value;
 
@@ -18,41 +19,61 @@ class LineItemController extends GetxController {
     update();
   }
 
-  addLineItem(BillingLineModel item) async {
+  save(BillingLineModel item, {IDataStore? store, showLoading = true}) async {
     try {
-      JobModel jobModel = baseController.jobModelById(item.jobId)!;
-      jobModel.billingLineModels = [... jobModel.billingLineModels, item];
-      dynamic response = await jobController.save(jobModel);
-      if (editLineId.isNotEmpty) {
-        int index = lineItems.indexWhere((e) => e.objectId == item.objectId);
-        lineItems.removeWhere((e) => e.objectId == item.objectId);
-        lineItems.insert(index, item);
-        editLineId = '';
-      } else {
-        lineItems.add(item);
+      store ??= Backendless.data.of(BLPath.billingLine);
+      Map<String, dynamic> data = item.toJson();
+      if (showLoading) {
+        NavigationController().loading();
       }
-      update();
-      return response;
+      try {
+        dynamic response = await store.save(data);
+        BillingLineModel newModel = BillingLineModel.fromJson(Map<String, dynamic>.from(response));
+        if (editLineId.isNotEmpty) {
+          int index = lineItems.indexWhere((e) => e.objectId == item.objectId);
+          lineItems.removeWhere((e) => e.objectId == item.objectId);
+          lineItems.insert(index, item);
+          editLineId = '';
+        } else {
+          lineItems.add(newModel);
+        }
+        update();
+        if (showLoading) {
+          NavigationController().loading(isLoading: false);
+        }
+        return newModel;
+      } catch (e) {
+        if (showLoading) {
+          NavigationController().loading(isLoading: false);
+        }
+        return e.toString();
+      }
     } catch (e) {
       return e.toString();
     }
   }
 
-  Future deleteLineItemById(String id, String jobId) async {
+  Future delete(String objectId, {IDataStore? store}) async {
+    bool showLoading = store == null;
+    if (showLoading) {
+      NavigationController().loading();
+    }
     try {
-      JobModel jobModel = baseController.jobModelById(jobId)!;
-      lineItems.removeWhere((element) => element.objectId == id);
-      jobModel.billingLineModels = [... lineItems];
-      dynamic response = await jobController.save(jobModel);
+      store ??= Backendless.data.of(BLPath.billingLine);
+      dynamic response = await store.remove(entity: {"objectId": objectId});
+      lineItems.removeWhere((element) => element.objectId == objectId);
+      jobController.billingLineModels.value = [... lineItems];
       update();
+      if (showLoading) {
+        NavigationController().loading(isLoading: false);
+      }
       return response;
     } catch(e) {
+      if (showLoading) {
+        NavigationController().loading(isLoading: false);
+      }
       return e.toString();
     }
-  }
-
-  String get newId {
-    return uuid.v1();
   }
 
   double get subTotal {

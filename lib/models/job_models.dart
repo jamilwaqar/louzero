@@ -33,21 +33,7 @@ class JobModel {
   int jobId;
   String description;
   String? customerId;
-  @JsonKey(defaultValue: [])
-  List<BillingLineModel> billingLineModels = [];
-  @JsonKey(defaultValue: [])
-  List<ScheduleModel> scheduleModels = [];
   String? note;
-
-  factory JobModel.fromMap(Map map) {
-    List billingLineModels = map.remove('billingLineModels');
-    map['billingLineModels'] =
-        billingLineModels.map((e) => Map<String, dynamic>.from(e)).toList();
-    List scheduleModels = map.remove('scheduleModels') ?? [];
-    map['scheduleModels'] = scheduleModels.map((e) => Map<String, dynamic>.from(e)).toList();
-    Map<String, dynamic> json = Map<String, dynamic>.from(map);
-    return JobModel.fromJson(json);
-  }
 
   factory JobModel.fromJson(Map<String, dynamic> json) =>
       _$JobModelFromJson(json);
@@ -125,8 +111,9 @@ class ScheduleModel {
   ScheduleModel({
     required this.startTime,
     required this.endTime,
+    this.objectId,
     this.note,
-    required this.objectId,
+    required this.jobId,
     required this.personnelName,
     this.personnelAvatar,
     required this.personnelId,
@@ -134,7 +121,8 @@ class ScheduleModel {
     this.complete = false,
   });
 
-  String objectId;
+  String jobId;
+  String? objectId;
   int startTime;
   int endTime;
   String? note;

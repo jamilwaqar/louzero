@@ -3,30 +3,29 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/constant/common.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/job_models.dart';
+import 'package:louzero/ui/page/job/controllers/schedule_controller.dart';
 import 'package:louzero/ui/page/job/views/widget/add_schedule_dialog.dart';
 import 'package:louzero/ui/widget/switch_button.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
-class ScheduleCard extends GetWidget<JobController> {
+class ScheduleCard extends GetWidget<ScheduleController> {
   ScheduleCard({
     Key? key,
-    required this.scheduleId
+    required this.scheduleId,
   }) : super(key: key);
 
   final String scheduleId;
   final _showScheduleDialog = false.obs;
-  late final schedule = Get.find<JobController>().scheduleById(scheduleId);
+  late final schedule = controller.scheduleById(scheduleId);
   late final _noteController = TextEditingController(text: schedule?.note);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<JobController>(
+    return GetBuilder<ScheduleController>(
         builder: (controller) {
-          final jobModel = controller.jobModel!;
           final schedule = controller.scheduleById(scheduleId);
           if (schedule == null) return const SizedBox();
           final DateTime parseDate = DateTime.fromMillisecondsSinceEpoch(schedule.startTime);
@@ -135,15 +134,14 @@ class ScheduleCard extends GetWidget<JobController> {
                                               label: 'Edit Notes',
                                               icon: MdiIcons.fileDocumentOutline,
                                               onTap: () {
-                                                _showEditNoteDialog(jobModel, schedule);
+                                                _showEditNoteDialog(schedule);
                                               },
                                             ),
                                             PopMenuItem(
                                               label: 'Remove',
                                               icon: MdiIcons.trashCanOutline,
                                               onTap: () {
-                                                jobModel.scheduleModels.removeWhere((e) => e.objectId == schedule.objectId);
-                                                controller.save(jobModel);
+                                                controller.delete(schedule.objectId!);
                                               },
                                             ),
                                           ],
@@ -187,7 +185,7 @@ class ScheduleCard extends GetWidget<JobController> {
                                           label: "Complete",
                                           onChanged: (bool value) {
                                             schedule.complete = value;
-                                            controller.save(jobModel);
+                                            controller.save(schedule);
                                           },
                                         )
                                       ],
@@ -202,7 +200,6 @@ class ScheduleCard extends GetWidget<JobController> {
               const SizedBox(height: 8,),
               _showScheduleDialog.value ?
               AddScheduleDialog(
-                jobModel: jobModel,
                 schedule: schedule,
                 onClose: () {
                   _showScheduleDialog.value = false;
@@ -215,7 +212,7 @@ class ScheduleCard extends GetWidget<JobController> {
         });
   }
 
-  void _showEditNoteDialog(JobModel jobModel, ScheduleModel schedule) async {
+  void _showEditNoteDialog(ScheduleModel schedule) async {
     await Future.delayed(const Duration(milliseconds: 150));
     showDialog(
       context: Get.context!,
@@ -231,7 +228,7 @@ class ScheduleCard extends GetWidget<JobController> {
           okayLabel: 'Update',
           onTapOkay: () {
             schedule.note = _noteController.text;
-            controller.save(jobModel);
+            controller.save(schedule);
           },
         );
       },

@@ -11,10 +11,6 @@ class MockBackendlessData extends Mock implements IDataStore {
   @override
   Future save(entity) {
     Map<String, dynamic> data = mockJobModel.toJson();
-    data['billingLineModels'] =
-        mockJobModel.billingLineModels.map((e) => e.toJson()).toList();
-    data['scheduleModels'] =
-        mockJobModel.scheduleModels.map((e) => e.toJson()).toList();
     return Future.value(data);
   }
 }
