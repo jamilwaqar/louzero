@@ -2,21 +2,15 @@ import 'package:delayed_widget/delayed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:louzero/common/app_segment_item.dart';
-import 'package:louzero/common/app_segmented_control.dart';
-import 'package:louzero/common/app_simple_dropdown.dart';
-import 'package:louzero/common/app_simple_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/get/job_controller.dart';
-import 'package:louzero/models/models.dart';
 import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../app_base_scaffold.dart';
-import 'views/jobs_home.dart';
 
 class JobListPage extends StatefulWidget {
   const JobListPage({Key? key}) : super(key: key);
@@ -214,8 +208,8 @@ class _JobListPageState extends State<JobListPage> {
       }).toList();
     }
     else if(_selectedDuration == "Today") {
-      DateTime yesterday = now.subtract(Duration(days:1));
-      DateTime tomorrow = now.add(Duration(days:1));
+      DateTime yesterday = now.subtract(const Duration(days:1));
+      DateTime tomorrow = now.add(const Duration(days:1));
 
       updatedItems = currentItems.where((i) {
         if(i['scheduled'].toString().isEmpty) {
@@ -228,7 +222,7 @@ class _JobListPageState extends State<JobListPage> {
       }).toList();
     }
     else if(_selectedDuration == "Tomorrow") {
-      DateTime nexOfTomorrow = now.add(Duration(days:2));
+      DateTime nexOfTomorrow = now.add(const Duration(days:2));
       updatedItems = currentItems.where((i) {
         if(i['scheduled'].toString().isEmpty) {
           return false;
@@ -240,7 +234,7 @@ class _JobListPageState extends State<JobListPage> {
       }).toList();
     }
     else if(_selectedDuration == "This Week") {
-      DateTime endOfWeek = now.add(Duration(days:8));
+      DateTime endOfWeek = now.add(const Duration(days:8));
 
       updatedItems = currentItems.where((i) {
         if(i['scheduled'].toString().isEmpty) {
@@ -254,8 +248,8 @@ class _JobListPageState extends State<JobListPage> {
 
     }
     else if(_selectedDuration == "Next Week") {
-      DateTime startOfWeek = now.add(Duration(days:7));
-      DateTime endOfNextWeek = now.add(Duration(days:15));
+      DateTime startOfWeek = now.add(const Duration(days:7));
+      DateTime endOfNextWeek = now.add(const Duration(days:15));
 
       updatedItems = currentItems.where((i) {
         if(i['scheduled'].toString().isEmpty) {
@@ -292,8 +286,8 @@ class _JobListPageState extends State<JobListPage> {
   void sortByCustomRange() {
     List currentItems = items;
     List updatedItems = [];
-    DateTime prevOfStart = _startDate!.subtract(Duration(days:1));
-    DateTime nextOfEnd = _endDate!.add(Duration(days:1));
+    DateTime prevOfStart = _startDate!.subtract(const Duration(days:1));
+    DateTime nextOfEnd = _endDate!.add(const Duration(days:1));
     updatedItems = currentItems.where((i) {
       if(i['scheduled'].toString().isEmpty) {
         return false;
