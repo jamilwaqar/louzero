@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:louzero/common/app_text_editor.dart';
+import 'package:louzero/common/app_color_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/models/customer_models.dart';
@@ -34,6 +35,7 @@ class Demo extends StatelessWidget {
             _buttons_(),
             _formInput_(),
             _richTextEditor()
+            _colorDropdown()
           ],
         ),
       ),
@@ -431,6 +433,19 @@ class Demo extends StatelessWidget {
           onChange: (content) {
             print('content has beenc chnage to: $content');
           },
+
+  Widget _colorDropdown() {
+    return _rowDark(
+        label: "Color dropdown",
+        child: AppColorDropdown(
+            onColorSelected: (color) {
+              print('selected clor $color');
+            },
+            items: const [
+              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899],
+              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899],
+              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899]
+            ]
         )
     );
   }
