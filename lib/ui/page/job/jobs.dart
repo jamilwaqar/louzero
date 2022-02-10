@@ -315,7 +315,7 @@ class _JobListPageState extends State<JobListPage> {
       onBodyTap: () {
         _hideModal();
       },
-      onAppbarVisibiltyChange: (isVisible) {
+      onAppbarVisibilityChange: (isVisible) {
         setState(() {
           _popModalHeight = isVisible ? MediaQuery.of(context).size.height - 220 : MediaQuery.of(context).size.height - 40;
         });

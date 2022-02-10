@@ -32,7 +32,7 @@ class CustomerProfilePage extends GetWidget<CustomerController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           ContactCard(
-            title: _customerFullName() + "(dev in progress)",
+            title: _customerFullName(),
             contact: controller.customerModel!.customerContacts[0],
             address: controller.customerModel!.serviceAddress,
             trailing: const TextKeyVal('Account Balance', '\$0.00'),
