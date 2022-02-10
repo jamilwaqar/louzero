@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               key: formGlobalKey,
               child: AppTabsBasic(
                 contentHeight: 490,
-                children: [_loginForm(), const SignUpPage()],
+                children: [_loginForm(), SignUpPage()],
                 tabs: const [
                   'Sign In',
                   'Create Account',

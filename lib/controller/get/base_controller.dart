@@ -209,6 +209,7 @@ class BaseController extends GetxController {
     }
   }
 
+
   searchAddress(String input, String countryCode) async {
     if (input.isEmpty) {
       searchedAddressList = [];

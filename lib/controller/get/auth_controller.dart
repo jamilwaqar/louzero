@@ -3,11 +3,15 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:louzero/controller/api/api_manager.dart';
+import 'package:louzero/controller/api/auth/auth_api.dart';
 import 'package:louzero/controller/constant/constants.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/user_models.dart';
+import 'package:louzero/ui/page/account/account_setup.dart';
+import 'package:louzero/ui/page/auth/verify.dart';
 import 'package:louzero/ui/widget/widget.dart';
 import 'package:uuid/uuid.dart';
+import 'base_controller.dart';
 
 class AuthController extends GetxController {
   
@@ -79,6 +83,52 @@ class AuthController extends GetxController {
     }
   }
 
+  Future sendVerification({required String email,
+    required int code,
+    showLoading = true}) async {
+    if (showLoading) NavigationController().loading();
+    var res = await AuthAPI(auth: userService)
+        .sendVerificationCode(email, code);
+    await Future.delayed(const Duration(seconds: 1));
+    if (showLoading) NavigationController().loading(isLoading: false);
+    if (res is String) {
+      WarningMessageDialog.showDialog(Get.context!, res);
+    } else {
+      Get.to(() => VerifyPage(email: email, code: code));
+    }
+  }
+
+  Future signUp(
+      {required String email,
+      required String password,
+      required String firstName,
+      required String lastName,
+      bool invited = false,
+      showLoading = true}) async {
+    if (showLoading) NavigationController().loading();
+    var res = await AuthAPI(auth: userService)
+        .signup(email, password);
+    if (res is String) {
+      if (showLoading) {
+        NavigationController().loading(isLoading: false);
+        WarningMessageDialog.showDialog(Get.context!, res);
+      }
+    } else {
+      if (guestUserId != null) {
+        await AuthAPI(auth: userService).cleanupGuestUser();
+      } else {
+        await AuthAPI(auth: userService)
+            .login(email, password);
+      }
+      if (showLoading) NavigationController().loading(isLoading: false);
+      loggedIn.value = true;
+      user.firstname = firstName;
+      user.lastname = lastName;
+      await updateUser();
+      Get.to(() => const AccountSetup());
+    }
+  }
+
   Future changePassword(
       {required String oldPassword,
       required String newPassword,
@@ -119,5 +169,15 @@ class AuthController extends GetxController {
     await Backendless.data.of(BLPath.user).save(user.toJson());
     NavigationController().loading(isLoading: false);
     WarningMessageDialog.showDialog(Get.context!, 'Saved changes!');
+  }
+
+  void logout() async {
+    GetStorage().write(GSKey.isAuthUser, false);
+    await AuthAPI(auth: userService).logout();
+    loggedIn.value = false;
+    Get.deleteAll();
+    Get.put(AuthController(Backendless.userService), permanent: true);
+    Get.put(BaseController());
+    NavigationController().popToFirst(Get.context!);
   }
 }

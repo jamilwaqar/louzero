@@ -12,7 +12,7 @@ import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/models/user_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/auth/auth_layout.dart';
-import 'package:louzero/ui/page/auth/complete.dart';
+import 'package:louzero/ui/page/auth/complete_signup.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 
@@ -169,7 +169,7 @@ class _AcceptInvitePageState extends State<AcceptInvitePage> {
       return;
     }
     await AuthAPI(auth: Backendless.userService).logout();
-    Get.to(() => CompletePage(email));
+    Get.to(() => CompleteSignupPage(email));
   }
 
   bool isExpired(DateTime createdDate) {

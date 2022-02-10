@@ -12,7 +12,7 @@ void main() {
 
   testWidgets('Widgets in Signup page', (WidgetTester tester) async {
     await tester.pumpWidget(
-        makeTestableWidget(child: const SignUpPage(), tester: tester));
+        makeTestableWidget(child: SignUpPage(), tester: tester));
     expect(find.text('Create Account'), findsOneWidget);
     expect(find.text('Sign In with Google'), findsOneWidget);
     expect(find.text('Enter your email to create a new account.'), findsOneWidget);
@@ -21,7 +21,7 @@ void main() {
 
   testWidgets('Enter Email and Password', (WidgetTester tester) async {
     await tester.pumpWidget(
-        makeTestableWidget(child: const SignUpPage(), tester: tester));
+        makeTestableWidget(child: SignUpPage(), tester: tester));
 
     expect(find.text(email), findsNothing);
     final emailText = find.byKey(const ValueKey('Email Address'));
