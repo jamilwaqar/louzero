@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
@@ -14,7 +15,9 @@ class AppBillingLines extends StatelessWidget {
   final Function(String)? onDuplicate;
   final Function(int, int)? onReorder;
 
-  final controller = Get.find<LineItemController>();
+  final _jobController = Get.put(JobController()); //might need to remove this later
+  // final controller = Get.find<LineItemController>();
+  final controller = Get.put(LineItemController());
 
   AppBillingLines({
     Key? key,
@@ -80,7 +83,7 @@ class AppBillingLines extends StatelessWidget {
                             _quantity(item),
                             _price(item),
                             _subtotal(item),
-                            _actions(item.objectId!),
+                            item.objectId != null ? _actions(item.objectId!) : const SizedBox( width: 48,),
                           ]),
                       //Discount line
                       if (hasDiscount) ..._discount(item),

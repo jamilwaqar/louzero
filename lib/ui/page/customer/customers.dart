@@ -102,7 +102,7 @@ class CustomerListPage extends GetWidget<CustomerController> {
                                 label: 'Invite',
                                 icon: Icons.mail_outline_rounded,
                                 onTap: () {
-                                  Get.to(() => const Demo());
+                                  Get.to(() => Demo());
                                   // Get.to(() => InviteCustomerPage(
                                   //       email:
                                   //           model.customerContacts.first.email,
