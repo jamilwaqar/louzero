@@ -469,10 +469,11 @@ class Demo extends StatelessWidget {
 
 }
 
-class BillingWidget extends GetWidget<JobController> {
+class BillingWidget extends StatelessWidget{
+  final controller = Get.put(JobController());
+  final _lineItemController = Get.put(LineItemController());
+
   BillingWidget({Key? key}) : super(key: key);
-  late final _lineItemController = Get.put(LineItemController());
-  late final controller = Get.put(JobController());
   final _addLineVisible = false.obs;
   final _inventoryIndex = 0.obs;
   final _miscLineItem = false.obs;

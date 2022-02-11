@@ -15,9 +15,8 @@ class AppBillingLines extends StatelessWidget {
   final Function(String)? onDuplicate;
   final Function(int, int)? onReorder;
 
-  final _jobController = Get.put(JobController()); //might need to remove this later
-  // final controller = Get.find<LineItemController>();
-  final controller = Get.put(LineItemController());
+
+  final controller = Get.find<LineItemController>();
 
   AppBillingLines({
     Key? key,
