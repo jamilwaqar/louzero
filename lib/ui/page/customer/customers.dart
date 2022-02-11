@@ -77,14 +77,14 @@ class CustomerListPage extends GetWidget<CustomerController> {
                               Icon(Icons.control_point_rounded,
                                   size: 40, color: AppColors.orange),
                             ],
-                            items:List.generate(CustomerPopMenu.values.length, (index) {
-                              final menu = CustomerPopMenu.values[index];
-                              return PopMenuItem(
-                                label: menu.label,
-                                icon: menu.icon,
-                                onTap: menu.onTap(model),
-                              );
-                            }),
+                              items:List.generate(CustomerPopMenu.values.length, (index) {
+                                final menu = CustomerPopMenu.values[index];
+                                return PopMenuItem(
+                                  label: menu.label,
+                                  icon: menu.icon,
+                                  onTap: menu.onTap(model),
+                                );
+                              }),
                           ),
                         ]),
                   )
@@ -145,7 +145,7 @@ extension CustomerPopMenuEx on CustomerPopMenu {
         return () {
           Future.delayed(popMenuHideDuration)
               .then((value) => Get.to(
-                  () => const Demo()));
+                  () => Demo()));
         };
     }
   }
