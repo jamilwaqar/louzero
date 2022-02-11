@@ -447,11 +447,11 @@ class Demo extends StatelessWidget {
             onColorSelected: (color) {
               print('selected clor $color');
             },
-            items: const [
-              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899],
-              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899],
-              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899]
-            ]
+          items: const [
+            0xFFC70707, 0xFFD7562D, 0xFFA46200, 0xFF4F6443, 0xFF4F6443,
+            0xFF007E93, 0xFF1151AA, 0xFF3539A0, 0xFF3C00A4, 0xFF9D2DA0,
+            0xFFC71962, 0xFF2F2F2F, 0xFF5A5A5A, 0xFF334D59, 0xFF672A06
+          ]
         )
     );
   }

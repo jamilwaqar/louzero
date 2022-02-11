@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:quiver/iterables.dart';
 
 class AppColorDropdown extends StatefulWidget{
   const AppColorDropdown({
@@ -9,7 +10,7 @@ class AppColorDropdown extends StatefulWidget{
     required this.onColorSelected,
     Key? key
   }) : super(key: key);
-  final List<List<int>> items;
+  final List<int> items;
   final Function onColorSelected;
 
   @override
@@ -18,6 +19,21 @@ class AppColorDropdown extends StatefulWidget{
 
 class _AppColorDropdownState extends State<AppColorDropdown> {
   int selectedItem = 0;
+  List<List<int>> colorItems = [];
+
+  @override
+  void initState() {
+    listToMatrix();
+    super.initState();
+  }
+
+  listToMatrix() {
+    var pairs = partition(widget.items, 5);
+    print('pa $pairs');
+    setState(() {
+      colorItems = pairs.toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +64,7 @@ class _AppColorDropdownState extends State<AppColorDropdown> {
         ],
       ),
       itemBuilder: (BuildContext context) {
-        return widget.items.map((colors) => colorMenuItems(colors)).toList();
+        return colorItems.map((colors) => colorMenuItems(colors)).toList();
       },
     );
   }
