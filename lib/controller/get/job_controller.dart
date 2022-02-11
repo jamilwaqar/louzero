@@ -1,7 +1,6 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/constant/constants.dart';
-import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/controller/page_navigation/navigation_controller.dart';
 import 'package:louzero/models/models.dart';
 import 'base_controller.dart';
