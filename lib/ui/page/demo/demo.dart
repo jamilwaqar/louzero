@@ -29,6 +29,7 @@ class Demo extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            _colorDropdown(),
             _calendar_(),
             _tabsBasic_(),
             _cardTabs_(),
@@ -42,7 +43,6 @@ class Demo extends StatelessWidget {
             _formInput_(),
             _billingLineAmount(),
             _richTextEditor(),
-            _colorDropdown(),
           ],
         ),
       ),
@@ -448,9 +448,9 @@ class Demo extends StatelessWidget {
               print('selected clor $color');
             },
           items: const [
-            0xFFC70707, 0xFFD7562D, 0xFFA46200, 0xFF4F6443, 0xFF4F6443,
-            0xFF007E93, 0xFF1151AA, 0xFF3539A0, 0xFF3C00A4, 0xFF9D2DA0,
-            0xFFC71962, 0xFF2F2F2F, 0xFF5A5A5A, 0xFF334D59, 0xFF672A06
+            Color(0xFFC70707), Color(0xFFD7562D), Color(0xFFA46200), Color(0xFF4F6443), Color(0xFF4F6443),
+    Color( 0xFF007E93), Color(0xFF1151AA), Color(0xFF3539A0), Color(0xFF3C00A4),Color(0xFF9D2DA0),
+    Color(0xFFC71962), Color(0xFF2F2F2F), Color(0xFF5A5A5A), Color(0xFF334D59), Color(0xFF672A06)
           ]
         )
     );
