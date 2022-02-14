@@ -14,6 +14,7 @@ class AppSimpleDropDown extends StatefulWidget {
         this.borderColor,
         this.icon,
         this.height,
+        this.width,
         this.hasClearIcon,
         this.dividerPosition,
         this.onTap,
@@ -27,6 +28,7 @@ class AppSimpleDropDown extends StatefulWidget {
   final Color? borderColor;
   final Icon? icon;
   final double? height;
+  final double? width;
   final Function onSelected;
   final Function? onClear;
   final Function? onTap;
@@ -77,7 +79,7 @@ class _AppSimpleDropDownState extends State<AppSimpleDropDown> {
       child: Row(
         children: [
           Container(
-            height: widget.height ?? 35,
+            height: widget.height != null ? widget.height! : 35,
             padding: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
                 color: widget.backgroundColor ?? Colors.transparent,

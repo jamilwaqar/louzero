@@ -15,6 +15,7 @@ class AppTextField extends StatefulWidget {
   final bool password;
   final bool enabled;
   final bool expands;
+  final bool isRequired;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
@@ -42,6 +43,7 @@ class AppTextField extends StatefulWidget {
     this.autofocus = false,
     this.multiline = false,
     this.expands = false,
+    this.isRequired = false,
     this.minLines = 1,
     this.maxLines = 1,
     this.mb = 16,

@@ -7,6 +7,7 @@ import 'package:louzero/controller/get/bindings/company_binding.dart';
 import 'package:louzero/controller/get/bindings/customer_binding.dart';
 import 'package:louzero/ui/page/account/account.dart';
 import 'package:louzero/ui/page/customer/customer_site.dart';
+import 'package:louzero/ui/page/settings/checklist.dart';
 import '../app_base_scaffold.dart';
 
 enum SettingType {
@@ -122,7 +123,9 @@ class _SettingsPageState extends State<SettingsPage> {
             // TODO: Handle this case.
             break;
           case SettingType.checklist:
-            // TODO: Handle this case.
+            Get.to(
+                    () => const CheckListPage(),
+                binding: CustomerBinding());
             break;
           case SettingType.customerType:
             // TODO: Handle this case.
