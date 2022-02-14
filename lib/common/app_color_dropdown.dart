@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:quiver/iterables.dart';
 
 class AppColorDropdown extends StatefulWidget{
   const AppColorDropdown({
@@ -9,7 +10,7 @@ class AppColorDropdown extends StatefulWidget{
     required this.onColorSelected,
     Key? key
   }) : super(key: key);
-  final List<List<int>> items;
+  final List<Color> items;
   final Function onColorSelected;
 
   @override
@@ -17,7 +18,22 @@ class AppColorDropdown extends StatefulWidget{
 }
 
 class _AppColorDropdownState extends State<AppColorDropdown> {
-  int selectedItem = 0;
+  Color selectedItem = Colors.transparent;
+  List<List<Color>> colorItems = [];
+
+  @override
+  void initState() {
+    listToMatrix();
+    super.initState();
+  }
+
+  listToMatrix() {
+    var pairs = partition(widget.items, 5);
+    print('pa $pairs');
+    setState(() {
+      colorItems = pairs.toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +48,12 @@ class _AppColorDropdownState extends State<AppColorDropdown> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-                color: selectedItem == 0 ? Colors.transparent : Color(selectedItem),
+                color: selectedItem == Colors.transparent ? Colors.transparent : selectedItem,
                 border: Border.all(
-                    color: selectedItem == 0 ? AppColors.secondary_90 : Color(selectedItem),
+                    color: selectedItem == Colors.transparent  ? AppColors.secondary_90 : selectedItem,
                     width: 1),
                 borderRadius: BorderRadius.circular(50)),
-            child: selectedItem == 0 ? const Icon(MdiIcons.chevronDown) : Row(
+            child: selectedItem == Colors.transparent  ? const Icon(MdiIcons.chevronDown) : Row(
               children: const [
                 Icon(MdiIcons.check, color: Colors.white,),
                 SizedBox(width:24,),
@@ -48,7 +64,7 @@ class _AppColorDropdownState extends State<AppColorDropdown> {
         ],
       ),
       itemBuilder: (BuildContext context) {
-        return widget.items.map((colors) => colorMenuItems(colors)).toList();
+        return colorItems.map((colors) => colorMenuItems(colors)).toList();
       },
     );
   }
@@ -64,7 +80,9 @@ class _AppColorDropdownState extends State<AppColorDropdown> {
           padding: const EdgeInsets.only(left: 8, right: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: colors.map((color) => _colorBox(color)).toList(),
+            children: colors.map((color) {
+              return _colorBox(color);
+            }).toList(),
           )),
     );
   }
@@ -84,7 +102,7 @@ class _AppColorDropdownState extends State<AppColorDropdown> {
         margin: const EdgeInsets.only(top: 4, left: 2, right: 2, bottom: 4),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            color: Color(color)
+            color: color as Color
         ),
       ),
     );
