@@ -5,12 +5,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/ui/page/job/controllers/job_list_controller.dart';
 import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/widget/widget.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../app_base_scaffold.dart';
 
 class JobListPage extends GetWidget<JobListController> {
@@ -29,192 +29,215 @@ class JobListPage extends GetWidget<JobListController> {
 
   @override
   Widget build(BuildContext context) {
-    return AppBaseScaffold(
-      subheader: 'All Jobs',
-      onBodyTap: () {
-        controller.hideModal();
-      },
-      onAppbarVisibilityChange: (isVisible) {
-         controller.popModalHeight.value = isVisible ? Get.height - 220 : Get.height - 40;
-      },
-      child: SizedBox(
-        height: Get.height,
-        child: Stack(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 32, right: 32),
-              child: Column(
-                children: [
-                  const SizedBox(height: 32,),
-                  AppSegmentedControl(
-                    fromMax: true,
-                    isStretch: true,
-                    backgroundColor: AppColors.secondary_95,
-                    onTap: () {
-                      controller.hideModal();
-                      print('AppSegmentedControl');
-                    },
-                    children: const {
-                      1: AppSegmentItem(
-                        text: 'Estimate (99)',
-                        icon: MdiIcons.calculator,
+    return GetBuilder<JobListController>(
+        builder: (_) => AppBaseScaffold(
+              subheader: 'All Jobs',
+              onBodyTap: () {
+                controller.hideModal();
+              },
+              onAppbarVisibilityChange: (isVisible) {
+                controller.popModalHeight.value =
+                    isVisible ? Get.height - 220 : Get.height - 40;
+              },
+              child: SizedBox(
+                height: Get.height,
+                child: Stack(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 32, right: 32),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 32,
+                          ),
+                          AppSegmentedControl(
+                            fromMax: true,
+                            isStretch: true,
+                            backgroundColor: AppColors.secondary_95,
+                            onTap: () {
+                              controller.hideModal();
+                              print('AppSegmentedControl');
+                            },
+                            children: {
+                              JobStatus.estimate:
+                                  jobStatusItem(JobStatus.estimate),
+                              JobStatus.booked: jobStatusItem(JobStatus.booked),
+                              JobStatus.invoiced:
+                                  jobStatusItem(JobStatus.invoiced),
+                              JobStatus.canceled:
+                                  jobStatusItem(JobStatus.canceled),
+                            },
+                            onValueChanged: (JobStatus value) {
+                              controller.selectedJobStatus = value;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 300,
+                                height: 35,
+                                child: _searchBox(),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              AppSimpleDropDown(
+                                  label: "Job Type",
+                                  onSelected: (value) {
+                                    controller.selectedType.value = value;
+                                    controller.sortByType();
+                                  },
+                                  onTap: () {
+                                    controller.hideModal();
+                                  },
+                                  items: const [
+                                    'Repair',
+                                    'Service',
+                                    'Pool Opening',
+                                    'Spa Opening'
+                                  ]),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              AppSimpleDropDown(
+                                  label: "Duration",
+                                  backgroundColor: Colors.white,
+                                  onClear: () {
+                                    controller.showCustomDateRange.value =
+                                        false;
+                                    controller.selectedDuration.value = null;
+                                    controller.endDate = null;
+                                    controller.startDate = null;
+                                    controller.diffInDays = 0;
+                                    controller.update();
+                                  },
+                                  onTap: () {
+                                    controller.hideModal();
+                                  },
+                                  onSelected: (value) {
+                                    controller.selectedDuration.value = value;
+                                    controller.showCustomDateRange.value =
+                                        false;
+                                    controller.sortByDuration();
+                                  },
+                                  dividerPosition: const [4, 5],
+                                  items: JobDurationFilter.values
+                                      .map((e) => e.label)
+                                      .toList()),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text('${controller.selectedJobStatus.label} Jobs ',
+                                        style: const TextStyle(
+                                          fontFamily: 'Barlow',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.secondary_20,
+                                        )),
+                                    Text(
+                                      '(${controller.tableItems.length})',
+                                      style: const TextStyle(
+                                        fontFamily: 'Barlow',
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.secondary_50,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text('Total: ',
+                                        style: TextStyle(
+                                          fontFamily: 'Barlow',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.secondary_20,
+                                        )),
+                                    Text('\$${controller.total}',
+                                        style: const TextStyle(
+                                          fontFamily: 'Barlow',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.secondary_50,
+                                        ))
+                                  ],
+                                ),
+                              ]),
+                          const AppDivider(),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: JobDataTable(
+                                  models: controller.tableItems,
+                                  onSortTap: (category, isAsc) {
+                                    controller.sortItems(category, isAsc);
+                                  },
+                                  onMoreButtonTap: () {
+                                    controller.isDetailsPopupVisible.value =
+                                        true;
+                                  })),
+                          const SizedBox(
+                            height: 32,
+                          )
+                        ],
                       ),
-                      2: AppSegmentItem(
-                        text: 'Booked (97)',
-                        icon: MdiIcons.calendar,
-                      ),
-                      3: AppSegmentItem(
-                        text: 'Invoiced',
-                        icon: MdiIcons.currencyUsd,
-                      ),
-                      4: AppSegmentItem(
-                        text: 'Canceled',
-                        icon: MdiIcons.cancel,
-                      ),
-                    },
-                    onValueChanged: (int value) {
-                      if (kDebugMode) {
-                        print('AppSegmentedControl $value');
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 16,),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 300,
-                        height: 35,
-                        child:  _searchBox(),
-                      ),
-                      const SizedBox(width: 16,),
-                      AppSimpleDropDown(
-                          label: "Job Type",
-                          onSelected: (value) {
-                            controller.selectedType.value = value;
-                            controller.sortByType();
-                          },
-                          onTap: () {
-                            controller.hideModal();
-                          },
-                          items: const ['Repair', 'Service', 'Pool Opening', 'Spa Opening']
-                      ),
-                      const SizedBox(width: 8,),
-                      AppSimpleDropDown(
-                          label: "Duration",
-                          backgroundColor: Colors.white,
-                          onClear: () {
-                            controller.showCustomDateRange.value = false;
-                            controller.selectedDuration.value = null;
-                            controller.endDate = null;
-                            controller.startDate = null;
-                            controller.diffInDays = 0;
-                            controller.update();
-                          },
-                          onTap: () {
-                            controller.hideModal();
-                          },
-                          onSelected: (value) {
-                            controller.selectedDuration.value = value;
-                            controller.showCustomDateRange.value = false;
-                            controller.sortByDuration();
-                          },
-                          dividerPosition: const [4, 5],
-                          items: JobDurationFilter.values.map((e) => e.label).toList()
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24,),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: const [
-                            Text('Booked Jobs ', style: TextStyle(
-                              fontFamily: 'Barlow',
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.secondary_20,
-                            )),
-                            Text('(97)', style: TextStyle(
-                              fontFamily: 'Barlow',
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.secondary_50,
-                            ),)
-                          ],
-                        ),
-                        Row(
-                          children: const [
-                            Text('Total: ', style: TextStyle(
-                              fontFamily: 'Barlow',
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.secondary_20,
-                            )),
-                            Text('\$78,302.00', style: TextStyle(
-                              fontFamily: 'Barlow',
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.secondary_50,
-                            ))
-                          ],
-                        ),
-                      ]
-                  ),
-                  const AppDivider(),
-                  const SizedBox(height: 8,),
-                  Flexible(flex: 1,
-                      child: JobDataTable(
-                          models: controller.tableItems,
-                          onSortTap: (category, isAsc) {
-                            controller.sortItems(category, isAsc);
-                          },
-                          onMoreButtonTap: () {
-                            controller.isDetailsPopupVisible.value = true;
-                          }
-                      )
-                  ),
-                  const SizedBox(height: 32,)
-                ],
-              ),
-            ),
-
-            controller.showCustomDateRange.value ?
-            Positioned(
-                right: 0,
-                top: 140,
-                width: MediaQuery.of(context).size.width,
-                child: DelayedWidget(
-                  animation: DelayedAnimations.SLIDE_FROM_BOTTOM,
-                  child: _customDateRangeModel(),
-                )
-            )
-                :
-            const SizedBox(),
-            controller.isDetailsPopupVisible.value ?
-            Positioned(
-                height: controller.popModalHeight.value != 0 ? controller.popModalHeight.value : Get.height - 220,
-                width: 370,
-                right: 20,
-                top: 20,
-                child: DelayedWidget(
-                  animation: DelayedAnimations.SLIDE_FROM_RIGHT,
-                  child: GestureDetector(
-                    onTap: () {
-                    },
-                    child: JobDetailsPopup(
-                      onPopupClose: () {
-                          controller.isDetailsPopupVisible.value = false;
-                      },
                     ),
-                  ),
-                )
-            )
-                :
-            const SizedBox()
-          ],
-        ),
-      ),
+                    controller.showCustomDateRange.value
+                        ? Positioned(
+                            right: 0,
+                            top: 140,
+                            width: MediaQuery.of(context).size.width,
+                            child: DelayedWidget(
+                              animation: DelayedAnimations.SLIDE_FROM_BOTTOM,
+                              child: _customDateRangeModel(),
+                            ))
+                        : const SizedBox(),
+                    controller.isDetailsPopupVisible.value
+                        ? Positioned(
+                            height: controller.popModalHeight.value != 0
+                                ? controller.popModalHeight.value
+                                : Get.height - 220,
+                            width: 370,
+                            right: 20,
+                            top: 20,
+                            child: DelayedWidget(
+                              animation: DelayedAnimations.SLIDE_FROM_RIGHT,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: JobDetailsPopup(
+                                  onPopupClose: () {
+                                    controller.isDetailsPopupVisible.value =
+                                        false;
+                                  },
+                                ),
+                              ),
+                            ))
+                        : const SizedBox()
+                  ],
+                ),
+              ),
+            ));
+  }
+
+  Widget jobStatusItem(JobStatus status) {
+    return AppSegmentItem(
+      text: '${status.label} (${controller.jobModels
+          .where((e) => e.status == status)
+          .toList().length})',
+      icon: status.icon,
     );
   }
 

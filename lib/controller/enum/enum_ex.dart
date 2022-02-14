@@ -55,6 +55,9 @@ extension CustomerCategoryEx on CustomerCategory {
 }
 
 extension JobStatusEx on JobStatus {
+  String get label {
+    return name.capitalizeFirst!;
+  }
 
   IconData get icon {
     switch(this) {

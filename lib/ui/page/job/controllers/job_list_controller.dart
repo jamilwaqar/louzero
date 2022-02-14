@@ -32,7 +32,14 @@ class JobListController extends GetxController {
 
   List<JobModel> get jobModels => baseController.jobs;
 
-  final selectedStatus = Rx<JobStatus>(JobStatus.estimate);
+  final _selectedJobStatus = Rx<JobStatus>(JobStatus.estimate);
+  JobStatus get selectedJobStatus => _selectedJobStatus.value;
+  set selectedJobStatus(val) {
+    _selectedJobStatus.value = val;
+    filterItemsByStatus();
+    update();
+  }
+
   final selectedType = "".obs;
   final selectedDuration = Rx<JobDurationFilter?>(null);
   final isDetailsPopupVisible = false.obs;
@@ -40,17 +47,23 @@ class JobListController extends GetxController {
   DateTime? startDate;
   DateTime? endDate;
   int diffInDays = 0;
+  double total = 0;
   final popModalHeight = 0.0.obs;
 
   final RxList<JobModel> tableItems = <JobModel>[].obs;
 
   @override
   void onInit() {
-    tableItems.value = jobModels.where((element) => element.status == selectedStatus.value).toList();
+    filterItemsByStatus();
     super.onInit();
   }
 
-
+  void filterItemsByStatus() {
+    tableItems.value = jobModels
+        .where((element) => element.status == selectedJobStatus)
+        .toList();
+    total = tableItems.fold(0.0, (preVal, element) => preVal + element.totalCost);
+  }
 
   void searchItems(text) {
     tableItems.clear();
@@ -116,6 +129,7 @@ class JobListController extends GetxController {
         break;
     }
     tableItems.value = updatedItems;
+    update();
   }
 
   void sortItems(category, isASC) {

@@ -273,7 +273,7 @@ class AddJobPage extends GetWidget<JobController> {
                     ? Icons.radio_button_checked_outlined
                     : Icons.radio_button_off, color: AppColors.orange),
                 const SizedBox(width: 8),
-                Text(status.name.capitalizeFirst!, style: TextStyles.bodyL),
+                Text(status.label.capitalizeFirst!, style: TextStyles.bodyL),
               ],
             ),
           ),
