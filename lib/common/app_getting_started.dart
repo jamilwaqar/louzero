@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/utils.dart';
 
@@ -21,7 +20,7 @@ class AppGettingStarted extends StatefulWidget{
 }
 
 class _AppGettingStartedState extends State<AppGettingStarted> {
-  final _showMsg = false.obs;
+  bool _showMsg = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,21 +62,23 @@ class _AppGettingStartedState extends State<AppGettingStarted> {
     alignment: Alignment.centerLeft,
     child: CupertinoButton(
       onPressed: (){
-        widget.onCheckboxPress(_showMsg.value);
+        setState(() {
+          _showMsg = false;
+        });
       },
       padding: EdgeInsets.zero,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Obx(
-                () => Checkbox(
-                checkColor: Colors.white,
-                value: _showMsg.value,
-                activeColor: AppColors.dark_1,
-                onChanged: (val) {
-                  _showMsg.value = val!;
-                }),
-          ),
+          Checkbox(
+              checkColor: Colors.white,
+              value: _showMsg,
+              activeColor: AppColors.dark_1,
+              onChanged: (val) {
+                setState(() {
+                  _showMsg = val!;
+                });
+              }),
           const SizedBox(width: 8),
           const Text("Don't show this message again.",
               style: TextStyles.bodyL),
