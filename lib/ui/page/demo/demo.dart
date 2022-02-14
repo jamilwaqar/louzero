@@ -5,16 +5,22 @@ import 'package:louzero/common/app_text_editor.dart';
 import 'package:louzero/common/app_color_dropdown.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
+import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
+import 'package:louzero/ui/page/job/job_add_new_line.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
+import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
 import 'package:louzero/ui/widget/time_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:get/get.dart';
 
 class Demo extends StatelessWidget {
-  const Demo({Key? key}) : super(key: key);
+  Demo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +29,7 @@ class Demo extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            _colorDropdown(),
             _calendar_(),
             _tabsBasic_(),
             _cardTabs_(),
@@ -34,8 +41,8 @@ class Demo extends StatelessWidget {
             _contactInfo_(),
             _buttons_(),
             _formInput_(),
+            _billingLineAmount(),
             _richTextEditor(),
-            _colorDropdown()
           ],
         ),
       ),
@@ -59,7 +66,7 @@ class Demo extends StatelessWidget {
     const _bg = Colors.black12;
 
     return _rowLight(
-        // color: AppColors.secondary_90,
+      // color: AppColors.secondary_90,
         child: AppCardTabs(
             mt: 0,
             mb: 16,
@@ -249,7 +256,7 @@ class Demo extends StatelessWidget {
           label: 'Multi Line',
           multiline: true,
           initialValue:
-              'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
+          'Chambray glossier, paleo pitchfork deep v vape biodiesel sustainable waistcoat ugh. Distillery neutra palo santo pop-up offal chillwave copper mug tilde leggings air plant cardigan kinfolk fanny pack. Hashtag mixtape butcher irony. Lomo schlitz franzen cold-pressed jean shorts.',
         ),
         const SizedBox(height: 16),
         const AppMultiSelect(
@@ -353,26 +360,26 @@ class Demo extends StatelessWidget {
       label: 'Time Picker',
       child: Buttons.outline('Open Time Picker', colorBg: AppColors.white,
           onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return NZTimePicker(
-              onChange: (time) {
-                print('the time is $time');
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return NZTimePicker(
+                  onChange: (time) {
+                    print('the time is $time');
+                  },
+                );
               },
             );
-          },
-        );
-      }),
+          }),
     );
   }
 
 // DEMO LAYOUT UTILS
   Widget _rowDark(
       {required String label,
-      required Widget child,
-      Color textColor = AppColors.secondary_99,
-      Color color = AppColors.secondary_30}) {
+        required Widget child,
+        Color textColor = AppColors.secondary_99,
+        Color color = AppColors.secondary_30}) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(top: 32, left: 16, right: 16, bottom: 48),
@@ -392,8 +399,8 @@ class Demo extends StatelessWidget {
 
   Widget _rowLight(
       {required Widget child,
-      required String label,
-      Color color = AppColors.secondary_95}) {
+        required String label,
+        Color color = AppColors.secondary_95}) {
     return _rowDark(
       child: child,
       label: label,
@@ -426,13 +433,11 @@ class Demo extends StatelessWidget {
     );
   }
 
-  Widget _richTextEditor() {
+  Widget _billingLineAmount() {
     return _rowDark(
-        label: "Rich Text Editor",
-        child: AppTextEditor(
-          onChange: (content) {
-            print('content has beenc chnage to: $content');
-          }));
+        label: "Billing Line Amount",
+        child: BillingWidget()
+    );
   }
 
   Widget _colorDropdown() {
@@ -442,12 +447,114 @@ class Demo extends StatelessWidget {
             onColorSelected: (color) {
               print('selected clor $color');
             },
-            items: const [
-              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899],
-              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899],
-              [0xFFa3b899, 0xFF114057, 0xFFa3b899, 0xFF114057, 0xFFa3b899]
-            ]
+          items: const [
+            Color(0xFFC70707), Color(0xFFD7562D), Color(0xFFA46200), Color(0xFF4F6443), Color(0xFF4F6443),
+    Color( 0xFF007E93), Color(0xFF1151AA), Color(0xFF3539A0), Color(0xFF3C00A4),Color(0xFF9D2DA0),
+    Color(0xFFC71962), Color(0xFF2F2F2F), Color(0xFF5A5A5A), Color(0xFF334D59), Color(0xFF672A06)
+          ]
         )
     );
   }
+
+  Widget _richTextEditor() {
+    return _rowDark(
+        label: "Rich Text Editor",
+        child: AppTextEditor(
+          onChange: (content) {
+            print('content has beenc chnage to: $content');
+          },
+        )
+    );
+  }
+
+}
+
+class BillingWidget extends StatelessWidget{
+  final controller = Get.put(JobController());
+  final _lineItemController = Get.put(LineItemController());
+
+  BillingWidget({Key? key}) : super(key: key);
+  final _addLineVisible = false.obs;
+  final _inventoryIndex = 0.obs;
+  final _miscLineItem = false.obs;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AppBillingLines(
+          data: [
+            BillingLineModel(description: "description",
+                jobId: "jobId",
+                quantity: 10,
+                price: 100,
+                subtotal: 1000,
+                discountAmount: 0)
+          ],
+          onDelete: (id) async {
+            print('deleted $id');
+          },
+          onDuplicate: (id) {
+            print('duplicate $id');
+          },
+          onEdit: (id) {
+            print('edit $id');
+          },
+          onReorder: (value1, value2) {
+            print('red');
+          },
+        ),
+        _addNewLine(),
+        _addItemButton()
+      ],
+    );
+  }
+
+  Widget _addItemButton() {
+    return AppPopMenu(
+      button: const [
+        AppButtons.iconOutline(
+          'Add New Line',
+          isMenu: true,
+        )
+      ],
+      items: [
+        PopMenuItem(
+          label: 'Inventory Line',
+          icon: MdiIcons.clipboardText,
+          onTap: () {
+            _miscLineItem.value = false;
+            _addLineVisible.value = true;
+            _inventoryIndex.value = 0;
+          },
+        ),
+        PopMenuItem(
+            label: 'Misc. Billing Line',
+            icon: MdiIcons.currencyUsd,
+            onTap: () {
+              _miscLineItem.value = true;
+              _addLineVisible.value = true;
+            }),
+      ],
+    );
+  }
+
+  Widget _addNewLine() {
+    return Obx(() =>
+        Visibility(
+          visible: _addLineVisible.value,
+          child: JobAddNewLine(
+            jobId: '1',
+            selectedIndex: _inventoryIndex.value,
+            isTextInput: _miscLineItem.value,
+            onCreate: () {
+              _addLineVisible.value = false;
+            },
+            onCancel: () {
+              _addLineVisible.value = false;
+            },
+          ),
+        ));
+  }
+
 }
