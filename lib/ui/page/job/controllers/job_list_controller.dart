@@ -1,32 +1,66 @@
 import 'package:get/get.dart';
+import 'package:louzero/controller/enum/enums.dart';
+import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/models/job_models.dart';
+
+enum JobDurationFilter {
+  yesterday, today, tomorrow, thisWeek, nextWeek, customRange
+}
+
+extension JobDurationFilterEx on JobDurationFilter {
+  String get label {
+    switch(this) {
+      case JobDurationFilter.yesterday:
+        return 'Yesterday';
+      case JobDurationFilter.today:
+        return 'Today';
+      case JobDurationFilter.tomorrow:
+        return 'Tomorrow';
+      case JobDurationFilter.thisWeek:
+        return 'This Week';
+      case JobDurationFilter.nextWeek:
+        return 'Next Week';
+      case JobDurationFilter.customRange:
+        return 'Custom Range';
+    }
+  }
+}
 
 class JobListController extends GetxController {
   final baseController = Get.find<BaseController>();
 
   List<JobModel> get jobModels => baseController.jobs;
 
+  final selectedStatus = Rx<JobStatus>(JobStatus.estimate);
   final selectedType = "".obs;
-  final selectedDuration = "".obs;
+  final selectedDuration = Rx<JobDurationFilter?>(null);
   final isDetailsPopupVisible = false.obs;
   final showCustomDateRange = false.obs;
-  DateTime? _startDate;
-  DateTime? _endDate;
+  DateTime? startDate;
+  DateTime? endDate;
   int diffInDays = 0;
-  double popModalHeight = 0;
+  final popModalHeight = 0.0.obs;
 
   final RxList<JobModel> tableItems = <JobModel>[].obs;
+
+  @override
+  void onInit() {
+    tableItems.value = jobModels.where((element) => element.status == selectedStatus.value).toList();
+    super.onInit();
+  }
+
+
 
   void searchItems(text) {
     tableItems.clear();
     if (text.toString().isNotEmpty) {
-      List currentItems = jobModels;
-      List updatedItems = currentItems.where((i) {
+      List<JobModel> currentItems = jobModels;
+      List<JobModel> updatedItems = currentItems.where((i) {
         final searchText = text.toString().toLowerCase();
-        return i['type'].toString().toLowerCase().contains(searchText) ||
+        return i.jobType.toLowerCase().contains(searchText) /*||
             i['customer'].toString().toLowerCase().contains(searchText) ||
-            i['address'].toString().toLowerCase().contains(searchText);
+            i['address'].toString().toLowerCase().contains(searchText)*/;
       }).toList();
       tableItems.value = [...updatedItems];
     } else {
@@ -35,10 +69,10 @@ class JobListController extends GetxController {
   }
 
   void sortByType() {
-    List currentItems = tableItems;
-    List updatedItems = currentItems
+    List<JobModel> currentItems = tableItems;
+    List<JobModel> updatedItems = currentItems
         .where((i) =>
-            i['type'].toString().toLowerCase() ==
+            i.jobType.toString().toLowerCase() ==
             selectedType.toString().toLowerCase())
         .toList();
 
@@ -50,98 +84,46 @@ class JobListController extends GetxController {
   }
 
   void sortByDuration() {
-    if (selectedDuration.isEmpty) {
+    if (selectedDuration.value == null) {
       tableItems.value = [...jobModels];
-
       return;
     }
-
-    if (selectedDuration.value == "Custom Range") {
-      showCustomDateRange.value = true;
-      return;
-    }
-
     List<JobModel> currentItems = jobModels;
     List<JobModel> updatedItems = [];
-    DateTime now = DateTime.now();
-    if (selectedDuration.value == "Yesterday") {
-      DateTime prevOfYesterday = now.subtract(const Duration(days: 2));
-      updatedItems = currentItems.where((i) {
-        if (i['scheduled'].toString().isEmpty) {
-          return false;
-        }
-
-        var date = DateTime.fromMillisecondsSinceEpoch(
-            int.parse(i['scheduled']) * 1000);
-        return prevOfYesterday.millisecondsSinceEpoch >
-                date.millisecondsSinceEpoch &&
-            now.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
-      }).toList();
-    } else if (selectedDuration == "Today") {
-      DateTime yesterday = now.subtract(const Duration(days: 1));
-      DateTime tomorrow = now.add(const Duration(days: 1));
-
-      updatedItems = currentItems.where((i) {
-        if (i['scheduled'].toString().isEmpty) {
-          return false;
-        }
-
-        var date = DateTime.fromMillisecondsSinceEpoch(
-            int.parse(i['scheduled']) * 1000);
-        return yesterday.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
-            tomorrow.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
-      }).toList();
-    } else if (selectedDuration == "Tomorrow") {
-      DateTime nexOfTomorrow = now.add(const Duration(days: 2));
-      updatedItems = currentItems.where((i) {
-        if (i['scheduled'].toString().isEmpty) {
-          return false;
-        }
-
-        var date = DateTime.fromMillisecondsSinceEpoch(
-            int.parse(i['scheduled']) * 1000);
-        return now.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
-            nexOfTomorrow.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
-      }).toList();
-    } else if (selectedDuration == "This Week") {
-      DateTime endOfWeek = now.add(const Duration(days: 8));
-
-      updatedItems = currentItems.where((i) {
-        if (i['scheduled'].toString().isEmpty) {
-          return false;
-        }
-
-        var date = DateTime.fromMillisecondsSinceEpoch(
-            int.parse(i['scheduled']) * 1000);
-        return now.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
-            endOfWeek.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
-      }).toList();
-    } else if (selectedDuration == "Next Week") {
-      DateTime startOfWeek = now.add(const Duration(days: 7));
-      DateTime endOfNextWeek = now.add(const Duration(days: 15));
-
-      updatedItems = currentItems.where((i) {
-        if (i['scheduled'].toString().isEmpty) {
-          return false;
-        }
-
-        var date = DateTime.fromMillisecondsSinceEpoch(
-            int.parse(i['scheduled']) * 1000);
-        return startOfWeek.millisecondsSinceEpoch >
-                date.millisecondsSinceEpoch &&
-            endOfNextWeek.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
-      }).toList();
+    switch(selectedDuration.value!) {
+      case JobDurationFilter.yesterday:
+        updatedItems =
+            currentItems.where((i) => i.scheduledAt?.isYesterday ?? false).toList();
+        break;
+      case JobDurationFilter.today:
+        updatedItems =
+            currentItems.where((i) => i.scheduledAt?.isToday ?? false).toList();
+        break;
+      case JobDurationFilter.tomorrow:
+        updatedItems =
+            currentItems.where((i) => i.scheduledAt?.isTomorrow ?? false).toList();
+        break;
+      case JobDurationFilter.thisWeek:
+        updatedItems =
+            currentItems.where((i) => i.scheduledAt?.isInThisWeek ?? false).toList();
+        break;
+      case JobDurationFilter.nextWeek:
+        updatedItems =
+            currentItems.where((i) => i.scheduledAt?.isInNextWeek ?? false).toList();
+        break;
+      case JobDurationFilter.customRange:
+        showCustomDateRange.value = true;
+        break;
     }
-
     tableItems.value = updatedItems;
   }
 
   void sortItems(category, isASC) {
     List<JobModel> currentItems = tableItems;
-    currentItems.sort((a, b) {
-      return a[category.toString().toLowerCase()]
-          .compareTo(b[category.toString().toLowerCase()]);
-    });
+    // currentItems.sort((a, b) {
+    //   return a[category.toString().toLowerCase()]
+    //       .compareTo(b[category.toString().toLowerCase()]);
+    // });
 
     if (isASC) {
       tableItems.value = currentItems.reversed.toList();
@@ -151,24 +133,23 @@ class JobListController extends GetxController {
   }
 
   void sortByCustomRange() {
-    List<JobModel> currentItems = items;
+    List<JobModel> currentItems = jobModels;
     List<JobModel> updatedItems = [];
-    DateTime prevOfStart = _startDate!.subtract(const Duration(days: 1));
-    DateTime nextOfEnd = _endDate!.add(const Duration(days: 1));
+    DateTime prevOfStart = startDate!.subtract(const Duration(days: 1));
+    DateTime nextOfEnd = endDate!.add(const Duration(days: 1));
     updatedItems = currentItems.where((i) {
-      if (i['scheduled'].toString().isEmpty) {
+      if (i.scheduledAt == null) {
         return false;
       }
-      var date =
-          DateTime.fromMillisecondsSinceEpoch(int.parse(i['scheduled']) * 1000);
-      return nextOfEnd.millisecondsSinceEpoch > date.millisecondsSinceEpoch &&
-          prevOfStart.millisecondsSinceEpoch < date.millisecondsSinceEpoch;
+      return nextOfEnd.millisecondsSinceEpoch >
+              i.scheduledAt!.millisecondsSinceEpoch &&
+          prevOfStart.millisecondsSinceEpoch <
+              i.scheduledAt!.millisecondsSinceEpoch;
     }).toList();
-
     tableItems.value = updatedItems;
   }
 
-  void _hideModal() {
+  void hideModal() {
     isDetailsPopupVisible.value = false;
   }
 }

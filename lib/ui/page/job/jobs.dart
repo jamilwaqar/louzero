@@ -1,10 +1,11 @@
 import 'package:delayed_widget/delayed_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/ui/page/job/controllers/job_list_controller.dart';
 import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
 import 'package:louzero/ui/widget/calendar.dart';
@@ -12,45 +13,32 @@ import 'package:louzero/ui/widget/widget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../app_base_scaffold.dart';
 
-class JobListPage extends StatefulWidget {
-  const JobListPage({Key? key}) : super(key: key);
+class JobListPage extends GetWidget<JobListController> {
+  JobListPage({Key? key}) : super(key: key);
 
-  @override
-  _JobListPageState createState() => _JobListPageState();
-}
-
-class _JobListPageState extends State<JobListPage> {
-  @override
-  void initState() {
-    setState(() {
-      tableItems = items;
-    });
-    _searchFocus.addListener(() {
-      print(_searchFocus.hasFocus);
-      if(_searchFocus.hasFocus) {
-        _hideModal();
-      }
-    });
-    super.initState();
-  }
 
   final TextEditingController _searchText = TextEditingController();
-  final FocusNode _searchFocus = FocusNode();
+  late final FocusNode _searchFocus = FocusNode()..addListener(() {
+    if (kDebugMode) {
+      print(_searchFocus.hasFocus);
+    }
+    if(_searchFocus.hasFocus) {
+      controller.hideModal();
+    }
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBaseScaffold(
       subheader: 'All Jobs',
       onBodyTap: () {
-        _hideModal();
+        controller.hideModal();
       },
       onAppbarVisibilityChange: (isVisible) {
-        setState(() {
-          _popModalHeight = isVisible ? MediaQuery.of(context).size.height - 220 : MediaQuery.of(context).size.height - 40;
-        });
+         controller.popModalHeight.value = isVisible ? Get.height - 220 : Get.height - 40;
       },
       child: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height: Get.height,
         child: Stack(
           children: [
             Container(
@@ -63,7 +51,8 @@ class _JobListPageState extends State<JobListPage> {
                     isStretch: true,
                     backgroundColor: AppColors.secondary_95,
                     onTap: () {
-                      _hideModal();
+                      controller.hideModal();
+                      print('AppSegmentedControl');
                     },
                     children: const {
                       1: AppSegmentItem(
@@ -84,7 +73,9 @@ class _JobListPageState extends State<JobListPage> {
                       ),
                     },
                     onValueChanged: (int value) {
-                      print(value);
+                      if (kDebugMode) {
+                        print('AppSegmentedControl $value');
+                      }
                     },
                   ),
                   const SizedBox(height: 16,),
@@ -99,13 +90,11 @@ class _JobListPageState extends State<JobListPage> {
                       AppSimpleDropDown(
                           label: "Job Type",
                           onSelected: (value) {
-                            setState(() {
-                              _selectedType = value;
-                            });
-                            sortByType();
+                            controller.selectedType.value = value;
+                            controller.sortByType();
                           },
                           onTap: () {
-                            _hideModal();
+                            controller.hideModal();
                           },
                           items: const ['Repair', 'Service', 'Pool Opening', 'Spa Opening']
                       ),
@@ -114,26 +103,23 @@ class _JobListPageState extends State<JobListPage> {
                           label: "Duration",
                           backgroundColor: Colors.white,
                           onClear: () {
-                            setState(() {
-                              showCustomDateRange = false;
-                              _selectedDuration = "";
-                              _endDate = null;
-                              _startDate = null;
-                              diffInDays = 0;
-                            });
+                            controller.showCustomDateRange.value = false;
+                            controller.selectedDuration.value = null;
+                            controller.endDate = null;
+                            controller.startDate = null;
+                            controller.diffInDays = 0;
+                            controller.update();
                           },
                           onTap: () {
-                            _hideModal();
+                            controller.hideModal();
                           },
                           onSelected: (value) {
-                            setState(() {
-                              _selectedDuration = value;
-                              showCustomDateRange = false;
-                            });
-                            sortByDuration();
+                            controller.selectedDuration.value = value;
+                            controller.showCustomDateRange.value = false;
+                            controller.sortByDuration();
                           },
                           dividerPosition: const [4, 5],
-                          items: const ['Yesterday', 'Today', 'Tomorrow', 'This Week', 'Next Week', 'Custom Range']
+                          items: JobDurationFilter.values.map((e) => e.label).toList()
                       ),
                     ],
                   ),
@@ -179,15 +165,12 @@ class _JobListPageState extends State<JobListPage> {
                   const SizedBox(height: 8,),
                   Flexible(flex: 1,
                       child: JobDataTable(
-                          items: tableItems, //replace items with jobmodels from controller
-                          models: Get.find<JobController>().jobModels, //this is temporary will be removed later
+                          models: controller.tableItems,
                           onSortTap: (category, isAsc) {
-                            sortItems(category, isAsc);
+                            controller.sortItems(category, isAsc);
                           },
                           onMoreButtonTap: () {
-                            setState(() {
-                              isDetailsPopupVisible = true;
-                            });
+                            controller.isDetailsPopupVisible.value = true;
                           }
                       )
                   ),
@@ -196,7 +179,7 @@ class _JobListPageState extends State<JobListPage> {
               ),
             ),
 
-            showCustomDateRange ?
+            controller.showCustomDateRange.value ?
             Positioned(
                 right: 0,
                 top: 140,
@@ -208,10 +191,9 @@ class _JobListPageState extends State<JobListPage> {
             )
                 :
             const SizedBox(),
-
-            isDetailsPopupVisible ?
+            controller.isDetailsPopupVisible.value ?
             Positioned(
-                height: _popModalHeight != 0 ? _popModalHeight : MediaQuery.of(context).size.height - 220,
+                height: controller.popModalHeight.value != 0 ? controller.popModalHeight.value : Get.height - 220,
                 width: 370,
                 right: 20,
                 top: 20,
@@ -222,9 +204,7 @@ class _JobListPageState extends State<JobListPage> {
                     },
                     child: JobDetailsPopup(
                       onPopupClose: () {
-                        setState(() {
-                          isDetailsPopupVisible = false;
-                        });
+                          controller.isDetailsPopupVisible.value = false;
                       },
                     ),
                   ),
@@ -244,7 +224,7 @@ class _JobListPageState extends State<JobListPage> {
         TextField(
           controller: _searchText,
           onChanged: (text) {
-            _searchItems(text);
+            controller.searchItems(text);
           },
           focusNode: _searchFocus,
           decoration: InputDecoration(
@@ -285,13 +265,13 @@ class _JobListPageState extends State<JobListPage> {
             Row(
               children: [
                 const Text('From: ', style: AppStyles.labelBold,),
-                Text(_startDate != null ? DateFormat('MMM, dd yyyy').format(_startDate!) : "", style: AppStyles.labelRegular,),
+                Text(controller.startDate != null ? DateFormat('MMM, dd yyyy').format(controller.startDate!) : "", style: AppStyles.labelRegular,),
               ],
             ),
             Row(
               children: [
                 const Text('To: ', style: AppStyles.labelBold,),
-                Text(_endDate != null ? DateFormat('MMM, dd yyyy').format(_endDate!) : "", style: AppStyles.labelRegular,),
+                Text(controller.endDate != null ? DateFormat('MMM, dd yyyy').format(controller.endDate!) : "", style: AppStyles.labelRegular,),
               ],
             ),
           ],
@@ -301,22 +281,21 @@ class _JobListPageState extends State<JobListPage> {
           onDateSelected: (date){
             print('date selected');
           },
-          startDate: _startDate,
-          endDate: _endDate,
+          startDate: controller.startDate,
+          endDate: controller.endDate,
           selectRange: true,
           onRangeSelected: (start, end) {
-            setState(() {
-              _startDate = start;
-              _endDate = end;
-            });
-            diffInDays = DateTime.parse(end.toString()).difference(start).inDays;
+              controller.startDate = start;
+              controller.endDate = end;
+              controller.diffInDays = DateTime.parse(end.toString()).difference(start).inDays;
+              controller.update();
           },
         ),
         const SizedBox(height: 32,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("$diffInDays days selected", style: AppStyles.labelBold,),
+            Text("${controller.diffInDays} days selected", style: AppStyles.labelBold,),
             Row(
               children: [
                 LZTextButton(
@@ -324,24 +303,19 @@ class _JobListPageState extends State<JobListPage> {
                   textColor: AppColors.secondary_20,
                   fontWeight: FontWeight.w500,
                   onPressed: () {
-                    setState(() {
-                      showCustomDateRange = false;
-                      if(_startDate == null && _endDate == null) {
-                        _selectedDuration = "";
-                        sortByDuration();
-                      }
-                    });
-                    print(_selectedDuration);
+                    controller.showCustomDateRange.value = false;
+                    if(controller.startDate == null && controller.endDate == null) {
+                      controller.selectedDuration.value = null;
+                      controller.sortByDuration();
+                    }
                   },
                 ),
                 const SizedBox(width: 32,),
                 AppButton(
                     label: "Apply",
                     onPressed: () async {
-                      sortByCustomRange();
-                      setState(() {
-                        showCustomDateRange = false;
-                      });
+                      controller.sortByCustomRange();
+                      controller.showCustomDateRange.value = false;
                     }
                 )
               ],

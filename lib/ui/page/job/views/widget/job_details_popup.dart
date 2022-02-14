@@ -106,7 +106,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
                                 width: 80,
                                 child:  Text('Status:', style: AppStyles.labelBold),
                               ),
-                              Text(currentJob?.status ?? "", style: const TextStyle(
+                              Text(currentJob?.status.name ?? "", style: const TextStyle(
                                 fontFamily: 'Lato',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,

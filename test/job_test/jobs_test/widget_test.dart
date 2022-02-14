@@ -14,7 +14,7 @@ void main() {
   Get.put(JobController());
   testWidgets('JobList page', (WidgetTester tester) async {
     await tester.pumpWidget(
-        makeTestableWidget(child: const JobListPage(), tester: tester));
+        makeTestableWidget(child: JobListPage(), tester: tester));
     expect(find.text('All Jobs'), findsOneWidget);
     expect(find.text('Canceled'), findsOneWidget);
   });

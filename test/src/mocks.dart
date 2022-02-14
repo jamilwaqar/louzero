@@ -1,3 +1,4 @@
+import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/models/company_models.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
@@ -39,7 +40,7 @@ final mockAddressModel = AddressModel(
 
 final mockJobModel = JobModel(
     jobId: 9999,
-    status: 'Estimate',
+    status: JobStatus.estimate,
     description: mockJob.description,
     jobType: mockJob.jobType)
   ..objectId = mockJob.objectId;
@@ -114,7 +115,7 @@ class MockJobModel extends Mock implements JobModel {
   String get jobType => 'Repair';
 
   @override
-  String get status => 'Estimate';
+  JobStatus get status => JobStatus.estimate;
 
   @override
   int get jobId => 9999;

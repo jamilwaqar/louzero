@@ -144,7 +144,7 @@ class JobsHome extends GetWidget<JobController> {
                 const SizedBox(height: 4),
                 TextKeyVal(
                   "Status:",
-                  controller.jobModel!.status,
+                  controller.jobModel!.status.name,
                   keyStyle: AppStyles.headerSmallCaps,
                   valStyle:
                       AppStyles.bodyLarge.copyWith(color: AppColors.accent_1),

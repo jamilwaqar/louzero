@@ -1,28 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:louzero/common/app_chip.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
-import 'package:louzero/controller/get/bindings/job_binding.dart';
+import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
-import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
-import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'package:get/get.dart';
 import 'package:louzero/controller/get/job_controller.dart';
-import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
 
 class JobDataTable extends StatefulWidget{
   const JobDataTable({
     Key? key,
-    required this.items,
     required this.onSortTap,
     required this.models,
     this.onMoreButtonTap
   }) : super(key: key);
 
-  final List items;
   final List<JobModel> models;
   final Function onSortTap;
   final Function? onMoreButtonTap;
@@ -56,9 +50,9 @@ class _JobDataTable extends State<JobDataTable> {
           Flexible(
             flex: 1,
             child: ListView.builder(
-              itemCount: widget.items.length,
+              itemCount: widget.models.length,
                 itemBuilder: (BuildContext context,int index){
-                  return  _tableRow(widget.items[index]);
+                  return  _tableRow(widget.models[index]);
                 }
             ),
           )
@@ -68,24 +62,22 @@ class _JobDataTable extends State<JobDataTable> {
   }
 
   Widget _tableHeader() {
-    return Container(
-        child: Row(
-            children: [
-              const SizedBox(width: 15,),
-              Expanded(
-                  flex: 1,
-                  child: FlexRow(
-                    flex: const [2, 7, 4, 3, 2],
-                    children: [
-                      _headerButtons('ID'),
-                      _headerButtons('Customer'),
-                      _headerButtons('Type'),
-                      _headerButtons('Scheduled'),
-                      _headerButtons('Total'),
-                    ],
-                  ))
-            ]
-        )
+    return Row(
+        children: [
+          const SizedBox(width: 15,),
+          Expanded(
+              flex: 1,
+              child: FlexRow(
+                flex: const [2, 7, 4, 3, 2],
+                children: [
+                  _headerButtons('ID'),
+                  _headerButtons('Customer'),
+                  _headerButtons('Type'),
+                  _headerButtons('Scheduled'),
+                  _headerButtons('Total'),
+                ],
+              ))
+        ]
     );
   }
 
@@ -134,18 +126,18 @@ class _JobDataTable extends State<JobDataTable> {
     );
   }
 
-  Widget _tableRow(item) {
-    final String color = "0xFF${colors[item['type']]}";
+  Widget _tableRow(JobModel item) {
+    final String color = "0xFF${colors[item.jobType]?? "C52B54"}";
+    CustomerModel customerModel =
+    Get.find<BaseController>().customerModelById(item.customerId!)!;
     String ds = "";
-    if(item['scheduled'].toString().isNotEmpty) {
-      DateTime date = DateTime.fromMillisecondsSinceEpoch(int.parse(item['scheduled']) * 1000);
-      ds = DateFormat('MMM, dd yyyy').format(date);
+    if(item.scheduledAt != null) {
+      ds = DateFormat('MMM, dd yyyy').format(item.scheduledAt!);
     }
 
     return GestureDetector(
       onTap: (){
         Get.find<JobController>().jobModel = widget.models[0];
-
         widget.onMoreButtonTap!();
       },
       child: Container(
@@ -177,14 +169,14 @@ class _JobDataTable extends State<JobDataTable> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       flex: const [2, 7, 4, 3, 2],
                       children: [
-                        Text("#${item['id']}", style: AppStyles.labelRegular,),
+                        Text("#${item.jobId}", style: AppStyles.labelRegular,),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(item['customer'], style: AppStyles.labelBold,),
+                            Text(customerModel.companyName, style: AppStyles.labelBold,),
                             const SizedBox(height: 8,),
-                            Text(item['address'], style: const TextStyle(
+                            Text(customerModel.serviceAddress.fullAddress, style: const TextStyle(
                               fontFamily: 'Lato',
                               fontSize: 14,
                             ))
@@ -195,7 +187,7 @@ class _JobDataTable extends State<JobDataTable> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             AppChip(
-                                text: item['type'],
+                                text: item.jobType,
                                 color: Color(int.parse(color))
                             ),
                           ],
@@ -204,7 +196,7 @@ class _JobDataTable extends State<JobDataTable> {
                           fontFamily: 'Lato',
                           fontSize: 14,
                         )),
-                        Text("\$${item['total']}", style: const TextStyle(
+                        Text("\$${item.totalCost}", style: const TextStyle(
                           fontFamily: 'Lato',
                           fontSize: 14,
                         )),

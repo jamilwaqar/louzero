@@ -350,7 +350,7 @@ class AddJobPage extends GetWidget<JobController> {
   }
 
   void _save() async {
-    JobModel model = JobModel(status: _status.value.name,
+    JobModel model = JobModel(status: _status.value,
         customerId: _customerId.value,
         jobId: Random().nextInt(9000)+ 1000,
         description: _descriptionController.text,
