@@ -48,30 +48,4 @@ class CheckListPage extends StatelessWidget{
       ],
     );
   }
-
-  Widget _createChecklist() {
-    //TODO
-    return const Text('_createChecklist');
-  }
-
-  Widget _checklistItems() {
-    //TODO
-    return const Text('_checklistItems');
-  }
-
-  Widget _addChecklistItem() {
-    //TODO
-    return const Text('_addChecklistItem');
-  }
-
-  Widget _editChecklistItem() {
-    //TODO
-    return const Text('_editChecklistItem');
-  }
-
-  Widget _checklistCard() {
-    //TODO
-    return const Text('_checklistCard');
-  }
-
 }
