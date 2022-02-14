@@ -6,6 +6,7 @@ import 'package:louzero/controller/utils.dart';
 
 class AppGettingStarted extends StatefulWidget{
   const AppGettingStarted({
+    this.title = "Getting Started",
     required this.description,
     required this.onCheckboxPress,
     required this.onGotItPress,
@@ -13,6 +14,7 @@ class AppGettingStarted extends StatefulWidget{
     Key? key
   }) : super(key: key);
 
+  final String title;
   final String description;
   final String confirmButtonText;
   final Function onCheckboxPress;
@@ -43,7 +45,7 @@ class _AppGettingStartedState extends State<AppGettingStarted> {
             children: [
               appIcon(Icons.lightbulb_outline, color: AppColors.primary_60),
               const SizedBox(width: 8),
-              Text('Getting Started',
+              Text(widget.title,
                   style:
                   AppStyles.headerRegular.copyWith(color: AppColors.dark_3)),
             ],
