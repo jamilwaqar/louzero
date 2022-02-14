@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
 import 'package:louzero/ui/page/job/controllers/job_list_controller.dart';
 import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
@@ -56,7 +57,6 @@ class JobListPage extends GetWidget<JobListController> {
                             backgroundColor: AppColors.secondary_95,
                             onTap: () {
                               controller.hideModal();
-                              print('AppSegmentedControl');
                             },
                             children: {
                               JobStatus.estimate:
@@ -87,18 +87,15 @@ class JobListPage extends GetWidget<JobListController> {
                               AppSimpleDropDown(
                                   label: "Job Type",
                                   onSelected: (value) {
-                                    controller.selectedType.value = value;
-                                    controller.sortByType();
+                                    controller.selectedType = value;
                                   },
                                   onTap: () {
                                     controller.hideModal();
                                   },
-                                  items: const [
-                                    'Repair',
-                                    'Service',
-                                    'Pool Opening',
-                                    'Spa Opening'
-                                  ]),
+                                  onClear: () {
+                                    controller.selectedType = '';
+                                  },
+                                  items: Get.find<AuthController>().user.jobTypes),
                               const SizedBox(
                                 width: 8,
                               ),
@@ -205,27 +202,27 @@ class JobListPage extends GetWidget<JobListController> {
                               child: _customDateRangeModel(),
                             ))
                         : const SizedBox(),
-                    controller.isDetailsPopupVisible.value
+                    Obx(()=> controller.isDetailsPopupVisible.value
                         ? Positioned(
-                            height: controller.popModalHeight.value != 0
-                                ? controller.popModalHeight.value
-                                : Get.height - 220,
-                            width: 370,
-                            right: 20,
-                            top: 20,
-                            child: DelayedWidget(
-                              animation: DelayedAnimations.SLIDE_FROM_RIGHT,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: JobDetailsPopup(
-                                  onPopupClose: () {
-                                    controller.isDetailsPopupVisible.value =
-                                        false;
-                                  },
-                                ),
-                              ),
-                            ))
-                        : const SizedBox()
+                        height: controller.popModalHeight.value != 0
+                            ? controller.popModalHeight.value
+                            : Get.height - 220,
+                        width: 370,
+                        right: 20,
+                        top: 20,
+                        child: DelayedWidget(
+                          animation: DelayedAnimations.SLIDE_FROM_RIGHT,
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: JobDetailsPopup(
+                              onPopupClose: () {
+                                controller.isDetailsPopupVisible.value =
+                                false;
+                              },
+                            ),
+                          ),
+                        ))
+                        : const SizedBox())
                   ],
                 ),
               ),

@@ -36,14 +36,21 @@ class JobListController extends GetxController {
   JobStatus get selectedJobStatus => _selectedJobStatus.value;
   set selectedJobStatus(val) {
     _selectedJobStatus.value = val;
-    filterItemsByStatus();
+    filterItems();
+  }
+
+  final _selectedType = "".obs;
+  String get selectedType => _selectedType.value;
+  set selectedType(String val) {
+    _selectedType.value = val;
+    filterItems();
     update();
   }
 
-  final selectedType = "".obs;
   final selectedDuration = Rx<JobDurationFilter?>(null);
   final isDetailsPopupVisible = false.obs;
   final showCustomDateRange = false.obs;
+
   DateTime? startDate;
   DateTime? endDate;
   int diffInDays = 0;
@@ -54,15 +61,22 @@ class JobListController extends GetxController {
 
   @override
   void onInit() {
-    filterItemsByStatus();
+    filterItems();
     super.onInit();
   }
 
-  void filterItemsByStatus() {
+  void filterItems() {
     tableItems.value = jobModels
-        .where((element) => element.status == selectedJobStatus)
+        .where((e) => e.status == selectedJobStatus && equalJobType(e))
         .toList();
     total = tableItems.fold(0.0, (preVal, element) => preVal + element.totalCost);
+    update();
+  }
+
+  bool equalJobType(JobModel model) {
+    if (selectedType.isEmpty) return true;
+    return model.jobType.toString().toLowerCase() ==
+        selectedType.toString().toLowerCase();
   }
 
   void searchItems(text) {
@@ -78,21 +92,6 @@ class JobListController extends GetxController {
       tableItems.value = [...updatedItems];
     } else {
       tableItems.value = [...jobModels];
-    }
-  }
-
-  void sortByType() {
-    List<JobModel> currentItems = tableItems;
-    List<JobModel> updatedItems = currentItems
-        .where((i) =>
-            i.jobType.toString().toLowerCase() ==
-            selectedType.toString().toLowerCase())
-        .toList();
-
-    if (selectedType.isNotEmpty) {
-      tableItems.value = [...updatedItems];
-    } else {
-      tableItems.value = [...tableItems];
     }
   }
 

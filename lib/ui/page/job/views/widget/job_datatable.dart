@@ -137,7 +137,7 @@ class _JobDataTable extends State<JobDataTable> {
 
     return GestureDetector(
       onTap: (){
-        Get.find<JobController>().jobModel = widget.models[0];
+        Get.put(JobController()).jobModel = widget.models[0];
         widget.onMoreButtonTap!();
       },
       child: Container(
