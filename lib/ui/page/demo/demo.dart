@@ -12,6 +12,7 @@ import 'package:louzero/models/job_models.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/job_add_new_line.dart';
+import 'package:louzero/ui/page/settings/add_checklist_item.dart';
 import 'package:louzero/ui/widget/calendar.dart';
 import 'package:louzero/ui/page/job/views/widget/contact_card.dart';
 import 'package:louzero/ui/widget/dialog/warning_dialog.dart';
@@ -29,6 +30,7 @@ class Demo extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            _addChecklistItem(),
             _calendar_(),
             _tabsBasic_(),
             _cardTabs_(),
@@ -467,6 +469,13 @@ class Demo extends StatelessWidget {
     );
   }
 
+  Widget _addChecklistItem() {
+    return _rowDark(
+      label: 'Add Checklist Item',
+      child: const AddChecklistItem()
+    );
+  }
+
 }
 
 class BillingWidget extends StatelessWidget{
@@ -556,5 +565,4 @@ class BillingWidget extends StatelessWidget{
           ),
         ));
   }
-
 }

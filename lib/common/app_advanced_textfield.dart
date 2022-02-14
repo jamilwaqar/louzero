@@ -25,6 +25,7 @@ class AppAdvancedTextField extends StatefulWidget {
     this.onClear,
     this.onChange,
     this.onTap,
+    this.backgroundColor,
   }) : super(key: key);
   final bool isUnderlined = true;
   final TextEditingController controller;
@@ -42,6 +43,7 @@ class AppAdvancedTextField extends StatefulWidget {
   final bool? multiline;
   final bool? autofocus;
   final int? maxLines;
+  final Color? backgroundColor;
   final Function? onClear;
   final Function? onChange;
   final Function? onTap;
@@ -58,6 +60,10 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
 
   @override
   void initState() {
+    if(widget.backgroundColor != null) {
+      _color = widget.backgroundColor!;
+    }
+
     _textFieldFocus.addListener(() {
       if (_textFieldFocus.hasFocus) {
         setState(() {
@@ -70,7 +76,7 @@ class _AppAdvancedTextFieldState extends State<AppAdvancedTextField> {
           });
         } else {
           setState(() {
-            _color = AppColors.secondary_99;
+            _color = widget.backgroundColor != null ? widget.backgroundColor! : AppColors.secondary_99;
           });
         }
       }
