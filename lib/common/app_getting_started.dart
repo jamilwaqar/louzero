@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:louzero/common/app_button.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/utils.dart';
 
@@ -8,10 +9,12 @@ class AppGettingStarted extends StatefulWidget{
     required this.description,
     required this.onCheckboxPress,
     required this.onGotItPress,
+    this.confirmButtonText = "Got It",
     Key? key
   }) : super(key: key);
 
   final String description;
+  final String confirmButtonText;
   final Function onCheckboxPress;
   final Function() onGotItPress;
 
@@ -51,7 +54,15 @@ class _AppGettingStartedState extends State<AppGettingStarted> {
           const SizedBox(height: 24),
           _notShowMsgWidget(),
           const SizedBox(height: 24),
-          _gotItButton(),
+          Align(
+            alignment: Alignment.centerRight,
+            child: AppButton(
+                label: widget.confirmButtonText,
+                colorBg: AppColors.orange,
+                onPressed: widget.onGotItPress
+            ),
+          )
+
         ],
       ),
     );
@@ -86,26 +97,4 @@ class _AppGettingStartedState extends State<AppGettingStarted> {
       ),
     ),
   );
-
-  Widget _gotItButton() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: Container(
-            width: 83,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.orange,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              "Got it",
-              style: TextStyles.labelL.copyWith(color: Colors.white),
-            ),
-          ),
-          onPressed: widget.onGotItPress),
-    );
-  }
 }
