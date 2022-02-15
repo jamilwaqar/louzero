@@ -98,6 +98,11 @@ class JobListController extends GetxController {
   void sortByDuration() {
     if (selectedDuration.value == null) {
       tableItems.value = [...jobModels];
+      showCustomDateRange.value = false;
+      endDate = null;
+      startDate = null;
+      diffInDays = 0;
+      update();
       return;
     }
     List<JobModel> currentItems = jobModels;

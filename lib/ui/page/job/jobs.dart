@@ -17,7 +17,6 @@ import '../app_base_scaffold.dart';
 class JobListPage extends GetWidget<JobListController> {
   JobListPage({Key? key}) : super(key: key);
 
-
   final TextEditingController _searchText = TextEditingController();
   late final FocusNode _searchFocus = FocusNode()..addListener(() {
     if (kDebugMode) {
@@ -103,22 +102,26 @@ class JobListPage extends GetWidget<JobListController> {
                                   label: "Duration",
                                   backgroundColor: Colors.white,
                                   onClear: () {
-                                    controller.showCustomDateRange.value =
-                                        false;
                                     controller.selectedDuration.value = null;
-                                    controller.endDate = null;
-                                    controller.startDate = null;
-                                    controller.diffInDays = 0;
-                                    controller.update();
+                                    controller.sortByDuration();
                                   },
                                   onTap: () {
                                     controller.hideModal();
                                   },
                                   onSelected: (value) {
-                                    controller.selectedDuration.value = value;
-                                    controller.showCustomDateRange.value =
-                                        false;
-                                    controller.sortByDuration();
+                                    try{
+                                      JobDurationFilter filter = JobDurationFilter.values.firstWhere((element) => element.label == value);
+                                      controller.selectedDuration.value = filter;
+                                      controller.showCustomDateRange.value =
+                                      false;
+                                      controller.sortByDuration();
+                                    } catch(e) {
+                                      if (kDebugMode) {
+                                        print(e.toString());
+                                        controller.selectedDuration.value = null;
+                                        controller.sortByDuration();
+                                      }
+                                    }
                                   },
                                   dividerPosition: const [4, 5],
                                   items: JobDurationFilter.values
@@ -192,16 +195,16 @@ class JobListPage extends GetWidget<JobListController> {
                         ],
                       ),
                     ),
-                    controller.showCustomDateRange.value
+                    Obx(()=> controller.showCustomDateRange.value
                         ? Positioned(
-                            right: 0,
-                            top: 140,
-                            width: MediaQuery.of(context).size.width,
-                            child: DelayedWidget(
-                              animation: DelayedAnimations.SLIDE_FROM_BOTTOM,
-                              child: _customDateRangeModel(),
-                            ))
-                        : const SizedBox(),
+                        right: 0,
+                        top: 140,
+                        width: MediaQuery.of(context).size.width,
+                        child: DelayedWidget(
+                          animation: DelayedAnimations.SLIDE_FROM_BOTTOM,
+                          child: _customDateRangeModel(),
+                        ))
+                        : const SizedBox()),
                     Obx(()=> controller.isDetailsPopupVisible.value
                         ? Positioned(
                         height: controller.popModalHeight.value != 0
@@ -299,7 +302,9 @@ class JobListPage extends GetWidget<JobListController> {
         const SizedBox(height: 16,),
         NZCalendar(
           onDateSelected: (date){
-            print('date selected');
+            if (kDebugMode) {
+              print('date selected');
+            }
           },
           startDate: controller.startDate,
           endDate: controller.endDate,
