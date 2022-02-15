@@ -23,7 +23,7 @@ class JobListPage extends GetWidget<JobListController> {
       print(_searchFocus.hasFocus);
     }
     if(_searchFocus.hasFocus) {
-      controller.hideModal();
+      controller.hidePopModal();
     }
   });
 
@@ -33,7 +33,7 @@ class JobListPage extends GetWidget<JobListController> {
         builder: (_) => AppBaseScaffold(
               subheader: 'All Jobs',
               onBodyTap: () {
-                controller.hideModal();
+                controller.hidePopModal();
               },
               onAppbarVisibilityChange: (isVisible) {
                 controller.popModalHeight.value =
@@ -55,7 +55,7 @@ class JobListPage extends GetWidget<JobListController> {
                             isStretch: true,
                             backgroundColor: AppColors.secondary_95,
                             onTap: () {
-                              controller.hideModal();
+                              controller.hidePopModal();
                             },
                             children: {
                               JobStatus.estimate:
@@ -89,7 +89,7 @@ class JobListPage extends GetWidget<JobListController> {
                                     controller.selectedType = value;
                                   },
                                   onTap: () {
-                                    controller.hideModal();
+                                    controller.hidePopModal();
                                   },
                                   onClear: () {
                                     controller.selectedType = '';
@@ -106,7 +106,7 @@ class JobListPage extends GetWidget<JobListController> {
                                     controller.sortByDuration();
                                   },
                                   onTap: () {
-                                    controller.hideModal();
+                                    controller.hidePopModal();
                                   },
                                   onSelected: (value) {
                                     try{
@@ -185,9 +185,8 @@ class JobListPage extends GetWidget<JobListController> {
                                   onSortTap: (category, isAsc) {
                                     controller.sortItems(category, isAsc);
                                   },
-                                  onMoreButtonTap: () {
-                                    controller.isDetailsPopupVisible.value =
-                                        true;
+                                  onMoreButtonTap: (model) {
+                                    controller.selectedJob.value = model;
                                   })),
                           const SizedBox(
                             height: 32,
@@ -205,7 +204,7 @@ class JobListPage extends GetWidget<JobListController> {
                           child: _customDateRangeModel(),
                         ))
                         : const SizedBox()),
-                    Obx(()=> controller.isDetailsPopupVisible.value
+                    Obx(()=> controller.selectedJob.value != null
                         ? Positioned(
                         height: controller.popModalHeight.value != 0
                             ? controller.popModalHeight.value
@@ -218,9 +217,9 @@ class JobListPage extends GetWidget<JobListController> {
                           child: GestureDetector(
                             onTap: () {},
                             child: JobDetailsPopup(
+                              model: controller.selectedJob.value!,
                               onPopupClose: () {
-                                controller.isDetailsPopupVisible.value =
-                                false;
+                                controller.hidePopModal();
                               },
                             ),
                           ),
