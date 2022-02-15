@@ -8,7 +8,7 @@ part of 'job_models.dart';
 
 JobModel _$JobModelFromJson(Map<String, dynamic> json) => JobModel(
       jobId: json['jobId'] as int,
-      status: json['status'] as String,
+      status: $enumDecode(_$JobStatusEnumMap, json['status']),
       description: json['description'] as String,
       jobType: json['jobType'] as String,
       customerId: json['customerId'] as String?,
@@ -17,6 +17,8 @@ JobModel _$JobModelFromJson(Map<String, dynamic> json) => JobModel(
       ..ownerId = json['ownerId'] as String?
       ..created = json['created'] as int?
       ..updated = json['updated'] as int?
+      ..scheduled = json['scheduled'] as int?
+      ..totalCost = (json['totalCost'] as num?)?.toDouble() ?? 0.0
       ..note = json['note'] as String?;
 
 Map<String, dynamic> _$JobModelToJson(JobModel instance) {
@@ -32,14 +34,23 @@ Map<String, dynamic> _$JobModelToJson(JobModel instance) {
   writeNotNull('ownerId', instance.ownerId);
   writeNotNull('created', instance.created);
   writeNotNull('updated', instance.updated);
+  val['scheduled'] = instance.scheduled;
+  val['totalCost'] = instance.totalCost;
   val['jobType'] = instance.jobType;
-  val['status'] = instance.status;
+  val['status'] = _$JobStatusEnumMap[instance.status];
   val['jobId'] = instance.jobId;
   val['description'] = instance.description;
   val['customerId'] = instance.customerId;
   val['note'] = instance.note;
   return val;
 }
+
+const _$JobStatusEnumMap = {
+  JobStatus.estimate: 'estimate',
+  JobStatus.booked: 'booked',
+  JobStatus.invoiced: 'invoiced',
+  JobStatus.canceled: 'canceled',
+};
 
 BillingLineModel _$BillingLineModelFromJson(Map<String, dynamic> json) =>
     BillingLineModel(
@@ -88,6 +99,7 @@ ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
     ScheduleModel(
       startTime: json['startTime'] as int,
       endTime: json['endTime'] as int,
+      objectId: json['objectId'] as String?,
       note: json['note'] as String?,
       jobId: json['jobId'] as String,
       personnelName: json['personnelName'] as String,
@@ -97,7 +109,7 @@ ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
       personnelId: json['personnelId'] as String,
       anyTimeVisit: json['anyTimeVisit'] as bool? ?? false,
       complete: json['complete'] as bool? ?? false,
-    )..objectId = json['objectId'] as String?;
+    );
 
 Map<String, dynamic> _$ScheduleModelToJson(ScheduleModel instance) =>
     <String, dynamic>{

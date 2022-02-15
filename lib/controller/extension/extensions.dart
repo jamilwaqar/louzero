@@ -1,8 +1,48 @@
 export 'decoration.dart';
 import 'package:intl/intl.dart';
 
+DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
+DateTime get now => DateTime.now();
+DateTime get startDateInWeek {
+  return getDate(now.subtract(Duration(days: now.weekday - 1)));
+}
+
+DateTime get endDateInWeek {
+  return getDate(now.add(Duration(days: DateTime.daysPerWeek - now.weekday)));
+}
+
 extension DateTimeEx on DateTime {
-  bool isSameDate(DateTime other) {
+
+  bool get isToday => isSameDate();
+
+  bool get isYesterday {
+    DateTime yesterday = now.subtract(const Duration(days: 1));
+    if (day == yesterday.day && month == yesterday.month && year == yesterday.year) {
+      return true;
+    }
+    return false;
+  }
+
+  bool get isTomorrow {
+    DateTime yesterday = now.add(const Duration(days: 1));
+    if (day == yesterday.day && month == yesterday.month && year == yesterday.year) {
+      return true;
+    }
+    return false;
+  }
+
+  bool get isInThisWeek {
+    return isBefore(endDateInWeek) && isAfter(startDateInWeek);
+  }
+
+  bool get isInNextWeek {
+    final startDate = getDate(startDateInWeek.add(const Duration(days: 7)));
+    final endDate = getDate(endDateInWeek.add(const Duration(days: 7)));
+    return isBefore(endDate) && isAfter(startDate);
+  }
+
+  bool isSameDate({DateTime? other}) {
+    other ??= DateTime.now();
     return year == other.year &&
         month == other.month &&
         day == other.day;

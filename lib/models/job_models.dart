@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:uuid/uuid.dart';
 part 'job_models.g.dart';
@@ -21,14 +22,20 @@ class JobModel {
   int? created;
   @JsonKey(includeIfNull: false)
   int? updated;
+  int? scheduled;
+  @JsonKey(defaultValue: 0.0)
+  double totalCost = 0.0;
 
   DateTime get createdAt => DateTime.fromMillisecondsSinceEpoch(created!);
 
   DateTime? get updatedAt =>
       updated != null ? DateTime.fromMillisecondsSinceEpoch(updated!) : null;
 
+  DateTime? get scheduledAt =>
+      scheduled != null ? DateTime.fromMillisecondsSinceEpoch(scheduled!) : null;
+
   String jobType;
-  String status;
+  JobStatus status;
 
   int jobId;
   String description;

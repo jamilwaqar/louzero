@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:louzero/common/app_add_button.dart';
 import 'package:louzero/common/app_button.dart';
 import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_icon_button.dart';
@@ -37,8 +35,8 @@ class JobDetailsPopup extends GetWidget<JobController>{
         decoration: BoxDecoration(
           color: AppColors.secondary_100,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            const BoxShadow(
+          boxShadow: const[
+            BoxShadow(
               offset: Offset(2, 2),
               blurRadius: 12,
               color: Color.fromRGBO(0, 0, 0, 0.16),
@@ -108,7 +106,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
                                 width: 80,
                                 child:  Text('Status:', style: AppStyles.labelBold),
                               ),
-                              Text(currentJob?.status ?? "", style: const TextStyle(
+                              Text(currentJob?.status.name ?? "", style: const TextStyle(
                                 fontFamily: 'Lato',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,

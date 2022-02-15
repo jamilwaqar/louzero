@@ -273,7 +273,7 @@ class AddJobPage extends GetWidget<JobController> {
                     ? Icons.radio_button_checked_outlined
                     : Icons.radio_button_off, color: AppColors.orange),
                 const SizedBox(width: 8),
-                Text(status.name.capitalizeFirst!, style: TextStyles.bodyL),
+                Text(status.label.capitalizeFirst!, style: TextStyles.bodyL),
               ],
             ),
           ),
@@ -350,7 +350,7 @@ class AddJobPage extends GetWidget<JobController> {
   }
 
   void _save() async {
-    JobModel model = JobModel(status: _status.value.name,
+    JobModel model = JobModel(status: _status.value,
         customerId: _customerId.value,
         jobId: Random().nextInt(9000)+ 1000,
         description: _descriptionController.text,

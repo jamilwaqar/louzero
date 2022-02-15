@@ -9,6 +9,7 @@ import 'package:louzero/controller/get/bindings/job_binding.dart';
 import 'package:louzero/ui/page/app_base_scaffold.dart';
 import 'package:louzero/ui/page/customer/customers.dart';
 import 'package:louzero/ui/page/job/add_job.dart';
+import 'package:louzero/ui/page/job/controllers/job_list_controller.dart';
 import 'package:louzero/ui/page/job/jobs.dart';
 import 'package:louzero/ui/page/stub/stub_nav.dart';
 import 'app_card_chart_pie.dart';
@@ -64,7 +65,7 @@ class _DashboardPageState extends State<DashboardPage> {
               'In Development',
               desc:
                   'Links to App Widgets in progress. For internal use and demos:',
-              children: [StubNav()],
+              children: [const StubNav()],
             ),
             _dashboardCard('Inventory'),
             _dashboardCard('Account Settings'),
@@ -181,7 +182,8 @@ class _DashboardPageState extends State<DashboardPage> {
             colorBg: AppColors.dark_1,
             label: 'Search Jobs',
             onPressed: () {
-              Get.to(() => const JobListPage(), binding: JobBinding());
+              Get.put(JobListController());
+              Get.to(() => JobListPage());
             })
       ],
     );

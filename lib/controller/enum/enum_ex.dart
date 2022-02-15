@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:get/get_utils/get_utils.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 extension CTContactTypeEx on CTContactType {
   String get name {
@@ -53,20 +55,20 @@ extension CustomerCategoryEx on CustomerCategory {
 }
 
 extension JobStatusEx on JobStatus {
-  String get name {
-    return toString().split('.').last.capitalizeFirst!;
+  String get label {
+    return name.capitalizeFirst!;
   }
 
-  String get icon {
+  IconData get icon {
     switch(this) {
       case JobStatus.estimate:
-        return "assets/icons/icon-calculator.png";
+        return MdiIcons.calculator;
       case JobStatus.booked:
-        return "assets/icons/icon-book.png";
+        return MdiIcons.calendar;
       case JobStatus.invoiced:
-        return "assets/icons/icon-money.png";
+        return MdiIcons.currencyUsd;
       case JobStatus.canceled:
-        return "assets/icons/icon-cancel.png";
+        return MdiIcons.cancel;
     }
   }
 }

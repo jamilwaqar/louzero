@@ -174,7 +174,7 @@ class BaseController extends GetxController {
 
   Future _fetchJobs() async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
-      ..whereClause = "ownerId = '${_authController.user.objectId}'";
+      ..whereClause = "ownerId = '${_authController.user.objectId}'"..pageSize = 100;
     try {
       var response = await Backendless.data.of(BLPath.job).find(queryBuilder);
       List<JobModel>list = List<Map>.from(response!).map((e) => JobModel.fromJson(Map<String, dynamic>.from(e))).toList();
@@ -183,6 +183,9 @@ class BaseController extends GetxController {
       }
       return list;
     } catch (e) {
+      if (kDebugMode) {
+        print('Fetch Jobs Error: ${e.toString()}');
+      }
       return e.toString();
     }
   }
