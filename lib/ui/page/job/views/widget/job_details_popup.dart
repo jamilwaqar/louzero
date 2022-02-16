@@ -5,30 +5,38 @@ import 'package:louzero/common/app_divider.dart';
 import 'package:louzero/common/app_icon_button.dart';
 import 'package:louzero/common/utility/flex_row.dart';
 import 'package:louzero/controller/constant/colors.dart';
+import 'package:louzero/controller/enum/enum_ex.dart';
+import 'package:louzero/controller/extension/extensions.dart';
+import 'package:louzero/controller/get/auth_controller.dart';
+import 'package:louzero/controller/get/base_controller.dart';
+import 'package:louzero/controller/get/customer_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
+import 'package:louzero/models/customer_models.dart';
+import 'package:louzero/models/job_models.dart';
+import 'package:louzero/ui/page/customer/customer.dart';
 import 'package:louzero/ui/page/job/controllers/line_item_controller.dart';
 import 'package:louzero/ui/page/job/controllers/schedule_controller.dart';
 import 'package:louzero/ui/page/job/views/jobs_home.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class JobDetailsPopup extends GetWidget<JobController>{
+class JobDetailsPopup extends GetWidget<JobController> {
   JobDetailsPopup({required this.onPopupClose, Key? key}) : super(key: key);
+  late final JobModel model = controller.jobModel!;
   final Function onPopupClose;
   final colors = {
     "Repair" : "1864CD",
     "Service" : "C52B54",
-    "Pool Opening" : "C52B54",
+    "Consulting" : "C52B54",
     "Spa Opening" : "C52B54"
   };
-
+  late final CustomerModel customerModel =
+  Get.find<BaseController>().customerModelById(model.customerId!)!;
 
   @override
   Widget build(BuildContext context) {
-    final currentJob = controller.jobModel;
-    print('current job $currentJob');
     int statusColor = 0xFF4087E8;
-    if(currentJob?.jobType != null && colors[currentJob?.jobType] != null) {
-      statusColor = int.parse("0xFF${colors[currentJob?.jobType]}");
+    if(colors[model.jobType] != null) {
+      statusColor = int.parse("0xFF${colors[model.jobType]}");
     }
 
     return Container(
@@ -53,13 +61,13 @@ class JobDetailsPopup extends GetWidget<JobController>{
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomRight: Radius.circular(10),
                     ),
                     color: Color(statusColor),
                   ),
-                  child: Text(currentJob?.jobType ?? "",  style: TextStyle(
+                  child: Text(model.jobType,  style: const TextStyle(
                     fontFamily: 'Lato',
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
@@ -88,7 +96,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
                             width: 80,
                             child:  Text('Job ID:', style: AppStyles.labelBold,),
                           ),
-                          Text("#${currentJob?.jobId ?? ""}", style: const TextStyle(
+                          Text("#${model.jobId}", style: const TextStyle(
                             fontFamily: 'Lato',
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -106,7 +114,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
                                 width: 80,
                                 child:  Text('Status:', style: AppStyles.labelBold),
                               ),
-                              Text(currentJob?.status.name ?? "", style: const TextStyle(
+                              Text(model.status.label, style: const TextStyle(
                                 fontFamily: 'Lato',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
@@ -115,12 +123,12 @@ class JobDetailsPopup extends GetWidget<JobController>{
                             ],
                           ),
                           Row(
-                            children: const [
-                              SizedBox(
+                            children: [
+                              const SizedBox(
                                 width: 80,
                                 child:  Text('Total:', style: AppStyles.labelBold),
                               ),
-                              Text("0", style: TextStyle(
+                              Text(model.totalCost.toStringAsFixed(2), style: const TextStyle(
                                 fontFamily: 'Lato',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
@@ -133,7 +141,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
                       const AppDivider(),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("DDDDDD", style: AppStyles.headerRegular,),
+                        child: Text(customerModel.companyName, style: AppStyles.headerRegular,),
                       ),
                       const SizedBox(height: 8,),
                       Row(
@@ -142,7 +150,7 @@ class JobDetailsPopup extends GetWidget<JobController>{
                         children: [
                           const Icon(MdiIcons.mapMarker,  size: 20, color: Color(0xFF7CA0E7),),
                           const SizedBox(width: 8,),
-                          Expanded(child: Text('3486 Archwood Ave.,  Vancouver, WA 98665', textAlign: TextAlign.left, style: AppStyles.labelRegular,))
+                          Expanded(child: Text(customerModel.serviceAddress.fullAddress, textAlign: TextAlign.left, style: AppStyles.labelRegular,))
                         ],
                       ),
                       const SizedBox(height: 16,),
@@ -154,26 +162,46 @@ class JobDetailsPopup extends GetWidget<JobController>{
                           const SizedBox(width: 8,),
                           Expanded(
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Appintments', textAlign: TextAlign.left, style: AppStyles.labelBold,),
-                                  const SizedBox(height: 8,),
-                                  FlexRow(
-                                    children: [
-                                      Text('Oct 12, 2021', style: AppStyles.labelRegular,),
-                                      Text('Any Time', style: AppStyles.labelRegular,)
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8,),
-                                  FlexRow(
-                                    children: [
-                                      Text('Oct 12, 2021', style: AppStyles.labelRegular,),
-                                      Text('Any Time', style: AppStyles.labelRegular,)
-                                    ],
-                                  )
-                                ],
-                              ))
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Appointments',
+                                textAlign: TextAlign.left,
+                                style: AppStyles.labelBold,
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              GetBuilder<JobController>(
+                                builder: (controller) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    itemBuilder: (_, index) {
+                                      ScheduleModel model = controller.scheduleModels[index];
+                                      return FlexRow(
+                                        children: [
+                                          Text(
+                                            model.start.simpleDate,
+                                            style: AppStyles.labelRegular,
+                                          ),
+                                          Text(
+                                            model.startEndTime,
+                                            style: AppStyles.labelRegular,
+                                          )
+                                        ],
+                                      );
+                                    },
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: controller.scheduleModels.length,
+                                  );
+                                },
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                            ],
+                          ))
                         ],
                       ),
                       const SizedBox(height: 16,),
@@ -188,17 +216,17 @@ class JobDetailsPopup extends GetWidget<JobController>{
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Job Description', style: AppStyles.labelBold,),
+                                  const Text('Job Description', style: AppStyles.labelBold,),
                                   const SizedBox(height: 8,),
-                                  Text('Need to fix something important at this job. It’s pretty complex so be prepared for that complexity. ', style: AppStyles.labelRegular,),
+                                  Text(model.description, style: AppStyles.labelRegular,),
                                   const SizedBox(height: 8,),
                                   Row(
                                     children: [
-                                      Text('Last updated ', style: AppStyles.labelRegular,),
-                                      Text('October 7, 2021', style: AppStyles.labelBold,)
+                                      const Text('Last updated ', style: AppStyles.labelRegular,),
+                                      Text(controller.jobModel!.updatedAt.simpleDate, style: AppStyles.labelBold,)
                                     ],
                                   ),
-                                  Text('By Alan Whitaker', style: AppStyles.labelRegular,)
+                                  Text('By ${Get.find<AuthController>().user.fullName}', style: AppStyles.labelRegular,)
                                 ],
                               )
                           )
@@ -213,7 +241,13 @@ class JobDetailsPopup extends GetWidget<JobController>{
                         icon: MdiIcons.plusCircle,
                         colorIcon: AppColors.orange,
                         label: 'Add Appointment',
-                        onPressed: (){},
+                        onPressed: (){
+                          Get.put(JobController()).jobModel = model;
+                          Get.put(LineItemController());
+                          Get.put(ScheduleController());
+                          Get.to(() => JobsHome());
+                          onPopupClose();
+                        },
                       ),
                       const SizedBox(height: 8,),
                       AppButton(
@@ -225,9 +259,11 @@ class JobDetailsPopup extends GetWidget<JobController>{
                         colorIcon: AppColors.orange,
                         label: 'View Job Profile',
                         onPressed: (){
+                          Get.put(JobController()).jobModel = model;
                           Get.put(LineItemController());
                           Get.put(ScheduleController());
                           Get.to(() => JobsHome());
+                          onPopupClose();
                         },
                       ),
                       const SizedBox(height: 8,),
@@ -239,12 +275,16 @@ class JobDetailsPopup extends GetWidget<JobController>{
                         icon: MdiIcons.arrowTopRight,
                         colorIcon: AppColors.orange,
                         label: 'View Customer Profile',
-                        onPressed: (){},
+                        onPressed: (){
+                          Get.put(CustomerController()).customerModel = customerModel;
+                          Get.to(() => const CustomerProfilePage());
+                          onPopupClose();
+                        },
                       ),
                       const Spacer(),
                       Buttons.appBar(
-                        'Job Status: Repair',
-                        icon: MdiIcons.calculator,
+                        'Job Status: ${model.status.label}',
+                        icon: model.status.icon,
                       )
                     ],
                   ),

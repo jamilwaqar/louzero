@@ -7,19 +7,18 @@ import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/models/customer_models.dart';
 import 'package:louzero/models/job_models.dart';
 import 'package:get/get.dart';
-import 'package:louzero/controller/get/job_controller.dart';
 
 class JobDataTable extends StatefulWidget{
   const JobDataTable({
     Key? key,
     required this.onSortTap,
     required this.models,
-    this.onMoreButtonTap
+    required this.onMoreButtonTap
   }) : super(key: key);
 
   final List<JobModel> models;
   final Function onSortTap;
-  final Function? onMoreButtonTap;
+  final Function(JobModel) onMoreButtonTap;
 
   @override
   _JobDataTable createState() => _JobDataTable();
@@ -137,8 +136,7 @@ class _JobDataTable extends State<JobDataTable> {
 
     return GestureDetector(
       onTap: (){
-        Get.put(JobController()).jobModel = widget.models[0];
-        widget.onMoreButtonTap!();
+        widget.onMoreButtonTap(item);
       },
       child: Container(
           margin: const EdgeInsets.only(top: 4, bottom: 4),

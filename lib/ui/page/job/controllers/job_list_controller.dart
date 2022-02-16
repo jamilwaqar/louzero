@@ -48,7 +48,7 @@ class JobListController extends GetxController {
   }
 
   final selectedDuration = Rx<JobDurationFilter?>(null);
-  final isDetailsPopupVisible = false.obs;
+  final selectedJob = Rx<JobModel?>(null);
   final showCustomDateRange = false.obs;
 
   DateTime? startDate;
@@ -167,7 +167,7 @@ class JobListController extends GetxController {
     tableItems.value = updatedItems;
   }
 
-  void hideModal() {
-    isDetailsPopupVisible.value = false;
+  void hidePopModal() {
+    selectedJob.value = null;
   }
 }

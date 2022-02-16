@@ -27,6 +27,9 @@ class ScheduleController extends GetxController {
         } else {
           scheduleModels.add(newModel);
         }
+        JobModel jobModel = jobController.jobModel!;
+        jobModel.scheduled = newModel.startTime;
+        await jobController.save(jobModel);
         update();
         if (showLoading) {
           NavigationController().loading(isLoading: false);

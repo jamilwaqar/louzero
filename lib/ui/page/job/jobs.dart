@@ -7,6 +7,7 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/ui/page/job/controllers/job_list_controller.dart';
 import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
@@ -23,7 +24,7 @@ class JobListPage extends GetWidget<JobListController> {
       print(_searchFocus.hasFocus);
     }
     if(_searchFocus.hasFocus) {
-      controller.hideModal();
+      controller.hidePopModal();
     }
   });
 
@@ -33,7 +34,7 @@ class JobListPage extends GetWidget<JobListController> {
         builder: (_) => AppBaseScaffold(
               subheader: 'All Jobs',
               onBodyTap: () {
-                controller.hideModal();
+                controller.hidePopModal();
               },
               onAppbarVisibilityChange: (isVisible) {
                 controller.popModalHeight.value =
@@ -55,7 +56,7 @@ class JobListPage extends GetWidget<JobListController> {
                             isStretch: true,
                             backgroundColor: AppColors.secondary_95,
                             onTap: () {
-                              controller.hideModal();
+                              controller.hidePopModal();
                             },
                             children: {
                               JobStatus.estimate:
@@ -89,7 +90,7 @@ class JobListPage extends GetWidget<JobListController> {
                                     controller.selectedType = value;
                                   },
                                   onTap: () {
-                                    controller.hideModal();
+                                    controller.hidePopModal();
                                   },
                                   onClear: () {
                                     controller.selectedType = '';
@@ -106,7 +107,7 @@ class JobListPage extends GetWidget<JobListController> {
                                     controller.sortByDuration();
                                   },
                                   onTap: () {
-                                    controller.hideModal();
+                                    controller.hidePopModal();
                                   },
                                   onSelected: (value) {
                                     try{
@@ -185,9 +186,9 @@ class JobListPage extends GetWidget<JobListController> {
                                   onSortTap: (category, isAsc) {
                                     controller.sortItems(category, isAsc);
                                   },
-                                  onMoreButtonTap: () {
-                                    controller.isDetailsPopupVisible.value =
-                                        true;
+                                  onMoreButtonTap: (model) {
+                                    Get.put(JobController()).jobModel = model;
+                                    controller.selectedJob.value = model;
                                   })),
                           const SizedBox(
                             height: 32,
@@ -205,7 +206,7 @@ class JobListPage extends GetWidget<JobListController> {
                           child: _customDateRangeModel(),
                         ))
                         : const SizedBox()),
-                    Obx(()=> controller.isDetailsPopupVisible.value
+                    Obx(()=> controller.selectedJob.value != null
                         ? Positioned(
                         height: controller.popModalHeight.value != 0
                             ? controller.popModalHeight.value
@@ -215,14 +216,10 @@ class JobListPage extends GetWidget<JobListController> {
                         top: 20,
                         child: DelayedWidget(
                           animation: DelayedAnimations.SLIDE_FROM_RIGHT,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: JobDetailsPopup(
-                              onPopupClose: () {
-                                controller.isDetailsPopupVisible.value =
-                                false;
-                              },
-                            ),
+                          child: JobDetailsPopup(
+                            onPopupClose: () {
+                              controller.hidePopModal();
+                            },
                           ),
                         ))
                         : const SizedBox())

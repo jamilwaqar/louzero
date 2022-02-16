@@ -10,11 +10,18 @@ class JobController extends GetxController {
 
   final _jobModel = Rx<JobModel?>(null);
   JobModel? get jobModel => _jobModel.value;
+
   set jobModel(val) {
     _jobModel.value = val;
     if (val != null) {
-        _fetchSchedules().then((value) => scheduleModels.value = value);
-        _fetchBillingLines().then((value) => billingLineModels.value = value);
+      _fetchSchedules().then((value) {
+        scheduleModels.value = value;
+        update();
+      });
+      _fetchBillingLines().then((value) {
+        billingLineModels.value = value;
+        update();
+      });
     }
   }
 

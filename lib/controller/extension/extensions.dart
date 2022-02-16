@@ -75,11 +75,11 @@ extension DateTimeEx on DateTime {
     }
   }
 
-  get fullDate => DateFormat('EEEE, MMMM d, hh:mm a').format(this);
+  String get fullDate => DateFormat('EEEE, MMMM d, hh:mm a').format(this);
 
-  get simpleDate => DateFormat('MMMM d, y').format(this);
+  String get simpleDate => DateFormat('MMMM d, y').format(this);
 
-  get weekDay => DateFormat('EEEE').format(this);
+  String get weekDay => DateFormat('EEEE').format(this);
 
   String get time => DateFormat('hh:mm a').format(this);
 
