@@ -56,6 +56,8 @@ class CompanyModel {
   CompanyStatus status = CompanyStatus.active;
 
   AddressModel? address;
+  @JsonKey(ignore: true)
+  late CompanyUserModel owner;
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
       _$CompanyModelFromJson(json);
@@ -83,6 +85,7 @@ class CompanyUserModel {
     required this.role,
   });
 
+  String? objectId;
   String companyId;
   String userId;
   int? invited;

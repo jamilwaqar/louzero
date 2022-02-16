@@ -47,6 +47,7 @@ class BaseController extends GetxController {
     dynamic res = await _fetchCompanyUsers(activeCompany!.objectId!);
     if (res is List<CompanyUserModel>) {
       activeCompanyUsers = res;
+      activeCompany!.owner = res.firstWhere((i) => i.role == UserRole.owner);
     }
   }
 

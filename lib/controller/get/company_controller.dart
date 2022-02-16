@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:backendless_sdk/backendless_sdk.dart' hide UserStatus;
 import 'package:get/get.dart';
 import 'package:louzero/controller/api/api_manager.dart';
 import 'package:louzero/controller/constant/constants.dart';
@@ -13,6 +14,8 @@ import 'base_controller.dart';
 class CompanyController extends GetxController {
   final _companyModel = CompanyModel().obs;
   final _authController = Get.find<AuthController>();
+  final _baseController = Get.find<BaseController>();
+
   RxBool isEditing = false.obs;
   void toggleEdit(bool val) {
     isEditing = RxBool(val);
@@ -36,7 +39,7 @@ class CompanyController extends GetxController {
     _companyModel.value = model;
   }
 
-  List<CompanyModel> get companies => Get.find<BaseController>().companies;
+  List<CompanyModel> get companies => _baseController.companies;
 
   Future createOrEditCompany(CompanyModel companyModel,
       {required AddressModel addressModel,
@@ -44,7 +47,7 @@ class CompanyController extends GetxController {
       bool isActiveCompany = false}) async {
     NavigationController().loading();
     if (!isEdit) {
-      await createCompanyUser();
+      await createCompanyUser(UserRole.owner, showLoading: false);
     }
     Map<String, dynamic> data = companyModel.toJson();
     data['address'] = addressModel.toJson();
@@ -59,7 +62,7 @@ class CompanyController extends GetxController {
       }
       if (isActiveCompany) {
         _authController.user.activeCompanyId = res['objectId'];
-        Get.find<BaseController>().activeCompany = newModel;
+        _baseController.activeCompany = newModel;
         await _authController.updateUser();
       }
     }
@@ -67,16 +70,47 @@ class CompanyController extends GetxController {
     NavigationController().loading(isLoading: false);
   }
 
-  Future createCompanyUser() async {
+  Future createCompanyUser(UserRole role,
+      {IDataStore? store, showLoading = true}) async {
+    store ??= Backendless.data.of(BLPath.companyUser);
     String currentUserId = _authController.user.objectId!;
-    final baseController = Get.find<BaseController>();
-    if (baseController.activeCompanyUsers.map((e)=> e.userId).contains(currentUserId)) {
-      CompanyUserModel userModel = CompanyUserModel(
-        companyId: baseController.activeCompany!.objectId!,
-          userId: currentUserId,
-          status: UserStatus.active,
-          role: UserRole.owner, userName: '');
 
+    CompanyUserModel userModel = CompanyUserModel(
+        companyId: _baseController.activeCompany!.objectId!,
+        userId: currentUserId,
+        status: UserStatus.active,
+        role: role,
+        userName: _authController.user.fullName);
+
+    Map<String, dynamic> data = userModel.toJson();
+    if (showLoading) {
+      NavigationController().loading();
+    }
+    try {
+      dynamic response = await store.save(data);
+      CompanyUserModel newModel = CompanyUserModel.fromJson(response);
+      if (userModel.objectId == null) {
+        List<CompanyUserModel> newList = [
+          ..._baseController.activeCompanyUsers,
+          newModel
+        ];
+        _baseController.activeCompanyUsers = newList;
+      } else {
+        // if (jobModel != null) {
+        //   jobModel = newModel;
+        // }
+        // updateJobModel(newModel);
+      }
+      update();
+      if (showLoading) {
+        NavigationController().loading(isLoading: false);
+      }
+      return newModel;
+    } catch (e) {
+      if (showLoading) {
+        NavigationController().loading(isLoading: false);
+      }
+      return e.toString();
     }
   }
 

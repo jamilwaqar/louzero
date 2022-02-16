@@ -73,7 +73,7 @@ class CompanyPage extends GetWidget<CompanyController> {
                 Ui.headingSM('Account Owner', icon: Icons.person),
                 Ui.block(
                   children: [
-                    Ui.text('NAME NEEDED HERE (DEV)'),
+                    Ui.text(model.owner.userName),
                     Ui.text(model.email, link: true),
                   ],
                 ),
