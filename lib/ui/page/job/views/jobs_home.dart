@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:louzero/controller/enum/enum_ex.dart';
 import 'package:louzero/controller/extension/extensions.dart';
 import 'package:louzero/controller/get/base_controller.dart';
 import 'package:louzero/controller/get/job_controller.dart';
@@ -36,7 +37,7 @@ class JobsHome extends GetWidget<JobController> {
             AppPopMenu(
               button: [
                 Buttons.appBar(
-                  'Job Status: ${controller.jobModel!.status}',
+                  'Job Status: ${controller.jobModel!.status.label}',
                   icon: MdiIcons.calculator,
                 )
               ],
@@ -109,9 +110,6 @@ class JobsHome extends GetWidget<JobController> {
   }
 
   Widget _tabDetails() {
-    DateTime updatedAt = controller.jobModel!.updatedAt != null
-        ? controller.jobModel!.updatedAt!
-        : controller.jobModel!.createdAt;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -152,7 +150,7 @@ class JobsHome extends GetWidget<JobController> {
                 const SizedBox(height: 8),
                 const Text('Last Updated', style: AppStyles.labelRegular),
                 const SizedBox(height: 8),
-                Text(updatedAt.simpleDate, style: AppStyles.bodyMedium),
+                Text(controller.jobModel!.updatedAt.simpleDate, style: AppStyles.bodyMedium),
                 const SizedBox(height: 8),
                 Text('by ${Get.find<AuthController>().user.fullName}',
                     style: AppStyles.labelRegular),

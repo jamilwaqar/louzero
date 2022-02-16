@@ -28,8 +28,8 @@ class JobModel {
 
   DateTime get createdAt => DateTime.fromMillisecondsSinceEpoch(created!);
 
-  DateTime? get updatedAt =>
-      updated != null ? DateTime.fromMillisecondsSinceEpoch(updated!) : null;
+  DateTime get updatedAt =>
+      updated != null ? DateTime.fromMillisecondsSinceEpoch(updated!) : createdAt;
 
   DateTime? get scheduledAt =>
       scheduled != null ? DateTime.fromMillisecondsSinceEpoch(scheduled!) : null;

@@ -7,6 +7,7 @@ import 'package:louzero/common/common.dart';
 import 'package:louzero/controller/constant/colors.dart';
 import 'package:louzero/controller/enum/enums.dart';
 import 'package:louzero/controller/get/auth_controller.dart';
+import 'package:louzero/controller/get/job_controller.dart';
 import 'package:louzero/ui/page/job/controllers/job_list_controller.dart';
 import 'package:louzero/ui/page/job/views/widget/job_datatable.dart';
 import 'package:louzero/ui/page/job/views/widget/job_details_popup.dart';
@@ -186,6 +187,7 @@ class JobListPage extends GetWidget<JobListController> {
                                     controller.sortItems(category, isAsc);
                                   },
                                   onMoreButtonTap: (model) {
+                                    Get.put(JobController()).jobModel = model;
                                     controller.selectedJob.value = model;
                                   })),
                           const SizedBox(
@@ -214,14 +216,10 @@ class JobListPage extends GetWidget<JobListController> {
                         top: 20,
                         child: DelayedWidget(
                           animation: DelayedAnimations.SLIDE_FROM_RIGHT,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: JobDetailsPopup(
-                              model: controller.selectedJob.value!,
-                              onPopupClose: () {
-                                controller.hidePopModal();
-                              },
-                            ),
+                          child: JobDetailsPopup(
+                            onPopupClose: () {
+                              controller.hidePopModal();
+                            },
                           ),
                         ))
                         : const SizedBox())
